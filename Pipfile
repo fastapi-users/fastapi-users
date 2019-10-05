@@ -1,0 +1,17 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+flake8 = "*"
+pytest = "*"
+requests = "*"
+
+[packages]
+fastapi = "*"
+passlib = {extras = ["bcrypt"],version = "*"}
+email-validator = "*"
+
+[requires]
+python_version = "3.7"
