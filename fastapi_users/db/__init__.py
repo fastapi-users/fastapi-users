@@ -1,6 +1,8 @@
 from typing import List
 
-from fastapi_users.models import UserDB, UserLogin
+from fastapi.security import OAuth2PasswordRequestForm
+
+from fastapi_users.models import UserDB
 from fastapi_users.password import get_password_hash, verify_password
 
 
@@ -19,14 +21,14 @@ class UserDBInterface:
     async def create(self, user: UserDB) -> UserDB:
         raise NotImplementedError()
 
-    async def authenticate(self, user_login) -> UserLogin:
-        user = await self.get_by_email(user_login.email)
+    async def authenticate(self, credentials: OAuth2PasswordRequestForm) -> UserDB:
+        user = await self.get_by_email(credentials.username)
 
         # Always run the hasher to mitigate timing attack
         # Inspired from Django: https://code.djangoproject.com/ticket/20760
-        get_password_hash(user_login.password)
+        get_password_hash(credentials.password)
 
-        if user is None or not verify_password(user_login.password, user.hashed_password):
+        if user is None or not verify_password(credentials.password, user.hashed_password):
             return None
 
         return user

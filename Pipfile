@@ -17,6 +17,7 @@ passlib = {extras = ["bcrypt"],version = "*"}
 email-validator = "*"
 sqlalchemy = "*"
 databases = "*"
+python-multipart = "*"
 
 [requires]
 python_version = "3.7"

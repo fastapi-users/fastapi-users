@@ -6,11 +6,6 @@ from pydantic import BaseModel
 from pydantic.types import EmailStr
 
 
-class EmailPasswordMixin(BaseModel):
-    email: EmailStr
-    password: str
-
-
 class UserBase(BaseModel):
     id: str = None
     email: Optional[EmailStr] = None
@@ -22,8 +17,9 @@ class UserBase(BaseModel):
         return v or str(uuid.uuid4())
 
 
-class UserCreate(EmailPasswordMixin, UserBase):
-    pass
+class UserCreate(UserBase):
+    email: EmailStr
+    password: str
 
 
 class UserUpdate(UserBase):
@@ -35,8 +31,4 @@ class UserDB(UserBase):
 
 
 class User(UserBase):
-    pass
-
-
-class UserLogin(EmailPasswordMixin):
     pass

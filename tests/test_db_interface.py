@@ -1,31 +1,37 @@
 import pytest
 
-from fastapi_users.models import UserLogin
+from fastapi.security import OAuth2PasswordRequestForm
+
+
+@pytest.fixture
+def create_oauth2_password_request_form():
+    def _create_oauth2_password_request_form(username, password):
+        return OAuth2PasswordRequestForm(
+            username=username,
+            password=password,
+            scope='',
+        )
+
+    return _create_oauth2_password_request_form
 
 
 class TestAuthenticate:
 
     @pytest.mark.asyncio
-    async def test_unknown_user(self, mock_db_interface):
-        user = await mock_db_interface.authenticate(UserLogin(
-            email='lancelot@camelot.bt',
-            password='guinevere',
-        ))
+    async def test_unknown_user(self, create_oauth2_password_request_form, mock_db_interface):
+        form = create_oauth2_password_request_form('lancelot@camelot.bt', 'guinevere')
+        user = await mock_db_interface.authenticate(form)
         assert user is None
 
     @pytest.mark.asyncio
-    async def test_wrong_password(self, mock_db_interface):
-        user = await mock_db_interface.authenticate(UserLogin(
-            email='king.arthur@camelot.bt',
-            password='percival',
-        ))
+    async def test_wrong_password(self, create_oauth2_password_request_form, mock_db_interface):
+        form = create_oauth2_password_request_form('king.arthur@camelot.bt', 'percival')
+        user = await mock_db_interface.authenticate(form)
         assert user is None
 
     @pytest.mark.asyncio
-    async def test_valid_credentials(self, mock_db_interface):
-        user = await mock_db_interface.authenticate(UserLogin(
-            email='king.arthur@camelot.bt',
-            password='guinevere',
-        ))
+    async def test_valid_credentials(self, create_oauth2_password_request_form, mock_db_interface):
+        form = create_oauth2_password_request_form('king.arthur@camelot.bt', 'guinevere')
+        user = await mock_db_interface.authenticate(form)
         assert user is not None
         assert user.email == 'king.arthur@camelot.bt'
