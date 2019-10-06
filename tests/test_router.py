@@ -25,32 +25,31 @@ def test_app_client() -> TestClient:
     return TestClient(app)
 
 
-def test_register_empty_body(test_app_client: TestClient):
-    response = test_app_client.post('/register', json={})
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+class TestRegister:
 
+    def test_empty_body(self, test_app_client: TestClient):
+        response = test_app_client.post('/register', json={})
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
-def test_register_missing_password(test_app_client: TestClient):
-    json = {
-        'email': 'king.arthur@camelot.bt',
-    }
-    response = test_app_client.post('/register', json=json)
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    def test_missing_password(self, test_app_client: TestClient):
+        json = {
+            'email': 'king.arthur@camelot.bt',
+        }
+        response = test_app_client.post('/register', json=json)
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
+    def test_wrong_email(self, test_app_client: TestClient):
+        json = {
+            'email': 'king.arthur',
+            'password': 'guinevere',
+        }
+        response = test_app_client.post('/register', json=json)
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
-def test_register_wrong_email(test_app_client: TestClient):
-    json = {
-        'email': 'king.arthur',
-        'password': 'guinevere',
-    }
-    response = test_app_client.post('/register', json=json)
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
-
-
-def test_register_valid_body(test_app_client: TestClient):
-    json = {
-        'email': 'king.arthur@camelot.bt',
-        'password': 'guinevere',
-    }
-    response = test_app_client.post('/register', json=json)
-    assert response.status_code == status.HTTP_200_OK
+    def test_valid_body(self, test_app_client: TestClient):
+        json = {
+            'email': 'king.arthur@camelot.bt',
+            'password': 'guinevere',
+        }
+        response = test_app_client.post('/register', json=json)
+        assert response.status_code == status.HTTP_200_OK

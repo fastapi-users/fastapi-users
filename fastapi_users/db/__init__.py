@@ -1,6 +1,6 @@
 from typing import List
 
-from ..models import UserDB
+from fastapi_users.models import UserDB
 
 
 class UserDBInterface:

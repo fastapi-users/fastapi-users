@@ -1,17 +1,20 @@
 import uuid
 from typing import Optional
 
+import pydantic
 from pydantic import BaseModel
 from pydantic.types import EmailStr
 
 
 class UserBase(BaseModel):
-    id: str = uuid.uuid4
+    id: str = None
     email: Optional[EmailStr] = None
     is_active: Optional[bool] = True
     is_superuser: Optional[bool] = False
-    first_name: Optional[str] = None
-    last_name: Optional[str] = None
+
+    @pydantic.validator('id', pre=True, always=True)
+    def default_id(cls, v):
+        return v or str(uuid.uuid4())
 
 
 class UserCreate(UserBase):

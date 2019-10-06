@@ -8,11 +8,15 @@ flake8 = "*"
 pytest = "*"
 requests = "*"
 isort = "*"
+databases = {extras = ["sqlite"],version = "*"}
+pytest-asyncio = "*"
 
 [packages]
 fastapi = "*"
 passlib = {extras = ["bcrypt"],version = "*"}
 email-validator = "*"
+sqlalchemy = "*"
+databases = "*"
 
 [requires]
 python_version = "3.7"
