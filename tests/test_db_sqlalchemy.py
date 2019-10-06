@@ -1,10 +1,10 @@
-from databases import Database
-import pytest
-import sqlalchemy
 import sqlite3
 
+import pytest
+import sqlalchemy
+from databases import Database
+
 from fastapi_users.db.sqlalchemy import Base, SQLAlchemyUserDB
-from fastapi_users.models import UserDB
 
 
 @pytest.fixture
@@ -22,14 +22,6 @@ async def sqlalchemy_user_db() -> SQLAlchemyUserDB:
     yield SQLAlchemyUserDB(database)
 
     Base.metadata.drop_all(engine)
-
-
-@pytest.fixture
-def user() -> UserDB:
-    return UserDB(
-        email='king.arthur@camelot.bt',
-        hashed_password='abc',
-    )
 
 
 @pytest.mark.asyncio
@@ -51,6 +43,10 @@ async def test_queries(user, sqlalchemy_user_db):
     email_user = await sqlalchemy_user_db.get_by_email(user.email)
     assert email_user.id == user_db.id
 
-    # Exception on existing email
+    # Exception when inserting existing email
     with pytest.raises(sqlite3.IntegrityError):
         await sqlalchemy_user_db.create(user)
+
+    # Unknown user
+    unknown_user = await sqlalchemy_user_db.get_by_email('lancelot@camelot.bt')
+    assert unknown_user is None
