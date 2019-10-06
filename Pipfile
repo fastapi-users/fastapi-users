@@ -7,6 +7,7 @@ verify_ssl = true
 flake8 = "*"
 pytest = "*"
 requests = "*"
+isort = "*"
 
 [packages]
 fastapi = "*"

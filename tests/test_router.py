@@ -1,15 +1,26 @@
+import pytest
 from starlette import status
 from starlette.testclient import TestClient
-import pytest
+
+from fastapi_users.db import UserDBInterface
+from fastapi_users.models import UserDB
+
+
+class MockUserDBInterface(UserDBInterface):
+
+    async def create(self, user: UserDB) -> UserDB:
+        return user
 
 
 @pytest.fixture
 def test_app_client() -> TestClient:
     from fastapi import FastAPI
-    from fastapi_users.router import router
+    from fastapi_users.router import UserRouter
+
+    userRouter = UserRouter(MockUserDBInterface())
 
     app = FastAPI()
-    app.include_router(router)
+    app.include_router(userRouter)
 
     return TestClient(app)
 
