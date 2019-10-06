@@ -89,3 +89,11 @@ class TestLogin:
         }
         response = test_app_client.post('/login', json=json)
         assert response.status_code == status.HTTP_200_OK
+
+    def test_inactive_user(self, test_app_client: TestClient):
+        json = {
+            'email': 'percival@camelot.bt',
+            'password': 'angharad',
+        }
+        response = test_app_client.post('/login', json=json)
+        assert response.status_code == status.HTTP_400_BAD_REQUEST

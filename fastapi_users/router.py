@@ -24,6 +24,8 @@ class UserRouter:
 
             if user is None:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
+            elif not user.is_active:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
 
             return user
 
