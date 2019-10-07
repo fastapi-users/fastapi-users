@@ -1,6 +1,6 @@
 import pytest
 
-from fastapi_users.db import UserDBInterface
+from fastapi_users.db import BaseUserDatabase
 from fastapi_users.models import UserDB
 from fastapi_users.password import get_password_hash
 
@@ -21,7 +21,7 @@ def user() -> UserDB:
     return active_user
 
 
-class MockUserDBInterface(UserDBInterface):
+class MockUserDBInterface(BaseUserDatabase):
 
     async def get_by_email(self, email: str) -> UserDB:
         if email == active_user.email:

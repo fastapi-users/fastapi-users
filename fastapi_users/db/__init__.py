@@ -6,7 +6,7 @@ from fastapi_users.models import UserDB
 from fastapi_users.password import get_password_hash, verify_and_update_password
 
 
-class UserDBInterface:
+class BaseUserDatabase:
     """
     Common interface exposing methods to list, get, create and update users in
     the database.

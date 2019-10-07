@@ -4,7 +4,7 @@ from databases import Database
 from sqlalchemy import Boolean, Column, String
 from sqlalchemy.ext.declarative import declarative_base
 
-from fastapi_users.db import UserDBInterface
+from fastapi_users.db import BaseUserDatabase
 from fastapi_users.models import UserDB
 
 Base = declarative_base()
@@ -23,7 +23,7 @@ class User(Base):
 users = User.__table__
 
 
-class SQLAlchemyUserDB(UserDBInterface):
+class SQLAlchemyUserDatabase(BaseUserDatabase):
 
     database: Database
 

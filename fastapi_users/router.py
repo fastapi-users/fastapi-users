@@ -2,14 +2,14 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from starlette import status
 
-from fastapi_users.db import UserDBInterface
+from fastapi_users.db import BaseUserDatabase
 from fastapi_users.models import UserCreate, UserDB
 from fastapi_users.password import get_password_hash
 
 
 class UserRouter:
 
-    def __new__(cls, userDB: UserDBInterface) -> APIRouter:
+    def __new__(cls, userDB: BaseUserDatabase) -> APIRouter:
         router = APIRouter()
 
         @router.post('/register')
