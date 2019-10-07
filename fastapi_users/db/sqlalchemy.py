@@ -42,3 +42,8 @@ class SQLAlchemyUserDB(UserDBInterface):
         query = users.insert().values(**user.dict())
         await self.database.execute(query)
         return user
+
+    async def update(self, user: UserDB) -> UserDB:
+        query = users.update().where(User.id == user.id).values(**user.dict())
+        await self.database.execute(query)
+        return user
