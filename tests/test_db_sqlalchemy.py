@@ -37,10 +37,14 @@ async def test_queries(user, sqlalchemy_user_db):
     user_db.is_superuser = True
     await sqlalchemy_user_db.update(user_db)
 
+    # Get by id
+    id_user = await sqlalchemy_user_db.get(user.id)
+    assert id_user.id == user_db.id
+    assert id_user.is_superuser is True
+
     # Get by email
     email_user = await sqlalchemy_user_db.get_by_email(user.email)
     assert email_user.id == user_db.id
-    assert email_user.is_superuser is True
 
     # List
     users = await sqlalchemy_user_db.list()

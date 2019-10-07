@@ -15,6 +15,9 @@ class UserDBInterface:
     async def list(self) -> List[UserDB]:
         raise NotImplementedError()
 
+    async def get(self, id: str) -> UserDB:
+        raise NotImplementedError()
+
     async def get_by_email(self, email: str) -> UserDB:
         raise NotImplementedError()
 

@@ -34,6 +34,10 @@ class SQLAlchemyUserDB(UserDBInterface):
         query = users.select()
         return await self.database.fetch_all(query)
 
+    async def get(self, id: str) -> UserDB:
+        query = users.select().where(User.id == id)
+        return await self.database.fetch_one(query)
+
     async def get_by_email(self, email: str) -> UserDB:
         query = users.select().where(User.email == email)
         return await self.database.fetch_one(query)
