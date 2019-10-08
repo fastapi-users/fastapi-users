@@ -66,5 +66,5 @@ class TestGetAuthenticationMethod:
         response = test_auth_client.get('/test-auth', headers={'Authorization': f'Bearer {token(user)}'})
         assert response.status_code == status.HTTP_200_OK
 
-        json = response.json()
-        assert json['id'] == user.id
+        response_json = response.json()
+        assert response_json['id'] == user.id

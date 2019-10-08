@@ -46,6 +46,11 @@ class TestRegister:
         response = test_app_client.post('/register', json=json)
         assert response.status_code == status.HTTP_200_OK
 
+        response_json = response.json()
+        assert 'hashed_password' not in response_json
+        assert 'password' not in response_json
+        assert 'id' in response_json
+
 
 class TestLogin:
 
