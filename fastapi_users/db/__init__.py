@@ -3,7 +3,9 @@ from typing import List
 from fastapi.security import OAuth2PasswordRequestForm
 
 from fastapi_users.models import UserDB
-from fastapi_users.password import get_password_hash, verify_and_update_password
+from fastapi_users.password import (
+    get_password_hash, verify_and_update_password
+)
 
 
 class BaseUserDatabase:

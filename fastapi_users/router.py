@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from starlette import status
+from starlette.responses import Response
 
+from fastapi_users.authentication import BaseAuthentication
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.models import UserCreate, UserDB
 from fastapi_users.password import get_password_hash
@@ -9,7 +11,7 @@ from fastapi_users.password import get_password_hash
 
 class UserRouter:
 
-    def __new__(cls, userDB: BaseUserDatabase) -> APIRouter:
+    def __new__(cls, userDB: BaseUserDatabase, auth: BaseAuthentication) -> APIRouter:
         router = APIRouter()
 
         @router.post('/register')
@@ -20,7 +22,7 @@ class UserRouter:
             return created_user
 
         @router.post('/login')
-        async def login(credentials: OAuth2PasswordRequestForm = Depends()):
+        async def login(response: Response, credentials: OAuth2PasswordRequestForm = Depends()):
             user = await userDB.authenticate(credentials)
 
             if user is None:
@@ -28,6 +30,6 @@ class UserRouter:
             elif not user.is_active:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
 
-            return user
+            return await auth.get_login_response(user, response)
 
         return router

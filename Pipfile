@@ -18,6 +18,7 @@ email-validator = "*"
 sqlalchemy = "*"
 databases = "*"
 python-multipart = "*"
+pyjwt = "*"
 
 [requires]
 python_version = "3.7"
