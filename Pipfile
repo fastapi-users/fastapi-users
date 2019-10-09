@@ -13,6 +13,8 @@ pytest-asyncio = "*"
 flake8-docstrings = "*"
 flake8-commas = "*"
 flake8-quotes = "*"
+mkdocs = "*"
+mkdocs-material = "*"
 
 [packages]
 fastapi = "*"

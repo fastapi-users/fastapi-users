@@ -1,0 +1,14 @@
+site_name: FastAPI Users
+site_description: Ready-to-use and customizable users management for FastAPI
+
+theme:
+  name: 'material'
+  palette:
+    primary: 'red'
+    accent: 'red'
+  logo:
+    icon: 'supervisor_account'
+
+repo_name: frankie567/fastapi-users
+repo_url: https://github.com/frankie567/fastapi-users
+edit_uri: ""
