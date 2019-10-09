@@ -9,16 +9,16 @@ from fastapi_users.models import UserDB
 from fastapi_users.password import get_password_hash
 
 active_user_data = UserDB(
-    id='aaa',
-    email='king.arthur@camelot.bt',
-    hashed_password=get_password_hash('guinevere'),
+    id="aaa",
+    email="king.arthur@camelot.bt",
+    hashed_password=get_password_hash("guinevere"),
 )
 
 inactive_user_data = UserDB(
-    id='bbb',
-    email='percival@camelot.bt',
-    hashed_password=get_password_hash('angharad'),
-    is_active=False
+    id="bbb",
+    email="percival@camelot.bt",
+    hashed_password=get_password_hash("angharad"),
+    is_active=False,
 )
 
 
@@ -33,7 +33,6 @@ def inactive_user() -> UserDB:
 
 
 class MockUserDatabase(BaseUserDatabase):
-
     async def get(self, id: str) -> UserDB:
         if id == active_user_data.id:
             return active_user_data
@@ -58,9 +57,8 @@ def mock_user_db() -> MockUserDatabase:
 
 
 class MockAuthentication(BaseAuthentication):
-
     async def get_login_response(self, user: UserDB, response: Response):
-        return {'token': user.id}
+        return {"token": user.id}
 
     async def authenticate(self, token: str) -> UserDB:
         user = await self.userDB.get(token)

@@ -12,7 +12,7 @@ class UserBase(BaseModel):
     is_active: Optional[bool] = True
     is_superuser: Optional[bool] = False
 
-    @pydantic.validator('id', pre=True, always=True)
+    @pydantic.validator("id", pre=True, always=True)
     def default_id(cls, v):
         return v or str(uuid.uuid4())
 

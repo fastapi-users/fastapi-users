@@ -3,9 +3,7 @@ from typing import List
 from fastapi.security import OAuth2PasswordRequestForm
 
 from fastapi_users.models import UserDB
-from fastapi_users.password import (
-    get_password_hash, verify_and_update_password,
-)
+from fastapi_users.password import get_password_hash, verify_and_update_password
 
 
 class BaseUserDatabase:
@@ -39,7 +37,9 @@ class BaseUserDatabase:
         if user is None:
             return None
         else:
-            verified, updated_password_hash = verify_and_update_password(credentials.password, user.hashed_password)
+            verified, updated_password_hash = verify_and_update_password(
+                credentials.password, user.hashed_password
+            )
             if not verified:
                 return None
             # Update password hash to a more robust one if needed

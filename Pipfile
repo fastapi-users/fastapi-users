@@ -11,10 +11,9 @@ isort = "*"
 databases = {extras = ["sqlite"],version = "*"}
 pytest-asyncio = "*"
 flake8-docstrings = "*"
-flake8-commas = "*"
-flake8-quotes = "*"
 mkdocs = "*"
 mkdocs-material = "*"
+black = "*"
 
 [packages]
 fastapi = "*"
@@ -27,3 +26,6 @@ pyjwt = "*"
 
 [requires]
 python_version = "3.7"
+
+[pipenv]
+allow_prereleases = true

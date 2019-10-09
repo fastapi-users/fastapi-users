@@ -11,4 +11,4 @@ charset = utf-8
 end_of_line = lf
 
 [*.yml]
-indent_size = 4
+indent_size = 2

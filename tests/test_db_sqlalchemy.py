@@ -9,11 +9,11 @@ from fastapi_users.db.sqlalchemy import Base, SQLAlchemyUserDatabase
 
 @pytest.fixture
 async def sqlalchemy_user_db() -> SQLAlchemyUserDatabase:
-    DATABASE_URL = 'sqlite:///./test.db'
+    DATABASE_URL = "sqlite:///./test.db"
     database = Database(DATABASE_URL)
 
     engine = sqlalchemy.create_engine(
-        DATABASE_URL, connect_args={'check_same_thread': False}
+        DATABASE_URL, connect_args={"check_same_thread": False}
     )
     Base.metadata.create_all(engine)
 
@@ -57,5 +57,5 @@ async def test_queries(user, sqlalchemy_user_db):
         await sqlalchemy_user_db.create(user)
 
     # Unknown user
-    unknown_user = await sqlalchemy_user_db.get_by_email('lancelot@camelot.bt')
+    unknown_user = await sqlalchemy_user_db.get_by_email("lancelot@camelot.bt")
     assert unknown_user is None
