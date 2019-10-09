@@ -3,12 +3,18 @@ import sqlite3
 import pytest
 import sqlalchemy
 from databases import Database
+from sqlalchemy.ext.declarative import declarative_base
 
-from fastapi_users.db.sqlalchemy import Base, SQLAlchemyUserDatabase
+from fastapi_users.db.sqlalchemy import BaseUser, SQLAlchemyUserDatabase
 
 
 @pytest.fixture
 async def sqlalchemy_user_db() -> SQLAlchemyUserDatabase:
+    Base = declarative_base()
+
+    class User(BaseUser, Base):
+        pass
+
     DATABASE_URL = "sqlite:///./test.db"
     database = Database(DATABASE_URL)
 
@@ -19,7 +25,7 @@ async def sqlalchemy_user_db() -> SQLAlchemyUserDatabase:
 
     await database.connect()
 
-    yield SQLAlchemyUserDatabase(database)
+    yield SQLAlchemyUserDatabase(database, User.__table__)
 
     Base.metadata.drop_all(engine)
 
