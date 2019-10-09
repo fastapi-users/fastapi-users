@@ -10,6 +10,9 @@ requests = "*"
 isort = "*"
 databases = {extras = ["sqlite"],version = "*"}
 pytest-asyncio = "*"
+flake8-docstrings = "*"
+flake8-commas = "*"
+flake8-quotes = "*"
 
 [packages]
 fastapi = "*"

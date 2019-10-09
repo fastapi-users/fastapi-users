@@ -10,7 +10,7 @@ from starlette.responses import Response
 from fastapi_users.authentication import BaseAuthentication
 from fastapi_users.models import UserDB
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/login')
 
 
 def generate_jwt(data: dict, lifetime_seconds: int, secret: str, algorithm: str) -> str:
