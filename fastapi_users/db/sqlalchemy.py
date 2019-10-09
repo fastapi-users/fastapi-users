@@ -10,7 +10,7 @@ from fastapi_users.models import UserDB
 Base = declarative_base()
 
 
-class User(Base):
+class BaseUser(Base):
     __tablename__ = 'user'
 
     id = Column(String, primary_key=True)
@@ -20,7 +20,7 @@ class User(Base):
     is_superuser = Column(Boolean, default=False)
 
 
-users = User.__table__
+users = BaseUser.__table__
 
 
 class SQLAlchemyUserDatabase(BaseUserDatabase):
@@ -35,11 +35,11 @@ class SQLAlchemyUserDatabase(BaseUserDatabase):
         return await self.database.fetch_all(query)
 
     async def get(self, id: str) -> UserDB:
-        query = users.select().where(User.id == id)
+        query = users.select().where(BaseUser.id == id)
         return await self.database.fetch_one(query)
 
     async def get_by_email(self, email: str) -> UserDB:
-        query = users.select().where(User.email == email)
+        query = users.select().where(BaseUser.email == email)
         return await self.database.fetch_one(query)
 
     async def create(self, user: UserDB) -> UserDB:
@@ -48,6 +48,6 @@ class SQLAlchemyUserDatabase(BaseUserDatabase):
         return user
 
     async def update(self, user: UserDB) -> UserDB:
-        query = users.update().where(User.id == user.id).values(**user.dict())
+        query = users.update().where(BaseUser.id == user.id).values(**user.dict())
         await self.database.execute(query)
         return user
