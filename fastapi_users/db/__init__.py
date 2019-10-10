@@ -1,8 +1,8 @@
-from typing import List
+from typing import List, Optional
 
 from fastapi.security import OAuth2PasswordRequestForm
 
-from fastapi_users.models import UserDB
+from fastapi_users.models import BaseUserDB
 from fastapi_users.password import get_password_hash, verify_and_update_password
 
 
@@ -12,22 +12,24 @@ class BaseUserDatabase:
     the database.
     """
 
-    async def list(self) -> List[UserDB]:
+    async def list(self) -> List[BaseUserDB]:
         raise NotImplementedError()
 
-    async def get(self, id: str) -> UserDB:
+    async def get(self, id: str) -> Optional[BaseUserDB]:
         raise NotImplementedError()
 
-    async def get_by_email(self, email: str) -> UserDB:
+    async def get_by_email(self, email: str) -> Optional[BaseUserDB]:
         raise NotImplementedError()
 
-    async def create(self, user: UserDB) -> UserDB:
+    async def create(self, user: BaseUserDB) -> BaseUserDB:
         raise NotImplementedError()
 
-    async def update(self, user: UserDB) -> UserDB:
+    async def update(self, user: BaseUserDB) -> BaseUserDB:
         raise NotImplementedError()
 
-    async def authenticate(self, credentials: OAuth2PasswordRequestForm) -> UserDB:
+    async def authenticate(
+        self, credentials: OAuth2PasswordRequestForm
+    ) -> Optional[BaseUserDB]:
         user = await self.get_by_email(credentials.username)
 
         # Always run the hasher to mitigate timing attack

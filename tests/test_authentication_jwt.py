@@ -6,7 +6,7 @@ from starlette.responses import Response
 from starlette.testclient import TestClient
 
 from fastapi_users.authentication.jwt import JWTAuthentication, generate_jwt
-from fastapi_users.models import UserDB
+from fastapi_users.models import BaseUserDB
 
 SECRET = "SECRET"
 ALGORITHM = "HS256"
@@ -33,7 +33,7 @@ def test_auth_client(jwt_authentication):
 
     @app.get("/test-auth")
     def test_auth(
-        user: UserDB = Depends(jwt_authentication.get_authentication_method())
+        user: BaseUserDB = Depends(jwt_authentication.get_authentication_method())
     ):
         return user
 

@@ -1,13 +1,13 @@
 import uuid
-from typing import Optional
+from typing import Optional, Type
 
 import pydantic
 from pydantic import BaseModel
 from pydantic.types import EmailStr
 
 
-class UserBase(BaseModel):
-    id: str = None
+class BaseUser(BaseModel):
+    id: Optional[str] = None
     email: Optional[EmailStr] = None
     is_active: Optional[bool] = True
     is_superuser: Optional[bool] = False
@@ -17,18 +17,31 @@ class UserBase(BaseModel):
         return v or str(uuid.uuid4())
 
 
-class UserCreate(UserBase):
+class BaseUserCreate(BaseUser):
     email: EmailStr
     password: str
 
 
-class UserUpdate(UserBase):
+class BaseUserUpdate(BaseUser):
     pass
 
 
-class UserDB(UserBase):
+class BaseUserDB(BaseUser):
     hashed_password: str
 
 
-class User(UserBase):
-    pass
+class Models:
+    def __init__(self, user_model: Type[BaseUser]):
+        class UserCreate(user_model, BaseUserCreate):  # type: ignore
+            pass
+
+        class UserUpdate(user_model, BaseUserUpdate):  # type: ignore
+            pass
+
+        class UserDB(user_model, BaseUserDB):  # type: ignore
+            pass
+
+        self.User = user_model
+        self.UserCreate = UserCreate
+        self.UserUpdate = UserUpdate
+        self.UserDB = UserDB

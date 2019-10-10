@@ -1,18 +1,19 @@
 import sqlite3
+from typing import AsyncGenerator
 
 import pytest
 import sqlalchemy
 from databases import Database
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 
-from fastapi_users.db.sqlalchemy import BaseUser, SQLAlchemyUserDatabase
+from fastapi_users.db.sqlalchemy import BaseUserTable, SQLAlchemyUserDatabase
 
 
 @pytest.fixture
-async def sqlalchemy_user_db() -> SQLAlchemyUserDatabase:
-    Base = declarative_base()
+async def sqlalchemy_user_db() -> AsyncGenerator[SQLAlchemyUserDatabase, None]:
+    Base: DeclarativeMeta = declarative_base()
 
-    class User(BaseUser, Base):
+    class User(BaseUserTable, Base):
         pass
 
     DATABASE_URL = "sqlite:///./test.db"

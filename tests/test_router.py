@@ -3,13 +3,16 @@ from fastapi import FastAPI
 from starlette import status
 from starlette.testclient import TestClient
 
-from fastapi_users.models import UserDB
-from fastapi_users.router import UserRouter
+from fastapi_users.models import BaseUser, BaseUserDB
+from fastapi_users.router import get_user_router
 
 
 @pytest.fixture
 def test_app_client(mock_user_db, mock_authentication) -> TestClient:
-    userRouter = UserRouter(mock_user_db, mock_authentication)
+    class User(BaseUser):
+        pass
+
+    userRouter = get_user_router(mock_user_db, User, mock_authentication)
 
     app = FastAPI()
     app.include_router(userRouter)
@@ -68,7 +71,7 @@ class TestLogin:
         response = test_app_client.post("/login", data=data)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
-    def test_valid_credentials(self, test_app_client: TestClient, user: UserDB):
+    def test_valid_credentials(self, test_app_client: TestClient, user: BaseUserDB):
         data = {"username": "king.arthur@camelot.bt", "password": "guinevere"}
         response = test_app_client.post("/login", data=data)
         assert response.status_code == status.HTTP_200_OK

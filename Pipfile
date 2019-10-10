@@ -14,6 +14,7 @@ flake8-docstrings = "*"
 mkdocs = "*"
 mkdocs-material = "*"
 black = "*"
+mypy = "*"
 
 [packages]
 fastapi = "*"

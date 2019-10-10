@@ -1,13 +1,13 @@
-from typing import List
+from typing import List, cast
 
 from databases import Database
 from sqlalchemy import Boolean, Column, String, Table
 
 from fastapi_users.db import BaseUserDatabase
-from fastapi_users.models import UserDB
+from fastapi_users.models import BaseUserDB
 
 
-class BaseUser:
+class BaseUserTable:
     __tablename__ = "user"
 
     id = Column(String, primary_key=True)
@@ -26,24 +26,24 @@ class SQLAlchemyUserDatabase(BaseUserDatabase):
         self.database = database
         self.users = users
 
-    async def list(self) -> List[UserDB]:
+    async def list(self) -> List[BaseUserDB]:
         query = self.users.select()
-        return await self.database.fetch_all(query)
+        return cast(List[BaseUserDB], await self.database.fetch_all(query))
 
-    async def get(self, id: str) -> UserDB:
+    async def get(self, id: str) -> BaseUserDB:
         query = self.users.select().where(self.users.c.id == id)
-        return await self.database.fetch_one(query)
+        return cast(BaseUserDB, await self.database.fetch_one(query))
 
-    async def get_by_email(self, email: str) -> UserDB:
+    async def get_by_email(self, email: str) -> BaseUserDB:
         query = self.users.select().where(self.users.c.email == email)
-        return await self.database.fetch_one(query)
+        return cast(BaseUserDB, await self.database.fetch_one(query))
 
-    async def create(self, user: UserDB) -> UserDB:
+    async def create(self, user: BaseUserDB) -> BaseUserDB:
         query = self.users.insert().values(**user.dict())
         await self.database.execute(query)
         return user
 
-    async def update(self, user: UserDB) -> UserDB:
+    async def update(self, user: BaseUserDB) -> BaseUserDB:
         query = (
             self.users.update().where(self.users.c.id == user.id).values(**user.dict())
         )
