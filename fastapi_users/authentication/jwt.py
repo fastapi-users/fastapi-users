@@ -7,6 +7,7 @@ from starlette import status
 from starlette.responses import Response
 
 from fastapi_users.authentication import BaseAuthentication
+from fastapi_users.db import BaseUserDatabase
 from fastapi_users.models import BaseUserDB
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
@@ -25,8 +26,7 @@ class JWTAuthentication(BaseAuthentication):
     secret: str
     lifetime_seconds: int
 
-    def __init__(self, secret: str, lifetime_seconds: int, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, secret: str, lifetime_seconds: int):
         self.secret = secret
         self.lifetime_seconds = lifetime_seconds
 
@@ -36,7 +36,7 @@ class JWTAuthentication(BaseAuthentication):
 
         return {"token": token}
 
-    def get_authentication_method(self):
+    def get_authentication_method(self, user_db: BaseUserDatabase):
         async def authentication_method(token: str = Depends(oauth2_scheme)):
             credentials_exception = HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED
@@ -50,7 +50,7 @@ class JWTAuthentication(BaseAuthentication):
             except jwt.PyJWTError:
                 raise credentials_exception
 
-            user = await self.user_db.get(user_id)
+            user = await user_db.get(user_id)
             if user is None or not user.is_active:
                 raise credentials_exception
 

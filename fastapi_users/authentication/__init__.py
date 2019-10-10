@@ -7,14 +7,10 @@ from fastapi_users.models import BaseUserDB
 
 
 class BaseAuthentication:
-
-    user_db: BaseUserDatabase
-
-    def __init__(self, user_db: BaseUserDatabase):
-        self.user_db = user_db
-
     async def get_login_response(self, user: BaseUserDB, response: Response):
         raise NotImplementedError()
 
-    def get_authentication_method(self) -> Callable[..., BaseUserDB]:
+    def get_authentication_method(
+        self, user_db: BaseUserDatabase
+    ) -> Callable[..., BaseUserDB]:
         raise NotImplementedError()

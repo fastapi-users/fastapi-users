@@ -1,7 +1,8 @@
 from typing import Optional
 
 import pytest
-from fastapi import HTTPException
+from fastapi import Depends, HTTPException
+from fastapi.security import OAuth2PasswordBearer
 from starlette import status
 from starlette.responses import Response
 
@@ -62,13 +63,21 @@ class MockAuthentication(BaseAuthentication):
     async def get_login_response(self, user: BaseUserDB, response: Response):
         return {"token": user.id}
 
-    async def authenticate(self, token: str) -> BaseUserDB:
-        user = await self.user_db.get(token)
-        if user is None or not user.is_active:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
-        return user
+    def get_authentication_method(self, user_db: BaseUserDatabase):
+        oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
+
+        async def authentication_method(token: str = Depends(oauth2_scheme)):
+            credentials_exception = HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED
+            )
+            user = await user_db.get(token)
+            if user is None or not user.is_active:
+                raise credentials_exception
+            return user
+
+        return authentication_method
 
 
 @pytest.fixture
-def mock_authentication(mock_user_db) -> MockAuthentication:
-    return MockAuthentication(mock_user_db)
+def mock_authentication() -> MockAuthentication:
+    return MockAuthentication()

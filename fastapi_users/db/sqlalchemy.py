@@ -8,6 +8,8 @@ from fastapi_users.models import BaseUserDB
 
 
 class BaseUserTable:
+    """Base SQLAlchemy users table definition."""
+
     __tablename__ = "user"
 
     id = Column(String, primary_key=True)
@@ -18,6 +20,12 @@ class BaseUserTable:
 
 
 class SQLAlchemyUserDatabase(BaseUserDatabase):
+    """
+    Database adapter for SQLAlchemy.
+
+    :param database: `Database` instance from `encode/databases`.
+    :param users: SQLAlchemy users table instance.
+    """
 
     database: Database
     users: Table

@@ -14,8 +14,8 @@ LIFETIME = 3600
 
 
 @pytest.fixture
-def jwt_authentication(mock_user_db):
-    return JWTAuthentication(SECRET, LIFETIME, mock_user_db)
+def jwt_authentication():
+    return JWTAuthentication(SECRET, LIFETIME)
 
 
 @pytest.fixture
@@ -28,12 +28,14 @@ def token():
 
 
 @pytest.fixture
-def test_auth_client(jwt_authentication):
+def test_auth_client(jwt_authentication, mock_user_db):
     app = FastAPI()
 
     @app.get("/test-auth")
     def test_auth(
-        user: BaseUserDB = Depends(jwt_authentication.get_authentication_method())
+        user: BaseUserDB = Depends(
+            jwt_authentication.get_authentication_method(mock_user_db)
+        )
     ):
         return user
 

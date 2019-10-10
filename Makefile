@@ -6,3 +6,9 @@ format:
 
 test:
 	$(PIPENV_RUN) pytest
+
+docs-serve:
+	$(PIPENV_RUN) mkdocs serve
+
+docs-publish:
+	$(PIPENV_RUN) mkdocs gh-deploy
