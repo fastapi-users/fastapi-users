@@ -3,11 +3,11 @@ from typing import List, cast
 from databases import Database
 from sqlalchemy import Boolean, Column, String, Table
 
-from fastapi_users.db import BaseUserDatabase
+from fastapi_users.db.base import BaseUserDatabase
 from fastapi_users.models import BaseUserDB
 
 
-class BaseUserTable:
+class SQLAlchemyBaseUserTable:
     """Base SQLAlchemy users table definition."""
 
     __tablename__ = "user"

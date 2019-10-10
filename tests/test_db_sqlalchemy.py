@@ -6,14 +6,14 @@ import sqlalchemy
 from databases import Database
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 
-from fastapi_users.db.sqlalchemy import BaseUserTable, SQLAlchemyUserDatabase
+from fastapi_users.db.sqlalchemy import SQLAlchemyBaseUserTable, SQLAlchemyUserDatabase
 
 
 @pytest.fixture
 async def sqlalchemy_user_db() -> AsyncGenerator[SQLAlchemyUserDatabase, None]:
     Base: DeclarativeMeta = declarative_base()
 
-    class User(BaseUserTable, Base):
+    class User(SQLAlchemyBaseUserTable, Base):
         pass
 
     DATABASE_URL = "sqlite:///./test.db"

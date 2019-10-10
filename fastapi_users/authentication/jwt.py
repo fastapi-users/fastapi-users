@@ -6,8 +6,8 @@ from fastapi.security import OAuth2PasswordBearer
 from starlette import status
 from starlette.responses import Response
 
-from fastapi_users.authentication import BaseAuthentication
-from fastapi_users.db import BaseUserDatabase
+from fastapi_users.authentication.base import BaseAuthentication
+from fastapi_users.db.base import BaseUserDatabase
 from fastapi_users.models import BaseUserDB
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
