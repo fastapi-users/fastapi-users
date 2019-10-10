@@ -10,21 +10,21 @@ from fastapi_users.password import get_password_hash
 
 
 class UserRouter:
-    def __new__(cls, userDB: BaseUserDatabase, auth: BaseAuthentication) -> APIRouter:
+    def __new__(cls, user_db: BaseUserDatabase, auth: BaseAuthentication) -> APIRouter:
         router = APIRouter()
 
         @router.post("/register", response_model=User)
         async def register(user: UserCreate):
             hashed_password = get_password_hash(user.password)
             db_user = UserDB(**user.dict(), hashed_password=hashed_password)
-            created_user = await userDB.create(db_user)
+            created_user = await user_db.create(db_user)
             return created_user
 
         @router.post("/login")
         async def login(
             response: Response, credentials: OAuth2PasswordRequestForm = Depends()
         ):
-            user = await userDB.authenticate(credentials)
+            user = await user_db.authenticate(credentials)
 
             if user is None:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)

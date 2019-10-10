@@ -50,7 +50,7 @@ class JWTAuthentication(BaseAuthentication):
             except jwt.PyJWTError:
                 raise credentials_exception
 
-            user = await self.userDB.get(user_id)
+            user = await self.user_db.get(user_id)
             if user is None or not user.is_active:
                 raise credentials_exception
 

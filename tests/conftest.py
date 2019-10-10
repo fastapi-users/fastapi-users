@@ -61,7 +61,7 @@ class MockAuthentication(BaseAuthentication):
         return {"token": user.id}
 
     async def authenticate(self, token: str) -> UserDB:
-        user = await self.userDB.get(token)
+        user = await self.user_db.get(token)
         if user is None or not user.is_active:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
         return user
