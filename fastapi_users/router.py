@@ -14,6 +14,7 @@ from fastapi_users.password import get_password_hash
 def get_user_router(
     user_db: BaseUserDatabase, user_model: Type[BaseUser], auth: BaseAuthentication
 ) -> APIRouter:
+    """Generate a router with the authentication routes."""
     router = APIRouter()
     models = Models(user_model)
 

@@ -7,6 +7,8 @@ from fastapi_users.models import BaseUserDB
 
 
 class BaseAuthentication:
+    """Base adapter for generating and decoding authentication tokens."""
+
     async def get_login_response(self, user: BaseUserDB, response: Response):
         raise NotImplementedError()
 

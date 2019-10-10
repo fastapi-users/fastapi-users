@@ -21,6 +21,12 @@ def generate_jwt(data: dict, lifetime_seconds: int, secret: str, algorithm: str)
 
 
 class JWTAuthentication(BaseAuthentication):
+    """
+    Authentication using a JWT.
+
+    :param secret: Secret used to encode the JWT.
+    :param lifetime_seconds: Lifetime duration of the JWT in seconds.
+    """
 
     algorithm: str = "HS256"
     secret: str

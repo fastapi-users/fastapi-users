@@ -7,6 +7,8 @@ from pydantic.types import EmailStr
 
 
 class BaseUser(BaseModel):
+    """Base User model."""
+
     id: Optional[str] = None
     email: Optional[EmailStr] = None
     is_active: Optional[bool] = True
@@ -31,6 +33,8 @@ class BaseUserDB(BaseUser):
 
 
 class Models:
+    """Generate models inheriting from the custom User model."""
+
     def __init__(self, user_model: Type[BaseUser]):
         class UserCreate(user_model, BaseUserCreate):  # type: ignore
             pass
