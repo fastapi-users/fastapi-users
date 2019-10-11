@@ -34,5 +34,11 @@ class FastAPIUsers:
         self.auth = auth
         self.router = get_user_router(self.db, user_model, self.auth)
 
-        get_current_user = self.auth.get_authentication_method(self.db)
+        get_current_user = self.auth.get_current_user(self.db)
         self.get_current_user = get_current_user  # type: ignore
+
+        get_current_active_user = self.auth.get_current_active_user(self.db)
+        self.get_current_active_user = get_current_active_user  # type: ignore
+
+        get_current_superuser = self.auth.get_current_superuser(self.db)
+        self.get_current_superuser = get_current_superuser  # type: ignore

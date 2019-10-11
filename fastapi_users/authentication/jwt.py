@@ -1,9 +1,8 @@
 from datetime import datetime, timedelta
 
 import jwt
-from fastapi import Depends, HTTPException
+from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
-from starlette import status
 from starlette.responses import Response
 
 from fastapi_users.authentication.base import BaseAuthentication
@@ -42,24 +41,36 @@ class JWTAuthentication(BaseAuthentication):
 
         return {"token": token}
 
-    def get_authentication_method(self, user_db: BaseUserDatabase):
-        async def authentication_method(token: str = Depends(oauth2_scheme)):
-            credentials_exception = HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED
-            )
+    def get_current_user(self, user_db: BaseUserDatabase):
+        async def _get_current_user(token: str = Depends(oauth2_scheme)):
+            user = await self._get_authentication_method(user_db)(token)
+            return self._get_current_user_base(user)
 
+        return _get_current_user
+
+    def get_current_active_user(self, user_db: BaseUserDatabase):
+        async def _get_current_active_user(token: str = Depends(oauth2_scheme)):
+            user = await self._get_authentication_method(user_db)(token)
+            return self._get_current_active_user_base(user)
+
+        return _get_current_active_user
+
+    def get_current_superuser(self, user_db: BaseUserDatabase):
+        async def _get_current_superuser(token: str = Depends(oauth2_scheme)):
+            user = await self._get_authentication_method(user_db)(token)
+            return self._get_current_superuser_base(user)
+
+        return _get_current_superuser
+
+    def _get_authentication_method(self, user_db: BaseUserDatabase):
+        async def authentication_method(token: str = Depends(oauth2_scheme)):
             try:
                 data = jwt.decode(token, self.secret, algorithms=[self.algorithm])
                 user_id = data.get("user_id")
                 if user_id is None:
-                    raise credentials_exception
+                    return None
             except jwt.PyJWTError:
-                raise credentials_exception
-
-            user = await user_db.get(user_id)
-            if user is None or not user.is_active:
-                raise credentials_exception
-
-            return user
+                return None
+            return await user_db.get(user_id)
 
         return authentication_method

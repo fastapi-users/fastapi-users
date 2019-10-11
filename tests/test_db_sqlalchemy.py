@@ -7,6 +7,8 @@ from databases import Database
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 
 from fastapi_users.db.sqlalchemy import SQLAlchemyBaseUserTable, SQLAlchemyUserDatabase
+from fastapi_users.models import BaseUserDB
+from fastapi_users.password import get_password_hash
 
 
 @pytest.fixture
@@ -32,7 +34,13 @@ async def sqlalchemy_user_db() -> AsyncGenerator[SQLAlchemyUserDatabase, None]:
 
 
 @pytest.mark.asyncio
-async def test_queries(user, sqlalchemy_user_db):
+async def test_queries(sqlalchemy_user_db):
+    user = BaseUserDB(
+        id="111",
+        email="lancelot@camelot.bt",
+        hashed_password=get_password_hash("guinevere"),
+    )
+
     # Create
     user_db = await sqlalchemy_user_db.create(user)
     assert user_db.id is not None
@@ -64,5 +72,5 @@ async def test_queries(user, sqlalchemy_user_db):
         await sqlalchemy_user_db.create(user)
 
     # Unknown user
-    unknown_user = await sqlalchemy_user_db.get_by_email("lancelot@camelot.bt")
+    unknown_user = await sqlalchemy_user_db.get_by_email("galahad@camelot.bt")
     assert unknown_user is None

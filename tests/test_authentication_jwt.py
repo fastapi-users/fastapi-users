@@ -33,9 +33,7 @@ def test_auth_client(jwt_authentication, mock_user_db):
 
     @app.get("/test-auth")
     def test_auth(
-        user: BaseUserDB = Depends(
-            jwt_authentication.get_authentication_method(mock_user_db)
-        )
+        user: BaseUserDB = Depends(jwt_authentication.get_current_user(mock_user_db))
     ):
         return user
 
@@ -53,7 +51,7 @@ async def test_get_login_response(jwt_authentication, user):
     assert decoded["user_id"] == user.id
 
 
-class TestGetAuthenticationMethod:
+class TestGetCurrentUser:
     def test_missing_token(self, test_auth_client):
         response = test_auth_client.get("/test-auth")
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
@@ -68,7 +66,10 @@ class TestGetAuthenticationMethod:
         response = test_auth_client.get(
             "/test-auth", headers={"Authorization": f"Bearer {token(inactive_user)}"}
         )
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.status_code == status.HTTP_200_OK
+
+        response_json = response.json()
+        assert response_json["id"] == inactive_user.id
 
     def test_valid_token(self, test_auth_client, token, user):
         response = test_auth_client.get(
