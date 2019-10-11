@@ -10,4 +10,5 @@ install:
   - pipenv install --dev
 
 script:
-  - pipenv run pytest
+  - pipenv run pytest --cov=./
+  - pipenv run codecov

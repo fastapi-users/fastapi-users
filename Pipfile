@@ -15,6 +15,8 @@ mkdocs = "*"
 mkdocs-material = "*"
 black = "*"
 mypy = "*"
+codecov = "*"
+pytest-cov = "*"
 
 [packages]
 fastapi = "*"
