@@ -4,6 +4,7 @@
     <em>Ready-to-use and customizable users management for FastAPI </em>
 </p>
 
+[![Build Status](https://travis-ci.org/frankie567/fastapi-users.svg?branch=master)](https://travis-ci.org/frankie567/fastapi-users)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=frankie567/fastapi-users)](https://dependabot.com)
 
 ---
