@@ -71,6 +71,14 @@ async def test_queries(sqlalchemy_user_db):
     with pytest.raises(sqlite3.IntegrityError):
         await sqlalchemy_user_db.create(user)
 
+    # Exception when inserting non-nullable fields
+    with pytest.raises(sqlite3.IntegrityError):
+        wrong_user = BaseUserDB(
+            id="222",
+            hashed_password="aaa"
+        )
+        await sqlalchemy_user_db.create(wrong_user)
+
     # Unknown user
     unknown_user = await sqlalchemy_user_db.get_by_email("galahad@camelot.bt")
     assert unknown_user is None

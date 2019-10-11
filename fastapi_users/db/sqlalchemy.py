@@ -13,10 +13,10 @@ class SQLAlchemyBaseUserTable:
     __tablename__ = "user"
 
     id = Column(String, primary_key=True)
-    email = Column(String, unique=True, index=True)
-    hashed_password = Column(String)
-    is_active = Column(Boolean, default=True)
-    is_superuser = Column(Boolean, default=False)
+    email = Column(String, unique=True, index=True, nullable=False)
+    hashed_password = Column(String, nullable=False)
+    is_active = Column(Boolean, default=True, nullable=False)
+    is_superuser = Column(Boolean, default=False, nullable=False)
 
 
 class SQLAlchemyUserDatabase(BaseUserDatabase):
