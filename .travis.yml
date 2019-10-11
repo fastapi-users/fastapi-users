@@ -7,7 +7,7 @@ python:
 
 install:
   - pip install pipenv
-  - pipenv install
+  - pipenv install --dev
 
 script:
   - pipenv run pytest
