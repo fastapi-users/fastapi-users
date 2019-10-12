@@ -17,3 +17,15 @@
 ---
 
 ## Work in progress 🚧
+
+This library is currently in early stage development. First working version soon!
+
+## Features
+
+* Extensible base user model
+* Ready-to-use register, login, *forgot and reset password routes (#3)*
+* Customizable database backend
+    * SQLAlchemy backend included
+    * *MongoDB backend included (#4)*
+* Customizable authentication backend
+    * JWT authentication backend included
