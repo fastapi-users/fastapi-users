@@ -1,4 +1,4 @@
-name: Python application
+name: Unit tests
 
 on: [push]
 
@@ -21,6 +21,8 @@ jobs:
         python -m pip install --upgrade pipenv
         pipenv install --dev
     - name: Test with pytest
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       run: |
         pipenv run pytest --cov=./
         pipenv run codecov
