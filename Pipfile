@@ -17,6 +17,7 @@ black = "*"
 mypy = "*"
 codecov = "*"
 pytest-cov = "*"
+pytest-mock = "*"
 
 [packages]
 fastapi = "*"
