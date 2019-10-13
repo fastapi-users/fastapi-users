@@ -87,9 +87,8 @@ def get_user_router(
             if user is None or not user.is_active:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
 
-            updated_user = BaseUserDB(**user.dict())
-            updated_user.hashed_password = get_password_hash(password)
-            await user_db.update(updated_user)
+            user.hashed_password = get_password_hash(password)
+            await user_db.update(user)
         except jwt.PyJWTError:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
 

@@ -10,70 +10,67 @@ from fastapi_users.db import BaseUserDatabase
 from fastapi_users.models import BaseUserDB
 from fastapi_users.password import get_password_hash
 
-active_user_data = BaseUserDB(
-    id="aaa",
-    email="king.arthur@camelot.bt",
-    hashed_password=get_password_hash("guinevere"),
-)
-
-inactive_user_data = BaseUserDB(
-    id="bbb",
-    email="percival@camelot.bt",
-    hashed_password=get_password_hash("angharad"),
-    is_active=False,
-)
-
-superuser_data = BaseUserDB(
-    id="ccc",
-    email="merlin@camelot.bt",
-    hashed_password=get_password_hash("viviane"),
-    is_superuser=True,
-)
+guinevere_password_hash = get_password_hash("guinevere")
+angharad_password_hash = get_password_hash("angharad")
+viviane_password_hash = get_password_hash("viviane")
 
 
 @pytest.fixture
 def user() -> BaseUserDB:
-    return active_user_data
+    return BaseUserDB(
+        id="aaa",
+        email="king.arthur@camelot.bt",
+        hashed_password=guinevere_password_hash,
+    )
 
 
 @pytest.fixture
 def inactive_user() -> BaseUserDB:
-    return inactive_user_data
+    return BaseUserDB(
+        id="bbb",
+        email="percival@camelot.bt",
+        hashed_password=angharad_password_hash,
+        is_active=False,
+    )
 
 
 @pytest.fixture
 def superuser() -> BaseUserDB:
-    return superuser_data
-
-
-class MockUserDatabase(BaseUserDatabase):
-    async def get(self, id: str) -> Optional[BaseUserDB]:
-        if id == active_user_data.id:
-            return active_user_data
-        elif id == inactive_user_data.id:
-            return inactive_user_data
-        elif id == superuser_data.id:
-            return superuser_data
-        return None
-
-    async def get_by_email(self, email: str) -> Optional[BaseUserDB]:
-        if email == active_user_data.email:
-            return active_user_data
-        elif email == inactive_user_data.email:
-            return inactive_user_data
-        elif email == superuser_data.email:
-            return superuser_data
-        return None
-
-    async def create(self, user: BaseUserDB) -> BaseUserDB:
-        return user
-
-    async def update(self, user: BaseUserDB) -> BaseUserDB:
-        return user
+    return BaseUserDB(
+        id="ccc",
+        email="merlin@camelot.bt",
+        hashed_password=viviane_password_hash,
+        is_superuser=True,
+    )
 
 
 @pytest.fixture
-def mock_user_db() -> MockUserDatabase:
+def mock_user_db(user, inactive_user, superuser) -> BaseUserDatabase:
+    class MockUserDatabase(BaseUserDatabase):
+        async def get(self, id: str) -> Optional[BaseUserDB]:
+            if id == user.id:
+                return user
+            elif id == inactive_user.id:
+                return inactive_user
+            elif id == superuser.id:
+                return superuser
+            return None
+
+        async def get_by_email(self, email: str) -> Optional[BaseUserDB]:
+            if email == user.email:
+                return user
+            elif email == inactive_user.email:
+                return inactive_user
+            elif email == superuser.email:
+                return superuser
+            return None
+
+        async def create(self, user: BaseUserDB) -> BaseUserDB:
+            return user
+
+        async def update(self, user: BaseUserDB) -> BaseUserDB:
+            return user
+
     return MockUserDatabase()
 
 

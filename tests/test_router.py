@@ -244,6 +244,7 @@ class TestResetPassword:
         user: BaseUserDB,
     ):
         mocker.spy(mock_user_db, "update")
+        current_hashed_passord = user.hashed_password
 
         json = {"token": forgot_password_token(user.id), "password": "holygrail"}
         response = test_app_client.post("/reset-password", json=json)
@@ -251,4 +252,4 @@ class TestResetPassword:
         assert mock_user_db.update.called is True
 
         updated_user = mock_user_db.update.call_args[0][0]
-        assert updated_user.hashed_password != user.hashed_password
+        assert updated_user.hashed_password != current_hashed_passord

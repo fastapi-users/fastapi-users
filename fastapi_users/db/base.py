@@ -53,7 +53,6 @@ class BaseUserDatabase:
                 return None
             # Update password hash to a more robust one if needed
             if updated_password_hash is not None:
-                user = BaseUserDB(**user.dict())
                 user.hashed_password = updated_password_hash
                 await self.update(user)
 
