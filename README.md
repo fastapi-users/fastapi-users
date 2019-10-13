@@ -1,6 +1,10 @@
 # FastAPI Users
 
 <p align="center">
+  <img src="https://raw.githubusercontent.com/frankie567/fastapi-users/master/logo.svg" alt="FastAPI Users">
+</p>
+
+<p align="center">
     <em>Ready-to-use and customizable users management for FastAPI </em>
 </p>
 
