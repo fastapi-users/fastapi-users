@@ -1,7 +1,7 @@
 # FastAPI Users
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/frankie567/fastapi-users/master/logo.svg" alt="FastAPI Users">
+  <img src="https://raw.githubusercontent.com/frankie567/fastapi-users/master/logo.svg?sanitize=true" alt="FastAPI Users">
 </p>
 
 <p align="center">
