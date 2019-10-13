@@ -1,5 +1,3 @@
-from datetime import datetime, timedelta
-
 import jwt
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
@@ -8,15 +6,9 @@ from starlette.responses import Response
 from fastapi_users.authentication.base import BaseAuthentication
 from fastapi_users.db.base import BaseUserDatabase
 from fastapi_users.models import BaseUserDB
+from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
-
-
-def generate_jwt(data: dict, lifetime_seconds: int, secret: str, algorithm: str) -> str:
-    payload = data.copy()
-    expire = datetime.utcnow() + timedelta(seconds=lifetime_seconds)
-    payload["exp"] = expire
-    return jwt.encode(payload, secret, algorithm=algorithm).decode("utf-8")
 
 
 class JWTAuthentication(BaseAuthentication):
@@ -27,7 +19,7 @@ class JWTAuthentication(BaseAuthentication):
     :param lifetime_seconds: Lifetime duration of the JWT in seconds.
     """
 
-    algorithm: str = "HS256"
+    token_audience: str = "fastapi-users:auth"
     secret: str
     lifetime_seconds: int
 
@@ -36,8 +28,8 @@ class JWTAuthentication(BaseAuthentication):
         self.lifetime_seconds = lifetime_seconds
 
     async def get_login_response(self, user: BaseUserDB, response: Response):
-        data = {"user_id": user.id}
-        token = generate_jwt(data, self.lifetime_seconds, self.secret, self.algorithm)
+        data = {"user_id": user.id, "aud": self.token_audience}
+        token = generate_jwt(data, self.lifetime_seconds, self.secret, JWT_ALGORITHM)
 
         return {"token": token}
 
@@ -65,7 +57,12 @@ class JWTAuthentication(BaseAuthentication):
     def _get_authentication_method(self, user_db: BaseUserDatabase):
         async def authentication_method(token: str = Depends(oauth2_scheme)):
             try:
-                data = jwt.decode(token, self.secret, algorithms=[self.algorithm])
+                data = jwt.decode(
+                    token,
+                    self.secret,
+                    audience=self.token_audience,
+                    algorithms=[JWT_ALGORITHM],
+                )
                 user_id = data.get("user_id")
                 if user_id is None:
                     return None

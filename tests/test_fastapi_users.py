@@ -6,13 +6,20 @@ from starlette.testclient import TestClient
 from fastapi_users import FastAPIUsers
 from fastapi_users.models import BaseUser, BaseUserDB
 
+SECRET = "SECRET"
+
 
 @pytest.fixture
 def fastapi_users(mock_user_db, mock_authentication) -> FastAPIUsers:
     class User(BaseUser):
         pass
 
-    return FastAPIUsers(mock_user_db, mock_authentication, User)
+    def on_after_forgot_password(user, token):
+        pass
+
+    return FastAPIUsers(
+        mock_user_db, mock_authentication, User, on_after_forgot_password, SECRET
+    )
 
 
 @pytest.fixture
@@ -41,6 +48,12 @@ class TestRouter:
         assert response.status_code != status.HTTP_404_NOT_FOUND
 
         response = test_app_client.post("/login")
+        assert response.status_code != status.HTTP_404_NOT_FOUND
+
+        response = test_app_client.post("/forgot-password")
+        assert response.status_code != status.HTTP_404_NOT_FOUND
+
+        response = test_app_client.post("/reset-password")
         assert response.status_code != status.HTTP_404_NOT_FOUND
 
 

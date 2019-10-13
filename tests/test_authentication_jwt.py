@@ -5,11 +5,11 @@ from starlette import status
 from starlette.responses import Response
 from starlette.testclient import TestClient
 
-from fastapi_users.authentication.jwt import JWTAuthentication, generate_jwt
+from fastapi_users.authentication.jwt import JWTAuthentication
 from fastapi_users.models import BaseUserDB
+from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
 
 SECRET = "SECRET"
-ALGORITHM = "HS256"
 LIFETIME = 3600
 
 
@@ -21,8 +21,8 @@ def jwt_authentication():
 @pytest.fixture
 def token():
     def _token(user, lifetime=LIFETIME):
-        data = {"user_id": user.id}
-        return generate_jwt(data, lifetime, SECRET, ALGORITHM)
+        data = {"user_id": user.id, "aud": "fastapi-users:auth"}
+        return generate_jwt(data, lifetime, SECRET, JWT_ALGORITHM)
 
     return _token
 
@@ -47,7 +47,9 @@ async def test_get_login_response(jwt_authentication, user):
     assert "token" in login_response
 
     token = login_response["token"]
-    decoded = jwt.decode(token, SECRET, algorithms=[ALGORITHM])
+    decoded = jwt.decode(
+        token, SECRET, audience="fastapi-users:auth", algorithms=[JWT_ALGORITHM]
+    )
     assert decoded["user_id"] == user.id
 
 

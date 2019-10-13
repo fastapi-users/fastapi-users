@@ -68,6 +68,9 @@ class MockUserDatabase(BaseUserDatabase):
     async def create(self, user: BaseUserDB) -> BaseUserDB:
         return user
 
+    async def update(self, user: BaseUserDB) -> BaseUserDB:
+        return user
+
 
 @pytest.fixture
 def mock_user_db() -> MockUserDatabase:
