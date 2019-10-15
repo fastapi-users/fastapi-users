@@ -2,8 +2,8 @@ from typing import List, Optional
 
 from fastapi.security import OAuth2PasswordRequestForm
 
+from fastapi_users import password
 from fastapi_users.models import BaseUserDB
-from fastapi_users.password import get_password_hash, verify_and_update_password
 
 
 class BaseUserDatabase:
@@ -41,12 +41,12 @@ class BaseUserDatabase:
 
         # Always run the hasher to mitigate timing attack
         # Inspired from Django: https://code.djangoproject.com/ticket/20760
-        get_password_hash(credentials.password)
+        password.get_password_hash(credentials.password)
 
         if user is None:
             return None
         else:
-            verified, updated_password_hash = verify_and_update_password(
+            verified, updated_password_hash = password.verify_and_update_password(
                 credentials.password, user.hashed_password
             )
             if not verified:

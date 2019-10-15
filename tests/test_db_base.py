@@ -1,6 +1,8 @@
 import pytest
 from fastapi.security import OAuth2PasswordRequestForm
 
+from fastapi_users.db import BaseUserDatabase
+
 
 @pytest.fixture
 def create_oauth2_password_request_form():
@@ -8,6 +10,26 @@ def create_oauth2_password_request_form():
         return OAuth2PasswordRequestForm(username=username, password=password, scope="")
 
     return _create_oauth2_password_request_form
+
+
+@pytest.mark.asyncio
+async def test_not_implemented_methods(user):
+    base_user_db = BaseUserDatabase()
+
+    with pytest.raises(NotImplementedError):
+        await base_user_db.list()
+
+    with pytest.raises(NotImplementedError):
+        await base_user_db.get("aaa")
+
+    with pytest.raises(NotImplementedError):
+        await base_user_db.get_by_email("lancelot@camelot.bt")
+
+    with pytest.raises(NotImplementedError):
+        await base_user_db.create(user)
+
+    with pytest.raises(NotImplementedError):
+        await base_user_db.update(user)
 
 
 class TestAuthenticate:
@@ -37,3 +59,21 @@ class TestAuthenticate:
         user = await mock_user_db.authenticate(form)
         assert user is not None
         assert user.email == "king.arthur@camelot.bt"
+
+    @pytest.mark.asyncio
+    async def test_upgrade_password_hash(
+        self, mocker, create_oauth2_password_request_form, mock_user_db
+    ):
+        verify_and_update_password_patch = mocker.patch(
+            "fastapi_users.password.verify_and_update_password"
+        )
+        verify_and_update_password_patch.return_value = (True, "updated_hash")
+        mocker.spy(mock_user_db, "update")
+
+        form = create_oauth2_password_request_form(
+            "king.arthur@camelot.bt", "guinevere"
+        )
+        user = await mock_user_db.authenticate(form)
+        assert user is not None
+        assert user.email == "king.arthur@camelot.bt"
+        assert mock_user_db.update.called is True

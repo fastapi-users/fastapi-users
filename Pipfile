@@ -18,6 +18,7 @@ mypy = "*"
 codecov = "*"
 pytest-cov = "*"
 pytest-mock = "*"
+asynctest = "*"
 
 [packages]
 fastapi = "*"

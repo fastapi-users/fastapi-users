@@ -1,6 +1,6 @@
-import asyncio
 from unittest.mock import MagicMock
 
+import asynctest
 import jwt
 import pytest
 from fastapi import FastAPI
@@ -17,57 +17,48 @@ LIFETIME = 3600
 
 @pytest.fixture
 def forgot_password_token():
-    def _forgot_password_token(user_id, lifetime=LIFETIME):
-        data = {"user_id": user_id, "aud": "fastapi-users:reset"}
+    def _forgot_password_token(user_id=None, lifetime=LIFETIME):
+        data = {"aud": "fastapi-users:reset"}
+        if user_id is not None:
+            data["user_id"] = user_id
         return generate_jwt(data, lifetime, SECRET, JWT_ALGORITHM)
 
     return _forgot_password_token
 
 
-@pytest.fixture()
 def on_after_forgot_password_sync():
-    on_after_forgot_password_mock = MagicMock(return_value=None)
-    return on_after_forgot_password_mock
+    return MagicMock(return_value=None)
+
+
+def on_after_forgot_password_async():
+    return asynctest.CoroutineMock(return_value=None)
+
+
+@pytest.fixture(params=[on_after_forgot_password_sync, on_after_forgot_password_async])
+def on_after_forgot_password(request):
+    return request.param()
 
 
 @pytest.fixture()
-def on_after_forgot_password_async():
-    on_after_forgot_password_mock = MagicMock(return_value=asyncio.Future())
-    on_after_forgot_password_mock.return_value.set_result(None)
-    return on_after_forgot_password_mock
+def test_app_client(
+    mock_user_db, mock_authentication, on_after_forgot_password
+) -> TestClient:
+    class User(BaseUser):
+        pass
 
+    userRouter = get_user_router(
+        mock_user_db,
+        User,
+        mock_authentication,
+        on_after_forgot_password,
+        SECRET,
+        LIFETIME,
+    )
 
-@pytest.fixture
-def get_test_app_client(mock_user_db, mock_authentication):
-    def _get_test_app_client(on_after_forgot_password) -> TestClient:
-        class User(BaseUser):
-            pass
+    app = FastAPI()
+    app.include_router(userRouter)
 
-        userRouter = get_user_router(
-            mock_user_db,
-            User,
-            mock_authentication,
-            on_after_forgot_password,
-            SECRET,
-            LIFETIME,
-        )
-
-        app = FastAPI()
-        app.include_router(userRouter)
-
-        return TestClient(app)
-
-    return _get_test_app_client
-
-
-@pytest.fixture
-def test_app_client(get_test_app_client, on_after_forgot_password_sync):
-    return get_test_app_client(on_after_forgot_password_sync)
-
-
-@pytest.fixture
-def test_app_client_async(get_test_app_client, on_after_forgot_password_async):
-    return get_test_app_client(on_after_forgot_password_async)
+    return TestClient(app)
 
 
 class TestRegister:
@@ -134,59 +125,36 @@ class TestLogin:
 
 
 class TestForgotPassword:
-    def test_empty_body(
-        self, test_app_client: TestClient, on_after_forgot_password_sync
-    ):
+    def test_empty_body(self, test_app_client: TestClient, on_after_forgot_password):
         response = test_app_client.post("/forgot-password", json={})
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
-        assert on_after_forgot_password_sync.called is False
+        assert on_after_forgot_password.called is False
 
     def test_not_existing_user(
-        self, test_app_client: TestClient, on_after_forgot_password_sync
+        self, test_app_client: TestClient, on_after_forgot_password
     ):
         json = {"email": "lancelot@camelot.bt"}
         response = test_app_client.post("/forgot-password", json=json)
         assert response.status_code == status.HTTP_202_ACCEPTED
-        assert on_after_forgot_password_sync.called is False
+        assert on_after_forgot_password.called is False
 
-    def test_inactive_user(
-        self, test_app_client: TestClient, on_after_forgot_password_sync
-    ):
+    def test_inactive_user(self, test_app_client: TestClient, on_after_forgot_password):
         json = {"email": "percival@camelot.bt"}
         response = test_app_client.post("/forgot-password", json=json)
         assert response.status_code == status.HTTP_202_ACCEPTED
-        assert on_after_forgot_password_sync.called is False
+        assert on_after_forgot_password.called is False
 
-    def test_existing_user_sync_hook(
-        self, test_app_client: TestClient, on_after_forgot_password_sync, user
+    def test_existing_user(
+        self, test_app_client: TestClient, on_after_forgot_password, user
     ):
         json = {"email": "king.arthur@camelot.bt"}
         response = test_app_client.post("/forgot-password", json=json)
         assert response.status_code == status.HTTP_202_ACCEPTED
-        assert on_after_forgot_password_sync.called is True
+        assert on_after_forgot_password.called is True
 
-        actual_user = on_after_forgot_password_sync.call_args[0][0]
+        actual_user = on_after_forgot_password.call_args[0][0]
         assert actual_user.id == user.id
-        actual_token = on_after_forgot_password_sync.call_args[0][1]
-        decoded_token = jwt.decode(
-            actual_token,
-            SECRET,
-            audience="fastapi-users:reset",
-            algorithms=[JWT_ALGORITHM],
-        )
-        assert decoded_token["user_id"] == user.id
-
-    def test_existing_user_async_hook(
-        self, test_app_client_async: TestClient, on_after_forgot_password_async, user
-    ):
-        json = {"email": "king.arthur@camelot.bt"}
-        response = test_app_client_async.post("/forgot-password", json=json)
-        assert response.status_code == status.HTTP_202_ACCEPTED
-        assert on_after_forgot_password_async.called is True
-
-        actual_user = on_after_forgot_password_async.call_args[0][0]
-        assert actual_user.id == user.id
-        actual_token = on_after_forgot_password_async.call_args[0][1]
+        actual_token = on_after_forgot_password.call_args[0][1]
         decoded_token = jwt.decode(
             actual_token,
             SECRET,
@@ -217,6 +185,21 @@ class TestResetPassword:
         print(response.json(), response.status_code)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
+    def test_valid_token_missing_user_id_payload(
+        self,
+        mocker,
+        mock_user_db,
+        test_app_client: TestClient,
+        forgot_password_token,
+        inactive_user: BaseUserDB,
+    ):
+        mocker.spy(mock_user_db, "update")
+
+        json = {"token": forgot_password_token(), "password": "holygrail"}
+        response = test_app_client.post("/reset-password", json=json)
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert mock_user_db.update.called is False
+
     def test_inactive_user(
         self,
         mocker,
@@ -244,6 +227,7 @@ class TestResetPassword:
         user: BaseUserDB,
     ):
         mocker.spy(mock_user_db, "update")
+        current_hashed_passord = user.hashed_password
 
         json = {"token": forgot_password_token(user.id), "password": "holygrail"}
         response = test_app_client.post("/reset-password", json=json)
@@ -251,4 +235,4 @@ class TestResetPassword:
         assert mock_user_db.update.called is True
 
         updated_user = mock_user_db.update.call_args[0][0]
-        assert updated_user.hashed_password != user.hashed_password
+        assert updated_user.hashed_password != current_hashed_passord
