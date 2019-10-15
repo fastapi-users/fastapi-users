@@ -1,4 +1,4 @@
-import inspect
+import asyncio
 from typing import Any, Callable, Type
 
 import jwt
@@ -28,7 +28,7 @@ def get_user_router(
     models = Models(user_model)
 
     reset_password_token_audience = "fastapi-users:reset"
-    is_on_after_forgot_password_async = inspect.iscoroutinefunction(
+    is_on_after_forgot_password_async = asyncio.iscoroutinefunction(
         on_after_forgot_password
     )
 

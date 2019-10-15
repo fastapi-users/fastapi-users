@@ -5,7 +5,7 @@ format:
 	$(PIPENV_RUN) black .
 
 test:
-	$(PIPENV_RUN) pytest
+	$(PIPENV_RUN) pytest --cov=fastapi_users/
 
 docs-serve:
 	$(PIPENV_RUN) mkdocs serve

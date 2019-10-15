@@ -9,21 +9,22 @@ from fastapi_users.models import BaseUser, BaseUserDB
 SECRET = "SECRET"
 
 
-@pytest.fixture
-def fastapi_users(mock_user_db, mock_authentication) -> FastAPIUsers:
+def sync_on_after_forgot_password():
+    return None
+
+
+async def async_on_after_forgot_password():
+    return None
+
+
+@pytest.fixture(params=[sync_on_after_forgot_password, async_on_after_forgot_password])
+def test_app_client(request, mock_user_db, mock_authentication) -> TestClient:
     class User(BaseUser):
         pass
 
-    def on_after_forgot_password(user, token):
-        pass
-
-    return FastAPIUsers(
-        mock_user_db, mock_authentication, User, on_after_forgot_password, SECRET
+    fastapi_users = FastAPIUsers(
+        mock_user_db, mock_authentication, User, request.param, SECRET
     )
-
-
-@pytest.fixture
-def test_app_client(fastapi_users: FastAPIUsers) -> TestClient:
     app = FastAPI()
     app.include_router(fastapi_users.router)
 

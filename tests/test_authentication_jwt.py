@@ -1,12 +1,9 @@
 import jwt
 import pytest
-from fastapi import Depends, FastAPI
 from starlette import status
 from starlette.responses import Response
-from starlette.testclient import TestClient
 
 from fastapi_users.authentication.jwt import JWTAuthentication
-from fastapi_users.models import BaseUserDB
 from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
 
 SECRET = "SECRET"
@@ -20,24 +17,18 @@ def jwt_authentication():
 
 @pytest.fixture
 def token():
-    def _token(user, lifetime=LIFETIME):
-        data = {"user_id": user.id, "aud": "fastapi-users:auth"}
+    def _token(user=None, lifetime=LIFETIME):
+        data = {"aud": "fastapi-users:auth"}
+        if user is not None:
+            data["user_id"] = user.id
         return generate_jwt(data, lifetime, SECRET, JWT_ALGORITHM)
 
     return _token
 
 
 @pytest.fixture
-def test_auth_client(jwt_authentication, mock_user_db):
-    app = FastAPI()
-
-    @app.get("/test-auth")
-    def test_auth(
-        user: BaseUserDB = Depends(jwt_authentication.get_current_user(mock_user_db))
-    ):
-        return user
-
-    return TestClient(app)
+def test_auth_client(get_test_auth_client, jwt_authentication):
+    return get_test_auth_client(jwt_authentication)
 
 
 @pytest.mark.asyncio
@@ -55,18 +46,26 @@ async def test_get_login_response(jwt_authentication, user):
 
 class TestGetCurrentUser:
     def test_missing_token(self, test_auth_client):
-        response = test_auth_client.get("/test-auth")
+        response = test_auth_client.get("/test-current-user")
+        print(response.json())
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     def test_invalid_token(self, test_auth_client):
         response = test_auth_client.get(
-            "/test-auth", headers={"Authorization": "Bearer foo"}
+            "/test-current-user", headers={"Authorization": "Bearer foo"}
+        )
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_valid_token_missing_user_payload(self, test_auth_client, token):
+        response = test_auth_client.get(
+            "/test-current-user", headers={"Authorization": f"Bearer {token()}"}
         )
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     def test_valid_token_inactive_user(self, test_auth_client, token, inactive_user):
         response = test_auth_client.get(
-            "/test-auth", headers={"Authorization": f"Bearer {token(inactive_user)}"}
+            "/test-current-user",
+            headers={"Authorization": f"Bearer {token(inactive_user)}"},
         )
         assert response.status_code == status.HTTP_200_OK
 
@@ -75,9 +74,74 @@ class TestGetCurrentUser:
 
     def test_valid_token(self, test_auth_client, token, user):
         response = test_auth_client.get(
-            "/test-auth", headers={"Authorization": f"Bearer {token(user)}"}
+            "/test-current-user", headers={"Authorization": f"Bearer {token(user)}"}
         )
         assert response.status_code == status.HTTP_200_OK
 
         response_json = response.json()
         assert response_json["id"] == user.id
+
+
+class TestGetCurrentActiveUser:
+    def test_missing_token(self, test_auth_client):
+        response = test_auth_client.get("/test-current-active-user")
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_invalid_token(self, test_auth_client):
+        response = test_auth_client.get(
+            "/test-current-active-user", headers={"Authorization": "Bearer foo"}
+        )
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_valid_token_inactive_user(self, test_auth_client, token, inactive_user):
+        response = test_auth_client.get(
+            "/test-current-active-user",
+            headers={"Authorization": f"Bearer {token(inactive_user)}"},
+        )
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_valid_token(self, test_auth_client, token, user):
+        response = test_auth_client.get(
+            "/test-current-active-user",
+            headers={"Authorization": f"Bearer {token(user)}"},
+        )
+        assert response.status_code == status.HTTP_200_OK
+
+        response_json = response.json()
+        assert response_json["id"] == user.id
+
+
+class TestGetCurrentSuperuser:
+    def test_missing_token(self, test_auth_client):
+        response = test_auth_client.get("/test-current-superuser")
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_invalid_token(self, test_auth_client):
+        response = test_auth_client.get(
+            "/test-current-superuser", headers={"Authorization": "Bearer foo"}
+        )
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_valid_token_inactive_user(self, test_auth_client, token, inactive_user):
+        response = test_auth_client.get(
+            "/test-current-superuser",
+            headers={"Authorization": f"Bearer {token(inactive_user)}"},
+        )
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_valid_token_regular_user(self, test_auth_client, token, user):
+        response = test_auth_client.get(
+            "/test-current-superuser",
+            headers={"Authorization": f"Bearer {token(user)}"},
+        )
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_valid_token_superuser(self, test_auth_client, token, superuser):
+        response = test_auth_client.get(
+            "/test-current-superuser",
+            headers={"Authorization": f"Bearer {token(superuser)}"},
+        )
+        assert response.status_code == status.HTTP_200_OK
+
+        response_json = response.json()
+        assert response_json["id"] == superuser.id
