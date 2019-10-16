@@ -1,5 +1,3 @@
-"""Ready-to-use and customizable users management for FastAPI."""
-
 from typing import Any, Callable, Type
 
 from fastapi import APIRouter

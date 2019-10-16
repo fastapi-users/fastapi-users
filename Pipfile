@@ -19,15 +19,16 @@ codecov = "*"
 pytest-cov = "*"
 pytest-mock = "*"
 asynctest = "*"
+flit = "*"
 
 [packages]
-fastapi = "*"
-passlib = {extras = ["bcrypt"],version = "*"}
-email-validator = "*"
-sqlalchemy = "*"
-databases = "*"
-python-multipart = "*"
-pyjwt = "*"
+fastapi = "==0.42.0"
+passlib = {extras = ["bcrypt"],version = "==1.7.1"}
+email-validator = "==1.0.4"
+sqlalchemy = "==1.3.10"
+databases = "==0.2.5"
+pyjwt = "==1.7.1"
+python-multipart = "==0.0.5"
 
 [requires]
 python_version = "3.7"

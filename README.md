@@ -11,6 +11,7 @@
 [![build](https://github.com/frankie567/fastapi-users/workflows/Unit%20tests/badge.svg)](https://github.com/frankie567/fastapi-users/actions)
 [![codecov](https://codecov.io/gh/frankie567/fastapi-users/branch/master/graph/badge.svg)](https://codecov.io/gh/frankie567/fastapi-users)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=frankie567/fastapi-users)](https://dependabot.com)
+[![PyPI version](https://badge.fury.io/py/fastapi-users.svg)](https://badge.fury.io/py/fastapi-users)
 
 ---
 
