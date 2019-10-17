@@ -1,4 +1,4 @@
-name: Unit tests
+name: Build
 
 on: [push]
 
@@ -26,3 +26,10 @@ jobs:
       run: |
         pipenv run pytest --cov=fastapi_users/
         pipenv run codecov
+    - name: Release on PyPI
+      if: startsWith(github.ref, 'refs/tags/')
+      env:
+        FLIT_USERNAME: ${{ secrets.FLIT_USERNAME }}
+        FLIT_PASSWORD: ${{ secrets.FLIT_PASSWORD }}
+      run: |
+        pipenv run flit publish
