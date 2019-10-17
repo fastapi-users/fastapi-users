@@ -1,0 +1,35 @@
+[build-system]
+requires = ["flit"]
+build-backend = "flit.buildapi"
+
+[tool.flit.metadata]
+module = "fastapi_users"
+dist-name = "fastapi-users"
+author = "François Voron"
+author-email = "fvoron@gmail.com"
+home-page = "https://github.com/frankie567/fastapi-users"
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Development Status :: 3 - Alpha",
+    "Framework :: AsyncIO",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Internet :: WWW/HTTP :: Session",
+]
+description-file = "README.md"
+requires-python = ">=3.7"
+requires = [
+    "fastapi ==0.42.0",
+    "passlib[bcrypt] ==1.7.1",
+    "email-validator ==1.0.4",
+    "sqlalchemy ==1.3.10",
+    "databases ==0.2.5",
+    "pyjwt ==1.7.1",
+    "python-multipart ==0.0.5",
+]
+
+[tool.flit.metadata.urls]
+Documentation = "https://frankie567.github.io/fastapi-users/"
