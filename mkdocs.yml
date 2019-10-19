@@ -8,7 +8,34 @@ theme:
     accent: 'red'
   logo:
     icon: 'supervisor_account'
+  favicon: 'favicon.png'
 
 repo_name: frankie567/fastapi-users
 repo_url: https://github.com/frankie567/fastapi-users
 edit_uri: ""
+
+markdown_extensions:
+  - markdown_include.include:
+      base_path: docs
+  - toc:
+      permalink: true
+  - admonition
+  - codehilite
+  - pymdownx.superfences
+
+nav:
+  - index.md
+  - installation.md
+  - Configuration:
+    - configuration/model.md
+    - Databases:
+      - configuration/databases/sqlalchemy.md
+      - configuration/databases/mongodb.md
+    - Authentication:
+      - configuration/authentication/index.md
+      - configuration/authentication/jwt.md
+    - configuration/router.md
+    - configuration/full_example.md
+  - Usage:
+    - usage/routes.md
+    - usage/dependency-callables.md

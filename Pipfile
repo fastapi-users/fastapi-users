@@ -20,6 +20,9 @@ pytest-cov = "*"
 pytest-mock = "*"
 asynctest = "*"
 flit = "*"
+markdown-include = "*"
+pygments = "*"
+pymdown-extensions = "*"
 
 [packages]
 fastapi = "==0.42.0"
