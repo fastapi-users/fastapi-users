@@ -1,7 +1,12 @@
 PIPENV_RUN := pipenv run
 
-format:
-	$(PIPENV_RUN) isort -rc .
+isort-src:
+	$(PIPENV_RUN) isort -rc ./fastapi_users
+
+isort-docs:
+	$(PIPENV_RUN) isort -rc ./docs/src -o fastapi_users
+
+format: isort-src isort-docs
 	$(PIPENV_RUN) black .
 
 test:
