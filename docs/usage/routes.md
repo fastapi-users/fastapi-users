@@ -32,7 +32,7 @@ Login a user.
 
 !!! abstract "Payload (`application/x-www-form-urlencoded`)"
     ```
-    email=king.arthur@camelot.bt&password=guinevere
+    username=king.arthur@camelot.bt&password=guinevere
     ```
 
 !!! success "`200 OK`"

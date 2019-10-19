@@ -38,3 +38,4 @@ nav:
     - configuration/full_example.md
   - Usage:
     - usage/routes.md
+    - usage/dependency-callables.md
