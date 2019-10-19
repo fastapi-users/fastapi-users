@@ -8,6 +8,7 @@ theme:
     accent: 'red'
   logo:
     icon: 'supervisor_account'
+  favicon: 'favicon.png'
 
 repo_name: frankie567/fastapi-users
 repo_url: https://github.com/frankie567/fastapi-users
