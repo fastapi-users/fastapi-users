@@ -14,7 +14,7 @@ Register a new user.
     }
     ```
 
-!!! success "`200 OK`"
+!!! success "`201 Created`"
     ```json
     {
         "id": "57cbb51a-ab71-4009-8802-3f54b4f2e23",

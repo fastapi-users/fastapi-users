@@ -32,7 +32,9 @@ def get_user_router(
         on_after_forgot_password
     )
 
-    @router.post("/register", response_model=models.User)
+    @router.post(
+        "/register", response_model=models.User, status_code=status.HTTP_201_CREATED
+    )
     async def register(user: models.UserCreate):  # type: ignore
         existing_user = await user_db.get_by_email(user.email)
 

@@ -84,7 +84,7 @@ class TestRegister:
     def test_valid_body(self, test_app_client: TestClient):
         json = {"email": "lancelot@camelot.bt", "password": "guinevere"}
         response = test_app_client.post("/register", json=json)
-        assert response.status_code == status.HTTP_200_OK
+        assert response.status_code == status.HTTP_201_CREATED
 
         response_json = response.json()
         assert "hashed_password" not in response_json
