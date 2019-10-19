@@ -33,18 +33,18 @@
       
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
-      <link rel="shortcut icon" href="/favicon.png">
+      <link rel="shortcut icon" href="../../favicon.png">
       <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.3">
     
     
       
-        <title>FastAPI Users</title>
+        <title>User model - FastAPI Users</title>
       
     
     
-      <link rel="stylesheet" href="/assets/stylesheets/application.30686662.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.30686662.css">
       
-        <link rel="stylesheet" href="/assets/stylesheets/application-palette.a8b3c06d.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.a8b3c06d.css">
       
       
         
@@ -53,7 +53,7 @@
       
     
     
-      <script src="/assets/javascripts/modernizr.74668098.js"></script>
+      <script src="../../assets/javascripts/modernizr.74668098.js"></script>
     
     
       
@@ -62,7 +62,7 @@
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
     
-    <link rel="stylesheet" href="/assets/fonts/material-icons.css">
+    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
     
     
     
@@ -87,12 +87,16 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
+      <a href="#user-model" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
     
       <header class="md-header" data-md-component="header">
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="/." title="FastAPI Users" class="md-header-nav__button md-logo">
+        <a href="../.." title="FastAPI Users" class="md-header-nav__button md-logo">
           
             <i class="md-icon">supervisor_account</i>
           
@@ -109,7 +113,7 @@
             </span>
             <span class="md-header-nav__topic">
               
-                
+                User model
               
             </span>
           
@@ -184,7 +188,7 @@
                   <div class="md-sidebar__inner">
                     <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="/." title="FastAPI Users" class="md-nav__button md-logo">
+    <a href="../.." title="FastAPI Users" class="md-nav__button md-logo">
       
         <i class="md-icon">supervisor_account</i>
       
@@ -220,7 +224,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/." title="FastAPI Users" class="md-nav__link">
+    <a href="../.." title="FastAPI Users" class="md-nav__link">
       FastAPI Users
     </a>
   </li>
@@ -232,7 +236,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/installation/" title="Installation" class="md-nav__link">
+    <a href="../../installation/" title="Installation" class="md-nav__link">
       Installation
     </a>
   </li>
@@ -242,10 +246,12 @@
       
       
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
     
     <label class="md-nav__link" for="nav-3">
       Configuration
@@ -261,11 +267,56 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="/configuration/model/" title="User model" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        User model
+      </label>
+    
+    <a href="./" title="User model" class="md-nav__link md-nav__link--active">
       User model
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#use-the-model" class="md-nav__link">
+    Use the model
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    Next steps
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -294,7 +345,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/configuration/databases/sqlalchemy/" title="SQLAlchemy" class="md-nav__link">
+    <a href="../databases/sqlalchemy/" title="SQLAlchemy" class="md-nav__link">
       SQLAlchemy
     </a>
   </li>
@@ -306,7 +357,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/configuration/databases/mongodb/" title="MongoDB" class="md-nav__link">
+    <a href="../databases/mongodb/" title="MongoDB" class="md-nav__link">
       MongoDB
     </a>
   </li>
@@ -342,7 +393,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/configuration/authentication/" title="Authentication" class="md-nav__link">
+    <a href="../authentication/" title="Authentication" class="md-nav__link">
       Authentication
     </a>
   </li>
@@ -354,7 +405,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/configuration/authentication/jwt/" title="JWT" class="md-nav__link">
+    <a href="../authentication/jwt/" title="JWT" class="md-nav__link">
       JWT
     </a>
   </li>
@@ -371,7 +422,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/configuration/router/" title="Router" class="md-nav__link">
+    <a href="../router/" title="Router" class="md-nav__link">
       Router
     </a>
   </li>
@@ -383,7 +434,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/configuration/full_example/" title="Full example" class="md-nav__link">
+    <a href="../full_example/" title="Full example" class="md-nav__link">
       Full example
     </a>
   </li>
@@ -419,7 +470,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/usage/routes/" title="Routes" class="md-nav__link">
+    <a href="../../usage/routes/" title="Routes" class="md-nav__link">
       Routes
     </a>
   </li>
@@ -431,7 +482,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/usage/dependency-callables/" title="Dependency callables" class="md-nav__link">
+    <a href="../../usage/dependency-callables/" title="Dependency callables" class="md-nav__link">
       Dependency callables
     </a>
   </li>
@@ -449,12 +500,76 @@
               </div>
             
             
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#use-the-model" class="md-nav__link">
+    Use the model
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    Next steps
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
           <div class="md-content">
             <article class="md-content__inner md-typeset">
               
-  <h1>404 - Not found</h1>
+                
+                
+                <h1 id="user-model">User model<a class="headerlink" href="#user-model" title="Permanent link">&para;</a></h1>
+<p><strong>FastAPI Users</strong> defines a minimal User model for authentication purposes. It is structured like this:</p>
+<ul>
+<li><code>id</code> (<code>str</code>) – Unique identifier of the user. Default to a <strong>UUID4</strong>.</li>
+<li><code>email</code> (<code>str</code>) – Email of the user. Validated by <a href="https://github.com/JoshData/python-email-validator"><code>email-validator</code></a>.</li>
+<li><code>is_active</code> (<code>bool</code>) – Whether or not the user is active. If not, login and forgot password requests will be denied. Default to <code>True</code>.</li>
+<li><code>is_active</code> (<code>bool</code>) – Whether or not the user is a superuser. Useful to implement administration logic. Default to <code>False</code>.</li>
+</ul>
+<h2 id="use-the-model">Use the model<a class="headerlink" href="#use-the-model" title="Permanent link">&para;</a></h2>
+<p>The model is exposed as a Pydantic model mixin.</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">BaseUser</span>
 
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">BaseUser</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+
+<p>You can of course add you own properties there to fit to your needs!</p>
+<h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<p>Depending on your database backend, database configuration will differ a bit.</p>
+<p><a href="../databases/sqlalchemy/">I'm using SQLAlchemy</a></p>
+<p><a href="../databases/mongodb/">I'm using MongoDB</a></p>
+                
+                  
+                
+              
               
                 
 
@@ -467,6 +582,41 @@
       
         
 <footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../../installation/" title="Installation" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Installation
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../databases/sqlalchemy/" title="SQLAlchemy" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                SQLAlchemy
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -485,9 +635,9 @@
       
     </div>
     
-      <script src="/assets/javascripts/application.ac79c3b0.js"></script>
+      <script src="../../assets/javascripts/application.ac79c3b0.js"></script>
       
-      <script>app.initialize({version:"1.0.4",url:{base:"/"}})</script>
+      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
       
     
   </body>
