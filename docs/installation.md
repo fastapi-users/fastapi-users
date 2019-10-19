@@ -14,4 +14,4 @@ pipenv install fastapi-users
 
 ---
 
-That's it! Now, let's have a look at our [User model](model.md).
+That's it! Now, let's have a look at our [User model](./configuration/model.md).

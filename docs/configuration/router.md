@@ -50,3 +50,7 @@ And then, include the router in the FastAPI app:
 app = FastAPI()
 app.include_router(fastapi_users.router, prefix="/users", tags=["users"])
 ```
+
+## Next steps
+
+Check out a [full example](full_example.md) that will show you the big picture.

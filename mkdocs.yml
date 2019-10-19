@@ -26,12 +26,15 @@ markdown_extensions:
 nav:
   - index.md
   - installation.md
-  - model.md
-  - Databases:
-    - databases/sqlalchemy.md
-    - databases/mongodb.md
-  - Authentication:
-    - authentication/index.md
-    - authentication/jwt.md
-  - router.md
-  - full_example.md
+  - Configuration:
+    - configuration/model.md
+    - Databases:
+      - configuration/databases/sqlalchemy.md
+      - configuration/databases/mongodb.md
+    - Authentication:
+      - configuration/authentication/index.md
+      - configuration/authentication/jwt.md
+    - configuration/router.md
+    - configuration/full_example.md
+  - Usage:
+    - usage/routes.md

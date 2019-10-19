@@ -51,7 +51,7 @@ The database adapter of **FastAPI Users** makes the link between your database c
 
 Notice that we declare the `users` variable, which is the actual SQLAlchemy table behind the table class. We also use our `database` instance, which allows us to do asynchronous request to the database.
 
-{!./authentication/_next_authentication.md!}
+{!./configuration/authentication/_next_authentication.md!}
 
 ## What about SQLAlchemy ORM?
 

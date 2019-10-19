@@ -2,10 +2,10 @@
 
 **FastAPI Users** defines a minimal User model for authentication purposes. It is structured like this:
 
-* `id` (`str`) - Unique identifier of the user. Default to a **UUID4**.
-* `email` (`str`) - Email of the user. Validated by [`email-validator`](https://github.com/JoshData/python-email-validator).
-* `is_active` (`bool`) - Whether or not the user is active. If not, login and forgot password requests will be denied. Default to `True`.
-* `is_active` (`bool`) - Whether or not the user is a superuser. Useful to implement administration logic. Default to `False`.
+* `id` (`str`) – Unique identifier of the user. Default to a **UUID4**.
+* `email` (`str`) – Email of the user. Validated by [`email-validator`](https://github.com/JoshData/python-email-validator).
+* `is_active` (`bool`) – Whether or not the user is active. If not, login and forgot password requests will be denied. Default to `True`.
+* `is_active` (`bool`) – Whether or not the user is a superuser. Useful to implement administration logic. Default to `False`.
 
 ## Use the model
 
