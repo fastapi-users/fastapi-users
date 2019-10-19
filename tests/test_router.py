@@ -91,6 +91,30 @@ class TestRegister:
         assert "password" not in response_json
         assert "id" in response_json
 
+    def test_valid_body_is_superuser(self, test_app_client: TestClient):
+        json = {
+            "email": "lancelot@camelot.bt",
+            "password": "guinevere",
+            "is_superuser": True,
+        }
+        response = test_app_client.post("/register", json=json)
+        assert response.status_code == status.HTTP_201_CREATED
+
+        response_json = response.json()
+        assert response_json["is_superuser"] is False
+
+    def test_valid_body_is_active(self, test_app_client: TestClient):
+        json = {
+            "email": "lancelot@camelot.bt",
+            "password": "guinevere",
+            "is_active": False,
+        }
+        response = test_app_client.post("/register", json=json)
+        assert response.status_code == status.HTTP_201_CREATED
+
+        response_json = response.json()
+        assert response_json["is_active"] is True
+
 
 class TestLogin:
     def test_empty_body(self, test_app_client: TestClient):

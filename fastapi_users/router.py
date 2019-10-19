@@ -42,7 +42,10 @@ def get_user_router(
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
 
         hashed_password = get_password_hash(user.password)
-        db_user = models.UserDB(**user.dict(), hashed_password=hashed_password)
+        db_user = models.UserDB(
+            **user.dict(exclude={"id", "is_superuser", "is_active"}),
+            hashed_password=hashed_password
+        )
         created_user = await user_db.create(db_user)
         return created_user
 
