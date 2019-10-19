@@ -76,8 +76,13 @@ class TestRegister:
         response = test_app_client.post("/register", json=json)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
-    def test_valid_body(self, test_app_client: TestClient):
+    def test_existing_user(self, test_app_client: TestClient):
         json = {"email": "king.arthur@camelot.bt", "password": "guinevere"}
+        response = test_app_client.post("/register", json=json)
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    def test_valid_body(self, test_app_client: TestClient):
+        json = {"email": "lancelot@camelot.bt", "password": "guinevere"}
         response = test_app_client.post("/register", json=json)
         assert response.status_code == status.HTTP_200_OK
 

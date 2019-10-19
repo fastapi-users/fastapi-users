@@ -26,6 +26,9 @@ Register a new user.
 
 !!! fail "`422 Validation Error`"
 
+!!! fail "`400 Bad Request`"
+    A user already exists with this email.
+
 ## `POST /login`
 
 Login a user.

@@ -34,6 +34,11 @@ def get_user_router(
 
     @router.post("/register", response_model=models.User)
     async def register(user: models.UserCreate):  # type: ignore
+        existing_user = await user_db.get_by_email(user.email)
+
+        if existing_user is not None:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
+
         hashed_password = get_password_hash(user.password)
         db_user = models.UserDB(**user.dict(), hashed_password=hashed_password)
         created_user = await user_db.create(db_user)
