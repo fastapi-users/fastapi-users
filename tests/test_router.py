@@ -220,7 +220,6 @@ class TestResetPassword:
         mock_user_db,
         test_app_client: TestClient,
         forgot_password_token,
-        inactive_user: BaseUserDB,
     ):
         mocker.spy(mock_user_db, "update")
 
