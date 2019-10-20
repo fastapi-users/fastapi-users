@@ -89,7 +89,7 @@ class TestRegister:
         response_json = response.json()
         assert "hashed_password" not in response_json
         assert "password" not in response_json
-        assert "id" in response_json
+        assert response_json["id"] is not None
 
     def test_valid_body_is_superuser(self, test_app_client: TestClient):
         json = {
@@ -289,3 +289,74 @@ class TestMe:
         response_json = response.json()
         assert response_json["id"] == user.id
         assert response_json["email"] == user.email
+
+
+class TestUpdateMe:
+    def test_missing_token(self, test_app_client: TestClient):
+        response = test_app_client.patch("/me")
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_inactive_user(
+        self, test_app_client: TestClient, inactive_user: BaseUserDB
+    ):
+        response = test_app_client.patch(
+            "/me", headers={"Authorization": f"Bearer {inactive_user.id}"}
+        )
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_empty_body(self, test_app_client: TestClient, user: BaseUserDB):
+        response = test_app_client.patch(
+            "/me", json={}, headers={"Authorization": f"Bearer {user.id}"}
+        )
+        assert response.status_code == status.HTTP_200_OK
+
+        response_json = response.json()
+        assert response_json["email"] == user.email
+
+    def test_valid_body(self, test_app_client: TestClient, user: BaseUserDB):
+        json = {"email": "king.arthur@tintagel.bt"}
+        response = test_app_client.patch(
+            "/me", json=json, headers={"Authorization": f"Bearer {user.id}"}
+        )
+        assert response.status_code == status.HTTP_200_OK
+
+        response_json = response.json()
+        assert response_json["email"] == "king.arthur@tintagel.bt"
+
+    def test_valid_body_is_superuser(
+        self, test_app_client: TestClient, user: BaseUserDB
+    ):
+        json = {"is_superuser": True}
+        response = test_app_client.patch(
+            "/me", json=json, headers={"Authorization": f"Bearer {user.id}"}
+        )
+        assert response.status_code == status.HTTP_200_OK
+
+        response_json = response.json()
+        assert response_json["is_superuser"] is False
+
+    def test_valid_body_is_active(self, test_app_client: TestClient, user: BaseUserDB):
+        json = {"is_active": False}
+        response = test_app_client.patch(
+            "/me", json=json, headers={"Authorization": f"Bearer {user.id}"}
+        )
+        assert response.status_code == status.HTTP_200_OK
+
+        response_json = response.json()
+        assert response_json["is_active"] is True
+
+    def test_valid_body_password(
+        self, mocker, mock_user_db, test_app_client: TestClient, user: BaseUserDB
+    ):
+        mocker.spy(mock_user_db, "update")
+        current_hashed_passord = user.hashed_password
+
+        json = {"password": "merlin"}
+        response = test_app_client.patch(
+            "/me", json=json, headers={"Authorization": f"Bearer {user.id}"}
+        )
+        assert response.status_code == status.HTTP_200_OK
+        assert mock_user_db.update.called is True
+
+        updated_user = mock_user_db.update.call_args[0][0]
+        assert updated_user.hashed_password != current_hashed_passord

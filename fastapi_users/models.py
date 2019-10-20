@@ -18,6 +18,11 @@ class BaseUser(BaseModel):
     def default_id(cls, v):
         return v or str(uuid.uuid4())
 
+    def create_update_dict(self):
+        return self.dict(
+            skip_defaults=True, exclude={"id", "is_superuser", "is_active"}
+        )
+
 
 class BaseUserCreate(BaseUser):
     email: EmailStr
@@ -25,7 +30,7 @@ class BaseUserCreate(BaseUser):
 
 
 class BaseUserUpdate(BaseUser):
-    pass
+    password: Optional[str]
 
 
 class BaseUserDB(BaseUser):

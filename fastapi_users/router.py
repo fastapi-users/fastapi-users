@@ -45,8 +45,7 @@ def get_user_router(
 
         hashed_password = get_password_hash(user.password)
         db_user = models.UserDB(
-            **user.dict(exclude={"id", "is_superuser", "is_active"}),
-            hashed_password=hashed_password
+            **user.create_update_dict(), hashed_password=hashed_password
         )
         created_user = await user_db.create(db_user)
         return created_user
@@ -109,5 +108,20 @@ def get_user_router(
         user: models.UserDB = Depends(get_current_active_user)  # type: ignore
     ):
         return user
+
+    @router.patch("/me", response_model=models.User)
+    async def update_me(
+        updated_user: models.UserUpdate,  # type: ignore
+        user: models.UserDB = Depends(get_current_active_user),  # type: ignore
+    ):
+        updated_user_data = updated_user.create_update_dict()
+        for field in updated_user_data:
+            if field == "password":
+                hashed_password = get_password_hash(updated_user_data[field])
+                user.hashed_password = hashed_password
+            else:
+                setattr(user, field, updated_user_data[field])
+
+        return await user_db.update(user)
 
     return router

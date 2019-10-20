@@ -104,3 +104,28 @@ Return the current authenticated active user.
 
 !!! fail "`401 Unauthorized`"
     Missing token or inactive user.
+
+### `PATCH /me`
+
+Update the current authenticated active user.
+
+!!! abstract "Payload"
+    ```json
+    {
+        "email": "king.arthur@tintagel.bt",
+        "password": "merlin"
+    }
+    ```
+
+!!! success "`200 OK`"
+    ```json
+    {
+        "id": "57cbb51a-ab71-4009-8802-3f54b4f2e23",
+        "email": "king.arthur@tintagel.bt",
+        "is_active": true,
+        "is_superuser": false
+    }
+    ```
+
+!!! fail "`401 Unauthorized`"
+    Missing token or inactive user.
