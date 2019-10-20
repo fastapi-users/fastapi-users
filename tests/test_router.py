@@ -265,3 +265,27 @@ class TestResetPassword:
 
         updated_user = mock_user_db.update.call_args[0][0]
         assert updated_user.hashed_password != current_hashed_passord
+
+
+class TestMe:
+    def test_missing_token(self, test_app_client: TestClient):
+        response = test_app_client.get("/me")
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_inactive_user(
+        self, test_app_client: TestClient, inactive_user: BaseUserDB
+    ):
+        response = test_app_client.get(
+            "/me", headers={"Authorization": f"Bearer {inactive_user.id}"}
+        )
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_active_user(self, test_app_client: TestClient, user: BaseUserDB):
+        response = test_app_client.get(
+            "/me", headers={"Authorization": f"Bearer {user.id}"}
+        )
+        assert response.status_code == status.HTTP_200_OK
+
+        response_json = response.json()
+        assert response_json["id"] == user.id
+        assert response_json["email"] == user.email

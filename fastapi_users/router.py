@@ -32,6 +32,8 @@ def get_user_router(
         on_after_forgot_password
     )
 
+    get_current_active_user = auth.get_current_active_user(user_db)
+
     @router.post(
         "/register", response_model=models.User, status_code=status.HTTP_201_CREATED
     )
@@ -101,5 +103,11 @@ def get_user_router(
             await user_db.update(user)
         except jwt.PyJWTError:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
+
+    @router.get("/me", response_model=models.User)
+    async def me(
+        user: models.UserDB = Depends(get_current_active_user)  # type: ignore
+    ):
+        return user
 
     return router
