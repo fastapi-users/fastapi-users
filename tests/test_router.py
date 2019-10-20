@@ -215,11 +215,7 @@ class TestResetPassword:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
     def test_valid_token_missing_user_id_payload(
-        self,
-        mocker,
-        mock_user_db,
-        test_app_client: TestClient,
-        forgot_password_token,
+        self, mocker, mock_user_db, test_app_client: TestClient, forgot_password_token
     ):
         mocker.spy(mock_user_db, "update")
 
