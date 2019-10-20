@@ -23,6 +23,7 @@ flit = "*"
 markdown-include = "*"
 pygments = "*"
 pymdown-extensions = "*"
+bumpversion = "*"
 
 [packages]
 fastapi = "==0.42.0"

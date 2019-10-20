@@ -17,3 +17,12 @@ docs-serve:
 
 docs-publish:
 	$(PIPENV_RUN) mkdocs gh-deploy
+
+bumpversion-major:
+	$(PIPENV_RUN) bumpversion major
+
+bumpversion-minor:
+	$(PIPENV_RUN) bumpversion minor
+
+bumpversion-patch:
+	$(PIPENV_RUN) bumpversion patch
