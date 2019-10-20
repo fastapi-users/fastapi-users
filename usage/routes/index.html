@@ -452,30 +452,70 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#unauthenticated" class="md-nav__link">
+    Unauthenticated
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#post-register" class="md-nav__link">
     POST /register
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#post-login" class="md-nav__link">
     POST /login
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#post-forgot-password" class="md-nav__link">
     POST /forgot-password
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#post-reset-password" class="md-nav__link">
     POST /reset-password
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authenticated" class="md-nav__link">
+    Authenticated
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get-me" class="md-nav__link">
+    GET /me
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#patch-me" class="md-nav__link">
+    PATCH /me
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -528,30 +568,70 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#unauthenticated" class="md-nav__link">
+    Unauthenticated
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#post-register" class="md-nav__link">
     POST /register
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#post-login" class="md-nav__link">
     POST /login
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#post-forgot-password" class="md-nav__link">
     POST /forgot-password
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#post-reset-password" class="md-nav__link">
     POST /reset-password
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authenticated" class="md-nav__link">
+    Authenticated
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get-me" class="md-nav__link">
+    GET /me
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#patch-me" class="md-nav__link">
+    PATCH /me
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -574,7 +654,8 @@
                 
                 <h1 id="routes">Routes<a class="headerlink" href="#routes" title="Permanent link">&para;</a></h1>
 <p>You'll find here the routes exposed by <strong>FastAPI Users</strong>. Note that you can also review them through the <a href="https://fastapi.tiangolo.com/tutorial/first-steps/#interactive-api-docs">interactive API docs</a>.</p>
-<h2 id="post-register"><code>POST /register</code><a class="headerlink" href="#post-register" title="Permanent link">&para;</a></h2>
+<h2 id="unauthenticated">Unauthenticated<a class="headerlink" href="#unauthenticated" title="Permanent link">&para;</a></h2>
+<h3 id="post-register"><code>POST /register</code><a class="headerlink" href="#post-register" title="Permanent link">&para;</a></h3>
 <p>Register a new user.</p>
 <div class="admonition abstract">
 <p class="admonition-title">Payload</p>
@@ -603,7 +684,7 @@
 <p class="admonition-title"><code>400 Bad Request</code></p>
 <p>A user already exists with this email.</p>
 </div>
-<h2 id="post-login"><code>POST /login</code><a class="headerlink" href="#post-login" title="Permanent link">&para;</a></h2>
+<h3 id="post-login"><code>POST /login</code><a class="headerlink" href="#post-login" title="Permanent link">&para;</a></h3>
 <p>Login a user.</p>
 <div class="admonition abstract">
 <p class="admonition-title">Payload (<code>application/x-www-form-urlencoded</code>)</p>
@@ -626,7 +707,7 @@
 <p class="admonition-title"><code>400 Bad Request</code></p>
 <p>Bad credentials or the user is inactive.</p>
 </div>
-<h2 id="post-forgot-password"><code>POST /forgot-password</code><a class="headerlink" href="#post-forgot-password" title="Permanent link">&para;</a></h2>
+<h3 id="post-forgot-password"><code>POST /forgot-password</code><a class="headerlink" href="#post-forgot-password" title="Permanent link">&para;</a></h3>
 <p>Request a reset password procedure. Will generate a temporary token and call the defined <code>on_after_forgot_password</code> if the user exists.</p>
 <p>To prevent malicious users from guessing existing users in your databse, the route will always return a <code>202 Accepted</code> response, even if the user requested does not exist.</p>
 <div class="admonition abstract">
@@ -640,7 +721,7 @@
 <div class="admonition success">
 <p class="admonition-title"><code>202 Accepted</code></p>
 </div>
-<h2 id="post-reset-password"><code>POST /reset-password</code><a class="headerlink" href="#post-reset-password" title="Permanent link">&para;</a></h2>
+<h3 id="post-reset-password"><code>POST /reset-password</code><a class="headerlink" href="#post-reset-password" title="Permanent link">&para;</a></h3>
 <p>Reset a password. Requires the token generated by the <code>/forgot-password</code> route.</p>
 <div class="admonition abstract">
 <p class="admonition-title">Payload</p>
@@ -652,7 +733,7 @@
 
 </div>
 <div class="admonition success">
-<p class="admonition-title"><code>200 Accepted</code></p>
+<p class="admonition-title"><code>200 OK</code></p>
 </div>
 <div class="admonition fail">
 <p class="admonition-title"><code>422 Validation Error</code></p>
@@ -660,6 +741,50 @@
 <div class="admonition fail">
 <p class="admonition-title"><code>400 Bad Request</code></p>
 <p>Bad or expired token.</p>
+</div>
+<h2 id="authenticated">Authenticated<a class="headerlink" href="#authenticated" title="Permanent link">&para;</a></h2>
+<h3 id="get-me"><code>GET /me</code><a class="headerlink" href="#get-me" title="Permanent link">&para;</a></h3>
+<p>Return the current authenticated active user.</p>
+<div class="admonition success">
+<p class="admonition-title"><code>200 OK</code></p>
+<div class="codehilite"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;57cbb51a-ab71-4009-8802-3f54b4f2e23&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;king.arthur@camelot.bt&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;is_active&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nt">&quot;is_superuser&quot;</span><span class="p">:</span> <span class="kc">false</span>
+<span class="p">}</span>
+</pre></div>
+
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>401 Unauthorized</code></p>
+<p>Missing token or inactive user.</p>
+</div>
+<h3 id="patch-me"><code>PATCH /me</code><a class="headerlink" href="#patch-me" title="Permanent link">&para;</a></h3>
+<p>Update the current authenticated active user.</p>
+<div class="admonition abstract">
+<p class="admonition-title">Payload</p>
+<div class="codehilite"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;king.arthur@tintagel.bt&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;merlin&quot;</span>
+<span class="p">}</span>
+</pre></div>
+
+</div>
+<div class="admonition success">
+<p class="admonition-title"><code>200 OK</code></p>
+<div class="codehilite"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;57cbb51a-ab71-4009-8802-3f54b4f2e23&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;king.arthur@tintagel.bt&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;is_active&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nt">&quot;is_superuser&quot;</span><span class="p">:</span> <span class="kc">false</span>
+<span class="p">}</span>
+</pre></div>
+
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>401 Unauthorized</code></p>
+<p>Missing token or inactive user.</p>
 </div>
                 
                   
