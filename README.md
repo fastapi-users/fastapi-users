@@ -21,16 +21,18 @@
 
 ---
 
-## Work in progress 🚧
-
-This library is currently in early stage development. First working version soon!
+Add quickly a registration and authentication system to your [FastAPI](https://fastapi.tiangolo.com/) project. **FastAPI Users** is designed to be as customizable and adaptable as possible.
 
 ## Features
 
-* Extensible base user model
-* Ready-to-use register, login, forgot and reset password routes.
-* Customizable database backend
-    * SQLAlchemy backend included
-    * *MongoDB backend included ([#4](https://github.com/frankie567/fastapi-users/issues/4))*
-* Customizable authentication backend
-    * JWT authentication backend included
+* [X] Extensible base user model
+* [X] Ready-to-use register, login, forgot and reset password routes.
+* [X] Customizable database backend
+    * [X] SQLAlchemy backend included
+    * [ ] MongoDB backend included ([#4](https://github.com/frankie567/fastapi-users/issues/4))
+* [X] Customizable authentication backend
+    * [X] JWT authentication backend included
+
+## License
+
+This project is licensed under the terms of the MIT license.

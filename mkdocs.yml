@@ -22,9 +22,10 @@ markdown_extensions:
   - admonition
   - codehilite
   - pymdownx.superfences
+  - pymdownx.tasklist
 
 nav:
-  - index.md
+  - About: index.md
   - installation.md
   - Configuration:
     - configuration/model.md
