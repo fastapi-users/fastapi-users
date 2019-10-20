@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 
 import pytest
 from fastapi import Depends, FastAPI
@@ -48,21 +48,24 @@ def superuser() -> BaseUserDB:
 @pytest.fixture
 def mock_user_db(user, inactive_user, superuser) -> BaseUserDatabase:
     class MockUserDatabase(BaseUserDatabase):
+        async def list(self) -> List[BaseUserDB]:
+            return [user, inactive_user, superuser]
+
         async def get(self, id: str) -> Optional[BaseUserDB]:
             if id == user.id:
                 return user
-            elif id == inactive_user.id:
+            if id == inactive_user.id:
                 return inactive_user
-            elif id == superuser.id:
+            if id == superuser.id:
                 return superuser
             return None
 
         async def get_by_email(self, email: str) -> Optional[BaseUserDB]:
             if email == user.email:
                 return user
-            elif email == inactive_user.email:
+            if email == inactive_user.email:
                 return inactive_user
-            elif email == superuser.email:
+            if email == superuser.email:
                 return superuser
             return None
 

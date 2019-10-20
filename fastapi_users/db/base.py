@@ -45,15 +45,15 @@ class BaseUserDatabase:
 
         if user is None:
             return None
-        else:
-            verified, updated_password_hash = password.verify_and_update_password(
-                credentials.password, user.hashed_password
-            )
-            if not verified:
-                return None
-            # Update password hash to a more robust one if needed
-            if updated_password_hash is not None:
-                user.hashed_password = updated_password_hash
-                await self.update(user)
+
+        verified, updated_password_hash = password.verify_and_update_password(
+            credentials.password, user.hashed_password
+        )
+        if not verified:
+            return None
+        # Update password hash to a more robust one if needed
+        if updated_password_hash is not None:
+            user.hashed_password = updated_password_hash
+            await self.update(user)
 
         return user
