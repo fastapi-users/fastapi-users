@@ -8,7 +8,7 @@ from starlette import status
 from starlette.testclient import TestClient
 
 from fastapi_users.models import BaseUser, BaseUserDB
-from fastapi_users.router import get_user_router
+from fastapi_users.router import Events, get_user_router
 from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
 
 SECRET = "SECRET"
@@ -47,12 +47,11 @@ def test_app_client(
         pass
 
     userRouter = get_user_router(
-        mock_user_db,
-        User,
-        mock_authentication,
-        on_after_forgot_password,
-        SECRET,
-        LIFETIME,
+        mock_user_db, User, mock_authentication, SECRET, LIFETIME
+    )
+
+    userRouter.add_event_handler(
+        Events.ON_AFTER_FORGOT_PASSWORD, on_after_forgot_password
     )
 
     app = FastAPI()

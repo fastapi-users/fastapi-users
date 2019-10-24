@@ -35,14 +35,14 @@ class User(BaseUser):
 
 auth = JWTAuthentication(secret=SECRET, lifetime_seconds=3600)
 
+app = FastAPI()
+fastapi_users = FastAPIUsers(user_db, auth, User, SECRET)
+app.include_router(fastapi_users.router, prefix="/users", tags=["users"])
 
+
+@fastapi_users.on_after_forgot_password()
 def on_after_forgot_password(user, token):
     print(f"User {user.id} has forgot their password. Reset token: {token}")
-
-
-app = FastAPI()
-fastapi_users = FastAPIUsers(user_db, auth, User, on_after_forgot_password, SECRET)
-app.include_router(fastapi_users.router, prefix="/users", tags=["users"])
 
 
 @app.on_event("startup")

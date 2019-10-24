@@ -22,9 +22,12 @@ def test_app_client(request, mock_user_db, mock_authentication) -> TestClient:
     class User(BaseUser):
         pass
 
-    fastapi_users = FastAPIUsers(
-        mock_user_db, mock_authentication, User, request.param, SECRET
-    )
+    fastapi_users = FastAPIUsers(mock_user_db, mock_authentication, User, SECRET)
+
+    @fastapi_users.on_after_forgot_password()
+    def on_after_forgot_password():
+        return request.param()
+
     app = FastAPI()
     app.include_router(fastapi_users.router)
 
