@@ -26,23 +26,21 @@ def forgot_password_token():
     return _forgot_password_token
 
 
-def on_after_forgot_password_sync():
+def event_handler_sync():
     return MagicMock(return_value=None)
 
 
-def on_after_forgot_password_async():
+def event_handler_async():
     return asynctest.CoroutineMock(return_value=None)
 
 
-@pytest.fixture(params=[on_after_forgot_password_sync, on_after_forgot_password_async])
-def on_after_forgot_password(request):
+@pytest.fixture(params=[event_handler_sync, event_handler_async])
+def event_handler(request):
     return request.param()
 
 
 @pytest.fixture()
-def test_app_client(
-    mock_user_db, mock_authentication, on_after_forgot_password
-) -> TestClient:
+def test_app_client(mock_user_db, mock_authentication, event_handler) -> TestClient:
     class User(BaseUser):
         pass
 
@@ -50,9 +48,8 @@ def test_app_client(
         mock_user_db, User, mock_authentication, SECRET, LIFETIME
     )
 
-    userRouter.add_event_handler(
-        Events.ON_AFTER_FORGOT_PASSWORD, on_after_forgot_password
-    )
+    userRouter.add_event_handler(Events.ON_AFTER_REGISTER, event_handler)
+    userRouter.add_event_handler(Events.ON_AFTER_FORGOT_PASSWORD, event_handler)
 
     app = FastAPI()
     app.include_router(userRouter)
@@ -61,36 +58,44 @@ def test_app_client(
 
 
 class TestRegister:
-    def test_empty_body(self, test_app_client: TestClient):
+    def test_empty_body(self, test_app_client: TestClient, event_handler):
         response = test_app_client.post("/register", json={})
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert event_handler.called is False
 
-    def test_missing_password(self, test_app_client: TestClient):
+    def test_missing_password(self, test_app_client: TestClient, event_handler):
         json = {"email": "king.arthur@camelot.bt"}
         response = test_app_client.post("/register", json=json)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert event_handler.called is False
 
-    def test_wrong_email(self, test_app_client: TestClient):
+    def test_wrong_email(self, test_app_client: TestClient, event_handler):
         json = {"email": "king.arthur", "password": "guinevere"}
         response = test_app_client.post("/register", json=json)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert event_handler.called is False
 
-    def test_existing_user(self, test_app_client: TestClient):
+    def test_existing_user(self, test_app_client: TestClient, event_handler):
         json = {"email": "king.arthur@camelot.bt", "password": "guinevere"}
         response = test_app_client.post("/register", json=json)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert event_handler.called is False
 
-    def test_valid_body(self, test_app_client: TestClient):
+    def test_valid_body(self, test_app_client: TestClient, event_handler):
         json = {"email": "lancelot@camelot.bt", "password": "guinevere"}
         response = test_app_client.post("/register", json=json)
         assert response.status_code == status.HTTP_201_CREATED
+        assert event_handler.called is True
 
         response_json = response.json()
         assert "hashed_password" not in response_json
         assert "password" not in response_json
         assert response_json["id"] is not None
 
-    def test_valid_body_is_superuser(self, test_app_client: TestClient):
+        actual_user = event_handler.call_args[0][0]
+        assert actual_user.id == response_json["id"]
+
+    def test_valid_body_is_superuser(self, test_app_client: TestClient, event_handler):
         json = {
             "email": "lancelot@camelot.bt",
             "password": "guinevere",
@@ -98,11 +103,12 @@ class TestRegister:
         }
         response = test_app_client.post("/register", json=json)
         assert response.status_code == status.HTTP_201_CREATED
+        assert event_handler.called is True
 
         response_json = response.json()
         assert response_json["is_superuser"] is False
 
-    def test_valid_body_is_active(self, test_app_client: TestClient):
+    def test_valid_body_is_active(self, test_app_client: TestClient, event_handler):
         json = {
             "email": "lancelot@camelot.bt",
             "password": "guinevere",
@@ -110,6 +116,7 @@ class TestRegister:
         }
         response = test_app_client.post("/register", json=json)
         assert response.status_code == status.HTTP_201_CREATED
+        assert event_handler.called is True
 
         response_json = response.json()
         assert response_json["is_active"] is True
@@ -153,36 +160,32 @@ class TestLogin:
 
 
 class TestForgotPassword:
-    def test_empty_body(self, test_app_client: TestClient, on_after_forgot_password):
+    def test_empty_body(self, test_app_client: TestClient, event_handler):
         response = test_app_client.post("/forgot-password", json={})
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
-        assert on_after_forgot_password.called is False
+        assert event_handler.called is False
 
-    def test_not_existing_user(
-        self, test_app_client: TestClient, on_after_forgot_password
-    ):
+    def test_not_existing_user(self, test_app_client: TestClient, event_handler):
         json = {"email": "lancelot@camelot.bt"}
         response = test_app_client.post("/forgot-password", json=json)
         assert response.status_code == status.HTTP_202_ACCEPTED
-        assert on_after_forgot_password.called is False
+        assert event_handler.called is False
 
-    def test_inactive_user(self, test_app_client: TestClient, on_after_forgot_password):
+    def test_inactive_user(self, test_app_client: TestClient, event_handler):
         json = {"email": "percival@camelot.bt"}
         response = test_app_client.post("/forgot-password", json=json)
         assert response.status_code == status.HTTP_202_ACCEPTED
-        assert on_after_forgot_password.called is False
+        assert event_handler.called is False
 
-    def test_existing_user(
-        self, test_app_client: TestClient, on_after_forgot_password, user
-    ):
+    def test_existing_user(self, test_app_client: TestClient, event_handler, user):
         json = {"email": "king.arthur@camelot.bt"}
         response = test_app_client.post("/forgot-password", json=json)
         assert response.status_code == status.HTTP_202_ACCEPTED
-        assert on_after_forgot_password.called is True
+        assert event_handler.called is True
 
-        actual_user = on_after_forgot_password.call_args[0][0]
+        actual_user = event_handler.call_args[0][0]
         assert actual_user.id == user.id
-        actual_token = on_after_forgot_password.call_args[0][1]
+        actual_token = event_handler.call_args[0][1]
         decoded_token = jwt.decode(
             actual_token,
             SECRET,

@@ -5,29 +5,37 @@ from starlette.testclient import TestClient
 
 from fastapi_users import FastAPIUsers
 from fastapi_users.models import BaseUser, BaseUserDB
+from fastapi_users.router import Events
 
-SECRET = "SECRET"
 
-
-def sync_on_after_forgot_password():
+def sync_event_handler():
     return None
 
 
-async def async_on_after_forgot_password():
+async def async_event_handler():
     return None
 
 
-@pytest.fixture(params=[sync_on_after_forgot_password, async_on_after_forgot_password])
-def test_app_client(request, mock_user_db, mock_authentication) -> TestClient:
+@pytest.fixture(params=[sync_event_handler, async_event_handler])
+def fastapi_users(request, mock_user_db, mock_authentication) -> FastAPIUsers:
     class User(BaseUser):
         pass
 
-    fastapi_users = FastAPIUsers(mock_user_db, mock_authentication, User, SECRET)
+    fastapi_users = FastAPIUsers(mock_user_db, mock_authentication, User, "SECRET")
+
+    @fastapi_users.on_after_register()
+    def on_after_register():
+        return request.param()
 
     @fastapi_users.on_after_forgot_password()
     def on_after_forgot_password():
         return request.param()
 
+    return fastapi_users
+
+
+@pytest.fixture()
+def test_app_client(fastapi_users) -> TestClient:
     app = FastAPI()
     app.include_router(fastapi_users.router)
 
@@ -44,6 +52,13 @@ def test_app_client(request, mock_user_db, mock_authentication) -> TestClient:
         return user
 
     return TestClient(app)
+
+
+class TestFastAPIUsers:
+    def test_event_handlers(self, fastapi_users):
+        event_handlers = fastapi_users.router.event_handlers
+        assert len(event_handlers[Events.ON_AFTER_REGISTER]) == 1
+        assert len(event_handlers[Events.ON_AFTER_FORGOT_PASSWORD]) == 1
 
 
 class TestRouter:

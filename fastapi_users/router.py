@@ -18,7 +18,8 @@ from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
 
 
 class Events(Enum):
-    ON_AFTER_FORGOT_PASSWORD = 1
+    ON_AFTER_REGISTER = 1
+    ON_AFTER_FORGOT_PASSWORD = 2
 
 
 class UserRouter(APIRouter):
@@ -68,6 +69,9 @@ def get_user_router(
             **user.create_update_dict(), hashed_password=hashed_password
         )
         created_user = await user_db.create(db_user)
+
+        await router.run_handlers(Events.ON_AFTER_REGISTER, created_user)
+
         return created_user
 
     @router.post("/login")

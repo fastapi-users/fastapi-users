@@ -34,6 +34,22 @@ app.include_router(fastapi_users.router, prefix="/users", tags=["users"])
 
 In order to be as unopinionated as possible, we expose decorators that allow you to plug your own logic after some actions. You can have several handlers per event.
 
+### After register
+
+This event handler is called after a successful registration. It is called with **one argument**: the **user** that has just registered.
+
+Typically, you'll want to **send a welcome e-mail** or add it to your marketing analytics pipeline.
+
+You can define it as an `async` or standard method.
+
+Example:
+
+```py
+@fastapi_users.on_after_register()
+def on_after_register(user: User):
+    print(f"User {user.id} has registered.")
+```
+
 ### After forgot password
 
 This event handler is called after a successful forgot password request. It is called with **two arguments**: the **user** which has requested to reset their password and a ready-to-use **JWT token** that will be accepted by the reset password route.
@@ -46,8 +62,8 @@ Example:
 
 ```py
 @fastapi_users.on_after_forgot_password()
-def on_after_forgot_password(user, token):
-    print(f'User {user.id} has forgot their password. Reset token: {token}')
+def on_after_forgot_password(user: User, token: str):
+    print(f"User {user.id} has forgot their password. Reset token: {token}")
 ```
 
 ## Next steps

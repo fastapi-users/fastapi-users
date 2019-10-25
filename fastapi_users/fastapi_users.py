@@ -52,6 +52,10 @@ class FastAPIUsers:
         get_current_superuser = self.auth.get_current_superuser(self.db)
         self.get_current_superuser = get_current_superuser  # type: ignore
 
+    def on_after_register(self) -> Callable:
+        """Add an event handler on successful registration."""
+        return self._on_event(Events.ON_AFTER_REGISTER)
+
     def on_after_forgot_password(self) -> Callable:
         """Add an event handler on successful forgot password request."""
         return self._on_event(Events.ON_AFTER_FORGOT_PASSWORD)
