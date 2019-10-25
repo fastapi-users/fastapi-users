@@ -1,5 +1,7 @@
 import asyncio
-from typing import Any, Callable, Type
+import typing
+from collections import defaultdict
+from enum import Enum
 
 import jwt
 from fastapi import APIRouter, Body, Depends, HTTPException
@@ -10,27 +12,46 @@ from starlette.responses import Response
 
 from fastapi_users.authentication import BaseAuthentication
 from fastapi_users.db import BaseUserDatabase
-from fastapi_users.models import BaseUser, BaseUserDB, Models
+from fastapi_users.models import BaseUser, Models
 from fastapi_users.password import get_password_hash
 from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
 
 
+class Events(Enum):
+    ON_AFTER_REGISTER = 1
+    ON_AFTER_FORGOT_PASSWORD = 2
+
+
+class UserRouter(APIRouter):
+    event_handlers: typing.DefaultDict[Events, typing.List[typing.Callable]]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.event_handlers = defaultdict(list)
+
+    def add_event_handler(self, event_type: Events, func: typing.Callable) -> None:
+        self.event_handlers[event_type].append(func)
+
+    async def run_handlers(self, event_type: Events, *args, **kwargs) -> None:
+        for handler in self.event_handlers[event_type]:
+            if asyncio.iscoroutinefunction(handler):
+                await handler(*args, **kwargs)
+            else:
+                handler(*args, **kwargs)
+
+
 def get_user_router(
     user_db: BaseUserDatabase,
-    user_model: Type[BaseUser],
+    user_model: typing.Type[BaseUser],
     auth: BaseAuthentication,
-    on_after_forgot_password: Callable[[BaseUserDB, str], Any],
     reset_password_token_secret: str,
     reset_password_token_lifetime_seconds: int = 3600,
-) -> APIRouter:
+) -> UserRouter:
     """Generate a router with the authentication routes."""
-    router = APIRouter()
+    router = UserRouter()
     models = Models(user_model)
 
     reset_password_token_audience = "fastapi-users:reset"
-    is_on_after_forgot_password_async = asyncio.iscoroutinefunction(
-        on_after_forgot_password
-    )
 
     get_current_active_user = auth.get_current_active_user(user_db)
 
@@ -48,6 +69,9 @@ def get_user_router(
             **user.create_update_dict(), hashed_password=hashed_password
         )
         created_user = await user_db.create(db_user)
+
+        await router.run_handlers(Events.ON_AFTER_REGISTER, created_user)
+
         return created_user
 
     @router.post("/login")
@@ -74,10 +98,7 @@ def get_user_router(
                 reset_password_token_lifetime_seconds,
                 reset_password_token_secret,
             )
-            if is_on_after_forgot_password_async:
-                await on_after_forgot_password(user, token)
-            else:
-                on_after_forgot_password(user, token)
+            await router.run_handlers(Events.ON_AFTER_FORGOT_PASSWORD, user, token)
 
         return None
 
