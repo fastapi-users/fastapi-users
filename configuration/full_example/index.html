@@ -572,14 +572,19 @@
 
 <span class="n">auth</span> <span class="o">=</span> <span class="n">JWTAuthentication</span><span class="p">(</span><span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span>
 
-
-<span class="k">def</span> <span class="nf">on_after_forgot_password</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;User {user.id} has forgot their password. Reset token: {token}&quot;</span><span class="p">)</span>
-
-
 <span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
-<span class="n">fastapi_users</span> <span class="o">=</span> <span class="n">FastAPIUsers</span><span class="p">(</span><span class="n">user_db</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">User</span><span class="p">,</span> <span class="n">on_after_forgot_password</span><span class="p">,</span> <span class="n">SECRET</span><span class="p">)</span>
+<span class="n">fastapi_users</span> <span class="o">=</span> <span class="n">FastAPIUsers</span><span class="p">(</span><span class="n">user_db</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">User</span><span class="p">,</span> <span class="n">SECRET</span><span class="p">)</span>
 <span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">router</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/users&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;users&quot;</span><span class="p">])</span>
+
+
+<span class="nd">@fastapi_users.on_after_register</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">on_after_register</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;User {user.id} has registered.&quot;</span><span class="p">)</span>
+
+
+<span class="nd">@fastapi_users.on_after_forgot_password</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">on_after_forgot_password</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;User {user.id} has forgot their password. Reset token: {token}&quot;</span><span class="p">)</span>
 
 
 <span class="nd">@app.on_event</span><span class="p">(</span><span class="s2">&quot;startup&quot;</span><span class="p">)</span>

@@ -404,12 +404,26 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#hooks" class="md-nav__link">
-    Hooks
+  <a href="#configure-fastapiusers" class="md-nav__link">
+    Configure FastAPIUsers
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#event-handlers" class="md-nav__link">
+    Event handlers
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#after-register" class="md-nav__link">
+    After register
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#after-forgot-password" class="md-nav__link">
@@ -420,13 +434,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configure-fastapiusers" class="md-nav__link">
-    Configure FastAPIUsers
-  </a>
   
 </li>
       
@@ -534,12 +541,26 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#hooks" class="md-nav__link">
-    Hooks
+  <a href="#configure-fastapiusers" class="md-nav__link">
+    Configure FastAPIUsers
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#event-handlers" class="md-nav__link">
+    Event handlers
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#after-register" class="md-nav__link">
+    After register
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#after-forgot-password" class="md-nav__link">
@@ -550,13 +571,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configure-fastapiusers" class="md-nav__link">
-    Configure FastAPIUsers
-  </a>
   
 </li>
       
@@ -586,24 +600,12 @@
                 
                 <h1 id="router">Router<a class="headerlink" href="#router" title="Permanent link">&para;</a></h1>
 <p>We're almost there! The last step is to configure the <code>FastAPIUsers</code> object that will wire the database adapter, the authentication class and the user model to expose the FastAPI router.</p>
-<h2 id="hooks">Hooks<a class="headerlink" href="#hooks" title="Permanent link">&para;</a></h2>
-<p>In order to be as unopinionated as possible, you'll have to define your logic after some actions.</p>
-<h3 id="after-forgot-password">After forgot password<a class="headerlink" href="#after-forgot-password" title="Permanent link">&para;</a></h3>
-<p>This hook is called after a successful forgot password request. It is called with <strong>two arguments</strong>: the <strong>user</strong> which has requested to reset their password and a ready-to-use <strong>JWT token</strong> that will be accepted by the reset password route.</p>
-<p>Typically, you'll want to <strong>send an e-mail</strong> with the link (and the token) that allows the user to reset their password.</p>
-<p>You can define it as an <code>async</code> or standard method.</p>
-<p>Example:</p>
-<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">on_after_forgot_password</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;User {user.id} has forgot their password. Reset token: {token}&#39;</span><span class="p">)</span>
-</pre></div>
-
 <h2 id="configure-fastapiusers">Configure <code>FastAPIUsers</code><a class="headerlink" href="#configure-fastapiusers" title="Permanent link">&para;</a></h2>
-<p>The last step is to instantiate <code>FastAPIUsers</code> object with all the elements we defined before. More precisely:</p>
+<p>Configure <code>FastAPIUsers</code> object with all the elements we defined before. More precisely:</p>
 <ul>
 <li><code>db</code>: Database adapter instance.</li>
 <li><code>auth</code>: Authentication logic instance.</li>
 <li><code>user_model</code>: Pydantic model of a user.</li>
-<li><code>on_after_forgot_password</code>: Hook called after a forgot password request.</li>
 <li><code>reset_password_token_secret</code>: Secret to encode reset password token.</li>
 <li><code>reset_password_token_lifetime_seconds</code>: Lifetime of reset password token in seconds. Default to one hour.</li>
 </ul>
@@ -613,7 +615,6 @@
     <span class="n">user_db</span><span class="p">,</span>
     <span class="n">auth</span><span class="p">,</span>
     <span class="n">User</span><span class="p">,</span>
-    <span class="n">on_after_forgot_password</span><span class="p">,</span>
     <span class="n">SECRET</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
@@ -621,6 +622,28 @@
 <p>And then, include the router in the FastAPI app:</p>
 <div class="codehilite"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
 <span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">router</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/users&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;users&quot;</span><span class="p">])</span>
+</pre></div>
+
+<h2 id="event-handlers">Event handlers<a class="headerlink" href="#event-handlers" title="Permanent link">&para;</a></h2>
+<p>In order to be as unopinionated as possible, we expose decorators that allow you to plug your own logic after some actions. You can have several handlers per event.</p>
+<h3 id="after-register">After register<a class="headerlink" href="#after-register" title="Permanent link">&para;</a></h3>
+<p>This event handler is called after a successful registration. It is called with <strong>one argument</strong>: the <strong>user</strong> that has just registered.</p>
+<p>Typically, you'll want to <strong>send a welcome e-mail</strong> or add it to your marketing analytics pipeline.</p>
+<p>You can define it as an <code>async</code> or standard method.</p>
+<p>Example:</p>
+<div class="codehilite"><pre><span></span><span class="nd">@fastapi_users.on_after_register</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">on_after_register</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;User {user.id} has registered.&quot;</span><span class="p">)</span>
+</pre></div>
+
+<h3 id="after-forgot-password">After forgot password<a class="headerlink" href="#after-forgot-password" title="Permanent link">&para;</a></h3>
+<p>This event handler is called after a successful forgot password request. It is called with <strong>two arguments</strong>: the <strong>user</strong> which has requested to reset their password and a ready-to-use <strong>JWT token</strong> that will be accepted by the reset password route.</p>
+<p>Typically, you'll want to <strong>send an e-mail</strong> with the link (and the token) that allows the user to reset their password.</p>
+<p>You can define it as an <code>async</code> or standard method.</p>
+<p>Example:</p>
+<div class="codehilite"><pre><span></span><span class="nd">@fastapi_users.on_after_forgot_password</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">on_after_forgot_password</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;User {user.id} has forgot their password. Reset token: {token}&quot;</span><span class="p">)</span>
 </pre></div>
 
 <h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
