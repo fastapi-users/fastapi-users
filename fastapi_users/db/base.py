@@ -39,11 +39,10 @@ class BaseUserDatabase:
         """
         user = await self.get_by_email(credentials.username)
 
-        # Always run the hasher to mitigate timing attack
-        # Inspired from Django: https://code.djangoproject.com/ticket/20760
-        password.get_password_hash(credentials.password)
-
         if user is None:
+            # Run the hasher to mitigate timing attack
+            # Inspired from Django: https://code.djangoproject.com/ticket/20760
+            password.get_password_hash(credentials.password)
             return None
 
         verified, updated_password_hash = password.verify_and_update_password(
