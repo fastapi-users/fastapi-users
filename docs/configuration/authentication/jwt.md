@@ -22,4 +22,6 @@ This method expects that you provide a `Bearer` authentication with a valid JWT.
 curl http://localhost:9000/protected-route -H'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiOTIyMWZmYzktNjQwZi00MzcyLTg2ZDMtY2U2NDJjYmE1NjAzIiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTcxNTA0MTkzfQ.M10bjOe45I5Ncu_uXvOmVV8QxnL-nZfcH96U90JaocI'
 ```
 
-{!./configuration/_next_router.md!}
+## Next steps
+
+We will now configure the main **FastAPI Users** object that will expose the [API router](../router.md).

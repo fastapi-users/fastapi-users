@@ -25,7 +25,7 @@ For the sake of this tutorial from now on, we'll use a simple SQLite databse.
 Let's create a `metadata` object and declare our User table.
 
 ```py hl_lines="4 14 15"
-{!./src/sqlalchemy.py!}
+{!./src/db_sqlalchemy.py!}
 ```
 
 As you can see, **FastAPI Users** provides a mixin that will include base fields for our User table. You can of course add you own fields there to fit to your needs!
@@ -35,7 +35,7 @@ As you can see, **FastAPI Users** provides a mixin that will include base fields
 We'll now create an SQLAlchemy enigne and ask it to create all the defined tables.
 
 ```py hl_lines="18 19 20 21 22"
-{!./src/sqlalchemy.py!}
+{!./src/db_sqlalchemy.py!}
 ```
 
 !!!tip
@@ -51,7 +51,9 @@ The database adapter of **FastAPI Users** makes the link between your database c
 
 Notice that we declare the `users` variable, which is the actual SQLAlchemy table behind the table class. We also use our `database` instance, which allows us to do asynchronous request to the database.
 
-{!./configuration/authentication/_next_authentication.md!}
+## Next steps
+
+We will now configure an [authentication method](../authentication/index.md).
 
 ## What about SQLAlchemy ORM?
 

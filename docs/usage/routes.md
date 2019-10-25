@@ -6,7 +6,7 @@ You'll find here the routes exposed by **FastAPI Users**. Note that you can also
 
 ### `POST /register`
 
-Register a new user.
+Register a new user. Will call the `on_after_register` [event handlers](../configuration/router.md#event-handlers) on successful registration.
 
 !!! abstract "Payload"
     ```json
@@ -54,7 +54,7 @@ Login a user.
 
 ### `POST /forgot-password`
 
-Request a reset password procedure. Will generate a temporary token and call the defined `on_after_forgot_password` if the user exists.
+Request a reset password procedure. Will generate a temporary token and call the `on_after_forgot_password` [event handlers](../configuration/router.md#event-handlers) if the user exists.
 
 To prevent malicious users from guessing existing users in your databse, the route will always return a `202 Accepted` response, even if the user requested does not exist.
 
