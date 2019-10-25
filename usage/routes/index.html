@@ -656,7 +656,7 @@
 <p>You'll find here the routes exposed by <strong>FastAPI Users</strong>. Note that you can also review them through the <a href="https://fastapi.tiangolo.com/tutorial/first-steps/#interactive-api-docs">interactive API docs</a>.</p>
 <h2 id="unauthenticated">Unauthenticated<a class="headerlink" href="#unauthenticated" title="Permanent link">&para;</a></h2>
 <h3 id="post-register"><code>POST /register</code><a class="headerlink" href="#post-register" title="Permanent link">&para;</a></h3>
-<p>Register a new user.</p>
+<p>Register a new user. Will call the <code>on_after_register</code> <a href="../../configuration/router/#event-handlers">event handlers</a> on successful registration.</p>
 <div class="admonition abstract">
 <p class="admonition-title">Payload</p>
 <div class="codehilite"><pre><span></span><span class="p">{</span>
@@ -708,7 +708,7 @@
 <p>Bad credentials or the user is inactive.</p>
 </div>
 <h3 id="post-forgot-password"><code>POST /forgot-password</code><a class="headerlink" href="#post-forgot-password" title="Permanent link">&para;</a></h3>
-<p>Request a reset password procedure. Will generate a temporary token and call the defined <code>on_after_forgot_password</code> if the user exists.</p>
+<p>Request a reset password procedure. Will generate a temporary token and call the <code>on_after_forgot_password</code> <a href="../../configuration/router/#event-handlers">event handlers</a> if the user exists.</p>
 <p>To prevent malicious users from guessing existing users in your databse, the route will always return a <code>202 Accepted</code> response, even if the user requested does not exist.</p>
 <div class="admonition abstract">
 <p class="admonition-title">Payload</p>
