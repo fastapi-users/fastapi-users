@@ -6,7 +6,7 @@
 
 Let's create a MongoDB connection and instantiate a collection.
 
-```py hl_lines="6 7 8 9"
+```py hl_lines="5 6 7 8"
 {!./src/db_mongodb.py!}
 ```
 
@@ -16,7 +16,7 @@ You can choose any name for the database and the collection.
 
 The database adapter of **FastAPI Users** makes the link between your database configuration and the users logic. Create it like this.
 
-```py hl_lines="15"
+```py hl_lines="14"
 {!./src/db_mongodb.py!}
 ```
 
