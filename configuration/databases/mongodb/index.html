@@ -568,12 +568,12 @@
 <span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
 <span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">MongoDBUserDatabase</span>
 
-<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;mongodb://localhost:27017&quot;</span>
-<span class="hll"><span class="n">client</span> <span class="o">=</span> <span class="n">motor</span><span class="o">.</span><span class="n">motor_asyncio</span><span class="o">.</span><span class="n">AsyncIOMotorClient</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">)</span>
+<span class="hll"><span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;mongodb://localhost:27017&quot;</span>
+</span><span class="hll"><span class="n">client</span> <span class="o">=</span> <span class="n">motor</span><span class="o">.</span><span class="n">motor_asyncio</span><span class="o">.</span><span class="n">AsyncIOMotorClient</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">)</span>
 </span><span class="hll"><span class="n">db</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="s2">&quot;database_name&quot;</span><span class="p">]</span>
 </span><span class="hll"><span class="n">collection</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="s2">&quot;users&quot;</span><span class="p">]</span>
-</span><span class="hll">
 </span>
+
 <span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
 
 
@@ -596,8 +596,8 @@
 <span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
 
 
-<span class="n">user_db</span> <span class="o">=</span> <span class="n">MongoDBUserDatabase</span><span class="p">(</span><span class="n">collection</span><span class="p">)</span>
-</pre></div>
+<span class="hll"><span class="n">user_db</span> <span class="o">=</span> <span class="n">MongoDBUserDatabase</span><span class="p">(</span><span class="n">collection</span><span class="p">)</span>
+</span></pre></div>
 
 <div class="admonition info">
 <p class="admonition-title">Info</p>
