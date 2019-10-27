@@ -7,7 +7,7 @@ Here is a full working example with JWT authentication to help get you started.
 ```
 
 ```py tab="MongoDB"
-# Coming soon
+{!./src/full_mongodb.py!}
 ```
 
 ## What now?
