@@ -17,18 +17,18 @@ class MongoDBUserDatabase(BaseUserDatabase):
 
     def __init__(self, collection: AsyncIOMotorCollection):
         self.collection = collection
-        self.collection.create_index('id', unique=True)
-        self.collection.create_index('email', unique=True)
+        self.collection.create_index("id", unique=True)
+        self.collection.create_index("email", unique=True)
 
     async def list(self) -> List[BaseUserDB]:
         return [BaseUserDB(**user) async for user in self.collection.find()]
 
     async def get(self, id: str) -> Optional[BaseUserDB]:
-        user = await self.collection.find_one({'id': id})
+        user = await self.collection.find_one({"id": id})
         return BaseUserDB(**user) if user else None
 
     async def get_by_email(self, email: str) -> Optional[BaseUserDB]:
-        user = await self.collection.find_one({'email': email})
+        user = await self.collection.find_one({"email": email})
         return BaseUserDB(**user) if user else None
 
     async def create(self, user: BaseUserDB) -> BaseUserDB:
@@ -36,5 +36,5 @@ class MongoDBUserDatabase(BaseUserDatabase):
         return user
 
     async def update(self, user: BaseUserDB) -> BaseUserDB:
-        await self.collection.replace_one({'id': user.id}, user.dict())
+        await self.collection.replace_one({"id": user.id}, user.dict())
         return user

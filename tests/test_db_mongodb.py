@@ -11,9 +11,9 @@ from fastapi_users.password import get_password_hash
 
 @pytest.fixture
 async def mongodb_user_db() -> AsyncGenerator[MongoDBUserDatabase, None]:
-    client = motor.motor_asyncio.AsyncIOMotorClient('mongodb://localhost:27017')
-    db = client['test_database']
-    collection = db['users']
+    client = motor.motor_asyncio.AsyncIOMotorClient("mongodb://localhost:27017")
+    db = client["test_database"]
+    collection = db["users"]
 
     yield MongoDBUserDatabase(collection)
 

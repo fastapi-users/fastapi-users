@@ -1,17 +1,16 @@
+import motor.motor_asyncio
 from fastapi import FastAPI
 from fastapi_users import BaseUser, FastAPIUsers
 from fastapi_users.authentication import JWTAuthentication
 from fastapi_users.db import MongoDBUserDatabase
-import motor.motor_asyncio
-
 
 DATABASE_URL = "mongodb://localhost:27017"
 SECRET = "SECRET"
 
 
 client = motor.motor_asyncio.AsyncIOMotorClient(DATABASE_URL)
-db = client['database_name']
-collection = db['users']
+db = client["database_name"]
+collection = db["users"]
 
 
 user_db = MongoDBUserDatabase(collection)
