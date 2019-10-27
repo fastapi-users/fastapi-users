@@ -341,6 +341,20 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#setup-database-connection-and-collection" class="md-nav__link">
+    Setup database connection and collection
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-the-database-adapter" class="md-nav__link">
+    Create the database adapter
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     Next steps
   </a>
@@ -509,6 +523,20 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#setup-database-connection-and-collection" class="md-nav__link">
+    Setup database connection and collection
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-the-database-adapter" class="md-nav__link">
+    Create the database adapter
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     Next steps
   </a>
@@ -533,7 +561,52 @@
                 
                 
                 <h1 id="mongodb">MongoDB<a class="headerlink" href="#mongodb" title="Permanent link">&para;</a></h1>
-<p><strong>Coming soon</strong>. Track the progress of this feature in <a href="https://github.com/frankie567/fastapi-users/issues/4">ticket #4</a>.</p>
+<p><strong>FastAPI Users</strong> provides the necessary tools to work with MongoDB databases thanks to <a href="https://github.com/mongodb/motor">mongodb/motor</a> package for full async support.</p>
+<h2 id="setup-database-connection-and-collection">Setup database connection and collection<a class="headerlink" href="#setup-database-connection-and-collection" title="Permanent link">&para;</a></h2>
+<p>Let's create a MongoDB connection and instantiate a collection.</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">motor.motor_asyncio</span>
+<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">MongoDBUserDatabase</span>
+
+<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;mongodb://localhost:27017&quot;</span>
+<span class="hll"><span class="n">client</span> <span class="o">=</span> <span class="n">motor</span><span class="o">.</span><span class="n">motor_asyncio</span><span class="o">.</span><span class="n">AsyncIOMotorClient</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">)</span>
+</span><span class="hll"><span class="n">db</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="s2">&quot;database_name&quot;</span><span class="p">]</span>
+</span><span class="hll"><span class="n">collection</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="s2">&quot;users&quot;</span><span class="p">]</span>
+</span><span class="hll">
+</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
+
+
+<span class="n">user_db</span> <span class="o">=</span> <span class="n">MongoDBUserDatabase</span><span class="p">(</span><span class="n">collection</span><span class="p">)</span>
+</pre></div>
+
+<p>You can choose any name for the database and the collection.</p>
+<h2 id="create-the-database-adapter">Create the database adapter<a class="headerlink" href="#create-the-database-adapter" title="Permanent link">&para;</a></h2>
+<p>The database adapter of <strong>FastAPI Users</strong> makes the link between your database configuration and the users logic. Create it like this.</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">motor.motor_asyncio</span>
+<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">MongoDBUserDatabase</span>
+
+<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;mongodb://localhost:27017&quot;</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">motor</span><span class="o">.</span><span class="n">motor_asyncio</span><span class="o">.</span><span class="n">AsyncIOMotorClient</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">)</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="s2">&quot;database_name&quot;</span><span class="p">]</span>
+<span class="n">collection</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="s2">&quot;users&quot;</span><span class="p">]</span>
+
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
+
+
+<span class="n">user_db</span> <span class="o">=</span> <span class="n">MongoDBUserDatabase</span><span class="p">(</span><span class="n">collection</span><span class="p">)</span>
+</pre></div>
+
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>The database adapter will automatically create a <a href="https://docs.mongodb.com/manual/core/index-unique/">unique index</a> on <code>id</code> and <code>email</code>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><strong>FastAPI Users</strong> will use its defined <a href="../../model/"><code>id</code> UUID-string</a> as unique identifier for the user, rather than the builtin MongoDB <code>_id</code>.</p>
+</div>
 <h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <p>We will now configure an <a href="../../authentication/">authentication method</a>.</p>
                 

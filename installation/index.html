@@ -244,9 +244,45 @@
       
     
     
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Installation
+      </label>
+    
     <a href="./" title="Installation" class="md-nav__link md-nav__link--active">
       Installation
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#with-sqlalchemy-support" class="md-nav__link">
+    With SQLAlchemy support
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#with-mongodb-support" class="md-nav__link">
+    With MongoDB support
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
     
   </li>
 
@@ -472,6 +508,29 @@
     
   
   
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#with-sqlalchemy-support" class="md-nav__link">
+    With SQLAlchemy support
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#with-mongodb-support" class="md-nav__link">
+    With MongoDB support
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -485,11 +544,12 @@
                 
                 <h1 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h1>
 <p>You can add <strong>FastAPI Users</strong> to your FastAPI project in a few easy steps. First of all, install the dependency:</p>
-<div class="codehilite"><pre><span></span>pip install fastapi-users
+<h2 id="with-sqlalchemy-support">With SQLAlchemy support<a class="headerlink" href="#with-sqlalchemy-support" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span>pip install fastapi-users<span class="o">[</span>sqlalchemy<span class="o">]</span>
 </pre></div>
 
-<p>...or if you're already in the future:</p>
-<div class="codehilite"><pre><span></span>pipenv install fastapi-users
+<h2 id="with-mongodb-support">With MongoDB support<a class="headerlink" href="#with-mongodb-support" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span>pip install fastapi-users<span class="o">[</span>mongodb<span class="o">]</span>
 </pre></div>
 
 <hr />

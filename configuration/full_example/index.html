@@ -598,7 +598,43 @@
 </pre></div></div>
 <input name="__tabs_1" type="radio" id="__tab_1_1" />
 <label for="__tab_1_1">MongoDB</label>
-<div class="superfences-content"><div class="codehilite"><pre><span></span><span class="c1"># Coming soon</span>
+<div class="superfences-content"><div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">motor.motor_asyncio</span>
+<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
+<span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">BaseUser</span><span class="p">,</span> <span class="n">FastAPIUsers</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.authentication</span> <span class="kn">import</span> <span class="n">JWTAuthentication</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">MongoDBUserDatabase</span>
+
+<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;mongodb://localhost:27017&quot;</span>
+<span class="n">SECRET</span> <span class="o">=</span> <span class="s2">&quot;SECRET&quot;</span>
+
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">motor</span><span class="o">.</span><span class="n">motor_asyncio</span><span class="o">.</span><span class="n">AsyncIOMotorClient</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">)</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="s2">&quot;database_name&quot;</span><span class="p">]</span>
+<span class="n">collection</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="s2">&quot;users&quot;</span><span class="p">]</span>
+
+
+<span class="n">user_db</span> <span class="o">=</span> <span class="n">MongoDBUserDatabase</span><span class="p">(</span><span class="n">collection</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">BaseUser</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="n">auth</span> <span class="o">=</span> <span class="n">JWTAuthentication</span><span class="p">(</span><span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
+<span class="n">fastapi_users</span> <span class="o">=</span> <span class="n">FastAPIUsers</span><span class="p">(</span><span class="n">user_db</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">User</span><span class="p">,</span> <span class="n">SECRET</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">router</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/users&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;users&quot;</span><span class="p">])</span>
+
+
+<span class="nd">@fastapi_users.on_after_register</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">on_after_register</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;User {user.id} has registered.&quot;</span><span class="p">)</span>
+
+
+<span class="nd">@fastapi_users.on_after_forgot_password</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">on_after_forgot_password</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;User {user.id} has forgot their password. Reset token: {token}&quot;</span><span class="p">)</span>
 </pre></div></div>
 </div>
 <h2 id="what-now">What now?<a class="headerlink" href="#what-now" title="Permanent link">&para;</a></h2>
