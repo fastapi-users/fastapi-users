@@ -10,6 +10,12 @@ jobs:
       matrix:
         python_version: [3.7]
 
+    services:
+      mongo:
+        image: mvertes/alpine-mongo
+        ports:
+          - 27017:27017
+
     steps:
     - uses: actions/checkout@v1
     - name: Set up Python 3.7
