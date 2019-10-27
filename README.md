@@ -27,9 +27,10 @@ Add quickly a registration and authentication system to your [FastAPI](https://f
 
 * [X] Extensible base user model
 * [X] Ready-to-use register, login, forgot and reset password routes.
+* [X] Dependency callables to inject current user in route.
 * [X] Customizable database backend
-    * [X] SQLAlchemy backend included
-    * [ ] MongoDB backend included ([#4](https://github.com/frankie567/fastapi-users/issues/4))
+    * [X] SQLAlchemy async backend included thanks to [encode/databases](https://www.encode.io/databases/)
+    * [X] MongoDB async backend included thanks to [mongodb/motor](https://github.com/mongodb/motor)
 * [X] Customizable authentication backend
     * [X] JWT authentication backend included
 
