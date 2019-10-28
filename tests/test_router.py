@@ -531,7 +531,12 @@ class TestDeleteUser:
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
     def test_superuser(
-        self, mocker, mock_user_db, test_app_client: TestClient, user: BaseUserDB, superuser: BaseUserDB
+        self,
+        mocker,
+        mock_user_db,
+        test_app_client: TestClient,
+        user: BaseUserDB,
+        superuser: BaseUserDB,
     ):
         mocker.spy(mock_user_db, "delete")
 

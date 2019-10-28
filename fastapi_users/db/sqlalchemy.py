@@ -59,7 +59,5 @@ class SQLAlchemyUserDatabase(BaseUserDatabase):
         return user
 
     async def delete(self, user: BaseUserDB) -> None:
-        query = (
-            self.users.delete().where(self.users.c.id == user.id)
-        )
+        query = self.users.delete().where(self.users.c.id == user.id)
         await self.database.execute(query)
