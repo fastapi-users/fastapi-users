@@ -509,3 +509,38 @@ class TestUpdateUser:
 
         updated_user = mock_user_db.update.call_args[0][0]
         assert updated_user.hashed_password != current_hashed_passord
+
+
+class TestDeleteUser:
+    def test_missing_token(self, test_app_client: TestClient):
+        response = test_app_client.delete("/000")
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_regular_user(self, test_app_client: TestClient, user: BaseUserDB):
+        response = test_app_client.delete(
+            "/000", headers={"Authorization": f"Bearer {user.id}"}
+        )
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_not_existing_user(
+        self, test_app_client: TestClient, superuser: BaseUserDB
+    ):
+        response = test_app_client.delete(
+            "/000", headers={"Authorization": f"Bearer {superuser.id}"}
+        )
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_superuser(
+        self, mocker, mock_user_db, test_app_client: TestClient, user: BaseUserDB, superuser: BaseUserDB
+    ):
+        mocker.spy(mock_user_db, "delete")
+
+        response = test_app_client.delete(
+            f"/{user.id}", headers={"Authorization": f"Bearer {superuser.id}"}
+        )
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert response.json() is None
+        assert mock_user_db.delete.called is True
+
+        deleted_user = mock_user_db.delete.call_args[0][0]
+        assert deleted_user.id == user.id
