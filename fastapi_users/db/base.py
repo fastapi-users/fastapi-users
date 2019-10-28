@@ -29,6 +29,10 @@ class BaseUserDatabase:
         """Update a user."""
         raise NotImplementedError()
 
+    async def delete(self, user: BaseUserDB) -> None:
+        """Delete a user."""
+        raise NotImplementedError()
+
     async def authenticate(
         self, credentials: OAuth2PasswordRequestForm
     ) -> Optional[BaseUserDB]:
