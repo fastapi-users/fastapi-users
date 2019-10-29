@@ -519,6 +519,47 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#superuser" class="md-nav__link">
+    Superuser
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get" class="md-nav__link">
+    GET /
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-user_id" class="md-nav__link">
+    GET /{user_id}
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#patch-user_id" class="md-nav__link">
+    PATCH /{user_id}
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delete-user_id" class="md-nav__link">
+    DELETE /{user_id}
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
       
       
       
@@ -626,6 +667,47 @@
           <li class="md-nav__item">
   <a href="#patch-me" class="md-nav__link">
     PATCH /me
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#superuser" class="md-nav__link">
+    Superuser
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get" class="md-nav__link">
+    GET /
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-user_id" class="md-nav__link">
+    GET /{user_id}
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#patch-user_id" class="md-nav__link">
+    PATCH /{user_id}
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delete-user_id" class="md-nav__link">
+    DELETE /{user_id}
   </a>
   
 </li>
@@ -785,6 +867,106 @@
 <div class="admonition fail">
 <p class="admonition-title"><code>401 Unauthorized</code></p>
 <p>Missing token or inactive user.</p>
+</div>
+<h2 id="superuser">Superuser<a class="headerlink" href="#superuser" title="Permanent link">&para;</a></h2>
+<h3 id="get"><code>GET /</code><a class="headerlink" href="#get" title="Permanent link">&para;</a></h3>
+<p>Return the list of registered users.</p>
+<div class="admonition success">
+<p class="admonition-title"><code>200 OK</code></p>
+<div class="codehilite"><pre><span></span><span class="p">[{</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;57cbb51a-ab71-4009-8802-3f54b4f2e23&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;king.arthur@camelot.bt&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;is_active&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nt">&quot;is_superuser&quot;</span><span class="p">:</span> <span class="kc">false</span>
+<span class="p">}]</span>
+</pre></div>
+
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>401 Unauthorized</code></p>
+<p>Missing token or inactive user.</p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>403 Forbidden</code></p>
+<p>Not a superuser.</p>
+</div>
+<h3 id="get-user_id"><code>GET /{user_id}</code><a class="headerlink" href="#get-user_id" title="Permanent link">&para;</a></h3>
+<p>Return the user with id <code>user_id</code>.</p>
+<div class="admonition success">
+<p class="admonition-title"><code>200 OK</code></p>
+<div class="codehilite"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;57cbb51a-ab71-4009-8802-3f54b4f2e23&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;king.arthur@camelot.bt&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;is_active&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nt">&quot;is_superuser&quot;</span><span class="p">:</span> <span class="kc">false</span>
+<span class="p">}</span>
+</pre></div>
+
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>401 Unauthorized</code></p>
+<p>Missing token or inactive user.</p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>403 Forbidden</code></p>
+<p>Not a superuser.</p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>404 Not found</code></p>
+<p>The user does not exist.</p>
+</div>
+<h3 id="patch-user_id"><code>PATCH /{user_id}</code><a class="headerlink" href="#patch-user_id" title="Permanent link">&para;</a></h3>
+<p>Update the user with id <code>user_id</code>.</p>
+<div class="admonition abstract">
+<p class="admonition-title">Payload</p>
+<div class="codehilite"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;king.arthur@tintagel.bt&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;merlin&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;is_active&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;is_superuser&quot;</span><span class="p">:</span> <span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+
+</div>
+<div class="admonition success">
+<p class="admonition-title"><code>200 OK</code></p>
+<div class="codehilite"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;57cbb51a-ab71-4009-8802-3f54b4f2e23&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;king.arthur@camelot.bt&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;is_active&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;is_superuser&quot;</span><span class="p">:</span> <span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>401 Unauthorized</code></p>
+<p>Missing token or inactive user.</p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>403 Forbidden</code></p>
+<p>Not a superuser.</p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>404 Not found</code></p>
+<p>The user does not exist.</p>
+</div>
+<h3 id="delete-user_id"><code>DELETE /{user_id}</code><a class="headerlink" href="#delete-user_id" title="Permanent link">&para;</a></h3>
+<p>Delete the user with id <code>user_id</code>.</p>
+<div class="admonition success">
+<p class="admonition-title"><code>204 No content</code></p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>401 Unauthorized</code></p>
+<p>Missing token or inactive user.</p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>403 Forbidden</code></p>
+<p>Not a superuser.</p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>404 Not found</code></p>
+<p>The user does not exist.</p>
 </div>
                 
                   
