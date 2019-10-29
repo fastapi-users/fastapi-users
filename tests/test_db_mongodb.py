@@ -61,3 +61,8 @@ async def test_queries(mongodb_user_db):
     # Unknown user
     unknown_user = await mongodb_user_db.get_by_email("galahad@camelot.bt")
     assert unknown_user is None
+
+    # Delete user
+    await mongodb_user_db.delete(user)
+    deleted_user = await mongodb_user_db.get(user.id)
+    assert deleted_user is None

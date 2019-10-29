@@ -37,7 +37,7 @@ def fastapi_users(request, mock_user_db, mock_authentication) -> FastAPIUsers:
 @pytest.fixture()
 def test_app_client(fastapi_users) -> TestClient:
     app = FastAPI()
-    app.include_router(fastapi_users.router)
+    app.include_router(fastapi_users.router, prefix="/users")
 
     @app.get("/current-user")
     def current_user(user=Depends(fastapi_users.get_current_user)):
@@ -63,16 +63,25 @@ class TestFastAPIUsers:
 
 class TestRouter:
     def test_routes_exist(self, test_app_client: TestClient):
-        response = test_app_client.post("/register")
+        response = test_app_client.post("/users/register")
         assert response.status_code != status.HTTP_404_NOT_FOUND
 
-        response = test_app_client.post("/login")
+        response = test_app_client.post("/users/login")
         assert response.status_code != status.HTTP_404_NOT_FOUND
 
-        response = test_app_client.post("/forgot-password")
+        response = test_app_client.post("/users/forgot-password")
         assert response.status_code != status.HTTP_404_NOT_FOUND
 
-        response = test_app_client.post("/reset-password")
+        response = test_app_client.post("/users/reset-password")
+        assert response.status_code != status.HTTP_404_NOT_FOUND
+
+        response = test_app_client.get("/users")
+        assert response.status_code != status.HTTP_404_NOT_FOUND
+
+        response = test_app_client.get("/users/aaa")
+        assert response.status_code != status.HTTP_404_NOT_FOUND
+
+        response = test_app_client.patch("/users/aaa")
         assert response.status_code != status.HTTP_404_NOT_FOUND
 
 

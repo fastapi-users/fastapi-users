@@ -357,3 +357,195 @@ class TestUpdateMe:
 
         updated_user = mock_user_db.update.call_args[0][0]
         assert updated_user.hashed_password != current_hashed_passord
+
+
+class TestListUsers:
+    def test_missing_token(self, test_app_client: TestClient):
+        response = test_app_client.get("/")
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_regular_user(self, test_app_client: TestClient, user: BaseUserDB):
+        response = test_app_client.get(
+            "/", headers={"Authorization": f"Bearer {user.id}"}
+        )
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_superuser(self, test_app_client: TestClient, superuser: BaseUserDB):
+        response = test_app_client.get(
+            "/", headers={"Authorization": f"Bearer {superuser.id}"}
+        )
+        assert response.status_code == status.HTTP_200_OK
+
+        response_json = response.json()
+        assert len(response_json) == 3
+        for user in response_json:
+            assert "id" in user
+            assert "hashed_password" not in user
+
+
+class TestGetUser:
+    def test_missing_token(self, test_app_client: TestClient):
+        response = test_app_client.get("/000")
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_regular_user(self, test_app_client: TestClient, user: BaseUserDB):
+        response = test_app_client.get(
+            "/000", headers={"Authorization": f"Bearer {user.id}"}
+        )
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_not_existing_user(
+        self, test_app_client: TestClient, superuser: BaseUserDB
+    ):
+        response = test_app_client.get(
+            "/000", headers={"Authorization": f"Bearer {superuser.id}"}
+        )
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_superuser(
+        self, test_app_client: TestClient, user: BaseUserDB, superuser: BaseUserDB
+    ):
+        response = test_app_client.get(
+            f"/{user.id}", headers={"Authorization": f"Bearer {superuser.id}"}
+        )
+        assert response.status_code == status.HTTP_200_OK
+
+        response_json = response.json()
+        assert response_json["id"] == user.id
+        assert "hashed_password" not in response_json
+
+
+class TestUpdateUser:
+    def test_missing_token(self, test_app_client: TestClient):
+        response = test_app_client.patch("/000")
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_regular_user(self, test_app_client: TestClient, user: BaseUserDB):
+        response = test_app_client.patch(
+            "/000", headers={"Authorization": f"Bearer {user.id}"}
+        )
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_not_existing_user(
+        self, test_app_client: TestClient, superuser: BaseUserDB
+    ):
+        response = test_app_client.patch(
+            "/000", json={}, headers={"Authorization": f"Bearer {superuser.id}"}
+        )
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_empty_body(
+        self, test_app_client: TestClient, user: BaseUserDB, superuser: BaseUserDB
+    ):
+        response = test_app_client.patch(
+            f"/{user.id}", json={}, headers={"Authorization": f"Bearer {superuser.id}"}
+        )
+        assert response.status_code == status.HTTP_200_OK
+
+        response_json = response.json()
+        assert response_json["email"] == user.email
+
+    def test_valid_body(
+        self, test_app_client: TestClient, user: BaseUserDB, superuser: BaseUserDB
+    ):
+        json = {"email": "king.arthur@tintagel.bt"}
+        response = test_app_client.patch(
+            f"/{user.id}",
+            json=json,
+            headers={"Authorization": f"Bearer {superuser.id}"},
+        )
+        assert response.status_code == status.HTTP_200_OK
+
+        response_json = response.json()
+        assert response_json["email"] == "king.arthur@tintagel.bt"
+
+    def test_valid_body_is_superuser(
+        self, test_app_client: TestClient, user: BaseUserDB, superuser: BaseUserDB
+    ):
+        json = {"is_superuser": True}
+        response = test_app_client.patch(
+            f"/{user.id}",
+            json=json,
+            headers={"Authorization": f"Bearer {superuser.id}"},
+        )
+        assert response.status_code == status.HTTP_200_OK
+
+        response_json = response.json()
+        assert response_json["is_superuser"] is True
+
+    def test_valid_body_is_active(
+        self, test_app_client: TestClient, user: BaseUserDB, superuser: BaseUserDB
+    ):
+        json = {"is_active": False}
+        response = test_app_client.patch(
+            f"/{user.id}",
+            json=json,
+            headers={"Authorization": f"Bearer {superuser.id}"},
+        )
+        assert response.status_code == status.HTTP_200_OK
+
+        response_json = response.json()
+        assert response_json["is_active"] is False
+
+    def test_valid_body_password(
+        self,
+        mocker,
+        mock_user_db,
+        test_app_client: TestClient,
+        user: BaseUserDB,
+        superuser: BaseUserDB,
+    ):
+        mocker.spy(mock_user_db, "update")
+        current_hashed_passord = user.hashed_password
+
+        json = {"password": "merlin"}
+        response = test_app_client.patch(
+            f"/{user.id}",
+            json=json,
+            headers={"Authorization": f"Bearer {superuser.id}"},
+        )
+        assert response.status_code == status.HTTP_200_OK
+        assert mock_user_db.update.called is True
+
+        updated_user = mock_user_db.update.call_args[0][0]
+        assert updated_user.hashed_password != current_hashed_passord
+
+
+class TestDeleteUser:
+    def test_missing_token(self, test_app_client: TestClient):
+        response = test_app_client.delete("/000")
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_regular_user(self, test_app_client: TestClient, user: BaseUserDB):
+        response = test_app_client.delete(
+            "/000", headers={"Authorization": f"Bearer {user.id}"}
+        )
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_not_existing_user(
+        self, test_app_client: TestClient, superuser: BaseUserDB
+    ):
+        response = test_app_client.delete(
+            "/000", headers={"Authorization": f"Bearer {superuser.id}"}
+        )
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_superuser(
+        self,
+        mocker,
+        mock_user_db,
+        test_app_client: TestClient,
+        user: BaseUserDB,
+        superuser: BaseUserDB,
+    ):
+        mocker.spy(mock_user_db, "delete")
+
+        response = test_app_client.delete(
+            f"/{user.id}", headers={"Authorization": f"Bearer {superuser.id}"}
+        )
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert response.json() is None
+        assert mock_user_db.delete.called is True
+
+        deleted_user = mock_user_db.delete.call_args[0][0]
+        assert deleted_user.id == user.id

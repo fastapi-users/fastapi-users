@@ -23,6 +23,9 @@ class BaseUser(BaseModel):
             skip_defaults=True, exclude={"id", "is_superuser", "is_active"}
         )
 
+    def create_update_dict_superuser(self):
+        return self.dict(skip_defaults=True, exclude={"id"})
+
 
 class BaseUserCreate(BaseUser):
     email: EmailStr

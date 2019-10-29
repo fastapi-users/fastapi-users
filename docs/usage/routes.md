@@ -129,3 +129,96 @@ Update the current authenticated active user.
 
 !!! fail "`401 Unauthorized`"
     Missing token or inactive user.
+
+## Superuser
+
+### `GET /`
+
+Return the list of registered users.
+
+!!! success "`200 OK`"
+    ```json
+    [{
+        "id": "57cbb51a-ab71-4009-8802-3f54b4f2e23",
+        "email": "king.arthur@camelot.bt",
+        "is_active": true,
+        "is_superuser": false
+    }]
+    ```
+
+!!! fail "`401 Unauthorized`"
+    Missing token or inactive user.
+
+!!! fail "`403 Forbidden`"
+    Not a superuser.
+
+### `GET /{user_id}`
+
+Return the user with id `user_id`.
+
+!!! success "`200 OK`"
+    ```json
+    {
+        "id": "57cbb51a-ab71-4009-8802-3f54b4f2e23",
+        "email": "king.arthur@camelot.bt",
+        "is_active": true,
+        "is_superuser": false
+    }
+    ```
+
+!!! fail "`401 Unauthorized`"
+    Missing token or inactive user.
+
+!!! fail "`403 Forbidden`"
+    Not a superuser.
+
+!!! fail "`404 Not found`"
+    The user does not exist.
+
+### `PATCH /{user_id}`
+
+Update the user with id `user_id`.
+
+!!! abstract "Payload"
+    ```json
+    {
+        "email": "king.arthur@tintagel.bt",
+        "password": "merlin",
+        "is_active": false,
+        "is_superuser": true
+    }
+    ```
+
+!!! success "`200 OK`"
+    ```json
+    {
+        "id": "57cbb51a-ab71-4009-8802-3f54b4f2e23",
+        "email": "king.arthur@camelot.bt",
+        "is_active": false,
+        "is_superuser": true
+    }
+    ```
+
+!!! fail "`401 Unauthorized`"
+    Missing token or inactive user.
+
+!!! fail "`403 Forbidden`"
+    Not a superuser.
+
+!!! fail "`404 Not found`"
+    The user does not exist.
+
+### `DELETE /{user_id}`
+
+Delete the user with id `user_id`.
+
+!!! success "`204 No content`"
+
+!!! fail "`401 Unauthorized`"
+    Missing token or inactive user.
+
+!!! fail "`403 Forbidden`"
+    Not a superuser.
+
+!!! fail "`404 Not found`"
+    The user does not exist.

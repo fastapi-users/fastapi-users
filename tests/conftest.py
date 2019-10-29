@@ -75,6 +75,9 @@ def mock_user_db(user, inactive_user, superuser) -> BaseUserDatabase:
         async def update(self, user: BaseUserDB) -> BaseUserDB:
             return user
 
+        async def delete(self, user: BaseUserDB) -> None:
+            pass
+
     return MockUserDatabase()
 
 

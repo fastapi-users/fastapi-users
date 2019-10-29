@@ -38,3 +38,6 @@ class MongoDBUserDatabase(BaseUserDatabase):
     async def update(self, user: BaseUserDB) -> BaseUserDB:
         await self.collection.replace_one({"id": user.id}, user.dict())
         return user
+
+    async def delete(self, user: BaseUserDB) -> None:
+        await self.collection.delete_one({"id": user.id})

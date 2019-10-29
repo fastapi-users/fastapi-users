@@ -31,6 +31,9 @@ async def test_not_implemented_methods(user):
     with pytest.raises(NotImplementedError):
         await base_user_db.update(user)
 
+    with pytest.raises(NotImplementedError):
+        await base_user_db.delete(user)
+
 
 class TestAuthenticate:
     @pytest.mark.asyncio
