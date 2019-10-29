@@ -98,7 +98,7 @@ def mock_authentication():
 
         def get_current_active_user(self, user_db: BaseUserDatabase):
             async def _get_current_active_user(
-                token: str = Depends(self.oauth2_scheme)
+                token: str = Depends(self.oauth2_scheme),
             ):
                 user = await self._get_authentication_method(user_db)(token)
                 return self._get_current_active_user_base(user)
@@ -128,7 +128,7 @@ def get_test_auth_client(mock_user_db):
 
         @app.get("/test-current-user")
         def test_current_user(
-            user: BaseUserDB = Depends(authentication.get_current_user(mock_user_db))
+            user: BaseUserDB = Depends(authentication.get_current_user(mock_user_db)),
         ):
             return user
 
@@ -136,7 +136,7 @@ def get_test_auth_client(mock_user_db):
         def test_current_active_user(
             user: BaseUserDB = Depends(
                 authentication.get_current_active_user(mock_user_db)
-            )
+            ),
         ):
             return user
 
@@ -144,7 +144,7 @@ def get_test_auth_client(mock_user_db):
         def test_current_superuser(
             user: BaseUserDB = Depends(
                 authentication.get_current_superuser(mock_user_db)
-            )
+            ),
         ):
             return user
 

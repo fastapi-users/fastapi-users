@@ -144,7 +144,7 @@ def get_user_router(
 
     @router.get("/me", response_model=models.User)
     async def me(
-        user: models.UserDB = Depends(get_current_active_user)  # type: ignore
+        user: models.UserDB = Depends(get_current_active_user),  # type: ignore
     ):
         return user
 
