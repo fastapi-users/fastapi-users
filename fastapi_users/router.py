@@ -17,22 +17,22 @@ from fastapi_users.password import get_password_hash
 from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
 
 
-class Events(Enum):
+class Event(Enum):
     ON_AFTER_REGISTER = 1
     ON_AFTER_FORGOT_PASSWORD = 2
 
 
 class UserRouter(APIRouter):
-    event_handlers: typing.DefaultDict[Events, typing.List[typing.Callable]]
+    event_handlers: typing.DefaultDict[Event, typing.List[typing.Callable]]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.event_handlers = defaultdict(list)
 
-    def add_event_handler(self, event_type: Events, func: typing.Callable) -> None:
+    def add_event_handler(self, event_type: Event, func: typing.Callable) -> None:
         self.event_handlers[event_type].append(func)
 
-    async def run_handlers(self, event_type: Events, *args, **kwargs) -> None:
+    async def run_handlers(self, event_type: Event, *args, **kwargs) -> None:
         for handler in self.event_handlers[event_type]:
             if asyncio.iscoroutinefunction(handler):
                 await handler(*args, **kwargs)
@@ -88,7 +88,7 @@ def get_user_router(
         )
         created_user = await user_db.create(db_user)
 
-        await router.run_handlers(Events.ON_AFTER_REGISTER, created_user)
+        await router.run_handlers(Event.ON_AFTER_REGISTER, created_user)
 
         return created_user
 
@@ -116,7 +116,7 @@ def get_user_router(
                 reset_password_token_lifetime_seconds,
                 reset_password_token_secret,
             )
-            await router.run_handlers(Events.ON_AFTER_FORGOT_PASSWORD, user, token)
+            await router.run_handlers(Event.ON_AFTER_FORGOT_PASSWORD, user, token)
 
         return None
 

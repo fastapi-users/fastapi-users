@@ -3,7 +3,7 @@ from typing import Callable, Type
 from fastapi_users.authentication import BaseAuthentication
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.models import BaseUser, BaseUserDB
-from fastapi_users.router import Events, UserRouter, get_user_router
+from fastapi_users.router import Event, UserRouter, get_user_router
 
 
 class FastAPIUsers:
@@ -54,13 +54,13 @@ class FastAPIUsers:
 
     def on_after_register(self) -> Callable:
         """Add an event handler on successful registration."""
-        return self._on_event(Events.ON_AFTER_REGISTER)
+        return self._on_event(Event.ON_AFTER_REGISTER)
 
     def on_after_forgot_password(self) -> Callable:
         """Add an event handler on successful forgot password request."""
-        return self._on_event(Events.ON_AFTER_FORGOT_PASSWORD)
+        return self._on_event(Event.ON_AFTER_FORGOT_PASSWORD)
 
-    def _on_event(self, event_type: Events) -> Callable:
+    def _on_event(self, event_type: Event) -> Callable:
         def decorator(func: Callable) -> Callable:
             self.router.add_event_handler(event_type, func)
             return func

@@ -5,7 +5,7 @@ from starlette.testclient import TestClient
 
 from fastapi_users import FastAPIUsers
 from fastapi_users.models import BaseUser, BaseUserDB
-from fastapi_users.router import Events
+from fastapi_users.router import Event
 
 
 def sync_event_handler():
@@ -57,8 +57,8 @@ def test_app_client(fastapi_users) -> TestClient:
 class TestFastAPIUsers:
     def test_event_handlers(self, fastapi_users):
         event_handlers = fastapi_users.router.event_handlers
-        assert len(event_handlers[Events.ON_AFTER_REGISTER]) == 1
-        assert len(event_handlers[Events.ON_AFTER_FORGOT_PASSWORD]) == 1
+        assert len(event_handlers[Event.ON_AFTER_REGISTER]) == 1
+        assert len(event_handlers[Event.ON_AFTER_FORGOT_PASSWORD]) == 1
 
 
 class TestRouter:
