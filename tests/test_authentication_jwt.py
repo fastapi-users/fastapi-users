@@ -47,7 +47,6 @@ async def test_get_login_response(jwt_authentication, user):
 class TestGetCurrentUser:
     def test_missing_token(self, test_auth_client):
         response = test_auth_client.get("/test-current-user")
-        print(response.json())
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     def test_invalid_token(self, test_auth_client):
