@@ -1,7 +1,7 @@
 import asyncio
 import typing
 from collections import defaultdict
-from enum import Enum
+from enum import Enum, auto
 
 import jwt
 from fastapi import APIRouter, Body, Depends, HTTPException
@@ -17,9 +17,15 @@ from fastapi_users.password import get_password_hash
 from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
 
 
+class ErrorCode:
+    REGISTER_USER_ALREADY_EXISTS = "REGISTER_USER_ALREADY_EXISTS"
+    LOGIN_BAD_CREDENTIALS = "LOGIN_BAD_CREDENTIALS"
+    RESET_PASSWORD_BAD_TOKEN = "RESET_PASSWORD_BAD_TOKEN"
+
+
 class Event(Enum):
-    ON_AFTER_REGISTER = 1
-    ON_AFTER_FORGOT_PASSWORD = 2
+    ON_AFTER_REGISTER = auto()
+    ON_AFTER_FORGOT_PASSWORD = auto()
 
 
 class UserRouter(APIRouter):
@@ -80,7 +86,10 @@ def get_user_router(
         existing_user = await user_db.get_by_email(user.email)
 
         if existing_user is not None:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=ErrorCode.REGISTER_USER_ALREADY_EXISTS,
+            )
 
         hashed_password = get_password_hash(user.password)
         db_user = models.UserDB(
@@ -98,10 +107,11 @@ def get_user_router(
     ):
         user = await user_db.authenticate(credentials)
 
-        if user is None:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
-        elif not user.is_active:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
+        if user is None or not user.is_active:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=ErrorCode.LOGIN_BAD_CREDENTIALS,
+            )
 
         return await auth.get_login_response(user, response)
 
@@ -131,16 +141,25 @@ def get_user_router(
             )
             user_id = data.get("user_id")
             if user_id is None:
-                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=ErrorCode.RESET_PASSWORD_BAD_TOKEN,
+                )
 
             user = await user_db.get(user_id)
             if user is None or not user.is_active:
-                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=ErrorCode.RESET_PASSWORD_BAD_TOKEN,
+                )
 
             user.hashed_password = get_password_hash(password)
             await user_db.update(user)
         except jwt.PyJWTError:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=ErrorCode.RESET_PASSWORD_BAD_TOKEN,
+            )
 
     @router.get("/me", response_model=models.User)
     async def me(

@@ -8,7 +8,7 @@ from starlette import status
 from starlette.testclient import TestClient
 
 from fastapi_users.models import BaseUser, BaseUserDB
-from fastapi_users.router import Event, get_user_router
+from fastapi_users.router import ErrorCode, Event, get_user_router
 from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
 
 SECRET = "SECRET"
@@ -79,6 +79,7 @@ class TestRegister:
         json = {"email": "king.arthur@camelot.bt", "password": "guinevere"}
         response = test_app_client.post("/register", json=json)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.json()["detail"] == ErrorCode.REGISTER_USER_ALREADY_EXISTS
         assert event_handler.called is False
 
     def test_valid_body(self, test_app_client: TestClient, event_handler):
@@ -141,11 +142,13 @@ class TestLogin:
         data = {"username": "lancelot@camelot.bt", "password": "guinevere"}
         response = test_app_client.post("/login", data=data)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.json()["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
 
     def test_wrong_password(self, test_app_client: TestClient):
         data = {"username": "king.arthur@camelot.bt", "password": "percival"}
         response = test_app_client.post("/login", data=data)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.json()["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
 
     def test_valid_credentials(self, test_app_client: TestClient, user: BaseUserDB):
         data = {"username": "king.arthur@camelot.bt", "password": "guinevere"}
@@ -157,6 +160,7 @@ class TestLogin:
         data = {"username": "percival@camelot.bt", "password": "angharad"}
         response = test_app_client.post("/login", data=data)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.json()["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
 
 
 class TestForgotPassword:
@@ -213,8 +217,8 @@ class TestResetPassword:
     def test_invalid_token(self, test_app_client: TestClient):
         json = {"token": "foo", "password": "guinevere"}
         response = test_app_client.post("/reset-password", json=json)
-        print(response.json(), response.status_code)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.json()["detail"] == ErrorCode.RESET_PASSWORD_BAD_TOKEN
 
     def test_valid_token_missing_user_id_payload(
         self, mocker, mock_user_db, test_app_client: TestClient, forgot_password_token
@@ -224,6 +228,7 @@ class TestResetPassword:
         json = {"token": forgot_password_token(), "password": "holygrail"}
         response = test_app_client.post("/reset-password", json=json)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.json()["detail"] == ErrorCode.RESET_PASSWORD_BAD_TOKEN
         assert mock_user_db.update.called is False
 
     def test_inactive_user(
@@ -242,6 +247,7 @@ class TestResetPassword:
         }
         response = test_app_client.post("/reset-password", json=json)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.json()["detail"] == ErrorCode.RESET_PASSWORD_BAD_TOKEN
         assert mock_user_db.update.called is False
 
     def test_existing_user(
