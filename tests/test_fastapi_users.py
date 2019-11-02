@@ -35,6 +35,7 @@ def fastapi_users(request, mock_user_db, mock_authentication) -> FastAPIUsers:
 
 
 @pytest.fixture()
+@pytest.mark.fastapi_users
 def test_app_client(fastapi_users) -> TestClient:
     app = FastAPI()
     app.include_router(fastapi_users.router, prefix="/users")
@@ -54,6 +55,7 @@ def test_app_client(fastapi_users) -> TestClient:
     return TestClient(app)
 
 
+@pytest.mark.fastapi_users
 class TestFastAPIUsers:
     def test_event_handlers(self, fastapi_users):
         event_handlers = fastapi_users.router.event_handlers
@@ -61,6 +63,7 @@ class TestFastAPIUsers:
         assert len(event_handlers[Event.ON_AFTER_FORGOT_PASSWORD]) == 1
 
 
+@pytest.mark.fastapi_users
 class TestRouter:
     def test_routes_exist(self, test_app_client: TestClient):
         response = test_app_client.post("/users/register")
@@ -85,6 +88,7 @@ class TestRouter:
         assert response.status_code != status.HTTP_404_NOT_FOUND
 
 
+@pytest.mark.fastapi_users
 class TestGetCurrentUser:
     def test_missing_token(self, test_app_client: TestClient):
         response = test_app_client.get("/current-user")
@@ -103,6 +107,7 @@ class TestGetCurrentUser:
         assert response.status_code == status.HTTP_200_OK
 
 
+@pytest.mark.fastapi_users
 class TestGetCurrentActiveUser:
     def test_missing_token(self, test_app_client: TestClient):
         response = test_app_client.get("/current-active-user")
@@ -130,6 +135,7 @@ class TestGetCurrentActiveUser:
         assert response.status_code == status.HTTP_200_OK
 
 
+@pytest.mark.fastapi_users
 class TestGetCurrentSuperuser:
     def test_missing_token(self, test_app_client: TestClient):
         response = test_app_client.get("/current-superuser")

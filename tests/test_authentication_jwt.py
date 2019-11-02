@@ -44,6 +44,7 @@ async def test_get_login_response(jwt_authentication, user):
     assert decoded["user_id"] == user.id
 
 
+@pytest.mark.authentication
 class TestGetCurrentUser:
     def test_missing_token(self, test_auth_client):
         response = test_auth_client.get("/test-current-user")
@@ -81,6 +82,7 @@ class TestGetCurrentUser:
         assert response_json["id"] == user.id
 
 
+@pytest.mark.authentication
 class TestGetCurrentActiveUser:
     def test_missing_token(self, test_auth_client):
         response = test_auth_client.get("/test-current-active-user")
@@ -110,6 +112,7 @@ class TestGetCurrentActiveUser:
         assert response_json["id"] == user.id
 
 
+@pytest.mark.authentication
 class TestGetCurrentSuperuser:
     def test_missing_token(self, test_auth_client):
         response = test_auth_client.get("/test-current-superuser")

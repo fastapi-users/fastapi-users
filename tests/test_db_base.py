@@ -13,6 +13,7 @@ def create_oauth2_password_request_form():
 
 
 @pytest.mark.asyncio
+@pytest.mark.db
 async def test_not_implemented_methods(user):
     base_user_db = BaseUserDatabase()
 
@@ -35,6 +36,7 @@ async def test_not_implemented_methods(user):
         await base_user_db.delete(user)
 
 
+@pytest.mark.db
 class TestAuthenticate:
     @pytest.mark.asyncio
     async def test_unknown_user(

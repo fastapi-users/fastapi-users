@@ -57,6 +57,7 @@ def test_app_client(mock_user_db, mock_authentication, event_handler) -> TestCli
     return TestClient(app)
 
 
+@pytest.mark.router
 class TestRegister:
     def test_empty_body(self, test_app_client: TestClient, event_handler):
         response = test_app_client.post("/register", json={})
@@ -123,6 +124,7 @@ class TestRegister:
         assert response_json["is_active"] is True
 
 
+@pytest.mark.router
 class TestLogin:
     def test_empty_body(self, test_app_client: TestClient):
         response = test_app_client.post("/login", data={})
@@ -163,6 +165,7 @@ class TestLogin:
         assert response.json()["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
 
 
+@pytest.mark.router
 class TestForgotPassword:
     def test_empty_body(self, test_app_client: TestClient, event_handler):
         response = test_app_client.post("/forgot-password", json={})
@@ -199,6 +202,7 @@ class TestForgotPassword:
         assert decoded_token["user_id"] == user.id
 
 
+@pytest.mark.router
 class TestResetPassword:
     def test_empty_body(self, test_app_client: TestClient):
         response = test_app_client.post("/reset-password", json={})
@@ -270,6 +274,7 @@ class TestResetPassword:
         assert updated_user.hashed_password != current_hashed_passord
 
 
+@pytest.mark.router
 class TestMe:
     def test_missing_token(self, test_app_client: TestClient):
         response = test_app_client.get("/me")
@@ -294,6 +299,7 @@ class TestMe:
         assert response_json["email"] == user.email
 
 
+@pytest.mark.router
 class TestUpdateMe:
     def test_missing_token(self, test_app_client: TestClient):
         response = test_app_client.patch("/me")
@@ -365,6 +371,7 @@ class TestUpdateMe:
         assert updated_user.hashed_password != current_hashed_passord
 
 
+@pytest.mark.router
 class TestListUsers:
     def test_missing_token(self, test_app_client: TestClient):
         response = test_app_client.get("/")
@@ -389,6 +396,7 @@ class TestListUsers:
             assert "hashed_password" not in user
 
 
+@pytest.mark.router
 class TestGetUser:
     def test_missing_token(self, test_app_client: TestClient):
         response = test_app_client.get("/000")
@@ -421,6 +429,7 @@ class TestGetUser:
         assert "hashed_password" not in response_json
 
 
+@pytest.mark.router
 class TestUpdateUser:
     def test_missing_token(self, test_app_client: TestClient):
         response = test_app_client.patch("/000")
@@ -517,6 +526,7 @@ class TestUpdateUser:
         assert updated_user.hashed_password != current_hashed_passord
 
 
+@pytest.mark.router
 class TestDeleteUser:
     def test_missing_token(self, test_app_client: TestClient):
         response = test_app_client.delete("/000")

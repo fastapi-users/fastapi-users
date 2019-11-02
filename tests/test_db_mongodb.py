@@ -11,7 +11,16 @@ from fastapi_users.password import get_password_hash
 
 @pytest.fixture
 async def mongodb_user_db() -> AsyncGenerator[MongoDBUserDatabase, None]:
-    client = motor.motor_asyncio.AsyncIOMotorClient("mongodb://localhost:27017")
+    client = motor.motor_asyncio.AsyncIOMotorClient(
+        "mongodb://localhost:27017", serverSelectionTimeoutMS=100
+    )
+
+    try:
+        await client.server_info()
+    except pymongo.errors.ServerSelectionTimeoutError:
+        pytest.skip("MongoDB not available", allow_module_level=True)
+        return
+
     db = client["test_database"]
     collection = db["users"]
 
@@ -21,6 +30,7 @@ async def mongodb_user_db() -> AsyncGenerator[MongoDBUserDatabase, None]:
 
 
 @pytest.mark.asyncio
+@pytest.mark.db
 async def test_queries(mongodb_user_db):
     user = BaseUserDB(
         id="111",

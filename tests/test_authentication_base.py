@@ -5,6 +5,7 @@ from fastapi_users.authentication import BaseAuthentication
 
 
 @pytest.mark.asyncio
+@pytest.mark.authentication
 async def test_not_implemented_methods(user, mock_user_db):
     response = Response()
     base_authentication = BaseAuthentication()

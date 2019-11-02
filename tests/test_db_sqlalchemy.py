@@ -34,6 +34,7 @@ async def sqlalchemy_user_db() -> AsyncGenerator[SQLAlchemyUserDatabase, None]:
 
 
 @pytest.mark.asyncio
+@pytest.mark.db
 async def test_queries(sqlalchemy_user_db):
     user = BaseUserDB(
         id="111",
