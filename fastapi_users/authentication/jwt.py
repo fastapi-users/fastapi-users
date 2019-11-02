@@ -1,14 +1,11 @@
 import jwt
 from fastapi import Depends
-from fastapi.security import OAuth2PasswordBearer
 from starlette.responses import Response
 
 from fastapi_users.authentication.base import BaseAuthentication
 from fastapi_users.db.base import BaseUserDatabase
 from fastapi_users.models import BaseUserDB
 from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
 
 class JWTAuthentication(BaseAuthentication):
@@ -23,7 +20,8 @@ class JWTAuthentication(BaseAuthentication):
     secret: str
     lifetime_seconds: int
 
-    def __init__(self, secret: str, lifetime_seconds: int):
+    def __init__(self, secret: str, lifetime_seconds: int, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.secret = secret
         self.lifetime_seconds = lifetime_seconds
 
@@ -34,28 +32,28 @@ class JWTAuthentication(BaseAuthentication):
         return {"token": token}
 
     def get_current_user(self, user_db: BaseUserDatabase):
-        async def _get_current_user(token: str = Depends(oauth2_scheme)):
+        async def _get_current_user(token: str = Depends(self.scheme)):
             user = await self._get_authentication_method(user_db)(token)
             return self._get_current_user_base(user)
 
         return _get_current_user
 
     def get_current_active_user(self, user_db: BaseUserDatabase):
-        async def _get_current_active_user(token: str = Depends(oauth2_scheme)):
+        async def _get_current_active_user(token: str = Depends(self.scheme)):
             user = await self._get_authentication_method(user_db)(token)
             return self._get_current_active_user_base(user)
 
         return _get_current_active_user
 
     def get_current_superuser(self, user_db: BaseUserDatabase):
-        async def _get_current_superuser(token: str = Depends(oauth2_scheme)):
+        async def _get_current_superuser(token: str = Depends(self.scheme)):
             user = await self._get_authentication_method(user_db)(token)
             return self._get_current_superuser_base(user)
 
         return _get_current_superuser
 
     def _get_authentication_method(self, user_db: BaseUserDatabase):
-        async def authentication_method(token: str = Depends(oauth2_scheme)):
+        async def authentication_method(token: str = Depends(self.scheme)):
             try:
                 data = jwt.decode(
                     token,

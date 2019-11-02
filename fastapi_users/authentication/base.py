@@ -1,6 +1,7 @@
 from typing import Callable
 
 from fastapi import HTTPException
+from fastapi.security import OAuth2PasswordBearer
 from starlette import status
 from starlette.responses import Response
 
@@ -15,7 +16,19 @@ class BaseAuthentication:
     Base adapter for generating and decoding authentication tokens.
 
     Provides dependency injectors to get current active/superuser user.
+
+    :param scheme: Optional authentication scheme for OpenAPI.
+    Defaults to `OAuth2PasswordBearer(tokenUrl="/users/login")`.
+    Override it if your login route lives somewhere else.
     """
+
+    scheme: OAuth2PasswordBearer
+
+    def __init__(self, scheme: OAuth2PasswordBearer = None):
+        if scheme is None:
+            self.scheme = OAuth2PasswordBearer(tokenUrl="/users/login")
+        else:
+            self.scheme = scheme
 
     async def get_login_response(self, user: BaseUserDB, response: Response):
         raise NotImplementedError()
