@@ -258,6 +258,40 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#development" class="md-nav__link">
+    Development
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setup-environement" class="md-nav__link">
+    Setup environement
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-unit-tests" class="md-nav__link">
+    Run unit tests
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#format-the-code" class="md-nav__link">
+    Format the code
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#license" class="md-nav__link">
     License
   </a>
@@ -519,6 +553,40 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#development" class="md-nav__link">
+    Development
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setup-environement" class="md-nav__link">
+    Setup environement
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-unit-tests" class="md-nav__link">
+    Run unit tests
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#format-the-code" class="md-nav__link">
+    Format the code
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#license" class="md-nav__link">
     License
   </a>
@@ -575,6 +643,31 @@
 </ul>
 </li>
 </ul>
+<h2 id="development">Development<a class="headerlink" href="#development" title="Permanent link">&para;</a></h2>
+<h3 id="setup-environement">Setup environement<a class="headerlink" href="#setup-environement" title="Permanent link">&para;</a></h3>
+<p>You should have <a href="https://pipenv.readthedocs.io/en/latest/">Pipenv</a> installed. Then, you can install the dependencies with:</p>
+<div class="codehilite"><pre><span></span>pipenv install --dev
+</pre></div>
+
+<p>After that, activate the virtual environment:</p>
+<div class="codehilite"><pre><span></span>pipenv shell
+</pre></div>
+
+<h3 id="run-unit-tests">Run unit tests<a class="headerlink" href="#run-unit-tests" title="Permanent link">&para;</a></h3>
+<p>You can run all the tests with:</p>
+<div class="codehilite"><pre><span></span>make <span class="nb">test</span>
+</pre></div>
+
+<p>The command will start a MongoDB container for the related unit tests. So you should have <a href="https://www.docker.com/get-started">Docker</a> installed.</p>
+<p>Alternatively, you can run <code>pytest</code> yourself. The MongoDB unit tests will be skipped if no server is available on your local machine:</p>
+<div class="codehilite"><pre><span></span>pytest
+</pre></div>
+
+<h3 id="format-the-code">Format the code<a class="headerlink" href="#format-the-code" title="Permanent link">&para;</a></h3>
+<p>Execute the following command to apply <code>isort</code> and <code>black</code> formatting:</p>
+<div class="codehilite"><pre><span></span>make format
+</pre></div>
+
 <h2 id="license">License<a class="headerlink" href="#license" title="Permanent link">&para;</a></h2>
 <p>This project is licensed under the terms of the MIT license.</p>
                 
