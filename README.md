@@ -34,6 +34,46 @@ Add quickly a registration and authentication system to your [FastAPI](https://f
 * [X] Customizable authentication backend
     * [X] JWT authentication backend included
 
+## Development
+
+### Setup environement
+
+You should have [Pipenv](https://pipenv.readthedocs.io/en/latest/) installed. Then, you can install the dependencies with:
+
+```bash
+pipenv install --dev
+```
+
+After that, activate the virtual environment:
+
+```bash
+pipenv shell
+```
+
+### Run unit tests
+
+You can run all the tests with:
+
+```bash
+make test
+```
+
+The command will start a MongoDB container for the related unit tests. So you should have [Docker](https://www.docker.com/get-started) installed.
+
+Alternatively, you can run `pytest` yourself. The MongoDB unit tests will be skipped if no server is available on your local machine:
+
+```bash
+pytest
+```
+
+### Format the code
+
+Execute the following command to apply `isort` and `black` formatting:
+
+```bash
+make format
+```
+
 ## License
 
 This project is licensed under the terms of the MIT license.
