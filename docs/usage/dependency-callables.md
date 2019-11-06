@@ -34,3 +34,15 @@ Get the current superuser. Will throw a `401 Unauthorized` if missing or wrong c
 def protected_route(user: User = Depends(fastapi_users.get_current_superuser)):
     return f'Hello, {user.email}'
 ```
+
+## In path operation
+
+If you don't need a user, you can use more clear way:
+
+```py
+@app.get('/protected-route', dependencies=[Depends(fastapi_users.get_current_superuser)])
+def protected_route():
+    return 'Hello, some user.'
+```
+
+You can see more about it [in FastAPI docs](https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/).
