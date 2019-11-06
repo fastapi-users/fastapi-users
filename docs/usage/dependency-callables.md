@@ -42,7 +42,7 @@ If you don't need a user, you can use more clear way:
 ```py
 @app.get('/protected-route', dependencies=[Depends(fastapi_users.get_current_superuser)])
 def protected_route():
-    return f'Hello, some user.'
+    return 'Hello, some user.'
 ```
 
 You can see more about it [in FastAPI docs](https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/).
