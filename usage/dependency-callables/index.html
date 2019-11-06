@@ -484,6 +484,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#in-path-operation" class="md-nav__link">
+    In path operation
+  </a>
+  
+</li>
+      
       
       
       
@@ -541,6 +548,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#in-path-operation" class="md-nav__link">
+    In path operation
+  </a>
+  
+</li>
+      
       
       
       
@@ -584,6 +598,15 @@
 <span class="k">def</span> <span class="nf">protected_route</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_current_superuser</span><span class="p">)):</span>
     <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;Hello, {user.email}&#39;</span>
 </pre></div>
+
+<h2 id="in-path-operation">In path operation<a class="headerlink" href="#in-path-operation" title="Permanent link">&para;</a></h2>
+<p>If you don't need a user, you can use more clear way:</p>
+<div class="codehilite"><pre><span></span><span class="nd">@app.get</span><span class="p">(</span><span class="s1">&#39;/protected-route&#39;</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="n">Depends</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_current_superuser</span><span class="p">)])</span>
+<span class="k">def</span> <span class="nf">protected_route</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s1">&#39;Hello, some user.&#39;</span>
+</pre></div>
+
+<p>You can see more about it <a href="https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/">in FastAPI docs</a>.</p>
                 
                   
                 
