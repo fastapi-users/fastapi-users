@@ -29,7 +29,7 @@ bumpversion = "*"
 fastapi = "==0.42.0"
 passlib = {extras = ["bcrypt"],version = "==1.7.1"}
 email-validator = "==1.0.5"
-sqlalchemy = "==1.3.10"
+sqlalchemy = "==1.3.11"
 databases = "==0.2.6"
 pyjwt = "==1.7.1"
 python-multipart = "==0.0.5"
