@@ -1,4 +1,4 @@
-from typing import List, Optional, cast
+from typing import List, Optional
 
 from databases import Database
 from sqlalchemy import Boolean, Column, String, Table
@@ -36,15 +36,18 @@ class SQLAlchemyUserDatabase(BaseUserDatabase):
 
     async def list(self) -> List[BaseUserDB]:
         query = self.users.select()
-        return cast(List[BaseUserDB], await self.database.fetch_all(query))
+        users = await self.database.fetch_all(query)
+        return [BaseUserDB(**user) for user in users]
 
     async def get(self, id: str) -> Optional[BaseUserDB]:
         query = self.users.select().where(self.users.c.id == id)
-        return cast(BaseUserDB, await self.database.fetch_one(query))
+        user = await self.database.fetch_one(query)
+        return BaseUserDB(**user) if user else None
 
     async def get_by_email(self, email: str) -> Optional[BaseUserDB]:
         query = self.users.select().where(self.users.c.email == email)
-        return cast(BaseUserDB, await self.database.fetch_one(query))
+        user = await self.database.fetch_one(query)
+        return BaseUserDB(**user) if user else None
 
     async def create(self, user: BaseUserDB) -> BaseUserDB:
         query = self.users.insert().values(**user.dict())
