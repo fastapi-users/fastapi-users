@@ -82,22 +82,24 @@ def mock_user_db(user, inactive_user, superuser) -> BaseUserDatabase:
     return MockUserDatabase()
 
 
+class MockAuthentication(BaseAuthentication):
+
+    def __init__(self, name: str = "mock"):
+        super().__init__(name)
+        self.scheme = OAuth2PasswordBearer("/users/login", auto_error=False)
+
+    async def __call__(self, request: Request, user_db: BaseUserDatabase):
+        token = await self.scheme.__call__(request)
+        if token is not None:
+            return await user_db.get(token)
+        return None
+
+    async def get_login_response(self, user: BaseUserDB, response: Response):
+        return {"token": user.id}
+
+
 @pytest.fixture
 def mock_authentication():
-    class MockAuthentication(BaseAuthentication):
-
-        def __init__(self):
-            self.scheme = OAuth2PasswordBearer("/users/login", auto_error=False)
-
-        async def __call__(self, request: Request, user_db: BaseUserDatabase):
-            token = await self.scheme.__call__(request)
-            if token is not None:
-                return await user_db.get(token)
-            return None
-
-        async def get_login_response(self, user: BaseUserDB, response: Response):
-            return {"token": user.id}
-
     return MockAuthentication()
 
 
@@ -114,7 +116,7 @@ def request_builder():
 
 @pytest.fixture
 def get_test_auth_client(mock_user_db):
-    def _get_test_auth_client(backends: List[Any]) -> TestClient:
+    def _get_test_auth_client(backends: List[BaseAuthentication]) -> TestClient:
         app = FastAPI()
         authenticator = Authenticator(backends, mock_user_db)
 

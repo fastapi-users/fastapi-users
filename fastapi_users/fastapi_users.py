@@ -1,8 +1,8 @@
-from typing import Any, Callable, List, Type
+from typing import Callable, List, Type
 
 from starlette.requests import Request
 
-from fastapi_users.authentication import Authenticator
+from fastapi_users.authentication import Authenticator, BaseAuthentication
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.models import BaseUser, BaseUserDB
 from fastapi_users.router import Event, UserRouter, get_user_router
@@ -29,7 +29,7 @@ class FastAPIUsers:
     def __init__(
         self,
         db: BaseUserDatabase,
-        auth_backends: List[Any],
+        auth_backends: List[BaseAuthentication],
         user_model: Type[BaseUser],
         reset_password_token_secret: str,
         reset_password_token_lifetime_seconds: int = 3600,

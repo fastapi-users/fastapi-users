@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Optional
 
 import jwt
 from fastapi import Depends
@@ -24,7 +24,8 @@ class JWTAuthentication(BaseAuthentication):
     secret: str
     lifetime_seconds: int
 
-    def __init__(self, secret: str, lifetime_seconds: int, tokenUrl: str = "/users/login"):
+    def __init__(self, secret: str, lifetime_seconds: int, tokenUrl: str = "/users/login", name: str = "jwt"):
+        super().__init__(name)
         self.secret = secret
         self.lifetime_seconds = lifetime_seconds
         self.scheme = OAuth2PasswordBearer(tokenUrl, auto_error=False)
@@ -50,7 +51,7 @@ class JWTAuthentication(BaseAuthentication):
             return None
         return await user_db.get(user_id)
 
-    async def get_login_response(self, user: BaseUserDB, response: Response):
+    async def get_login_response(self, user: BaseUserDB, response: Response) -> Any:
         data = {"user_id": user.id, "aud": self.token_audience}
         token = generate_jwt(data, self.lifetime_seconds, self.secret, JWT_ALGORITHM)
 

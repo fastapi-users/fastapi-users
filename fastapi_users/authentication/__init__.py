@@ -12,10 +12,10 @@ from fastapi_users.models import BaseUserDB
 
 class Authenticator:
 
-    backends: List[Any]
+    backends: List[BaseAuthentication]
     user_db: BaseUserDatabase
 
-    def __init__(self, backends: List[Any], user_db: BaseUserDatabase):
+    def __init__(self, backends: List[BaseAuthentication], user_db: BaseUserDatabase):
         self.backends = backends
         self.user_db = user_db
 
