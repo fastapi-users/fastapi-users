@@ -32,12 +32,8 @@ def auth_backend_user(user):
 
 
 @pytest.mark.authentication
-def test_authenticator(
-    get_test_auth_client, auth_backend_none, auth_backend_user
-):
-    client = get_test_auth_client(
-        [auth_backend_none, auth_backend_user]
-    )
+def test_authenticator(get_test_auth_client, auth_backend_none, auth_backend_user):
+    client = get_test_auth_client([auth_backend_none, auth_backend_user])
     response = client.get("/test-current-user")
     assert response.status_code == status.HTTP_200_OK
 

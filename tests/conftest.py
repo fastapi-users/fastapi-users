@@ -83,7 +83,6 @@ def mock_user_db(user, inactive_user, superuser) -> BaseUserDatabase:
 
 
 class MockAuthentication(BaseAuthentication):
-
     def __init__(self, name: str = "mock"):
         super().__init__(name)
         self.scheme = OAuth2PasswordBearer("/users/login", auto_error=False)
@@ -108,9 +107,13 @@ def request_builder():
     def _request_builder(headers: Mapping[str, Any]) -> Request:
         scope = {
             "type": "http",
-            "headers": [[key.lower().encode("latin-1"), headers[key].encode("latin-1")] for key in headers],
+            "headers": [
+                [key.lower().encode("latin-1"), headers[key].encode("latin-1")]
+                for key in headers
+            ],
         }
         return Request(scope)
+
     return _request_builder
 
 

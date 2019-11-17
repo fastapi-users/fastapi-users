@@ -10,6 +10,7 @@ from fastapi_users.models import BaseUserDB
 class BaseAuthentication:
     """
     """
+
     name: str
 
     def __init__(self, name: str = "base"):

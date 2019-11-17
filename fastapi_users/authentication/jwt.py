@@ -24,7 +24,13 @@ class JWTAuthentication(BaseAuthentication):
     secret: str
     lifetime_seconds: int
 
-    def __init__(self, secret: str, lifetime_seconds: int, tokenUrl: str = "/users/login", name: str = "jwt"):
+    def __init__(
+        self,
+        secret: str,
+        lifetime_seconds: int,
+        tokenUrl: str = "/users/login",
+        name: str = "jwt",
+    ):
         super().__init__(name)
         self.secret = secret
         self.lifetime_seconds = lifetime_seconds

@@ -47,11 +47,11 @@ def test_app_client(mock_user_db, mock_authentication, event_handler) -> TestCli
         pass
 
     mock_authentication_bis = MockAuthentication(name="mock-bis")
-    authenticator = Authenticator([mock_authentication, mock_authentication_bis], mock_user_db)
-
-    userRouter = get_user_router(
-        mock_user_db, User, authenticator, SECRET, LIFETIME
+    authenticator = Authenticator(
+        [mock_authentication, mock_authentication_bis], mock_user_db
     )
+
+    userRouter = get_user_router(mock_user_db, User, authenticator, SECRET, LIFETIME)
 
     userRouter.add_event_handler(Event.ON_AFTER_REGISTER, event_handler)
     userRouter.add_event_handler(Event.ON_AFTER_FORGOT_PASSWORD, event_handler)
@@ -158,7 +158,9 @@ class TestLogin:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert response.json()["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
 
-    def test_valid_credentials(self, path, test_app_client: TestClient, user: BaseUserDB):
+    def test_valid_credentials(
+        self, path, test_app_client: TestClient, user: BaseUserDB
+    ):
         data = {"username": "king.arthur@camelot.bt", "password": "guinevere"}
         response = test_app_client.post(path, data=data)
         assert response.status_code == status.HTTP_200_OK

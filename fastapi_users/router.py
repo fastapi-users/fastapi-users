@@ -46,7 +46,9 @@ class UserRouter(APIRouter):
                 handler(*args, **kwargs)
 
 
-def _add_login_route(router: UserRouter, user_db: BaseUserDatabase, auth_backend: BaseAuthentication):
+def _add_login_route(
+    router: UserRouter, user_db: BaseUserDatabase, auth_backend: BaseAuthentication
+):
     @router.post(f"/login/{auth_backend.name}")
     async def login(
         response: Response, credentials: OAuth2PasswordRequestForm = Depends()

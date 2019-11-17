@@ -12,9 +12,10 @@ def base_authentication():
 
 @pytest.mark.authentication
 class TestAuthenticate:
-
     @pytest.mark.asyncio
-    async def test_not_implemented(self, base_authentication, mock_user_db, request_builder):
+    async def test_not_implemented(
+        self, base_authentication, mock_user_db, request_builder
+    ):
         request = request_builder({})
         with pytest.raises(NotImplementedError):
             await base_authentication(request, mock_user_db)
