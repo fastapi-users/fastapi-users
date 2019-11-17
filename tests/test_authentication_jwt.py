@@ -1,9 +1,5 @@
-from typing import Any, Mapping
-
 import jwt
 import pytest
-from starlette import status
-from starlette.requests import Request
 from starlette.responses import Response
 
 from fastapi_users.authentication.jwt import JWTAuthentication

@@ -1,7 +1,6 @@
 from typing import Any, Optional
 
 import jwt
-from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from starlette.requests import Request
 from starlette.responses import Response

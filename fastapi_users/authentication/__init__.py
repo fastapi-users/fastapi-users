@@ -1,4 +1,4 @@
-from typing import Any, List
+from typing import List
 
 from fastapi import HTTPException
 from starlette import status

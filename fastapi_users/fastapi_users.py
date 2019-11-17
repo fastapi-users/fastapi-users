@@ -1,10 +1,8 @@
 from typing import Callable, List, Type
 
-from starlette.requests import Request
-
 from fastapi_users.authentication import Authenticator, BaseAuthentication
 from fastapi_users.db import BaseUserDatabase
-from fastapi_users.models import BaseUser, BaseUserDB
+from fastapi_users.models import BaseUser
 from fastapi_users.router import Event, UserRouter, get_user_router
 
 
