@@ -10,7 +10,7 @@ from pydantic.types import EmailStr
 from starlette import status
 from starlette.responses import Response
 
-from fastapi_users.authentication import BaseAuthentication
+from fastapi_users.authentication import Authenticator
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.models import BaseUser, Models
 from fastapi_users.password import get_password_hash
@@ -49,7 +49,7 @@ class UserRouter(APIRouter):
 def get_user_router(
     user_db: BaseUserDatabase,
     user_model: typing.Type[BaseUser],
-    auth: BaseAuthentication,
+    authenticator: Authenticator,
     reset_password_token_secret: str,
     reset_password_token_lifetime_seconds: int = 3600,
 ) -> UserRouter:
@@ -59,8 +59,8 @@ def get_user_router(
 
     reset_password_token_audience = "fastapi-users:reset"
 
-    get_current_active_user = auth.get_current_active_user(user_db)
-    get_current_superuser = auth.get_current_superuser(user_db)
+    get_current_active_user = authenticator.get_current_active_user
+    get_current_superuser = authenticator.get_current_superuser
 
     async def _get_or_404(id: str) -> models.UserDB:  # type: ignore
         user = await user_db.get(id)
@@ -113,7 +113,8 @@ def get_user_router(
                 detail=ErrorCode.LOGIN_BAD_CREDENTIALS,
             )
 
-        return await auth.get_login_response(user, response)
+        #return await auth.get_login_response(user, response)
+        return None
 
     @router.post("/forgot-password", status_code=status.HTTP_202_ACCEPTED)
     async def forgot_password(email: EmailStr = Body(..., embed=True)):

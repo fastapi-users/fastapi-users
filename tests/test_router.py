@@ -7,6 +7,7 @@ from fastapi import FastAPI
 from starlette import status
 from starlette.testclient import TestClient
 
+from fastapi_users.authentication import Authenticator
 from fastapi_users.models import BaseUser, BaseUserDB
 from fastapi_users.router import ErrorCode, Event, get_user_router
 from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
@@ -44,8 +45,10 @@ def test_app_client(mock_user_db, mock_authentication, event_handler) -> TestCli
     class User(BaseUser):
         pass
 
+    authenticator = Authenticator([mock_authentication], mock_user_db)
+
     userRouter = get_user_router(
-        mock_user_db, User, mock_authentication, SECRET, LIFETIME
+        mock_user_db, User, authenticator, SECRET, LIFETIME
     )
 
     userRouter.add_event_handler(Event.ON_AFTER_REGISTER, event_handler)

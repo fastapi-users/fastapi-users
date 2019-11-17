@@ -21,7 +21,7 @@ def fastapi_users(request, mock_user_db, mock_authentication) -> FastAPIUsers:
     class User(BaseUser):
         pass
 
-    fastapi_users = FastAPIUsers(mock_user_db, mock_authentication, User, "SECRET")
+    fastapi_users = FastAPIUsers(mock_user_db, [mock_authentication], User, "SECRET")
 
     @fastapi_users.on_after_register()
     def on_after_register():

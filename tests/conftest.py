@@ -1,12 +1,13 @@
-from typing import List, Optional
+from typing import Any, List, Mapping, Optional
 
 import pytest
 from fastapi import Depends, FastAPI
 from fastapi.security import OAuth2PasswordBearer
+from starlette.requests import Request
 from starlette.responses import Response
 from starlette.testclient import TestClient
 
-from fastapi_users.authentication import BaseAuthentication
+from fastapi_users.authentication import Authenticator, BaseAuthentication
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.models import BaseUserDB
 from fastapi_users.password import get_password_hash
@@ -84,67 +85,54 @@ def mock_user_db(user, inactive_user, superuser) -> BaseUserDatabase:
 @pytest.fixture
 def mock_authentication():
     class MockAuthentication(BaseAuthentication):
-        oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
+
+        def __init__(self):
+            self.scheme = OAuth2PasswordBearer("/users/login", auto_error=False)
+
+        async def __call__(self, request: Request, user_db: BaseUserDatabase):
+            token = await self.scheme.__call__(request)
+            if token is not None:
+                return await user_db.get(token)
+            return None
 
         async def get_login_response(self, user: BaseUserDB, response: Response):
             return {"token": user.id}
-
-        def get_current_user(self, user_db: BaseUserDatabase):
-            async def _get_current_user(token: str = Depends(self.oauth2_scheme)):
-                user = await self._get_authentication_method(user_db)(token)
-                return self._get_current_user_base(user)
-
-            return _get_current_user
-
-        def get_current_active_user(self, user_db: BaseUserDatabase):
-            async def _get_current_active_user(
-                token: str = Depends(self.oauth2_scheme),
-            ):
-                user = await self._get_authentication_method(user_db)(token)
-                return self._get_current_active_user_base(user)
-
-            return _get_current_active_user
-
-        def get_current_superuser(self, user_db: BaseUserDatabase):
-            async def _get_current_superuser(token: str = Depends(self.oauth2_scheme)):
-                user = await self._get_authentication_method(user_db)(token)
-                return self._get_current_superuser_base(user)
-
-            return _get_current_superuser
-
-        def _get_authentication_method(self, user_db: BaseUserDatabase):
-            async def authentication_method(token: str = Depends(self.oauth2_scheme)):
-                return await user_db.get(token)
-
-            return authentication_method
 
     return MockAuthentication()
 
 
 @pytest.fixture
+def request_builder():
+    def _request_builder(headers: Mapping[str, Any]) -> Request:
+        scope = {
+            "type": "http",
+            "headers": [[key.lower().encode("latin-1"), headers[key].encode("latin-1")] for key in headers],
+        }
+        return Request(scope)
+    return _request_builder
+
+
+@pytest.fixture
 def get_test_auth_client(mock_user_db):
-    def _get_test_auth_client(authentication):
+    def _get_test_auth_client(backends: List[Any]) -> TestClient:
         app = FastAPI()
+        authenticator = Authenticator(backends, mock_user_db)
 
         @app.get("/test-current-user")
         def test_current_user(
-            user: BaseUserDB = Depends(authentication.get_current_user(mock_user_db)),
+            user: BaseUserDB = Depends(authenticator.get_current_user),
         ):
             return user
 
         @app.get("/test-current-active-user")
         def test_current_active_user(
-            user: BaseUserDB = Depends(
-                authentication.get_current_active_user(mock_user_db)
-            ),
+            user: BaseUserDB = Depends(authenticator.get_current_active_user),
         ):
             return user
 
         @app.get("/test-current-superuser")
         def test_current_superuser(
-            user: BaseUserDB = Depends(
-                authentication.get_current_superuser(mock_user_db)
-            ),
+            user: BaseUserDB = Depends(authenticator.get_current_superuser),
         ):
             return user
 
