@@ -636,11 +636,11 @@
         },
         "pytest-mock": {
             "hashes": [
-                "sha256:b3514caac35fe3f05555923eabd9546abce11571cc2ddf7d8615959d04f2c89e",
-                "sha256:ea502c3891599c26243a3a847ccf0b1d20556678c528f86c98e3cd6d40c5cf11"
+                "sha256:ba8c0c38fdccee77d4666373e95cc115954863ede741b8505088fa1fc1a87c6c",
+                "sha256:fff6cbd15a05f104062aa778e1ded35927d3d29bb1164218b140678fb368e32b"
             ],
             "index": "pypi",
-            "version": "==1.11.2"
+            "version": "==1.12.0"
         },
         "pytoml": {
             "hashes": [
