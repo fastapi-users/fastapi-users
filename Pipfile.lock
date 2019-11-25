@@ -366,11 +366,18 @@
         },
         "flit": {
             "hashes": [
-                "sha256:1d93f7a833ed8a6e120ddc40db5c4763bc39bccc75c05081ec8285ece718aefb",
-                "sha256:6f6f0fb83c51ffa3a150fa41b5ac118df9ea4a87c2c06dff4ebf9adbe7b52b36"
+                "sha256:1884458418d480e0810d0aa19b6f5e19591b38defd6958a865fa28206f19b3c8",
+                "sha256:eb5f0b72aee1063426e4806f33bf603cd91a8b5d66bd8b76d009701c36607fec"
             ],
             "index": "pypi",
-            "version": "==1.3"
+            "version": "==2.0.2"
+        },
+        "flit-core": {
+            "hashes": [
+                "sha256:9efcdca4ae84fd4d831e18d3cdb85a0b4f211a52d4b832408ff9a65bcc309928",
+                "sha256:c49546abb6afe371a13b78a2595d5afe1c0cd0aaa9dd753d800cd21259e51222"
+            ],
+            "version": "==2.0.2"
         },
         "htmlmin": {
             "hashes": [
