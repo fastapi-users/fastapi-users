@@ -25,7 +25,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pipenv
-        pipenv install --dev
+        pipenv install --python ${{ matrix.python_version }} --dev
     - name: Test with pytest
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
