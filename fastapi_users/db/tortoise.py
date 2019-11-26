@@ -8,11 +8,11 @@ from fastapi_users.models import BaseUserDB
 
 
 class BaseUserModel:
-    id: str = fields.TextField(pk=True, generated=False)
-    email: str = fields.CharField(index=True, unique=True, null=False, max_length=255)
-    hashed_password: str = fields.CharField(null=False, max_length=255)
-    is_active: bool = fields.BooleanField(default=True, null=False)
-    is_superuser: bool = fields.BooleanField(default=False, null=False)
+    id = fields.TextField(pk=True, generated=False)
+    email = fields.CharField(index=True, unique=True, null=False, max_length=255)
+    hashed_password = fields.CharField(null=False, max_length=255)
+    is_active = fields.BooleanField(default=True, null=False)
+    is_superuser = fields.BooleanField(default=False, null=False)
 
     class Meta:
         table = "user"
