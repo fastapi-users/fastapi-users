@@ -1,9 +1,9 @@
-from typing import List, Type, Optional
+from typing import List, Optional, Type
 
-from fastapi_users.db import BaseUserDatabase
-from tortoise import fields, Model
+from tortoise import Model, fields
 from tortoise.exceptions import DoesNotExist
 
+from fastapi_users.db import BaseUserDatabase
 from fastapi_users.models import BaseUserDB
 
 
@@ -19,7 +19,6 @@ class BaseUserModel:
 
 
 class TortoiseUserDatabase(BaseUserDatabase):
-
     def __init__(self, user_model: Type[Model]):
         self._model = user_model
 
@@ -53,9 +52,3 @@ class TortoiseUserDatabase(BaseUserDatabase):
 
     async def delete(self, user: BaseUserDB) -> None:
         await self._model.filter(id=user.id).delete()
-
-
-
-
-
-
