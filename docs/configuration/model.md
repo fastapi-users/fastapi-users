@@ -28,3 +28,5 @@ Depending on your database backend, database configuration will differ a bit.
 [I'm using SQLAlchemy](databases/sqlalchemy.md)
 
 [I'm using MongoDB](databases/mongodb.md)
+
+[I'm using Tortoise ORM](databases/tortoise.md)
