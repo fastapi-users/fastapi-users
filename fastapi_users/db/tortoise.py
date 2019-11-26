@@ -1,26 +1,26 @@
 from typing import List, Type, Optional
 
 from fastapi_users.db import BaseUserDatabase
-from tortoise import Model
-from tortoise import fields
+from tortoise import fields, Model
 from tortoise.exceptions import DoesNotExist
 
 from fastapi_users.models import BaseUserDB
 
 
-class BaseUserModel(Model):
-    id: int = fields.IntField(pk=True)
-    email: str = fields.TextField(index=True, unique=True, null=False)
-    hashed_password: str = fields.TextField(null=False)
+class BaseUserModel:
+    id: str = fields.TextField(pk=True, generated=False)
+    email: str = fields.CharField(index=True, unique=True, null=False, max_length=255)
+    hashed_password: str = fields.CharField(null=False, max_length=255)
     is_active: bool = fields.BooleanField(default=True, null=False)
     is_superuser: bool = fields.BooleanField(default=False, null=False)
 
     class Meta:
         table = "user"
 
+
 class TortoiseUserDatabase(BaseUserDatabase):
 
-    def __init__(self, user_model: Type[BaseUserModel]):
+    def __init__(self, user_model: Type[Model]):
         self._model = user_model
 
     async def list(self) -> List[BaseUserDB]:
@@ -42,11 +42,13 @@ class TortoiseUserDatabase(BaseUserDatabase):
         return BaseUserDB.from_orm(user) if user else None
 
     async def create(self, user: BaseUserDB) -> BaseUserDB:
-        await self._model.create(**user.dict())
+        model = self._model(**user.dict())
+        await model.save()
         return user
 
     async def update(self, user: BaseUserDB) -> BaseUserDB:
-        await self._model.filter(id=user.id).update(**user.dict())
+        usr = user.create_update_dict_superuser()
+        await self._model.filter(id=user.id).update(**usr)
         return user
 
     async def delete(self, user: BaseUserDB) -> None:
