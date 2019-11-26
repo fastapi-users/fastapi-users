@@ -21,6 +21,7 @@ async def tortoise_user_db() -> AsyncGenerator[TortoiseUserDatabase, None]:
         db_url=DATABASE_URL, modules={"models": ["tests.test_db_tortoise"]}
     )
     await Tortoise.generate_schemas()
+
     yield TortoiseUserDatabase(User)
 
     await User.all().delete()
