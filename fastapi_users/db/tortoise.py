@@ -19,36 +19,39 @@ class BaseUserModel:
 
 
 class TortoiseUserDatabase(BaseUserDatabase):
-    def __init__(self, user_model: Type[Model]):
-        self._model = user_model
+
+    model: Type[Model]
+
+    def __init__(self, model: Type[Model]):
+        self.model = model
 
     async def list(self) -> List[BaseUserDB]:
-        users = await self._model.all()
+        users = await self.model.all()
         return [BaseUserDB.from_orm(user) for user in users]
 
     async def get(self, id: str) -> Optional[BaseUserDB]:
         try:
-            user = await self._model.filter(id=id).first()
+            user = await self.model.filter(id=id).first()
         except DoesNotExist:
             user = None
         return BaseUserDB.from_orm(user) if user else None
 
     async def get_by_email(self, email: str) -> Optional[BaseUserDB]:
         try:
-            user = await self._model.filter(email=email).first()
+            user = await self.model.filter(email=email).first()
         except DoesNotExist:
             user = None
         return BaseUserDB.from_orm(user) if user else None
 
     async def create(self, user: BaseUserDB) -> BaseUserDB:
-        model = self._model(**user.dict())
+        model = self.model(**user.dict())
         await model.save()
         return user
 
     async def update(self, user: BaseUserDB) -> BaseUserDB:
         usr = user.create_update_dict_superuser()
-        await self._model.filter(id=user.id).update(**usr)
+        await self.model.filter(id=user.id).update(**usr)
         return user
 
     async def delete(self, user: BaseUserDB) -> None:
-        await self._model.filter(id=user.id).delete()
+        await self.model.filter(id=user.id).delete()
