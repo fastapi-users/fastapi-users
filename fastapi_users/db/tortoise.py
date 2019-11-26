@@ -44,8 +44,7 @@ class TortoiseUserDatabase(BaseUserDatabase):
         return BaseUserDB.from_orm(user) if user else None
 
     async def create(self, user: BaseUserDB) -> BaseUserDB:
-        model = self.model(**user.dict())
-        await model.save()
+        await self.model(**user.dict())
         return user
 
     async def update(self, user: BaseUserDB) -> BaseUserDB:
