@@ -26,14 +26,6 @@ Let's declare our User table.
 
 As you can see, **FastAPI Users** provides a mixin that will include base fields for our User table. You can of course add you own fields there to fit to your needs!
 
-## Create the tables
-
-We'll now create an SQLAlchemy enigne and ask it to create all the defined tables.
-
-```py hl_lines="18 19 20 21 22"
-{!./src/db_sqlalchemy.py!}
-```
-
 ## Create the database adapter
 
 The database adapter of **FastAPI Users** makes the link between your database configuration and the users logic. Create it like this.
