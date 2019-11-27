@@ -557,7 +557,7 @@
 
 
 <span class="n">engine</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">create_engine</span><span class="p">(</span>
-    <span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">connect_args</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;check_same_thread&quot;</span><span class="p">:</span> <span class="bp">False</span><span class="p">}</span>
+    <span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">connect_args</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;check_same_thread&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
 <span class="p">)</span>
 
 <span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
@@ -577,24 +577,24 @@
 <span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">router</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/users&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;users&quot;</span><span class="p">])</span>
 
 
-<span class="nd">@fastapi_users.on_after_register</span><span class="p">()</span>
+<span class="nd">@fastapi_users</span><span class="o">.</span><span class="n">on_after_register</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">on_after_register</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;User {user.id} has registered.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User </span><span class="si">{user.id}</span><span class="s2"> has registered.&quot;</span><span class="p">)</span>
 
 
-<span class="nd">@fastapi_users.on_after_forgot_password</span><span class="p">()</span>
+<span class="nd">@fastapi_users</span><span class="o">.</span><span class="n">on_after_forgot_password</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">on_after_forgot_password</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;User {user.id} has forgot their password. Reset token: {token}&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User </span><span class="si">{user.id}</span><span class="s2"> has forgot their password. Reset token: </span><span class="si">{token}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 
-<span class="nd">@app.on_event</span><span class="p">(</span><span class="s2">&quot;startup&quot;</span><span class="p">)</span>
-<span class="n">async</span> <span class="k">def</span> <span class="nf">startup</span><span class="p">():</span>
-    <span class="n">await</span> <span class="n">database</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span><span class="s2">&quot;startup&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">startup</span><span class="p">():</span>
+    <span class="k">await</span> <span class="n">database</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 
 
-<span class="nd">@app.on_event</span><span class="p">(</span><span class="s2">&quot;shutdown&quot;</span><span class="p">)</span>
-<span class="n">async</span> <span class="k">def</span> <span class="nf">shutdown</span><span class="p">():</span>
-    <span class="n">await</span> <span class="n">database</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span><span class="s2">&quot;shutdown&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">shutdown</span><span class="p">():</span>
+    <span class="k">await</span> <span class="n">database</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
 </pre></div></div>
 <input name="__tabs_1" type="radio" id="__tab_1_1" />
 <label for="__tab_1_1">MongoDB</label>
@@ -627,14 +627,14 @@
 <span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">router</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/users&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;users&quot;</span><span class="p">])</span>
 
 
-<span class="nd">@fastapi_users.on_after_register</span><span class="p">()</span>
+<span class="nd">@fastapi_users</span><span class="o">.</span><span class="n">on_after_register</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">on_after_register</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;User {user.id} has registered.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User </span><span class="si">{user.id}</span><span class="s2"> has registered.&quot;</span><span class="p">)</span>
 
 
-<span class="nd">@fastapi_users.on_after_forgot_password</span><span class="p">()</span>
+<span class="nd">@fastapi_users</span><span class="o">.</span><span class="n">on_after_forgot_password</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">on_after_forgot_password</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;User {user.id} has forgot their password. Reset token: {token}&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User </span><span class="si">{user.id}</span><span class="s2"> has forgot their password. Reset token: </span><span class="si">{token}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div></div>
 </div>
 <h2 id="what-now">What now?<a class="headerlink" href="#what-now" title="Permanent link">&para;</a></h2>

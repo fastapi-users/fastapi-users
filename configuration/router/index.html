@@ -631,9 +631,9 @@
 <p>Typically, you'll want to <strong>send a welcome e-mail</strong> or add it to your marketing analytics pipeline.</p>
 <p>You can define it as an <code>async</code> or standard method.</p>
 <p>Example:</p>
-<div class="codehilite"><pre><span></span><span class="nd">@fastapi_users.on_after_register</span><span class="p">()</span>
+<div class="codehilite"><pre><span></span><span class="nd">@fastapi_users</span><span class="o">.</span><span class="n">on_after_register</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">on_after_register</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;User {user.id} has registered.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User </span><span class="si">{user.id}</span><span class="s2"> has registered.&quot;</span><span class="p">)</span>
 </pre></div>
 
 <h3 id="after-forgot-password">After forgot password<a class="headerlink" href="#after-forgot-password" title="Permanent link">&para;</a></h3>
@@ -641,9 +641,9 @@
 <p>Typically, you'll want to <strong>send an e-mail</strong> with the link (and the token) that allows the user to reset their password.</p>
 <p>You can define it as an <code>async</code> or standard method.</p>
 <p>Example:</p>
-<div class="codehilite"><pre><span></span><span class="nd">@fastapi_users.on_after_forgot_password</span><span class="p">()</span>
+<div class="codehilite"><pre><span></span><span class="nd">@fastapi_users</span><span class="o">.</span><span class="n">on_after_forgot_password</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">on_after_forgot_password</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;User {user.id} has forgot their password. Reset token: {token}&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User </span><span class="si">{user.id}</span><span class="s2"> has forgot their password. Reset token: </span><span class="si">{token}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 
 <h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
