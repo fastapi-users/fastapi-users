@@ -30,7 +30,7 @@ async def tortoise_user_db() -> AsyncGenerator[TortoiseUserDatabase, None]:
 
 @pytest.mark.asyncio
 @pytest.mark.db
-async def test_queries(tortoise_user_db):
+async def test_queries(tortoise_user_db: TortoiseUserDatabase):
     user = BaseUserDB(
         id="111",
         email="lancelot@camelot.bt",
