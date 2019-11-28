@@ -1,6 +1,6 @@
 [build-system]
-requires = ["flit"]
-build-backend = "flit.buildapi"
+requires = ["flit_core >=2,<3"]
+build-backend = "flit_core.buildapi"
 
 [tool.flit.metadata]
 module = "fastapi_users"
@@ -21,7 +21,7 @@ classifiers = [
 description-file = "README.md"
 requires-python = ">=3.7"
 requires = [
-    "fastapi ==0.42.0",
+    "fastapi ==0.44.0",
     "passlib[bcrypt] ==1.7.1",
     "email-validator ==1.0.5",
     "pyjwt ==1.7.1",
