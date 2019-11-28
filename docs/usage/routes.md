@@ -37,20 +37,13 @@ Register a new user. Will call the `on_after_register` [event handlers](../confi
     }
     ```
 
-### `POST /login`
+### `POST /login/{name}`
 
-Login a user.
+Login a user against the method named `name`. Check the corresponding [authentication method](../configuration/authentication/index.md) to view the success response.
 
 !!! abstract "Payload (`application/x-www-form-urlencoded`)"
     ```
     username=king.arthur@camelot.bt&password=guinevere
-    ```
-
-!!! success "`200 OK`"
-    ```json
-    {
-        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiOTIyMWZmYzktNjQwZi00MzcyLTg2ZDMtY2U2NDJjYmE1NjAzIiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTcxNTA0MTkzfQ.M10bjOe45I5Ncu_uXvOmVV8QxnL-nZfcH96U90JaocI"
-    }
     ```
 
 !!! fail "`422 Validation Error`"

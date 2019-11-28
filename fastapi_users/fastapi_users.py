@@ -1,4 +1,4 @@
-from typing import Callable, List, Type
+from typing import Callable, Sequence, Type
 
 from fastapi_users.authentication import Authenticator, BaseAuthentication
 from fastapi_users.db import BaseUserDatabase
@@ -11,7 +11,7 @@ class FastAPIUsers:
     Main object that ties together the component for users authentication.
 
     :param db: Database adapter instance.
-    :param auth: Authentication logic instance.
+    :param auth_backends: List of authentication backends.
     :param user_model: Pydantic model of a user.
     :param reset_password_token_secret: Secret to encode reset password token.
     :param reset_password_token_lifetime_seconds: Lifetime of reset password token.
@@ -27,7 +27,7 @@ class FastAPIUsers:
     def __init__(
         self,
         db: BaseUserDatabase,
-        auth_backends: List[BaseAuthentication],
+        auth_backends: Sequence[BaseAuthentication],
         user_model: Type[BaseUser],
         reset_password_token_secret: str,
         reset_password_token_lifetime_seconds: int = 3600,

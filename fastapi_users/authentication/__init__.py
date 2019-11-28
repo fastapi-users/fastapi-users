@@ -1,4 +1,4 @@
-from typing import List
+from typing import Sequence
 
 from fastapi import HTTPException
 from starlette import status
@@ -22,10 +22,12 @@ class Authenticator:
     :param user_db: Database adapter instance.
     """
 
-    backends: List[BaseAuthentication]
+    backends: Sequence[BaseAuthentication]
     user_db: BaseUserDatabase
 
-    def __init__(self, backends: List[BaseAuthentication], user_db: BaseUserDatabase):
+    def __init__(
+        self, backends: Sequence[BaseAuthentication], user_db: BaseUserDatabase
+    ):
         self.backends = backends
         self.user_db = user_db
 
