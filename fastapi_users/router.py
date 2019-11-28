@@ -6,7 +6,7 @@ from enum import Enum, auto
 import jwt
 from fastapi import APIRouter, Body, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
-from pydantic.types import EmailStr
+from pydantic import EmailStr
 from starlette import status
 from starlette.responses import Response
 
