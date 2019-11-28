@@ -9,6 +9,11 @@ from fastapi_users.models import BaseUserDB
 
 class BaseAuthentication:
     """
+    Base authentication backend.
+
+    Every backend should derive from this class.
+
+    :param name: Name of the backend. It will be used to name the login route.
     """
 
     name: str

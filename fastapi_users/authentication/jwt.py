@@ -13,10 +13,12 @@ from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
 
 class JWTAuthentication(BaseAuthentication):
     """
-    Authentication using a JWT.
+    Authentication backend using a JWT in a Bearer header.
 
     :param secret: Secret used to encode the JWT.
     :param lifetime_seconds: Lifetime duration of the JWT in seconds.
+    :param tokenUrl: Path where to get a token.
+    :param name: Name of the backend. It will be used to name the login route.
     """
 
     token_audience: str = "fastapi-users:auth"

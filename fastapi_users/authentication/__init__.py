@@ -11,6 +11,16 @@ from fastapi_users.models import BaseUserDB
 
 
 class Authenticator:
+    """
+    Provides dependency callables to retrieve authenticated user.
+
+    It performs the authentication against a list of backends
+    defined by the end-developer. The first backend yielding a user wins.
+    If no backend yields a user, an HTTPException is raised.
+
+    :param backends: List of authentication backends.
+    :param user_db: Database adapter instance.
+    """
 
     backends: List[BaseAuthentication]
     user_db: BaseUserDatabase
