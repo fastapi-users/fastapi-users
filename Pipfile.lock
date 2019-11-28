@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "9e12a01bf9f676b835bded374e29cde52cc6f826b28343a05c9e5e7291f3e34e"
+            "sha256": "4d00b916bd84a62b9047900bbec33a5eecf31c43baa93058122fb4b73bceedc4"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -100,11 +100,11 @@
         },
         "fastapi": {
             "hashes": [
-                "sha256:2b815d959e0e9caff5c64f99d5943f8f2366e43112ad42447ba70a7e79171e23",
-                "sha256:5328c4126e81b7b6686f0c378791cfab7f2975825c391222af52ef49af71077a"
+                "sha256:2e5a4c5727576492e3cc2d2d09c414e478f95f1566345d87efee957dd71fe44d",
+                "sha256:a9c891473091c1f868235c25397cba71fa8b62fae8c8c3a5bc1ad008298e0990"
             ],
             "index": "pypi",
-            "version": "==0.43.0"
+            "version": "==0.44.0"
         },
         "idna": {
             "hashes": [
@@ -140,14 +140,18 @@
         },
         "pydantic": {
             "hashes": [
-                "sha256:18598557f0d9ab46173045910ed50458c4fb4d16153c23346b504d7a5b679f77",
-                "sha256:6a9335c968e13295430a208487e74d69fef40168b72dea8d975765d14e2da660",
-                "sha256:6f5eb88fe4c21380aa064b7d249763fc6306f0b001d7e7d52d80866d1afc9ed3",
-                "sha256:bc6c6a78647d7a65a493e1107572d993f26a652c49183201e3c7d23924bf7311",
-                "sha256:e1a63b4e6bf8820833cb6fa239ffbe8eec57ccdd7d66359eff20e68a83c1deeb",
-                "sha256:ede2d65ae33788d4e26e12b330b4a32c53cb14131c65bca3a59f037c73f6ee7a"
+                "sha256:47f23d87d5c605662b898fe37f59aa74802ba84c0a64464f5962dfde60b4531b",
+                "sha256:5d75c5905e80a264f871469de388e3d5727ccd75b28e8c6cb548fc4e350328c8",
+                "sha256:6e30349ffef291afa647483a1459d0f10e650360d767e8cd3df6d3369c390ef8",
+                "sha256:70667c525ab8d58194b2140a529074e04d92dc5adaddb4780523f2b1e6685380",
+                "sha256:ae28fcd6269fb0cf8319c620b7f7f78936a502e0f272d19879514b03b270ac59",
+                "sha256:d33b6dc70b331eb4eaaa6528bacbfd229ecdbe1598f396a01c1c8dc52d2d55ca",
+                "sha256:e49dea4e0cf474f8b8698a8e64989a13ff03b12259502a9867034eeaadf9e116",
+                "sha256:eb100277c0cfee522d88c7699ce20de38e72182369c53699968b01ea117476af",
+                "sha256:ec3cbd893072cacf9bacb1c324cde4e117efbc7c3246f82c5546265b892b7a31",
+                "sha256:fa0574d397727133f64ff8effbc1c53afd18ae1a2f755d6743951a6506d26547"
             ],
-            "version": "==0.32.2"
+            "version": "==1.1.1"
         },
         "pyjwt": {
             "hashes": [
