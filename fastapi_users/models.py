@@ -2,8 +2,7 @@ import uuid
 from typing import Optional, Type
 
 import pydantic
-from pydantic import BaseModel
-from pydantic.types import EmailStr
+from pydantic import BaseModel, EmailStr
 
 
 class BaseUser(BaseModel):
@@ -20,11 +19,11 @@ class BaseUser(BaseModel):
 
     def create_update_dict(self):
         return self.dict(
-            skip_defaults=True, exclude={"id", "is_superuser", "is_active"}
+            exclude_unset=True, exclude={"id", "is_superuser", "is_active"}
         )
 
     def create_update_dict_superuser(self):
-        return self.dict(skip_defaults=True, exclude={"id"})
+        return self.dict(exclude_unset=True, exclude={"id"})
 
 
 class BaseUserCreate(BaseUser):
