@@ -49,8 +49,9 @@ class TortoiseUserDatabase(BaseUserDatabase):
         return user
 
     async def update(self, user: BaseUserDB) -> BaseUserDB:
-        usr = user.create_update_dict_superuser()
-        await self.model.filter(id=user.id).update(**usr)
+        user_dict = user.dict()
+        user_dict.pop("id")  # Tortoise complains if we pass the PK again
+        await self.model.filter(id=user.id).update(**user_dict)
         return user
 
     async def delete(self, user: BaseUserDB) -> None:

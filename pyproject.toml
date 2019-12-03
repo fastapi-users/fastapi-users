@@ -36,9 +36,8 @@ sqlalchemy = [
 mongodb = [
     "motor ==2.0.0",
 ]
-
-tortoise = [
-    "tortoise ==0.15.1"
+tortoise-orm = [
+    "tortoise-orm ==0.15.1"
 ]
 
 [tool.flit.metadata.urls]

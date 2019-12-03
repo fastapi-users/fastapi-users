@@ -48,7 +48,7 @@ coverage.xml
 .pytest_cache/
 junit/
 junit.xml
-test.db
+test.db*
 
 # Translations
 *.mo

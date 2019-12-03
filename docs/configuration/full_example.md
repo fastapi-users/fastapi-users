@@ -10,7 +10,7 @@ Here is a full working example with JWT authentication to help get you started.
 {!./src/full_mongodb.py!}
 ```
 
-```py tab="Tortoise"
+```py tab="Tortoise ORM"
 {!./src/full_tortoise.py!}
 ```
 
