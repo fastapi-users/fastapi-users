@@ -31,17 +31,17 @@ class TortoiseUserDatabase(BaseUserDatabase):
 
     async def get(self, id: str) -> Optional[BaseUserDB]:
         try:
-            user = await self.model.filter(id=id).first()
+            user = await self.model.get(id=id)
+            return BaseUserDB.from_orm(user)
         except DoesNotExist:
-            user = None
-        return BaseUserDB.from_orm(user) if user else None
+            return None
 
     async def get_by_email(self, email: str) -> Optional[BaseUserDB]:
         try:
-            user = await self.model.filter(email=email).first()
+            user = await self.model.get(email=email)
+            return BaseUserDB.from_orm(user)
         except DoesNotExist:
-            user = None
-        return BaseUserDB.from_orm(user) if user else None
+            return None
 
     async def create(self, user: BaseUserDB) -> BaseUserDB:
         model = self.model(**user.dict())
