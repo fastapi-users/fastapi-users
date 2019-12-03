@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "4d00b916bd84a62b9047900bbec33a5eecf31c43baa93058122fb4b73bceedc4"
+            "sha256": "78d0c10e48c0662beb7525d9173388d78804f2a9ba7e4d993b50c63e9d57059b"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -16,6 +16,12 @@
         ]
     },
     "default": {
+        "aiosqlite": {
+            "hashes": [
+                "sha256:ad84fbd7516ca7065d799504fc41d6845c938e5306d1b7dd960caaeda12e22a9"
+            ],
+            "version": "==0.10.0"
+        },
         "bcrypt": {
             "hashes": [
                 "sha256:0258f143f3de96b7c14f762c770f5fc56ccd72f8a1857a451c1cd9a655d9ac89",
@@ -76,6 +82,12 @@
                 "sha256:fd43a88e045cf992ed09fa724b5315b790525f2676883a6ea64e3263bae6549d"
             ],
             "version": "==1.13.2"
+        },
+        "ciso8601": {
+            "hashes": [
+                "sha256:307342e8bb362ae41a3f3a089c11b374116823bce6fbe5d784e2a2dc37f2c753"
+            ],
+            "version": "==2.1.2"
         },
         "databases": {
             "hashes": [
@@ -198,6 +210,12 @@
             ],
             "version": "==3.9.0"
         },
+        "pypika": {
+            "hashes": [
+                "sha256:2d23365f7d30e313d6d3f9a1670f2ac9ddb72b391a21ad4737644ace797c6ae1"
+            ],
+            "version": "==0.35.16"
+        },
         "python-multipart": {
             "hashes": [
                 "sha256:f7bb5f611fc600d15fa47b3974c8aa16e93724513b49b5f95c81e6624c83fa43"
@@ -224,6 +242,21 @@
                 "sha256:c2ac9a42e0e0328ad20fe444115ac5e3760c1ee2ac1ff8cdb5ec915c4a453411"
             ],
             "version": "==0.12.9"
+        },
+        "tortoise-orm": {
+            "hashes": [
+                "sha256:590a036f224cc3627fbcd950b7492ec98b8411df3491b725eb49c8b5edeaf54c"
+            ],
+            "index": "pypi",
+            "version": "==0.15.1"
+        },
+        "typing-extensions": {
+            "hashes": [
+                "sha256:091ecc894d5e908ac75209f10d5b4f118fbdb2eb1ede6a63544054bb1edb41f2",
+                "sha256:910f4656f54de5993ad9304959ce9bb903f90aadc7c67a0bef07e678014e892d",
+                "sha256:cf8b63fedea4d89bab840ecbb93e75578af28f76f66c35889bd7065f5af88575"
+            ],
+            "version": "==3.7.4.1"
         }
     },
     "develop": {
