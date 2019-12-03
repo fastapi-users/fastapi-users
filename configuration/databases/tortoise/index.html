@@ -38,7 +38,7 @@
     
     
       
-        <title>SQLAlchemy - FastAPI Users</title>
+        <title>Tortoise ORM - FastAPI Users</title>
       
     
     
@@ -87,7 +87,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#sqlalchemy" tabindex="1" class="md-skip">
+      <a href="#tortoise-orm" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -113,7 +113,7 @@
             </span>
             <span class="md-header-nav__topic">
               
-                SQLAlchemy
+                Tortoise ORM
               
             </span>
           
@@ -300,6 +300,30 @@
           
           
 
+
+  <li class="md-nav__item">
+    <a href="../sqlalchemy/" title="SQLAlchemy" class="md-nav__link">
+      SQLAlchemy
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../mongodb/" title="MongoDB" class="md-nav__link">
+      MongoDB
+    </a>
+  </li>
+
+        
+          
+          
+          
+
   
 
 
@@ -311,11 +335,11 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="__toc">
-        SQLAlchemy
+        Tortoise ORM
       </label>
     
-    <a href="./" title="SQLAlchemy" class="md-nav__link md-nav__link--active">
-      SQLAlchemy
+    <a href="./" title="Tortoise ORM" class="md-nav__link md-nav__link--active">
+      Tortoise ORM
     </a>
     
       
@@ -343,13 +367,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#create-the-tables" class="md-nav__link">
-    Create the tables
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#create-the-database-adapter" class="md-nav__link">
     Create the database adapter
   </a>
@@ -357,15 +374,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    Next steps
+  <a href="#register-tortoise" class="md-nav__link">
+    Register Tortoise
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-about-sqlalchemy-orm" class="md-nav__link">
-    What about SQLAlchemy ORM?
+  <a href="#next-steps" class="md-nav__link">
+    Next steps
   </a>
   
 </li>
@@ -378,30 +395,6 @@
   
 </nav>
     
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../mongodb/" title="MongoDB" class="md-nav__link">
-      MongoDB
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../tortoise/" title="Tortoise ORM" class="md-nav__link">
-      Tortoise ORM
-    </a>
   </li>
 
         
@@ -570,13 +563,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#create-the-tables" class="md-nav__link">
-    Create the tables
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#create-the-database-adapter" class="md-nav__link">
     Create the database adapter
   </a>
@@ -584,15 +570,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    Next steps
+  <a href="#register-tortoise" class="md-nav__link">
+    Register Tortoise
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-about-sqlalchemy-orm" class="md-nav__link">
-    What about SQLAlchemy ORM?
+  <a href="#next-steps" class="md-nav__link">
+    Next steps
   </a>
   
 </li>
@@ -614,153 +600,84 @@
               
                 
                 
-                <h1 id="sqlalchemy">SQLAlchemy<a class="headerlink" href="#sqlalchemy" title="Permanent link">&para;</a></h1>
-<p><strong>FastAPI Users</strong> provides the necessary tools to work with SQL databases thanks to <a href="https://docs.sqlalchemy.org/en/13/core/">SQLAlchemy Core</a> and <a href="https://www.encode.io/databases/">encode/databases</a> package for full async support.</p>
+                <h1 id="tortoise-orm">Tortoise ORM<a class="headerlink" href="#tortoise-orm" title="Permanent link">&para;</a></h1>
+<p><strong>FastAPI Users</strong> provides the necessary tools to work with Tortoise ORM.</p>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
 <p>Install the database driver that corresponds to your DBMS:</p>
-<div class="codehilite"><pre><span></span>pip install databases<span class="o">[</span>postgresql<span class="o">]</span>
+<div class="codehilite"><pre><span></span>pip install asyncpg
 </pre></div>
 
-<div class="codehilite"><pre><span></span>pip install databases<span class="o">[</span>mysql<span class="o">]</span>
+<div class="codehilite"><pre><span></span>pip install aiomysql
 </pre></div>
 
-<div class="codehilite"><pre><span></span>pip install databases<span class="o">[</span>sqlite<span class="o">]</span>
+<div class="codehilite"><pre><span></span>pip install aiosqlite
 </pre></div>
 
 <p>For the sake of this tutorial from now on, we'll use a simple SQLite databse.</p>
 <h2 id="setup-user-table">Setup User table<a class="headerlink" href="#setup-user-table" title="Permanent link">&para;</a></h2>
-<p>Let's create a <code>metadata</code> object and declare our User table.</p>
-<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">databases</span>
-<span class="kn">import</span> <span class="nn">sqlalchemy</span>
-<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
-<span class="hll"><span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">SQLAlchemyBaseUserTable</span><span class="p">,</span> <span class="n">SQLAlchemyUserDatabase</span>
-</span><span class="kn">from</span> <span class="nn">sqlalchemy.ext.declarative</span> <span class="kn">import</span> <span class="n">DeclarativeMeta</span><span class="p">,</span> <span class="n">declarative_base</span>
+<p>Let's declare our User model.</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.db.tortoise</span> <span class="kn">import</span> <span class="n">BaseUserModel</span><span class="p">,</span> <span class="n">TortoiseUserDatabase</span>
+<span class="kn">from</span> <span class="nn">tortoise</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">tortoise.contrib.starlette</span> <span class="kn">import</span> <span class="n">register_tortoise</span>
 
-<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;sqlite:///./test.db&quot;</span>
-
-<span class="n">database</span> <span class="o">=</span> <span class="n">databases</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">)</span>
-
-<span class="n">Base</span><span class="p">:</span> <span class="n">DeclarativeMeta</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">()</span>
+<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;sqlite://./test.db&quot;</span>
 
 
-<span class="hll"><span class="k">class</span> <span class="nc">UserTable</span><span class="p">(</span><span class="n">Base</span><span class="p">,</span> <span class="n">SQLAlchemyBaseUserTable</span><span class="p">):</span>
+<span class="hll"><span class="k">class</span> <span class="nc">UserModel</span><span class="p">(</span><span class="n">BaseUserModel</span><span class="p">,</span> <span class="n">Model</span><span class="p">):</span>
 </span><span class="hll">    <span class="k">pass</span>
 </span>
 
-<span class="n">engine</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">create_engine</span><span class="p">(</span>
-    <span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">connect_args</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;check_same_thread&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
-<span class="p">)</span>
-
-<span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
-
-<span class="n">users</span> <span class="o">=</span> <span class="n">UserTable</span><span class="o">.</span><span class="n">__table__</span>
-<span class="n">user_db</span> <span class="o">=</span> <span class="n">SQLAlchemyUserDatabase</span><span class="p">(</span><span class="n">database</span><span class="p">,</span> <span class="n">users</span><span class="p">)</span>
-
+<span class="n">user_db</span> <span class="o">=</span> <span class="n">TortoiseUserDatabase</span><span class="p">(</span><span class="n">UserModel</span><span class="p">)</span>
 <span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
 
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span><span class="s2">&quot;startup&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">startup</span><span class="p">():</span>
-    <span class="k">await</span> <span class="n">database</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
-
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span><span class="s2">&quot;shutdown&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">shutdown</span><span class="p">():</span>
-    <span class="k">await</span> <span class="n">database</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+<span class="n">register_tortoise</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">modules</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;models&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;path_to_your_package&quot;</span><span class="p">]})</span>
 </pre></div>
 
 <p>As you can see, <strong>FastAPI Users</strong> provides a mixin that will include base fields for our User table. You can of course add you own fields there to fit to your needs!</p>
-<h2 id="create-the-tables">Create the tables<a class="headerlink" href="#create-the-tables" title="Permanent link">&para;</a></h2>
-<p>We'll now create an SQLAlchemy enigne and ask it to create all the defined tables.</p>
-<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">databases</span>
-<span class="kn">import</span> <span class="nn">sqlalchemy</span>
-<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
-<span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">SQLAlchemyBaseUserTable</span><span class="p">,</span> <span class="n">SQLAlchemyUserDatabase</span>
-<span class="kn">from</span> <span class="nn">sqlalchemy.ext.declarative</span> <span class="kn">import</span> <span class="n">DeclarativeMeta</span><span class="p">,</span> <span class="n">declarative_base</span>
-
-<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;sqlite:///./test.db&quot;</span>
-
-<span class="n">database</span> <span class="o">=</span> <span class="n">databases</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">)</span>
-
-<span class="n">Base</span><span class="p">:</span> <span class="n">DeclarativeMeta</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">()</span>
-
-
-<span class="k">class</span> <span class="nc">UserTable</span><span class="p">(</span><span class="n">Base</span><span class="p">,</span> <span class="n">SQLAlchemyBaseUserTable</span><span class="p">):</span>
-    <span class="k">pass</span>
-
-
-<span class="hll"><span class="n">engine</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">create_engine</span><span class="p">(</span>
-</span><span class="hll">    <span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">connect_args</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;check_same_thread&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
-</span><span class="hll"><span class="p">)</span>
-</span><span class="hll">
-</span><span class="hll"><span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
-</span>
-<span class="n">users</span> <span class="o">=</span> <span class="n">UserTable</span><span class="o">.</span><span class="n">__table__</span>
-<span class="n">user_db</span> <span class="o">=</span> <span class="n">SQLAlchemyUserDatabase</span><span class="p">(</span><span class="n">database</span><span class="p">,</span> <span class="n">users</span><span class="p">)</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
-
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span><span class="s2">&quot;startup&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">startup</span><span class="p">():</span>
-    <span class="k">await</span> <span class="n">database</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
-
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span><span class="s2">&quot;shutdown&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">shutdown</span><span class="p">():</span>
-    <span class="k">await</span> <span class="n">database</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
-</pre></div>
-
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>In production, you would probably want to create the tables with Alembic, integrated with migrations, etc.</p>
-</div>
 <h2 id="create-the-database-adapter">Create the database adapter<a class="headerlink" href="#create-the-database-adapter" title="Permanent link">&para;</a></h2>
 <p>The database adapter of <strong>FastAPI Users</strong> makes the link between your database configuration and the users logic. Create it like this.</p>
-<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">databases</span>
-<span class="kn">import</span> <span class="nn">sqlalchemy</span>
-<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
-<span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">SQLAlchemyBaseUserTable</span><span class="p">,</span> <span class="n">SQLAlchemyUserDatabase</span>
-<span class="kn">from</span> <span class="nn">sqlalchemy.ext.declarative</span> <span class="kn">import</span> <span class="n">DeclarativeMeta</span><span class="p">,</span> <span class="n">declarative_base</span>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.db.tortoise</span> <span class="kn">import</span> <span class="n">BaseUserModel</span><span class="p">,</span> <span class="n">TortoiseUserDatabase</span>
+<span class="kn">from</span> <span class="nn">tortoise</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">tortoise.contrib.starlette</span> <span class="kn">import</span> <span class="n">register_tortoise</span>
 
-<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;sqlite:///./test.db&quot;</span>
-
-<span class="n">database</span> <span class="o">=</span> <span class="n">databases</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">)</span>
-
-<span class="n">Base</span><span class="p">:</span> <span class="n">DeclarativeMeta</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">()</span>
+<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;sqlite://./test.db&quot;</span>
 
 
-<span class="k">class</span> <span class="nc">UserTable</span><span class="p">(</span><span class="n">Base</span><span class="p">,</span> <span class="n">SQLAlchemyBaseUserTable</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">UserModel</span><span class="p">(</span><span class="n">BaseUserModel</span><span class="p">,</span> <span class="n">Model</span><span class="p">):</span>
     <span class="k">pass</span>
 
 
-<span class="n">engine</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">create_engine</span><span class="p">(</span>
-    <span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">connect_args</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;check_same_thread&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
-<span class="p">)</span>
+<span class="hll"><span class="n">user_db</span> <span class="o">=</span> <span class="n">TortoiseUserDatabase</span><span class="p">(</span><span class="n">UserModel</span><span class="p">)</span>
+</span><span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
 
-<span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
-
-<span class="hll"><span class="n">users</span> <span class="o">=</span> <span class="n">UserTable</span><span class="o">.</span><span class="n">__table__</span>
-</span><span class="hll"><span class="n">user_db</span> <span class="o">=</span> <span class="n">SQLAlchemyUserDatabase</span><span class="p">(</span><span class="n">database</span><span class="p">,</span> <span class="n">users</span><span class="p">)</span>
-</span>
-<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
-
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span><span class="s2">&quot;startup&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">startup</span><span class="p">():</span>
-    <span class="k">await</span> <span class="n">database</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
-
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span><span class="s2">&quot;shutdown&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">shutdown</span><span class="p">():</span>
-    <span class="k">await</span> <span class="n">database</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+<span class="n">register_tortoise</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">modules</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;models&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;path_to_your_package&quot;</span><span class="p">]})</span>
 </pre></div>
 
-<p>Notice that we declare the <code>users</code> variable, which is the actual SQLAlchemy table behind the table class. We also use our <code>database</code> instance, which allows us to do asynchronous request to the database.</p>
+<h2 id="register-tortoise">Register Tortoise<a class="headerlink" href="#register-tortoise" title="Permanent link">&para;</a></h2>
+<p>For using Tortoise ORM we must register our models and database.</p>
+<p>Tortoise ORM supports integration with Starlette/FastAPI out-of-the-box. It will automatically bind startup and shutdown events.</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.db.tortoise</span> <span class="kn">import</span> <span class="n">BaseUserModel</span><span class="p">,</span> <span class="n">TortoiseUserDatabase</span>
+<span class="kn">from</span> <span class="nn">tortoise</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">tortoise.contrib.starlette</span> <span class="kn">import</span> <span class="n">register_tortoise</span>
+
+<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;sqlite://./test.db&quot;</span>
+
+
+<span class="k">class</span> <span class="nc">UserModel</span><span class="p">(</span><span class="n">BaseUserModel</span><span class="p">,</span> <span class="n">Model</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="n">user_db</span> <span class="o">=</span> <span class="n">TortoiseUserDatabase</span><span class="p">(</span><span class="n">UserModel</span><span class="p">)</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
+
+<span class="hll"><span class="n">register_tortoise</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">modules</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;models&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;path_to_your_package&quot;</span><span class="p">]})</span>
+</span></pre></div>
+
 <h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <p>We will now configure an <a href="../../authentication/">authentication method</a>.</p>
-<h2 id="what-about-sqlalchemy-orm">What about SQLAlchemy ORM?<a class="headerlink" href="#what-about-sqlalchemy-orm" title="Permanent link">&para;</a></h2>
-<p>The primary objective was to use pure async approach as much as possible. However, we understand that ORM is convenient and useful for many developers. If this feature becomes very demanded, we will add a database adapter for SQLAlchemy ORM.</p>
                 
                   
                 
@@ -781,7 +698,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../../model/" title="User model" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../mongodb/" title="MongoDB" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -790,19 +707,19 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                User model
+                MongoDB
               </span>
             </div>
           </a>
         
         
-          <a href="../mongodb/" title="MongoDB" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../../authentication/" title="Authentication" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                MongoDB
+                Authentication
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

@@ -318,6 +318,18 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../databases/tortoise/" title="Tortoise ORM" class="md-nav__link">
+      Tortoise ORM
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -623,6 +635,45 @@
 <span class="n">auth</span> <span class="o">=</span> <span class="n">JWTAuthentication</span><span class="p">(</span><span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
+<span class="n">fastapi_users</span> <span class="o">=</span> <span class="n">FastAPIUsers</span><span class="p">(</span><span class="n">user_db</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">User</span><span class="p">,</span> <span class="n">SECRET</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">router</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/users&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;users&quot;</span><span class="p">])</span>
+
+
+<span class="nd">@fastapi_users</span><span class="o">.</span><span class="n">on_after_register</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">on_after_register</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User </span><span class="si">{user.id}</span><span class="s2"> has registered.&quot;</span><span class="p">)</span>
+
+
+<span class="nd">@fastapi_users</span><span class="o">.</span><span class="n">on_after_forgot_password</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">on_after_forgot_password</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User </span><span class="si">{user.id}</span><span class="s2"> has forgot their password. Reset token: </span><span class="si">{token}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div></div>
+<input name="__tabs_1" type="radio" id="__tab_1_2" />
+<label for="__tab_1_2">Tortoise ORM</label>
+<div class="superfences-content"><div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
+<span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">BaseUser</span><span class="p">,</span> <span class="n">FastAPIUsers</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.authentication</span> <span class="kn">import</span> <span class="n">JWTAuthentication</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.db.tortoise</span> <span class="kn">import</span> <span class="n">BaseUserModel</span><span class="p">,</span> <span class="n">TortoiseUserDatabase</span>
+<span class="kn">from</span> <span class="nn">tortoise</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">tortoise.contrib.starlette</span> <span class="kn">import</span> <span class="n">register_tortoise</span>
+
+<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;sqlite://./test.db&quot;</span>
+<span class="n">SECRET</span> <span class="o">=</span> <span class="s2">&quot;SECRET&quot;</span>
+
+
+<span class="k">class</span> <span class="nc">UserModel</span><span class="p">(</span><span class="n">BaseUserModel</span><span class="p">,</span> <span class="n">Model</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">BaseUser</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="n">auth</span> <span class="o">=</span> <span class="n">JWTAuthentication</span><span class="p">(</span><span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span>
+<span class="n">user_db</span> <span class="o">=</span> <span class="n">TortoiseUserDatabase</span><span class="p">(</span><span class="n">UserModel</span><span class="p">)</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
+
+<span class="n">register_tortoise</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">db_url</span><span class="o">=</span><span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">modules</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;models&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">]})</span>
 <span class="n">fastapi_users</span> <span class="o">=</span> <span class="n">FastAPIUsers</span><span class="p">(</span><span class="n">user_db</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">User</span><span class="p">,</span> <span class="n">SECRET</span><span class="p">)</span>
 <span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">router</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/users&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;users&quot;</span><span class="p">])</span>
 
