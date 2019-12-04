@@ -14,6 +14,12 @@ pip install fastapi-users[sqlalchemy]
 pip install fastapi-users[mongodb]
 ```
 
+## With Tortoise ORM support
+
+```sh
+pip install fastapi-users[tortoise-orm]
+```
+
 ---
 
 That's it! Now, let's have a look at our [User model](./configuration/model.md).
