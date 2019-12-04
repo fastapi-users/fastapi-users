@@ -29,6 +29,11 @@ def token():
 
 
 @pytest.mark.authentication
+def test_default_name(cookie_authentication):
+    assert cookie_authentication.name == "cookie"
+
+
+@pytest.mark.authentication
 class TestAuthenticate:
     @pytest.mark.asyncio
     async def test_missing_token(

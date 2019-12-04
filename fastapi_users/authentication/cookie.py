@@ -30,7 +30,7 @@ class CookieAuthentication(JWTAuthentication):
         cookie_name: str = "fastapiusersauth",
         name: str = "cookie",
     ):
-        super().__init__(secret, lifetime_seconds)
+        super().__init__(secret, lifetime_seconds, name=name)
         self.lifetime_seconds = lifetime_seconds
         self.cookie_name = cookie_name
         self.api_key_cookie = APIKeyCookie(name=self.cookie_name, auto_error=False)

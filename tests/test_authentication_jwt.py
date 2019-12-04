@@ -27,6 +27,11 @@ def token():
 
 
 @pytest.mark.authentication
+def test_default_name(jwt_authentication):
+    assert jwt_authentication.name == "jwt"
+
+
+@pytest.mark.authentication
 class TestAuthenticate:
     @pytest.mark.asyncio
     async def test_missing_token(
