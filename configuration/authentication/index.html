@@ -38,7 +38,7 @@
     
     
       
-        <title>Authentication - FastAPI Users</title>
+        <title>Introduction - FastAPI Users</title>
       
     
     
@@ -113,7 +113,7 @@
             </span>
             <span class="md-header-nav__topic">
               
-                Authentication
+                Introduction
               
             </span>
           
@@ -371,11 +371,11 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="__toc">
-        Authentication
+        Introduction
       </label>
     
-    <a href="./" title="Authentication" class="md-nav__link md-nav__link--active">
-      Authentication
+    <a href="./" title="Introduction" class="md-nav__link md-nav__link--active">
+      Introduction
     </a>
     
       
@@ -387,6 +387,13 @@
   
     <label class="md-nav__title" for="__toc">Table of contents</label>
     <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    How it works?
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#provided-methods" class="md-nav__link">
@@ -414,6 +421,18 @@
   <li class="md-nav__item">
     <a href="jwt/" title="JWT" class="md-nav__link">
       JWT
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="cookie/" title="Cookie" class="md-nav__link">
+      Cookie
     </a>
   </li>
 
@@ -521,6 +540,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    How it works?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#provided-methods" class="md-nav__link">
     Provided methods
   </a>
@@ -546,9 +572,14 @@
                 
                 <h1 id="authentication">Authentication<a class="headerlink" href="#authentication" title="Permanent link">&para;</a></h1>
 <p><strong>FastAPI Users</strong> allows you to plug in several authentication methods.</p>
+<h2 id="how-it-works">How it works?<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h2>
+<p>You can have <strong>several</strong> authentication methods, e.g. a cookie authentication for browser-based queries and a JWT token authentication for pure API queries.</p>
+<p>When checking authentication, each method is run one after the other. The first method yielding a user wins. If no method yields a user, an <code>HTTPException</code> is raised.</p>
+<p>Each defined method will generate a <a href="../../usage/routes/#post-loginname"><code>/login/{name}</code></a> route where <code>name</code> is defined on the authentication method object.</p>
 <h2 id="provided-methods">Provided methods<a class="headerlink" href="#provided-methods" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="jwt/">JWT authentication</a></li>
+<li><a href="cookie/">Cookie authentication</a></li>
 </ul>
                 
                   

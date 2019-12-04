@@ -360,8 +360,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../authentication/" title="Authentication" class="md-nav__link">
-      Authentication
+    <a href="../authentication/" title="Introduction" class="md-nav__link">
+      Introduction
     </a>
   </li>
 
@@ -374,6 +374,18 @@
   <li class="md-nav__item">
     <a href="../authentication/jwt/" title="JWT" class="md-nav__link">
       JWT
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../authentication/cookie/" title="Cookie" class="md-nav__link">
+      Cookie
     </a>
   </li>
 
@@ -582,10 +594,12 @@
     <span class="k">pass</span>
 
 
-<span class="n">auth</span> <span class="o">=</span> <span class="n">JWTAuthentication</span><span class="p">(</span><span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span>
+<span class="n">auth_backends</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">JWTAuthentication</span><span class="p">(</span><span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">),</span>
+<span class="p">]</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
-<span class="n">fastapi_users</span> <span class="o">=</span> <span class="n">FastAPIUsers</span><span class="p">(</span><span class="n">user_db</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">User</span><span class="p">,</span> <span class="n">SECRET</span><span class="p">)</span>
+<span class="n">fastapi_users</span> <span class="o">=</span> <span class="n">FastAPIUsers</span><span class="p">(</span><span class="n">user_db</span><span class="p">,</span> <span class="n">auth_backends</span><span class="p">,</span> <span class="n">User</span><span class="p">,</span> <span class="n">SECRET</span><span class="p">)</span>
 <span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">router</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/users&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;users&quot;</span><span class="p">])</span>
 
 
@@ -632,10 +646,12 @@
     <span class="k">pass</span>
 
 
-<span class="n">auth</span> <span class="o">=</span> <span class="n">JWTAuthentication</span><span class="p">(</span><span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span>
+<span class="n">auth_backends</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">JWTAuthentication</span><span class="p">(</span><span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">),</span>
+<span class="p">]</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
-<span class="n">fastapi_users</span> <span class="o">=</span> <span class="n">FastAPIUsers</span><span class="p">(</span><span class="n">user_db</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">User</span><span class="p">,</span> <span class="n">SECRET</span><span class="p">)</span>
+<span class="n">fastapi_users</span> <span class="o">=</span> <span class="n">FastAPIUsers</span><span class="p">(</span><span class="n">user_db</span><span class="p">,</span> <span class="n">auth_backends</span><span class="p">,</span> <span class="n">User</span><span class="p">,</span> <span class="n">SECRET</span><span class="p">)</span>
 <span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">router</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/users&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;users&quot;</span><span class="p">])</span>
 
 

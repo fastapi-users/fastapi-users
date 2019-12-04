@@ -362,8 +362,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../" title="Authentication" class="md-nav__link">
-      Authentication
+    <a href="../" title="Introduction" class="md-nav__link">
+      Introduction
     </a>
   </li>
 
@@ -408,6 +408,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#login" class="md-nav__link">
+    Login
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#authentication" class="md-nav__link">
     Authentication
   </a>
@@ -429,6 +436,18 @@
   
 </nav>
     
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../cookie/" title="Cookie" class="md-nav__link">
+      Cookie
+    </a>
   </li>
 
         
@@ -542,6 +561,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#login" class="md-nav__link">
+    Login
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#authentication" class="md-nav__link">
     Authentication
   </a>
@@ -579,10 +605,35 @@
 
 <span class="n">SECRET</span> <span class="o">=</span> <span class="s2">&quot;SECRET&quot;</span>
 
-<span class="n">auth</span> <span class="o">=</span> <span class="n">JWTAuthentication</span><span class="p">(</span><span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span>
+<span class="n">auth_backends</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">jwt_authentication</span> <span class="o">=</span> <span class="n">JWTAuthentication</span><span class="p">(</span><span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">))</span>
+
+<span class="n">auth_backends</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">jwt_authentication</span><span class="p">)</span>
 </pre></div>
 
 <p>As you can see, instantiation is quite simple. You just have to define a constant <code>SECRET</code> which is used to encode the token and the lifetime of token (in seconds).</p>
+<p>You can also optionally define the <code>name</code> which will be used to generate its <a href="../../../usage/routes/#post-loginname"><code>/login</code> route</a>. <strong>Defaults to <code>jwt</code></strong>.</p>
+<div class="codehilite"><pre><span></span><span class="n">jwt_authentication</span> <span class="o">=</span> <span class="n">JWTAuthentication</span><span class="p">(</span>
+    <span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span>
+    <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;my-jwt&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+
+<h2 id="login">Login<a class="headerlink" href="#login" title="Permanent link">&para;</a></h2>
+<p>This method will return a JWT token upon successful login:</p>
+<div class="admonition success">
+<p class="admonition-title"><code>200 OK</code></p>
+<div class="codehilite"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;token&quot;</span><span class="p">:</span> <span class="s2">&quot;eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiOTIyMWZmYzktNjQwZi00MzcyLTg2ZDMtY2U2NDJjYmE1NjAzIiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTcxNTA0MTkzfQ.M10bjOe45I5Ncu_uXvOmVV8QxnL-nZfcH96U90JaocI&quot;</span>
+<span class="p">}</span>
+</pre></div>
+
+</div>
+<blockquote>
+<p>Check documentation about <a href="../../../usage/routes/#post-loginname">login route</a>.</p>
+</blockquote>
 <h2 id="authentication">Authentication<a class="headerlink" href="#authentication" title="Permanent link">&para;</a></h2>
 <p>This method expects that you provide a <code>Bearer</code> authentication with a valid JWT.</p>
 <div class="codehilite"><pre><span></span>curl http://localhost:9000/protected-route -H<span class="s1">&#39;Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiOTIyMWZmYzktNjQwZi00MzcyLTg2ZDMtY2U2NDJjYmE1NjAzIiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTcxNTA0MTkzfQ.M10bjOe45I5Ncu_uXvOmVV8QxnL-nZfcH96U90JaocI&#39;</span>
@@ -610,7 +661,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../" title="Authentication" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../" title="Introduction" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -619,19 +670,19 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Authentication
+                Introduction
               </span>
             </div>
           </a>
         
         
-          <a href="../../router/" title="Router" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../cookie/" title="Cookie" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Router
+                Cookie
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
