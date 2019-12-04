@@ -1,3 +1,5 @@
+import re
+
 import jwt
 import pytest
 from starlette.responses import Response
@@ -71,3 +73,23 @@ class TestAuthenticate:
 @pytest.mark.asyncio
 async def test_get_login_response(cookie_authentication, user):
     login_response = await cookie_authentication.get_login_response(user, Response())
+
+    cookies = [
+        header for header in login_response.raw_headers if header[0] == b"set-cookie"
+    ]
+    assert len(cookies) == 1
+
+    cookie = cookies[0][1].decode("latin-1")
+
+    assert f"Max-Age={LIFETIME}" in cookie
+
+    cookie_name_value = re.match(r"^(\w+)=([^;]+);", cookie)
+
+    cookie_name = cookie_name_value[1]
+    assert cookie_name == COOKIE_NAME
+
+    cookie_value = cookie_name_value[2]
+    decoded = jwt.decode(
+        cookie_value, SECRET, audience="fastapi-users:auth", algorithms=[JWT_ALGORITHM]
+    )
+    assert decoded["user_id"] == user.id
