@@ -33,6 +33,7 @@ Add quickly a registration and authentication system to your [FastAPI](https://f
     * [X] MongoDB async backend included thanks to [mongodb/motor](https://github.com/mongodb/motor)
 * [X] Multiple customizable authentication backends
     * [X] JWT authentication backend included
+    * [X] Cookie authentication backend included
 
 ## Development
 

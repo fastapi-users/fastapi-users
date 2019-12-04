@@ -13,3 +13,4 @@ Each defined method will generate a [`/login/{name}`](../../usage/routes.md#post
 ## Provided methods
 
 * [JWT authentication](jwt.md)
+* [Cookie authentication](cookie.md)

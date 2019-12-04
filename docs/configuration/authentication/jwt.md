@@ -18,7 +18,7 @@ auth_backends.append(jwt_authentication)
 
 As you can see, instantiation is quite simple. You just have to define a constant `SECRET` which is used to encode the token and the lifetime of token (in seconds).
 
-You can also optionally define the `name` which will be used to generate it [`/login` route](../../usage/routes.md#post-loginname). **Defaults to `jwt`**.
+You can also optionally define the `name` which will be used to generate its [`/login` route](../../usage/routes.md#post-loginname). **Defaults to `jwt`**.
 
 ```py
 jwt_authentication = JWTAuthentication(

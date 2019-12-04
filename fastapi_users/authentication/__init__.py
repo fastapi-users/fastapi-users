@@ -5,6 +5,7 @@ from starlette import status
 from starlette.requests import Request
 
 from fastapi_users.authentication.base import BaseAuthentication  # noqa: F401
+from fastapi_users.authentication.cookie import CookieAuthentication  # noqa: F401
 from fastapi_users.authentication.jwt import JWTAuthentication  # noqa: F401
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.models import BaseUserDB

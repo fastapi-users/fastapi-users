@@ -34,8 +34,9 @@ nav:
       - configuration/databases/mongodb.md
       - configuration/databases/tortoise.md
     - Authentication:
-      - configuration/authentication/index.md
+      - Introduction: configuration/authentication/index.md
       - configuration/authentication/jwt.md
+      - configuration/authentication/cookie.md
     - configuration/router.md
     - configuration/full_example.md
   - Usage:
