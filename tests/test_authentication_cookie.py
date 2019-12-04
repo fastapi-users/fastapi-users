@@ -77,10 +77,15 @@ class TestAuthenticate:
 @pytest.mark.authentication
 @pytest.mark.asyncio
 async def test_get_login_response(cookie_authentication, user):
-    login_response = await cookie_authentication.get_login_response(user, Response())
+    response = Response()
+    login_response = await cookie_authentication.get_login_response(user, response)
+
+    # We shouldn't return directly the response
+    # so that FastAPI can terminate it properly
+    assert login_response is None
 
     cookies = [
-        header for header in login_response.raw_headers if header[0] == b"set-cookie"
+        header for header in response.raw_headers if header[0] == b"set-cookie"
     ]
     assert len(cookies) == 1
 

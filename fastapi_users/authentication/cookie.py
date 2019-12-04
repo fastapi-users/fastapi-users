@@ -44,7 +44,10 @@ class CookieAuthentication(JWTAuthentication):
             secure=True,
             httponly=True,
         )
-        return response
+
+        # We shouldn't return directly the response
+        # so that FastAPI can terminate it properly
+        return None
 
     async def _retrieve_token(self, request: Request) -> Optional[str]:
         return await self.api_key_cookie.__call__(request)
