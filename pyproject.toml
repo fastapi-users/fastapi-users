@@ -37,7 +37,7 @@ mongodb = [
     "motor ==2.0.0",
 ]
 tortoise-orm = [
-    "tortoise-orm ==0.15.1"
+    "tortoise-orm ==0.15.4"
 ]
 
 [tool.flit.metadata.urls]
