@@ -7,7 +7,7 @@ We're almost there! The last step is to configure the `FastAPIUsers` object that
 Configure `FastAPIUsers` object with all the elements we defined before. More precisely:
 
 * `db`: Database adapter instance.
-* `auth`: Authentication logic instance.
+* `auth_backends`: List of authentication backends. See [Authentication](./authentication/index.md).
 * `user_model`: Pydantic model of a user.
 * `reset_password_token_secret`: Secret to encode reset password token.
 * `reset_password_token_lifetime_seconds`: Lifetime of reset password token in seconds. Default to one hour.
@@ -17,7 +17,7 @@ from fastapi_users import FastAPIUsers
 
 fastapi_users = FastAPIUsers(
     user_db,
-    auth,
+    auth_backends,
     User,
     SECRET,
 )

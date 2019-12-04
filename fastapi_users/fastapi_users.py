@@ -1,8 +1,8 @@
-from typing import Callable, Type
+from typing import Callable, Sequence, Type
 
-from fastapi_users.authentication import BaseAuthentication
+from fastapi_users.authentication import Authenticator, BaseAuthentication
 from fastapi_users.db import BaseUserDatabase
-from fastapi_users.models import BaseUser, BaseUserDB
+from fastapi_users.models import BaseUser
 from fastapi_users.router import Event, UserRouter, get_user_router
 
 
@@ -11,7 +11,7 @@ class FastAPIUsers:
     Main object that ties together the component for users authentication.
 
     :param db: Database adapter instance.
-    :param auth: Authentication logic instance.
+    :param auth_backends: List of authentication backends.
     :param user_model: Pydantic model of a user.
     :param reset_password_token_secret: Secret to encode reset password token.
     :param reset_password_token_lifetime_seconds: Lifetime of reset password token.
@@ -21,36 +21,30 @@ class FastAPIUsers:
     """
 
     db: BaseUserDatabase
-    auth: BaseAuthentication
+    authenticator: Authenticator
     router: UserRouter
-    get_current_user: Callable[..., BaseUserDB]
 
     def __init__(
         self,
         db: BaseUserDatabase,
-        auth: BaseAuthentication,
+        auth_backends: Sequence[BaseAuthentication],
         user_model: Type[BaseUser],
         reset_password_token_secret: str,
         reset_password_token_lifetime_seconds: int = 3600,
     ):
         self.db = db
-        self.auth = auth
+        self.authenticator = Authenticator(auth_backends, db)
         self.router = get_user_router(
             self.db,
             user_model,
-            self.auth,
+            self.authenticator,
             reset_password_token_secret,
             reset_password_token_lifetime_seconds,
         )
 
-        get_current_user = self.auth.get_current_user(self.db)
-        self.get_current_user = get_current_user  # type: ignore
-
-        get_current_active_user = self.auth.get_current_active_user(self.db)
-        self.get_current_active_user = get_current_active_user  # type: ignore
-
-        get_current_superuser = self.auth.get_current_superuser(self.db)
-        self.get_current_superuser = get_current_superuser  # type: ignore
+        self.get_current_user = self.authenticator.get_current_user
+        self.get_current_active_user = self.authenticator.get_current_active_user
+        self.get_current_superuser = self.authenticator.get_current_superuser
 
     def on_after_register(self) -> Callable:
         """Add an event handler on successful registration."""

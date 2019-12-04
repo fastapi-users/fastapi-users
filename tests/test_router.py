@@ -7,9 +7,11 @@ from fastapi import FastAPI
 from starlette import status
 from starlette.testclient import TestClient
 
+from fastapi_users.authentication import Authenticator
 from fastapi_users.models import BaseUser, BaseUserDB
 from fastapi_users.router import ErrorCode, Event, get_user_router
 from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
+from tests.conftest import MockAuthentication
 
 SECRET = "SECRET"
 LIFETIME = 3600
@@ -44,9 +46,12 @@ def test_app_client(mock_user_db, mock_authentication, event_handler) -> TestCli
     class User(BaseUser):
         pass
 
-    userRouter = get_user_router(
-        mock_user_db, User, mock_authentication, SECRET, LIFETIME
+    mock_authentication_bis = MockAuthentication(name="mock-bis")
+    authenticator = Authenticator(
+        [mock_authentication, mock_authentication_bis], mock_user_db
     )
+
+    userRouter = get_user_router(mock_user_db, User, authenticator, SECRET, LIFETIME)
 
     userRouter.add_event_handler(Event.ON_AFTER_REGISTER, event_handler)
     userRouter.add_event_handler(Event.ON_AFTER_FORGOT_PASSWORD, event_handler)
@@ -125,42 +130,45 @@ class TestRegister:
 
 
 @pytest.mark.router
+@pytest.mark.parametrize("path", ["/login/mock", "/login/mock-bis"])
 class TestLogin:
-    def test_empty_body(self, test_app_client: TestClient):
-        response = test_app_client.post("/login", data={})
+    def test_empty_body(self, path, test_app_client: TestClient):
+        response = test_app_client.post(path, data={})
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
-    def test_missing_username(self, test_app_client: TestClient):
+    def test_missing_username(self, path, test_app_client: TestClient):
         data = {"password": "guinevere"}
-        response = test_app_client.post("/login", data=data)
+        response = test_app_client.post(path, data=data)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
-    def test_missing_password(self, test_app_client: TestClient):
+    def test_missing_password(self, path, test_app_client: TestClient):
         data = {"username": "king.arthur@camelot.bt"}
-        response = test_app_client.post("/login", data=data)
+        response = test_app_client.post(path, data=data)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
-    def test_not_existing_user(self, test_app_client: TestClient):
+    def test_not_existing_user(self, path, test_app_client: TestClient):
         data = {"username": "lancelot@camelot.bt", "password": "guinevere"}
-        response = test_app_client.post("/login", data=data)
+        response = test_app_client.post(path, data=data)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert response.json()["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
 
-    def test_wrong_password(self, test_app_client: TestClient):
+    def test_wrong_password(self, path, test_app_client: TestClient):
         data = {"username": "king.arthur@camelot.bt", "password": "percival"}
-        response = test_app_client.post("/login", data=data)
+        response = test_app_client.post(path, data=data)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert response.json()["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
 
-    def test_valid_credentials(self, test_app_client: TestClient, user: BaseUserDB):
+    def test_valid_credentials(
+        self, path, test_app_client: TestClient, user: BaseUserDB
+    ):
         data = {"username": "king.arthur@camelot.bt", "password": "guinevere"}
-        response = test_app_client.post("/login", data=data)
+        response = test_app_client.post(path, data=data)
         assert response.status_code == status.HTTP_200_OK
         assert response.json() == {"token": user.id}
 
-    def test_inactive_user(self, test_app_client: TestClient):
+    def test_inactive_user(self, path, test_app_client: TestClient):
         data = {"username": "percival@camelot.bt", "password": "angharad"}
-        response = test_app_client.post("/login", data=data)
+        response = test_app_client.post(path, data=data)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert response.json()["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
 

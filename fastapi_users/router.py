@@ -10,7 +10,7 @@ from pydantic import EmailStr
 from starlette import status
 from starlette.responses import Response
 
-from fastapi_users.authentication import BaseAuthentication
+from fastapi_users.authentication import Authenticator, BaseAuthentication
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.models import BaseUser, Models
 from fastapi_users.password import get_password_hash
@@ -46,10 +46,28 @@ class UserRouter(APIRouter):
                 handler(*args, **kwargs)
 
 
+def _add_login_route(
+    router: UserRouter, user_db: BaseUserDatabase, auth_backend: BaseAuthentication
+):
+    @router.post(f"/login/{auth_backend.name}")
+    async def login(
+        response: Response, credentials: OAuth2PasswordRequestForm = Depends()
+    ):
+        user = await user_db.authenticate(credentials)
+
+        if user is None or not user.is_active:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=ErrorCode.LOGIN_BAD_CREDENTIALS,
+            )
+
+        return await auth_backend.get_login_response(user, response)
+
+
 def get_user_router(
     user_db: BaseUserDatabase,
     user_model: typing.Type[BaseUser],
-    auth: BaseAuthentication,
+    authenticator: Authenticator,
     reset_password_token_secret: str,
     reset_password_token_lifetime_seconds: int = 3600,
 ) -> UserRouter:
@@ -59,8 +77,8 @@ def get_user_router(
 
     reset_password_token_audience = "fastapi-users:reset"
 
-    get_current_active_user = auth.get_current_active_user(user_db)
-    get_current_superuser = auth.get_current_superuser(user_db)
+    get_current_active_user = authenticator.get_current_active_user
+    get_current_superuser = authenticator.get_current_superuser
 
     async def _get_or_404(id: str) -> models.UserDB:  # type: ignore
         user = await user_db.get(id)
@@ -78,6 +96,9 @@ def get_user_router(
             else:
                 setattr(user, field, update_dict[field])
         return await user_db.update(user)
+
+    for auth_backend in authenticator.backends:
+        _add_login_route(router, user_db, auth_backend)
 
     @router.post(
         "/register", response_model=models.User, status_code=status.HTTP_201_CREATED
@@ -100,20 +121,6 @@ def get_user_router(
         await router.run_handlers(Event.ON_AFTER_REGISTER, created_user)
 
         return created_user
-
-    @router.post("/login")
-    async def login(
-        response: Response, credentials: OAuth2PasswordRequestForm = Depends()
-    ):
-        user = await user_db.authenticate(credentials)
-
-        if user is None or not user.is_active:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=ErrorCode.LOGIN_BAD_CREDENTIALS,
-            )
-
-        return await auth.get_login_response(user, response)
 
     @router.post("/forgot-password", status_code=status.HTTP_202_ACCEPTED)
     async def forgot_password(email: EmailStr = Body(..., embed=True)):

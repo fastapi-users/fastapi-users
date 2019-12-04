@@ -33,10 +33,12 @@ class User(BaseUser):
     pass
 
 
-auth = JWTAuthentication(secret=SECRET, lifetime_seconds=3600)
+auth_backends = [
+    JWTAuthentication(secret=SECRET, lifetime_seconds=3600),
+]
 
 app = FastAPI()
-fastapi_users = FastAPIUsers(user_db, auth, User, SECRET)
+fastapi_users = FastAPIUsers(user_db, auth_backends, User, SECRET)
 app.include_router(fastapi_users.router, prefix="/users", tags=["users"])
 
 

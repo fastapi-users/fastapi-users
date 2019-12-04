@@ -31,8 +31,9 @@ Add quickly a registration and authentication system to your [FastAPI](https://f
 * [X] Customizable database backend
     * [X] SQLAlchemy async backend included thanks to [encode/databases](https://www.encode.io/databases/)
     * [X] MongoDB async backend included thanks to [mongodb/motor](https://github.com/mongodb/motor)
-* [X] Customizable authentication backend
+* [X] Multiple customizable authentication backends
     * [X] JWT authentication backend included
+    * [X] Cookie authentication backend included
 
 ## Development
 
