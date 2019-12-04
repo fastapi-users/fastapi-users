@@ -1,5 +1,6 @@
-from typing import Any, List, Mapping, Optional
+from typing import Any, List, Mapping, Optional, Tuple
 
+import http.cookies
 import pytest
 from fastapi import Depends, FastAPI
 from fastapi.security import OAuth2PasswordBearer
@@ -104,13 +105,27 @@ def mock_authentication():
 
 @pytest.fixture
 def request_builder():
-    def _request_builder(headers: Mapping[str, Any]) -> Request:
+    def _request_builder(
+        headers: Mapping[str, Any] = None, cookies: Mapping[str, str] = None
+    ) -> Request:
+        encoded_headers: List[Tuple[bytes, bytes]] = []
+
+        if headers is not None:
+            encoded_headers += [
+                (key.lower().encode("latin-1"), headers[key].encode("latin-1"))
+                for key in headers
+            ]
+
+        if cookies is not None:
+            for key in cookies:
+                cookie = http.cookies.SimpleCookie()  # type: http.cookies.BaseCookie
+                cookie[key] = cookies[key]
+                cookie_val = cookie.output(header="").strip()
+                encoded_headers.append((b"cookie", cookie_val.encode("latin-1")))
+
         scope = {
             "type": "http",
-            "headers": [
-                [key.lower().encode("latin-1"), headers[key].encode("latin-1")]
-                for key in headers
-            ],
+            "headers": encoded_headers,
         }
         return Request(scope)
 

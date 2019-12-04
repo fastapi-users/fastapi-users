@@ -40,7 +40,7 @@ class JWTAuthentication(BaseAuthentication):
     async def __call__(
         self, request: Request, user_db: BaseUserDatabase,
     ) -> Optional[BaseUserDB]:
-        token = await self.scheme.__call__(request)
+        token = await self._retrieve_token(request)
         if token is None:
             return None
 
@@ -59,7 +59,12 @@ class JWTAuthentication(BaseAuthentication):
         return await user_db.get(user_id)
 
     async def get_login_response(self, user: BaseUserDB, response: Response) -> Any:
-        data = {"user_id": user.id, "aud": self.token_audience}
-        token = generate_jwt(data, self.lifetime_seconds, self.secret, JWT_ALGORITHM)
-
+        token = await self._generate_token(user)
         return {"token": token}
+
+    async def _retrieve_token(self, request: Request) -> Optional[str]:
+        return await self.scheme.__call__(request)
+
+    async def _generate_token(self, user: BaseUserDB) -> str:
+        data = {"user_id": user.id, "aud": self.token_audience}
+        return generate_jwt(data, self.lifetime_seconds, self.secret, JWT_ALGORITHM)
