@@ -34,7 +34,7 @@ databases = "==0.2.6"
 pyjwt = "==1.7.1"
 python-multipart = "==0.0.5"
 motor = "==2.0.0"
-tortoise-orm = "==0.15.1"
+tortoise-orm = "==0.15.4"
 
 [requires]
 python_version = "3.7"
