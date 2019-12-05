@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "51fe95238c964c3fe24e581f21c02097e667b0ef32824f33c891c49521741ad0"
+            "sha256": "19ed6b061e83b2185088353190ea56c8adffa922f440d19d6a330b04a0e35c11"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -112,11 +112,11 @@
         },
         "fastapi": {
             "hashes": [
-                "sha256:2e5a4c5727576492e3cc2d2d09c414e478f95f1566345d87efee957dd71fe44d",
-                "sha256:a9c891473091c1f868235c25397cba71fa8b62fae8c8c3a5bc1ad008298e0990"
+                "sha256:04afe17ceaaa6c07a0377c2d2cafde864672f0489b5be21030e3d6ca2e47b0ac",
+                "sha256:5e053824ffbdd7041812f4c77e6def17a557edc12f4fb061e00d7ee9a03aca3b"
             ],
             "index": "pypi",
-            "version": "==0.44.0"
+            "version": "==0.44.1"
         },
         "idna": {
             "hashes": [
@@ -376,11 +376,10 @@
         },
         "docutils": {
             "hashes": [
-                "sha256:6c4f696463b79f1fb8ba0c594b63840ebd41f059e92b31957c46b74a4599b6d0",
-                "sha256:9e4d7ecfc600058e07ba661411a2b7de2fd0fafa17d1a7f7361cd47b1175c827",
-                "sha256:a2aeea129088da402665e92e0b25b04b073c04b2dce4ab65caaa38b7ce2e1a99"
+                "sha256:7a6228589435302e421f5c473ce0180878b90f70227f7174cacde5efbd34275f",
+                "sha256:f1bad547016f945f7b35b28d8bead307821822ca3f8d4f87a1bd2ad1a8faab51"
             ],
-            "version": "==0.15.2"
+            "version": "==0.16b0.dev0"
         },
         "entrypoints": {
             "hashes": [
@@ -435,11 +434,11 @@
         },
         "importlib-metadata": {
             "hashes": [
-                "sha256:b044f07694ef14a6683b097ba56bd081dbc7cdc7c7fe46011e499dfecc082f21",
-                "sha256:e6ac600a142cf2db707b1998382cc7fc3b02befb7273876e01b8ad10b9652742"
+                "sha256:3a8b2dfd0a2c6a3636e7c016a7e54ae04b997d30e69d5eacdca7a6c2221a1402",
+                "sha256:41e688146d000891f32b1669e8573c57e39e5060e7f5f647aa617cd9a9568278"
             ],
             "markers": "python_version < '3.8'",
-            "version": "==1.1.0"
+            "version": "==1.2.0"
         },
         "isort": {
             "hashes": [
