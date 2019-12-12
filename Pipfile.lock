@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "af870c6e391fb57dc88f1157509521d1c68be4d37bb68c539e2dbb115d58aa25"
+            "sha256": "83fad9e228b2c82c08ace5232ce6c93067036fa8e06045a8f4c037133b38ec5a"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -18,9 +18,9 @@
     "default": {
         "aiosqlite": {
             "hashes": [
-                "sha256:ad84fbd7516ca7065d799504fc41d6845c938e5306d1b7dd960caaeda12e22a9"
+                "sha256:4f02314a42db6722dc26f2a6119c64e3f05f141f57bbf2b1e1f9fd741b6d7fb8"
             ],
-            "version": "==0.10.0"
+            "version": "==0.11.0"
         },
         "bcrypt": {
             "hashes": [
@@ -112,11 +112,11 @@
         },
         "fastapi": {
             "hashes": [
-                "sha256:04afe17ceaaa6c07a0377c2d2cafde864672f0489b5be21030e3d6ca2e47b0ac",
-                "sha256:5e053824ffbdd7041812f4c77e6def17a557edc12f4fb061e00d7ee9a03aca3b"
+                "sha256:3f626eda9b6edaa17c90c21a4d0d1a97a2a2fcba43a55f8c425b6b37e832c8bb",
+                "sha256:44712863ca3899eb812a6869a2efe02d6be6ae972968c76a43d82ec472788f17"
             ],
             "index": "pypi",
-            "version": "==0.44.1"
+            "version": "==0.45.0"
         },
         "idna": {
             "hashes": [
@@ -288,9 +288,9 @@
     "develop": {
         "aiosqlite": {
             "hashes": [
-                "sha256:ad84fbd7516ca7065d799504fc41d6845c938e5306d1b7dd960caaeda12e22a9"
+                "sha256:4f02314a42db6722dc26f2a6119c64e3f05f141f57bbf2b1e1f9fd741b6d7fb8"
             ],
-            "version": "==0.10.0"
+            "version": "==0.11.0"
         },
         "appdirs": {
             "hashes": [
