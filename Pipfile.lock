@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "7c6969fb86656e0f916e84c0e797f7baff9a1e14722e4601abbe48f4cdd6170b"
+            "sha256": "83fad9e228b2c82c08ace5232ce6c93067036fa8e06045a8f4c037133b38ec5a"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -18,9 +18,9 @@
     "default": {
         "aiosqlite": {
             "hashes": [
-                "sha256:ad84fbd7516ca7065d799504fc41d6845c938e5306d1b7dd960caaeda12e22a9"
+                "sha256:4f02314a42db6722dc26f2a6119c64e3f05f141f57bbf2b1e1f9fd741b6d7fb8"
             ],
-            "version": "==0.10.0"
+            "version": "==0.11.0"
         },
         "bcrypt": {
             "hashes": [
@@ -127,11 +127,12 @@
         },
         "motor": {
             "hashes": [
-                "sha256:462fbb824f4289481c158227a2579d6adaf1ec7c70cf7ebe60ed6ceb321e5869",
-                "sha256:d035c09ab422bc50bf3efb134f7405694cae76268545bd21e14fb22e2638f84e"
+                "sha256:599719bc6dcddc3b9ea4e09659fb0073d5fadcc24735999b2902f48cef33f909",
+                "sha256:756c587985d166166e644ccd36fb8b586fb987eb42fc0fc60cce9a3d76d809b4",
+                "sha256:97b4fc0a00a84df30f866d18693c503eef46c7642f75218a2c44d74d835be38a"
             ],
             "index": "pypi",
-            "version": "==2.0.0"
+            "version": "==2.1.0"
         },
         "passlib": {
             "extras": [
@@ -287,9 +288,9 @@
     "develop": {
         "aiosqlite": {
             "hashes": [
-                "sha256:ad84fbd7516ca7065d799504fc41d6845c938e5306d1b7dd960caaeda12e22a9"
+                "sha256:4f02314a42db6722dc26f2a6119c64e3f05f141f57bbf2b1e1f9fd741b6d7fb8"
             ],
-            "version": "==0.10.0"
+            "version": "==0.11.0"
         },
         "appdirs": {
             "hashes": [
@@ -559,11 +560,11 @@
         },
         "mkdocs-material": {
             "hashes": [
-                "sha256:307d76239ad7aa126ec7b2f6aa751f22bcabafdbe7679451b08ffe0bc005e22c",
-                "sha256:e11d89d236b2ea62e0a645ff3f55f64d66e9d4c3426771ffaeb24600521166b1"
+                "sha256:89a8e2527ca8426c40f2213ce53513f73f54d0a32b36aef33fde6849d294e9ec",
+                "sha256:b21aa2645ccb11442ea381c92d187bbc94127f50702c0d28c3fc0152fa7b29da"
             ],
             "index": "pypi",
-            "version": "==4.5.1"
+            "version": "==4.6.0"
         },
         "mkdocs-minify-plugin": {
             "hashes": [
