@@ -8,7 +8,7 @@ from fastapi_users.models import BaseUserDB
 
 
 class BaseUserModel:
-    id = fields.TextField(pk=True, generated=False)
+    id = fields.CharField(pk=True, generated=False, max_length=255)
     email = fields.CharField(index=True, unique=True, null=False, max_length=255)
     hashed_password = fields.CharField(null=False, max_length=255)
     is_active = fields.BooleanField(default=True, null=False)
