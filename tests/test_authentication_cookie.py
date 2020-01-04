@@ -84,9 +84,7 @@ async def test_get_login_response(cookie_authentication, user):
     # so that FastAPI can terminate it properly
     assert login_response is None
 
-    cookies = [
-        header for header in response.raw_headers if header[0] == b"set-cookie"
-    ]
+    cookies = [header for header in response.raw_headers if header[0] == b"set-cookie"]
     assert len(cookies) == 1
 
     cookie = cookies[0][1].decode("latin-1")
