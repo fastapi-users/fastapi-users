@@ -186,21 +186,29 @@ def get_user_router(
         updated_user_data = updated_user.create_update_dict()
         return await _update_user(user, updated_user_data)
 
-    @router.get("/", response_model=List[user_model])  # type: ignore
-    async def list_users(superuser=Depends(get_current_superuser),):
+    @router.get(
+        "/",
+        response_model=List[user_model],  # type: ignore
+        dependencies=[Depends(get_current_superuser)],
+    )
+    async def list_users():
         return await user_db.list()
 
-    @router.get("/{id}", response_model=user_model)
-    async def get_user(
-        id: str, superuser=Depends(get_current_superuser),
-    ):
+    @router.get(
+        "/{id}",
+        response_model=user_model,
+        dependencies=[Depends(get_current_superuser)],
+    )
+    async def get_user(id: str,):
         return await _get_or_404(id)
 
-    @router.patch("/{id}", response_model=user_model)
+    @router.patch(
+        "/{id}",
+        response_model=user_model,
+        dependencies=[Depends(get_current_superuser)],
+    )
     async def update_user(
-        id: str,
-        updated_user: user_update_model,  # type: ignore
-        superuser=Depends(get_current_superuser),
+        id: str, updated_user: user_update_model,  # type: ignore
     ):
         updated_user = cast(
             models.BaseUserUpdate, updated_user,
@@ -209,10 +217,12 @@ def get_user_router(
         updated_user_data = updated_user.create_update_dict_superuser()
         return await _update_user(user, updated_user_data)
 
-    @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-    async def delete_user(
-        id: str, superuser=Depends(get_current_superuser),
-    ):
+    @router.delete(
+        "/{id}",
+        status_code=status.HTTP_204_NO_CONTENT,
+        dependencies=[Depends(get_current_superuser)],
+    )
+    async def delete_user(id: str):
         user = await _get_or_404(id)
         await user_db.delete(user)
         return None
