@@ -1,7 +1,7 @@
 import databases
 import sqlalchemy
 from fastapi import FastAPI
-from fastapi_users import BaseUser, FastAPIUsers
+from fastapi_users import FastAPIUsers, models
 from fastapi_users.authentication import JWTAuthentication
 from fastapi_users.db import SQLAlchemyBaseUserTable, SQLAlchemyUserDatabase
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
@@ -10,8 +10,23 @@ DATABASE_URL = "sqlite:///./test.db"
 SECRET = "SECRET"
 
 
-database = databases.Database(DATABASE_URL)
+class User(models.BaseUser):
+    pass
 
+
+class UserCreate(User, models.BaseUserCreate):
+    pass
+
+
+class UserUpdate(User, models.BaseUserUpdate):
+    pass
+
+
+class UserDB(User, models.BaseUserDB):
+    pass
+
+
+database = databases.Database(DATABASE_URL)
 Base: DeclarativeMeta = declarative_base()
 
 
@@ -22,15 +37,10 @@ class UserTable(Base, SQLAlchemyBaseUserTable):
 engine = sqlalchemy.create_engine(
     DATABASE_URL, connect_args={"check_same_thread": False}
 )
-
 Base.metadata.create_all(engine)
 
 users = UserTable.__table__
-user_db = SQLAlchemyUserDatabase(database, users)
-
-
-class User(BaseUser):
-    pass
+user_db = SQLAlchemyUserDatabase(UserDB, database, users)
 
 
 auth_backends = [
@@ -38,7 +48,9 @@ auth_backends = [
 ]
 
 app = FastAPI()
-fastapi_users = FastAPIUsers(user_db, auth_backends, User, SECRET)
+fastapi_users = FastAPIUsers(
+    user_db, auth_backends, User, UserCreate, UserUpdate, UserDB, SECRET,
+)
 app.include_router(fastapi_users.router, prefix="/users", tags=["users"])
 
 

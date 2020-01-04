@@ -627,62 +627,114 @@
 
 <p>For the sake of this tutorial from now on, we'll use a simple SQLite databse.</p>
 <h2 id="setup-user-table">Setup User table<a class="headerlink" href="#setup-user-table" title="Permanent link">&para;</a></h2>
-<p>Let's declare our User model.</p>
+<p>Let's declare our User ORM model.</p>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
-<span class="kn">from</span> <span class="nn">fastapi_users.db.tortoise</span> <span class="kn">import</span> <span class="n">BaseUserModel</span><span class="p">,</span> <span class="n">TortoiseUserDatabase</span>
-<span class="kn">from</span> <span class="nn">tortoise</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">TortoiseBaseUserModel</span><span class="p">,</span> <span class="n">TortoiseUserDatabase</span>
 <span class="kn">from</span> <span class="nn">tortoise.contrib.starlette</span> <span class="kn">import</span> <span class="n">register_tortoise</span>
+
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUser</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserCreate</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserCreate</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserUpdate</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserUpdate</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserDB</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserDB</span><span class="p">):</span>
+    <span class="k">pass</span>
+
 
 <span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;sqlite://./test.db&quot;</span>
 
 
-<span class="hll"><span class="k">class</span> <span class="nc">UserModel</span><span class="p">(</span><span class="n">BaseUserModel</span><span class="p">,</span> <span class="n">Model</span><span class="p">):</span>
+<span class="hll"><span class="k">class</span> <span class="nc">UserModel</span><span class="p">(</span><span class="n">TortoiseBaseUserModel</span><span class="p">):</span>
 </span><span class="hll">    <span class="k">pass</span>
 </span>
 
-<span class="n">user_db</span> <span class="o">=</span> <span class="n">TortoiseUserDatabase</span><span class="p">(</span><span class="n">UserModel</span><span class="p">)</span>
+<span class="n">user_db</span> <span class="o">=</span> <span class="n">TortoiseUserDatabase</span><span class="p">(</span><span class="n">UserDB</span><span class="p">,</span> <span class="n">UserModel</span><span class="p">)</span>
 <span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
 
 <span class="n">register_tortoise</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">modules</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;models&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;path_to_your_package&quot;</span><span class="p">]})</span>
 </pre></div>
 
-<p>As you can see, <strong>FastAPI Users</strong> provides a mixin that will include base fields for our User table. You can of course add you own fields there to fit to your needs!</p>
+<p>As you can see, <strong>FastAPI Users</strong> provides an abstract model that will include base fields for our User table. You can of course add you own fields there to fit to your needs!</p>
 <h2 id="create-the-database-adapter">Create the database adapter<a class="headerlink" href="#create-the-database-adapter" title="Permanent link">&para;</a></h2>
 <p>The database adapter of <strong>FastAPI Users</strong> makes the link between your database configuration and the users logic. Create it like this.</p>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
-<span class="kn">from</span> <span class="nn">fastapi_users.db.tortoise</span> <span class="kn">import</span> <span class="n">BaseUserModel</span><span class="p">,</span> <span class="n">TortoiseUserDatabase</span>
-<span class="kn">from</span> <span class="nn">tortoise</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">TortoiseBaseUserModel</span><span class="p">,</span> <span class="n">TortoiseUserDatabase</span>
 <span class="kn">from</span> <span class="nn">tortoise.contrib.starlette</span> <span class="kn">import</span> <span class="n">register_tortoise</span>
+
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUser</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserCreate</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserCreate</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserUpdate</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserUpdate</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserDB</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserDB</span><span class="p">):</span>
+    <span class="k">pass</span>
+
 
 <span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;sqlite://./test.db&quot;</span>
 
 
-<span class="k">class</span> <span class="nc">UserModel</span><span class="p">(</span><span class="n">BaseUserModel</span><span class="p">,</span> <span class="n">Model</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">UserModel</span><span class="p">(</span><span class="n">TortoiseBaseUserModel</span><span class="p">):</span>
     <span class="k">pass</span>
 
 
-<span class="hll"><span class="n">user_db</span> <span class="o">=</span> <span class="n">TortoiseUserDatabase</span><span class="p">(</span><span class="n">UserModel</span><span class="p">)</span>
+<span class="hll"><span class="n">user_db</span> <span class="o">=</span> <span class="n">TortoiseUserDatabase</span><span class="p">(</span><span class="n">UserDB</span><span class="p">,</span> <span class="n">UserModel</span><span class="p">)</span>
 </span><span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
 
 <span class="n">register_tortoise</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">modules</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;models&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;path_to_your_package&quot;</span><span class="p">]})</span>
 </pre></div>
 
+<p>Notice that we pass a reference to your <a href="../../model/"><code>UserDB</code> model</a>.</p>
 <h2 id="register-tortoise">Register Tortoise<a class="headerlink" href="#register-tortoise" title="Permanent link">&para;</a></h2>
 <p>For using Tortoise ORM we must register our models and database.</p>
 <p>Tortoise ORM supports integration with Starlette/FastAPI out-of-the-box. It will automatically bind startup and shutdown events.</p>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
-<span class="kn">from</span> <span class="nn">fastapi_users.db.tortoise</span> <span class="kn">import</span> <span class="n">BaseUserModel</span><span class="p">,</span> <span class="n">TortoiseUserDatabase</span>
-<span class="kn">from</span> <span class="nn">tortoise</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">TortoiseBaseUserModel</span><span class="p">,</span> <span class="n">TortoiseUserDatabase</span>
 <span class="kn">from</span> <span class="nn">tortoise.contrib.starlette</span> <span class="kn">import</span> <span class="n">register_tortoise</span>
+
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUser</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserCreate</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserCreate</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserUpdate</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserUpdate</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserDB</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserDB</span><span class="p">):</span>
+    <span class="k">pass</span>
+
 
 <span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;sqlite://./test.db&quot;</span>
 
 
-<span class="k">class</span> <span class="nc">UserModel</span><span class="p">(</span><span class="n">BaseUserModel</span><span class="p">,</span> <span class="n">Model</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">UserModel</span><span class="p">(</span><span class="n">TortoiseBaseUserModel</span><span class="p">):</span>
     <span class="k">pass</span>
 
 
-<span class="n">user_db</span> <span class="o">=</span> <span class="n">TortoiseUserDatabase</span><span class="p">(</span><span class="n">UserModel</span><span class="p">)</span>
+<span class="n">user_db</span> <span class="o">=</span> <span class="n">TortoiseUserDatabase</span><span class="p">(</span><span class="n">UserDB</span><span class="p">,</span> <span class="n">UserModel</span><span class="p">)</span>
 <span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
 
 <span class="hll"><span class="n">register_tortoise</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">modules</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;models&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;path_to_your_package&quot;</span><span class="p">]})</span>

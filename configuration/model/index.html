@@ -296,8 +296,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#use-the-model" class="md-nav__link">
-    Use the model
+  <a href="#define-your-models" class="md-nav__link">
+    Define your models
   </a>
   
 </li>
@@ -538,8 +538,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#use-the-model" class="md-nav__link">
-    Use the model
+  <a href="#define-your-models" class="md-nav__link">
+    Define your models
   </a>
   
 </li>
@@ -576,12 +576,31 @@
 <li><code>is_active</code> (<code>bool</code>) – Whether or not the user is active. If not, login and forgot password requests will be denied. Default to <code>True</code>.</li>
 <li><code>is_active</code> (<code>bool</code>) – Whether or not the user is a superuser. Useful to implement administration logic. Default to <code>False</code>.</li>
 </ul>
-<h2 id="use-the-model">Use the model<a class="headerlink" href="#use-the-model" title="Permanent link">&para;</a></h2>
-<p>The model is exposed as a Pydantic model mixin.</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">BaseUser</span>
+<h2 id="define-your-models">Define your models<a class="headerlink" href="#define-your-models" title="Permanent link">&para;</a></h2>
+<p>There are four Pydantic models variations provided as mixins:</p>
+<ul>
+<li><code>BaseUser</code>, which provides the basic fields and validation ;</li>
+<li><code>BaseCreateUser</code>, dedicated to user registration, which makes the <code>email</code> compulsory and adds a compulsory <code>password</code> field ;</li>
+<li><code>BaseUpdateUser</code>, dedicated to user profile update, which adds an optional <code>password</code> field ;</li>
+<li><code>BaseUserDB</code>, which is a representation of the user in database, adding a <code>hashed_password</code> field.</li>
+</ul>
+<p>You should define each of those variations, inheriting from each mixin:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">models</span>
 
 
-<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">BaseUser</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUser</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserCreate</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserCreate</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserUpdate</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserUpdate</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserDB</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserDB</span><span class="p">):</span>
     <span class="k">pass</span>
 </pre></div>
 

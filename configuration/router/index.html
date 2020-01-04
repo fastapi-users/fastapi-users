@@ -623,13 +623,16 @@
                 
                 
                 <h1 id="router">Router<a class="headerlink" href="#router" title="Permanent link">&para;</a></h1>
-<p>We're almost there! The last step is to configure the <code>FastAPIUsers</code> object that will wire the database adapter, the authentication class and the user model to expose the FastAPI router.</p>
+<p>We're almost there! The last step is to configure the <code>FastAPIUsers</code> object that will wire the database adapter, the authentication class and the user models to expose the FastAPI router.</p>
 <h2 id="configure-fastapiusers">Configure <code>FastAPIUsers</code><a class="headerlink" href="#configure-fastapiusers" title="Permanent link">&para;</a></h2>
 <p>Configure <code>FastAPIUsers</code> object with all the elements we defined before. More precisely:</p>
 <ul>
 <li><code>db</code>: Database adapter instance.</li>
 <li><code>auth_backends</code>: List of authentication backends. See <a href="../authentication/">Authentication</a>.</li>
 <li><code>user_model</code>: Pydantic model of a user.</li>
+<li><code>user_create_model</code>: Pydantic model for creating a user.</li>
+<li><code>user_update_model</code>: Pydantic model for updating a user.</li>
+<li><code>user_db_model</code>: Pydantic model of a DB representation of a user.</li>
 <li><code>reset_password_token_secret</code>: Secret to encode reset password token.</li>
 <li><code>reset_password_token_lifetime_seconds</code>: Lifetime of reset password token in seconds. Default to one hour.</li>
 </ul>
@@ -639,6 +642,9 @@
     <span class="n">user_db</span><span class="p">,</span>
     <span class="n">auth_backends</span><span class="p">,</span>
     <span class="n">User</span><span class="p">,</span>
+    <span class="n">UserCreate</span><span class="p">,</span>
+    <span class="n">UserUpdate</span><span class="p">,</span>
+    <span class="n">UserDB</span><span class="p">,</span>
     <span class="n">SECRET</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
