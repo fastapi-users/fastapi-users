@@ -8,6 +8,7 @@ from starlette.requests import Request
 from starlette.responses import Response
 from starlette.testclient import TestClient
 
+from fastapi_users import models
 from fastapi_users.authentication import Authenticator, BaseAuthentication
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.models import BaseUserDB
@@ -18,9 +19,25 @@ angharad_password_hash = get_password_hash("angharad")
 viviane_password_hash = get_password_hash("viviane")
 
 
+class User(models.BaseUser):
+    first_name: Optional[str]
+
+
+class UserCreate(User, models.BaseUserCreate):
+    pass
+
+
+class UserUpdate(User, models.BaseUserUpdate):
+    pass
+
+
+class UserDB(User, models.BaseUserDB):
+    pass
+
+
 @pytest.fixture
-def user() -> BaseUserDB:
-    return BaseUserDB(
+def user() -> UserDB:
+    return UserDB(
         id="aaa",
         email="king.arthur@camelot.bt",
         hashed_password=guinevere_password_hash,
@@ -28,8 +45,8 @@ def user() -> BaseUserDB:
 
 
 @pytest.fixture
-def inactive_user() -> BaseUserDB:
-    return BaseUserDB(
+def inactive_user() -> UserDB:
+    return UserDB(
         id="bbb",
         email="percival@camelot.bt",
         hashed_password=angharad_password_hash,
@@ -38,8 +55,8 @@ def inactive_user() -> BaseUserDB:
 
 
 @pytest.fixture
-def superuser() -> BaseUserDB:
-    return BaseUserDB(
+def superuser() -> UserDB:
+    return UserDB(
         id="ccc",
         email="merlin@camelot.bt",
         hashed_password=viviane_password_hash,
@@ -49,11 +66,11 @@ def superuser() -> BaseUserDB:
 
 @pytest.fixture
 def mock_user_db(user, inactive_user, superuser) -> BaseUserDatabase:
-    class MockUserDatabase(BaseUserDatabase):
-        async def list(self) -> List[BaseUserDB]:
+    class MockUserDatabase(BaseUserDatabase[UserDB]):
+        async def list(self) -> List[UserDB]:
             return [user, inactive_user, superuser]
 
-        async def get(self, id: str) -> Optional[BaseUserDB]:
+        async def get(self, id: str) -> Optional[UserDB]:
             if id == user.id:
                 return user
             if id == inactive_user.id:
@@ -62,7 +79,7 @@ def mock_user_db(user, inactive_user, superuser) -> BaseUserDatabase:
                 return superuser
             return None
 
-        async def get_by_email(self, email: str) -> Optional[BaseUserDB]:
+        async def get_by_email(self, email: str) -> Optional[UserDB]:
             if email == user.email:
                 return user
             if email == inactive_user.email:
@@ -71,16 +88,16 @@ def mock_user_db(user, inactive_user, superuser) -> BaseUserDatabase:
                 return superuser
             return None
 
-        async def create(self, user: BaseUserDB) -> BaseUserDB:
+        async def create(self, user: UserDB) -> UserDB:
             return user
 
-        async def update(self, user: BaseUserDB) -> BaseUserDB:
+        async def update(self, user: UserDB) -> UserDB:
             return user
 
-        async def delete(self, user: BaseUserDB) -> None:
+        async def delete(self, user: UserDB) -> None:
             pass
 
-    return MockUserDatabase()
+    return MockUserDatabase(UserDB)
 
 
 class MockAuthentication(BaseAuthentication):
@@ -139,20 +156,18 @@ def get_test_auth_client(mock_user_db):
         authenticator = Authenticator(backends, mock_user_db)
 
         @app.get("/test-current-user")
-        def test_current_user(
-            user: BaseUserDB = Depends(authenticator.get_current_user),
-        ):
+        def test_current_user(user: UserDB = Depends(authenticator.get_current_user),):
             return user
 
         @app.get("/test-current-active-user")
         def test_current_active_user(
-            user: BaseUserDB = Depends(authenticator.get_current_active_user),
+            user: UserDB = Depends(authenticator.get_current_active_user),
         ):
             return user
 
         @app.get("/test-current-superuser")
         def test_current_superuser(
-            user: BaseUserDB = Depends(authenticator.get_current_superuser),
+            user: UserDB = Depends(authenticator.get_current_superuser),
         ):
             return user
 

@@ -4,8 +4,8 @@ from starlette import status
 from starlette.testclient import TestClient
 
 from fastapi_users import FastAPIUsers
-from fastapi_users.models import BaseUser, BaseUserDB
 from fastapi_users.router import Event
+from tests.conftest import User, UserCreate, UserUpdate, UserDB
 
 
 def sync_event_handler():
@@ -18,10 +18,15 @@ async def async_event_handler():
 
 @pytest.fixture(params=[sync_event_handler, async_event_handler])
 def fastapi_users(request, mock_user_db, mock_authentication) -> FastAPIUsers:
-    class User(BaseUser):
-        pass
-
-    fastapi_users = FastAPIUsers(mock_user_db, [mock_authentication], User, "SECRET")
+    fastapi_users = FastAPIUsers(
+        mock_user_db,
+        [mock_authentication],
+        User,
+        UserCreate,
+        UserUpdate,
+        UserDB,
+        "SECRET",
+    )
 
     @fastapi_users.on_after_register()
     def on_after_register():
@@ -100,7 +105,7 @@ class TestGetCurrentUser:
         )
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    def test_valid_token(self, test_app_client: TestClient, user: BaseUserDB):
+    def test_valid_token(self, test_app_client: TestClient, user: UserDB):
         response = test_app_client.get(
             "/current-user", headers={"Authorization": f"Bearer {user.id}"}
         )
@@ -120,7 +125,7 @@ class TestGetCurrentActiveUser:
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     def test_valid_token_inactive_user(
-        self, test_app_client: TestClient, inactive_user: BaseUserDB
+        self, test_app_client: TestClient, inactive_user: UserDB
     ):
         response = test_app_client.get(
             "/current-active-user",
@@ -128,7 +133,7 @@ class TestGetCurrentActiveUser:
         )
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    def test_valid_token(self, test_app_client: TestClient, user: BaseUserDB):
+    def test_valid_token(self, test_app_client: TestClient, user: UserDB):
         response = test_app_client.get(
             "/current-active-user", headers={"Authorization": f"Bearer {user.id}"}
         )
@@ -147,16 +152,14 @@ class TestGetCurrentSuperuser:
         )
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    def test_valid_token_regular_user(
-        self, test_app_client: TestClient, user: BaseUserDB
-    ):
+    def test_valid_token_regular_user(self, test_app_client: TestClient, user: UserDB):
         response = test_app_client.get(
             "/current-superuser", headers={"Authorization": f"Bearer {user.id}"}
         )
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
     def test_valid_token_superuser(
-        self, test_app_client: TestClient, superuser: BaseUserDB
+        self, test_app_client: TestClient, superuser: UserDB
     ):
         response = test_app_client.get(
             "/current-superuser", headers={"Authorization": f"Bearer {superuser.id}"}

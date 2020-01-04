@@ -1,41 +1,50 @@
-from typing import List, Optional
+from typing import Generic, List, Optional, Type
 
 from fastapi.security import OAuth2PasswordRequestForm
 
 from fastapi_users import password
-from fastapi_users.models import BaseUserDB
+from fastapi_users.models import UD
 
 
-class BaseUserDatabase:
-    """Base adapter for retrieving, creating and updating users from a database."""
+class BaseUserDatabase(Generic[UD]):
+    """
+    Base adapter for retrieving, creating and updating users from a database.
 
-    async def list(self) -> List[BaseUserDB]:
+    :param user_db_model: Pydantic model of a DB representation of a user.
+    """
+
+    user_db_model: Type[UD]
+
+    def __init__(self, user_db_model: Type[UD]):
+        self.user_db_model = user_db_model
+
+    async def list(self) -> List[UD]:
         """List all users."""
         raise NotImplementedError()
 
-    async def get(self, id: str) -> Optional[BaseUserDB]:
+    async def get(self, id: str) -> Optional[UD]:
         """Get a single user by id."""
         raise NotImplementedError()
 
-    async def get_by_email(self, email: str) -> Optional[BaseUserDB]:
+    async def get_by_email(self, email: str) -> Optional[UD]:
         """Get a single user by email."""
         raise NotImplementedError()
 
-    async def create(self, user: BaseUserDB) -> BaseUserDB:
+    async def create(self, user: UD) -> UD:
         """Create a user."""
         raise NotImplementedError()
 
-    async def update(self, user: BaseUserDB) -> BaseUserDB:
+    async def update(self, user: UD) -> UD:
         """Update a user."""
         raise NotImplementedError()
 
-    async def delete(self, user: BaseUserDB) -> None:
+    async def delete(self, user: UD) -> None:
         """Delete a user."""
         raise NotImplementedError()
 
     async def authenticate(
         self, credentials: OAuth2PasswordRequestForm
-    ) -> Optional[BaseUserDB]:
+    ) -> Optional[UD]:
         """
         Authenticate and return a user following an email and a password.
 

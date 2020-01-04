@@ -1,8 +1,8 @@
 from typing import Callable, Sequence, Type
 
+from fastapi_users import models
 from fastapi_users.authentication import Authenticator, BaseAuthentication
 from fastapi_users.db import BaseUserDatabase
-from fastapi_users.models import BaseUser
 from fastapi_users.router import Event, UserRouter, get_user_router
 
 
@@ -13,6 +13,9 @@ class FastAPIUsers:
     :param db: Database adapter instance.
     :param auth_backends: List of authentication backends.
     :param user_model: Pydantic model of a user.
+    :param user_create_model: Pydantic model for creating a user.
+    :param user_update_model: Pydantic model for updating a user.
+    :param user_db_model: Pydantic model of a DB representation of a user.
     :param reset_password_token_secret: Secret to encode reset password token.
     :param reset_password_token_lifetime_seconds: Lifetime of reset password token.
 
@@ -28,7 +31,10 @@ class FastAPIUsers:
         self,
         db: BaseUserDatabase,
         auth_backends: Sequence[BaseAuthentication],
-        user_model: Type[BaseUser],
+        user_model: Type[models.BaseUser],
+        user_create_model: Type[models.BaseUserCreate],
+        user_update_model: Type[models.BaseUserUpdate],
+        user_db_model: Type[models.BaseUserDB],
         reset_password_token_secret: str,
         reset_password_token_lifetime_seconds: int = 3600,
     ):
@@ -37,6 +43,9 @@ class FastAPIUsers:
         self.router = get_user_router(
             self.db,
             user_model,
+            user_create_model,
+            user_update_model,
+            user_db_model,
             self.authenticator,
             reset_password_token_secret,
             reset_password_token_lifetime_seconds,

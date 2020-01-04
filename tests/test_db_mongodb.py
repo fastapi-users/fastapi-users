@@ -5,8 +5,8 @@ import pytest
 import pymongo.errors
 
 from fastapi_users.db.mongodb import MongoDBUserDatabase
-from fastapi_users.models import BaseUserDB
 from fastapi_users.password import get_password_hash
+from tests.conftest import UserDB
 
 
 @pytest.fixture
@@ -24,15 +24,15 @@ async def mongodb_user_db() -> AsyncGenerator[MongoDBUserDatabase, None]:
     db = client["test_database"]
     collection = db["users"]
 
-    yield MongoDBUserDatabase(collection)
+    yield MongoDBUserDatabase(UserDB, collection)
 
     await collection.drop()
 
 
 @pytest.mark.asyncio
 @pytest.mark.db
-async def test_queries(mongodb_user_db):
-    user = BaseUserDB(
+async def test_queries(mongodb_user_db: MongoDBUserDatabase[UserDB]):
+    user = UserDB(
         id="111",
         email="lancelot@camelot.bt",
         hashed_password=get_password_hash("guinevere"),
@@ -51,11 +51,13 @@ async def test_queries(mongodb_user_db):
 
     # Get by id
     id_user = await mongodb_user_db.get(user.id)
+    assert id_user is not None
     assert id_user.id == user_db.id
     assert id_user.is_superuser is True
 
     # Get by email
-    email_user = await mongodb_user_db.get_by_email(user.email)
+    email_user = await mongodb_user_db.get_by_email(str(user.email))
+    assert email_user is not None
     assert email_user.id == user_db.id
 
     # List
@@ -76,3 +78,21 @@ async def test_queries(mongodb_user_db):
     await mongodb_user_db.delete(user)
     deleted_user = await mongodb_user_db.get(user.id)
     assert deleted_user is None
+
+
+@pytest.mark.asyncio
+@pytest.mark.db
+async def test_queries_custom_fields(mongodb_user_db: MongoDBUserDatabase[UserDB]):
+    """It should output custom fields in query result."""
+    user = UserDB(
+        id="111",
+        email="lancelot@camelot.bt",
+        hashed_password=get_password_hash("guinevere"),
+        first_name="Lancelot",
+    )
+    await mongodb_user_db.create(user)
+
+    id_user = await mongodb_user_db.get(user.id)
+    assert id_user is not None
+    assert id_user.id == user.id
+    assert id_user.first_name == user.first_name

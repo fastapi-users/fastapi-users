@@ -2,6 +2,7 @@ import pytest
 from fastapi.security import OAuth2PasswordRequestForm
 
 from fastapi_users.db import BaseUserDatabase
+from tests.conftest import UserDB
 
 
 @pytest.fixture
@@ -15,7 +16,7 @@ def create_oauth2_password_request_form():
 @pytest.mark.asyncio
 @pytest.mark.db
 async def test_not_implemented_methods(user):
-    base_user_db = BaseUserDatabase()
+    base_user_db = BaseUserDatabase(UserDB)
 
     with pytest.raises(NotImplementedError):
         await base_user_db.list()

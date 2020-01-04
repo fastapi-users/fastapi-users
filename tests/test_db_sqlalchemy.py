@@ -4,11 +4,12 @@ from typing import AsyncGenerator
 import pytest
 import sqlalchemy
 from databases import Database
+from sqlalchemy import Column, String
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 
 from fastapi_users.db.sqlalchemy import SQLAlchemyBaseUserTable, SQLAlchemyUserDatabase
-from fastapi_users.models import BaseUserDB
 from fastapi_users.password import get_password_hash
+from tests.conftest import UserDB
 
 
 @pytest.fixture
@@ -16,7 +17,7 @@ async def sqlalchemy_user_db() -> AsyncGenerator[SQLAlchemyUserDatabase, None]:
     Base: DeclarativeMeta = declarative_base()
 
     class User(SQLAlchemyBaseUserTable, Base):
-        pass
+        first_name = Column(String, nullable=True)
 
     DATABASE_URL = "sqlite:///./test.db"
     database = Database(DATABASE_URL)
@@ -28,15 +29,15 @@ async def sqlalchemy_user_db() -> AsyncGenerator[SQLAlchemyUserDatabase, None]:
 
     await database.connect()
 
-    yield SQLAlchemyUserDatabase(database, User.__table__)
+    yield SQLAlchemyUserDatabase(UserDB, database, User.__table__)
 
     Base.metadata.drop_all(engine)
 
 
 @pytest.mark.asyncio
 @pytest.mark.db
-async def test_queries(sqlalchemy_user_db):
-    user = BaseUserDB(
+async def test_queries(sqlalchemy_user_db: SQLAlchemyUserDatabase[UserDB]):
+    user = UserDB(
         id="111",
         email="lancelot@camelot.bt",
         hashed_password=get_password_hash("guinevere"),
@@ -55,11 +56,13 @@ async def test_queries(sqlalchemy_user_db):
 
     # Get by id
     id_user = await sqlalchemy_user_db.get(user.id)
+    assert id_user is not None
     assert id_user.id == user_db.id
     assert id_user.is_superuser is True
 
     # Get by email
-    email_user = await sqlalchemy_user_db.get_by_email(user.email)
+    email_user = await sqlalchemy_user_db.get_by_email(str(user.email))
+    assert email_user is not None
     assert email_user.id == user_db.id
 
     # List
@@ -74,7 +77,7 @@ async def test_queries(sqlalchemy_user_db):
 
     # Exception when inserting non-nullable fields
     with pytest.raises(sqlite3.IntegrityError):
-        wrong_user = BaseUserDB(id="222", hashed_password="aaa")
+        wrong_user = UserDB(id="222", hashed_password="aaa")
         await sqlalchemy_user_db.create(wrong_user)
 
     # Unknown user
@@ -85,3 +88,23 @@ async def test_queries(sqlalchemy_user_db):
     await sqlalchemy_user_db.delete(user)
     deleted_user = await sqlalchemy_user_db.get(user.id)
     assert deleted_user is None
+
+
+@pytest.mark.asyncio
+@pytest.mark.db
+async def test_queries_custom_fields(
+    sqlalchemy_user_db: SQLAlchemyUserDatabase[UserDB],
+):
+    """It should output custom fields in query result."""
+    user = UserDB(
+        id="111",
+        email="lancelot@camelot.bt",
+        hashed_password=get_password_hash("guinevere"),
+        first_name="Lancelot",
+    )
+    await sqlalchemy_user_db.create(user)
+
+    id_user = await sqlalchemy_user_db.get(user.id)
+    assert id_user is not None
+    assert id_user.id == user.id
+    assert id_user.first_name == user.first_name

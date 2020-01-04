@@ -24,7 +24,7 @@ For the sake of this tutorial from now on, we'll use a simple SQLite databse.
 
 Let's create a `metadata` object and declare our User table.
 
-```py hl_lines="4 14 15"
+```py hl_lines="5 32 33"
 {!./src/db_sqlalchemy.py!}
 ```
 
@@ -34,7 +34,7 @@ As you can see, **FastAPI Users** provides a mixin that will include base fields
 
 We'll now create an SQLAlchemy enigne and ask it to create all the defined tables.
 
-```py hl_lines="18 19 20 21 22"
+```py hl_lines="36 37 38 39 40"
 {!./src/db_sqlalchemy.py!}
 ```
 
@@ -45,11 +45,15 @@ We'll now create an SQLAlchemy enigne and ask it to create all the defined table
 
 The database adapter of **FastAPI Users** makes the link between your database configuration and the users logic. Create it like this.
 
-```py hl_lines="24 25"
+```py hl_lines="42 43"
 {!./src/db_sqlalchemy.py!}
 ```
 
-Notice that we declare the `users` variable, which is the actual SQLAlchemy table behind the table class. We also use our `database` instance, which allows us to do asynchronous request to the database.
+Notice that we pass it three things:
+
+* A reference to your [`UserDB` model](../model.md).
+* The `users` variable, which is the actual SQLAlchemy table behind the table class.
+* A `database` instance, which allows us to do asynchronous request to the database.
 
 ## Next steps
 
