@@ -7,15 +7,34 @@
 * `is_active` (`bool`) – Whether or not the user is active. If not, login and forgot password requests will be denied. Default to `True`.
 * `is_active` (`bool`) – Whether or not the user is a superuser. Useful to implement administration logic. Default to `False`.
 
-## Use the model
+## Define your models
 
-The model is exposed as a Pydantic model mixin.
+There are four Pydantic models variations provided as mixins:
+
+* `BaseUser`, which provides the basic fields and validation ;
+* `BaseCreateUser`, dedicated to user registration, which makes the `email` compulsory and adds a compulsory `password` field ;
+* `BaseUpdateUser`, dedicated to user profile update, which adds an optional `password` field ;
+* `BaseUserDB`, which is a representation of the user in database, adding a `hashed_password` field.
+
+You should define each of those variations, inheriting from each mixin:
 
 ```py
-from fastapi_users import BaseUser
+from fastapi_users import models
 
 
-class User(BaseUser):
+class User(models.BaseUser):
+    pass
+
+
+class UserCreate(User, models.BaseUserCreate):
+    pass
+
+
+class UserUpdate(User, models.BaseUserUpdate):
+    pass
+
+
+class UserDB(User, models.BaseUserDB):
     pass
 ```
 

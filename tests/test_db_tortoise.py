@@ -4,12 +4,12 @@ import pytest
 from tortoise.exceptions import IntegrityError
 from tortoise import Tortoise, fields
 
-from fastapi_users.db.tortoise import TortoiseUserDatabase, BaseUserModel
+from fastapi_users.db.tortoise import TortoiseUserDatabase, TortoiseBaseUserModel
 from fastapi_users.password import get_password_hash
 from tests.conftest import UserDB
 
 
-class User(BaseUserModel):
+class User(TortoiseBaseUserModel):
     first_name = fields.CharField(null=True, max_length=255)
 
 

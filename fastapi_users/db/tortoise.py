@@ -7,7 +7,7 @@ from fastapi_users.db.base import BaseUserDatabase
 from fastapi_users.models import UD
 
 
-class BaseUserModel(Model):
+class TortoiseBaseUserModel(Model):
     id = fields.CharField(pk=True, generated=False, max_length=255)
     email = fields.CharField(index=True, unique=True, null=False, max_length=255)
     hashed_password = fields.CharField(null=False, max_length=255)
@@ -26,9 +26,9 @@ class TortoiseUserDatabase(BaseUserDatabase[UD]):
     :param model: Tortoise ORM model.
     """
 
-    model: Type[BaseUserModel]
+    model: Type[TortoiseBaseUserModel]
 
-    def __init__(self, user_db_model: Type[UD], model: Type[BaseUserModel]):
+    def __init__(self, user_db_model: Type[UD], model: Type[TortoiseBaseUserModel]):
         super().__init__(user_db_model)
         self.model = model
 

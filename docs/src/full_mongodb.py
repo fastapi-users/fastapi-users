@@ -1,6 +1,6 @@
 import motor.motor_asyncio
 from fastapi import FastAPI
-from fastapi_users import BaseUser, FastAPIUsers
+from fastapi_users import FastAPIUsers, models
 from fastapi_users.authentication import JWTAuthentication
 from fastapi_users.db import MongoDBUserDatabase
 
@@ -8,24 +8,35 @@ DATABASE_URL = "mongodb://localhost:27017"
 SECRET = "SECRET"
 
 
+class User(models.BaseUser):
+    pass
+
+
+class UserCreate(User, models.BaseUserCreate):
+    pass
+
+
+class UserUpdate(User, models.BaseUserUpdate):
+    pass
+
+
+class UserDB(User, models.BaseUserDB):
+    pass
+
+
 client = motor.motor_asyncio.AsyncIOMotorClient(DATABASE_URL)
 db = client["database_name"]
 collection = db["users"]
-
-
-user_db = MongoDBUserDatabase(collection)
-
-
-class User(BaseUser):
-    pass
-
+user_db = MongoDBUserDatabase(UserDB, collection)
 
 auth_backends = [
     JWTAuthentication(secret=SECRET, lifetime_seconds=3600),
 ]
 
 app = FastAPI()
-fastapi_users = FastAPIUsers(user_db, auth_backends, User, SECRET)
+fastapi_users = FastAPIUsers(
+    user_db, auth_backends, User, UserCreate, UserUpdate, UserDB, SECRET,
+)
 app.include_router(fastapi_users.router, prefix="/users", tags=["users"])
 
 

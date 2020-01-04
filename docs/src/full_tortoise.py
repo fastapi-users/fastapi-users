@@ -1,28 +1,44 @@
 from fastapi import FastAPI
-from fastapi_users import BaseUser, FastAPIUsers
+from fastapi_users import FastAPIUsers, models
 from fastapi_users.authentication import JWTAuthentication
-from fastapi_users.db.tortoise import BaseUserModel, TortoiseUserDatabase
-from tortoise import Model
+from fastapi_users.db import TortoiseBaseUserModel, TortoiseUserDatabase
 from tortoise.contrib.starlette import register_tortoise
 
 DATABASE_URL = "sqlite://./test.db"
 SECRET = "SECRET"
 
 
-class UserModel(BaseUserModel, Model):
+class User(models.BaseUser):
     pass
 
 
-class User(BaseUser):
+class UserCreate(User, models.BaseUserCreate):
     pass
 
 
-auth = JWTAuthentication(secret=SECRET, lifetime_seconds=3600)
-user_db = TortoiseUserDatabase(UserModel)
+class UserUpdate(User, models.BaseUserUpdate):
+    pass
+
+
+class UserDB(User, models.BaseUserDB):
+    pass
+
+
+class UserModel(TortoiseBaseUserModel):
+    pass
+
+
+user_db = TortoiseUserDatabase(UserDB, UserModel)
 app = FastAPI()
-
 register_tortoise(app, db_url=DATABASE_URL, modules={"models": ["test"]})
-fastapi_users = FastAPIUsers(user_db, auth, User, SECRET)
+
+auth_backends = [
+    JWTAuthentication(secret=SECRET, lifetime_seconds=3600),
+]
+
+fastapi_users = FastAPIUsers(
+    user_db, auth_backends, User, UserCreate, UserUpdate, UserDB, SECRET,
+)
 app.include_router(fastapi_users.router, prefix="/users", tags=["users"])
 
 

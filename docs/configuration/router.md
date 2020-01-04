@@ -1,6 +1,6 @@
 # Router
 
-We're almost there! The last step is to configure the `FastAPIUsers` object that will wire the database adapter, the authentication class and the user model to expose the FastAPI router.
+We're almost there! The last step is to configure the `FastAPIUsers` object that will wire the database adapter, the authentication class and the user models to expose the FastAPI router.
 
 ## Configure `FastAPIUsers`
 
@@ -9,6 +9,9 @@ Configure `FastAPIUsers` object with all the elements we defined before. More pr
 * `db`: Database adapter instance.
 * `auth_backends`: List of authentication backends. See [Authentication](./authentication/index.md).
 * `user_model`: Pydantic model of a user.
+* `user_create_model`: Pydantic model for creating a user.
+* `user_update_model`: Pydantic model for updating a user.
+* `user_db_model`: Pydantic model of a DB representation of a user.
 * `reset_password_token_secret`: Secret to encode reset password token.
 * `reset_password_token_lifetime_seconds`: Lifetime of reset password token in seconds. Default to one hour.
 
@@ -19,6 +22,9 @@ fastapi_users = FastAPIUsers(
     user_db,
     auth_backends,
     User,
+    UserCreate,
+    UserUpdate,
+    UserDB,
     SECRET,
 )
 ```

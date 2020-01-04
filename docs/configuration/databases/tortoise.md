@@ -22,21 +22,23 @@ For the sake of this tutorial from now on, we'll use a simple SQLite databse.
 
 ## Setup User table
 
-Let's declare our User model.
+Let's declare our User ORM model.
 
-```py hl_lines="9 10"
+```py hl_lines="26 27"
 {!./src/db_tortoise.py!}
 ```
 
-As you can see, **FastAPI Users** provides a mixin that will include base fields for our User table. You can of course add you own fields there to fit to your needs!
+As you can see, **FastAPI Users** provides an abstract model that will include base fields for our User table. You can of course add you own fields there to fit to your needs!
 
 ## Create the database adapter
 
 The database adapter of **FastAPI Users** makes the link between your database configuration and the users logic. Create it like this.
 
-```py hl_lines="13"
+```py hl_lines="30"
 {!./src/db_tortoise.py!}
 ```
+
+Notice that we pass a reference to your [`UserDB` model](../model.md).
 
 ## Register Tortoise
 
@@ -44,7 +46,7 @@ For using Tortoise ORM we must register our models and database.
 
 Tortoise ORM supports integration with Starlette/FastAPI out-of-the-box. It will automatically bind startup and shutdown events.
 
-```py hl_lines="16"
+```py hl_lines="33"
 {!./src/db_tortoise.py!}
 ```
 
