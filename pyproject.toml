@@ -21,7 +21,7 @@ classifiers = [
 description-file = "README.md"
 requires-python = ">=3.7"
 requires = [
-    "fastapi ==0.45.0",
+    "fastapi ==0.46.0",
     "passlib[bcrypt] ==1.7.1",
     "email-validator ==1.0.5",
     "pyjwt ==1.7.1",
