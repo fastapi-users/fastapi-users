@@ -11,10 +11,19 @@ SECRET = "SECRET"
 LIFETIME = 3600
 COOKIE_NAME = "COOKIE_NAME"
 
-
-@pytest.fixture
-def cookie_authentication():
-    return CookieAuthentication(SECRET, LIFETIME, COOKIE_NAME)
+cookie_authentication = CookieAuthentication(SECRET, LIFETIME, COOKIE_NAME)
+cookie_authentication_path = CookieAuthentication(
+    SECRET, LIFETIME, COOKIE_NAME, cookie_path="/arthur"
+)
+cookie_authentication_domain = CookieAuthentication(
+    SECRET, LIFETIME, COOKIE_NAME, cookie_domain="camelot.bt"
+)
+cookie_authentication_secure = CookieAuthentication(
+    SECRET, LIFETIME, COOKIE_NAME, cookie_secure=False
+)
+cookie_authentication_httponly = CookieAuthentication(
+    SECRET, LIFETIME, COOKIE_NAME, cookie_httponly=False
+)
 
 
 @pytest.fixture
@@ -29,24 +38,20 @@ def token():
 
 
 @pytest.mark.authentication
-def test_default_name(cookie_authentication):
+def test_default_name():
     assert cookie_authentication.name == "cookie"
 
 
 @pytest.mark.authentication
 class TestAuthenticate:
     @pytest.mark.asyncio
-    async def test_missing_token(
-        self, cookie_authentication, mock_user_db, request_builder
-    ):
+    async def test_missing_token(self, mock_user_db, request_builder):
         request = request_builder()
         authenticated_user = await cookie_authentication(request, mock_user_db)
         assert authenticated_user is None
 
     @pytest.mark.asyncio
-    async def test_invalid_token(
-        self, cookie_authentication, mock_user_db, request_builder
-    ):
+    async def test_invalid_token(self, mock_user_db, request_builder):
         cookies = {}
         cookies[COOKIE_NAME] = "foo"
         request = request_builder(cookies=cookies)
@@ -55,7 +60,7 @@ class TestAuthenticate:
 
     @pytest.mark.asyncio
     async def test_valid_token_missing_user_payload(
-        self, cookie_authentication, mock_user_db, request_builder, token
+        self, mock_user_db, request_builder, token
     ):
         cookies = {}
         cookies[COOKIE_NAME] = token()
@@ -64,9 +69,7 @@ class TestAuthenticate:
         assert authenticated_user is None
 
     @pytest.mark.asyncio
-    async def test_valid_token(
-        self, cookie_authentication, mock_user_db, request_builder, token, user
-    ):
+    async def test_valid_token(self, mock_user_db, request_builder, token, user):
         cookies = {}
         cookies[COOKIE_NAME] = token(user)
         request = request_builder(cookies=cookies)
@@ -76,7 +79,19 @@ class TestAuthenticate:
 
 @pytest.mark.authentication
 @pytest.mark.asyncio
-async def test_get_login_response(cookie_authentication, user):
+@pytest.mark.parametrize(
+    "cookie_authentication,path,domain,secure,httponly",
+    [
+        (cookie_authentication, "/", None, True, True),
+        (cookie_authentication_path, "/arthur", None, True, True),
+        (cookie_authentication_domain, "/", "camelot.bt", True, True),
+        (cookie_authentication_secure, "/", None, False, True),
+        (cookie_authentication_httponly, "/", None, True, False),
+    ],
+)
+async def test_get_login_response(
+    user, cookie_authentication, path, domain, secure, httponly
+):
     response = Response()
     login_response = await cookie_authentication.get_login_response(user, response)
 
@@ -90,6 +105,22 @@ async def test_get_login_response(cookie_authentication, user):
     cookie = cookies[0][1].decode("latin-1")
 
     assert f"Max-Age={LIFETIME}" in cookie
+    assert f"Path={path}" in cookie
+
+    if domain:
+        assert f"Domain={domain}" in cookie
+    else:
+        assert "Domain=" not in cookie
+
+    if secure:
+        assert "Secure" in cookie
+    else:
+        assert "Secure" not in cookie
+
+    if httponly:
+        assert "HttpOnly" in cookie
+    else:
+        assert "HttpOnly" not in cookie
 
     cookie_name_value = re.match(r"^(\w+)=([^;]+);", cookie)
 

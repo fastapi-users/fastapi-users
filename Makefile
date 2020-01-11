@@ -11,6 +11,7 @@ format: isort-src isort-docs
 	$(PIPENV_RUN) black .
 
 test:
+	docker stop $(MONGODB_CONTAINER_NAME) || true
 	docker run -d --rm --name $(MONGODB_CONTAINER_NAME) -p 27017:27017 mvertes/alpine-mongo
 	$(PIPENV_RUN) pytest --cov=fastapi_users/
 	docker stop $(MONGODB_CONTAINER_NAME)
