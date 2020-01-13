@@ -3,7 +3,7 @@ from typing import Callable, Sequence, Type
 from fastapi_users import models
 from fastapi_users.authentication import Authenticator, BaseAuthentication
 from fastapi_users.db import BaseUserDatabase
-from fastapi_users.router import Event, UserRouter, get_user_router
+from fastapi_users.router import Event, EventHandlersRouter, get_user_router
 
 
 class FastAPIUsers:
@@ -25,7 +25,7 @@ class FastAPIUsers:
 
     db: BaseUserDatabase
     authenticator: Authenticator
-    router: UserRouter
+    router: EventHandlersRouter
 
     def __init__(
         self,
