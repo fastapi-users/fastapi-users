@@ -1,6 +1,5 @@
 import asyncio
 from collections import defaultdict
-from enum import Enum, auto
 from typing import Any, Callable, DefaultDict, Dict, List, Type, cast
 
 import jwt
@@ -14,18 +13,8 @@ from fastapi_users import models
 from fastapi_users.authentication import Authenticator, BaseAuthentication
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.password import get_password_hash
+from fastapi_users.router.common import ErrorCode, Event
 from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
-
-
-class ErrorCode:
-    REGISTER_USER_ALREADY_EXISTS = "REGISTER_USER_ALREADY_EXISTS"
-    LOGIN_BAD_CREDENTIALS = "LOGIN_BAD_CREDENTIALS"
-    RESET_PASSWORD_BAD_TOKEN = "RESET_PASSWORD_BAD_TOKEN"
-
-
-class Event(Enum):
-    ON_AFTER_REGISTER = auto()
-    ON_AFTER_FORGOT_PASSWORD = auto()
 
 
 class UserRouter(APIRouter):
