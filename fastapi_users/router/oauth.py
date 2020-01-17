@@ -65,13 +65,17 @@ def get_oauth_router(
         if not backend_exists:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
 
-        redirect_url = request.url_for(callback_route_name)
+        if redirect_url is not None:
+            authorize_redirect_url = redirect_url
+        else:
+            authorize_redirect_url = request.url_for(callback_route_name)
+
         state_data = {
             "authentication_backend": authentication_backend,
         }
         state = generate_state_token(state_data, state_secret)
         authorization_url = await oauth_client.get_authorization_url(
-            redirect_url, state, scopes,
+            authorize_redirect_url, state, scopes,
         )
 
         return {"authorization_url": authorization_url}

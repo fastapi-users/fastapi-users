@@ -113,6 +113,25 @@ class TestAuthorize:
         data = response.json()
         assert "authorization_url" in data
 
+    def test_with_redirect_url(
+        self, test_app_client_redirect_url: TestClient, oauth_client
+    ):
+        with asynctest.patch.object(oauth_client, "get_authorization_url") as mock:
+            mock.return_value = "AUTHORIZATION_URL"
+            response = test_app_client_redirect_url.get(
+                "/authorize",
+                params={
+                    "authentication_backend": "mock",
+                    "scopes": ["scope1", "scope2"],
+                },
+            )
+
+        assert response.status_code == status.HTTP_200_OK
+        mock.assert_awaited_once()
+
+        data = response.json()
+        assert "authorization_url" in data
+
 
 @pytest.mark.router
 @pytest.mark.oauth
