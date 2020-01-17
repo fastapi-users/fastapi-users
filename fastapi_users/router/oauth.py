@@ -54,9 +54,7 @@ def get_oauth_router(
 
     @router.get("/authorize")
     async def authorize(
-        request: Request,
-        authentication_backend: str,
-        scopes: List[str] = Query(list, min_length=1),
+        request: Request, authentication_backend: str, scopes: List[str] = Query(None),
     ):
         # Check that authentication_backend exists
         backend_exists = False

@@ -70,15 +70,6 @@ def test_app_client_redirect_url(get_test_app_client):
 @pytest.mark.router
 @pytest.mark.oauth
 class TestAuthorize:
-    def test_missing_scopes(self, test_app_client: TestClient, oauth_client):
-        with asynctest.patch.object(oauth_client, "get_authorization_url") as mock:
-            mock.return_value = "AUTHORIZATION_URL"
-            response = test_app_client.get(
-                "/authorize", params={"authentication_backend": "mock"},
-            )
-
-        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
-
     def test_missing_authentication_backend(
         self, test_app_client: TestClient, oauth_client
     ):
