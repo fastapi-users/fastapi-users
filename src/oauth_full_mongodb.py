@@ -1,16 +1,18 @@
-import databases
-import sqlalchemy
+import motor.motor_asyncio
 from fastapi import FastAPI
 from fastapi_users import FastAPIUsers, models
 from fastapi_users.authentication import JWTAuthentication
-from fastapi_users.db import SQLAlchemyBaseUserTable, SQLAlchemyUserDatabase
-from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
+from fastapi_users.db import MongoDBUserDatabase
+from httpx_oauth.clients.google import GoogleOAuth2
 
-DATABASE_URL = "sqlite:///./test.db"
+DATABASE_URL = "mongodb://localhost:27017"
 SECRET = "SECRET"
 
 
-class User(models.BaseUser):
+google_oauth_client = GoogleOAuth2("CLIENT_ID", "CLIENT_SECRET")
+
+
+class User(models.BaseUser, models.BaseOAuthAccountMixin):
     pass
 
 
@@ -26,22 +28,10 @@ class UserDB(User, models.BaseUserDB):
     pass
 
 
-database = databases.Database(DATABASE_URL)
-Base: DeclarativeMeta = declarative_base()
-
-
-class UserTable(Base, SQLAlchemyBaseUserTable):
-    pass
-
-
-engine = sqlalchemy.create_engine(
-    DATABASE_URL, connect_args={"check_same_thread": False}
-)
-Base.metadata.create_all(engine)
-
-users = UserTable.__table__
-user_db = SQLAlchemyUserDatabase(UserDB, database, users)
-
+client = motor.motor_asyncio.AsyncIOMotorClient(DATABASE_URL)
+db = client["database_name"]
+collection = db["users"]
+user_db = MongoDBUserDatabase(UserDB, collection)
 
 auth_backends = [
     JWTAuthentication(secret=SECRET, lifetime_seconds=3600),
@@ -53,6 +43,9 @@ fastapi_users = FastAPIUsers(
 )
 app.include_router(fastapi_users.router, prefix="/users", tags=["users"])
 
+google_oauth_router = fastapi_users.get_oauth_router(google_oauth_client, SECRET)
+app.include_router(google_oauth_router, prefix="/google-oauth", tags=["users"])
+
 
 @fastapi_users.on_after_register()
 def on_after_register(user: User):
@@ -62,13 +55,3 @@ def on_after_register(user: User):
 @fastapi_users.on_after_forgot_password()
 def on_after_forgot_password(user: User, token: str):
     print(f"User {user.id} has forgot their password. Reset token: {token}")
-
-
-@app.on_event("startup")
-async def startup():
-    await database.connect()
-
-
-@app.on_event("shutdown")
-async def shutdown():
-    await database.disconnect()

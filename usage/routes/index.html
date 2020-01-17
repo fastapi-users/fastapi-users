@@ -417,6 +417,18 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../configuration/oauth/" title="OAuth2" class="md-nav__link">
+      OAuth2
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -508,6 +520,33 @@
   <a href="#post-reset-password" class="md-nav__link">
     POST /reset-password
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#oauth-routes" class="md-nav__link">
+    OAuth routes
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get-authorize" class="md-nav__link">
+    GET /authorize
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-callback" class="md-nav__link">
+    GET /callback
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -665,6 +704,33 @@
   <a href="#post-reset-password" class="md-nav__link">
     POST /reset-password
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#oauth-routes" class="md-nav__link">
+    OAuth routes
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get-authorize" class="md-nav__link">
+    GET /authorize
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-callback" class="md-nav__link">
+    GET /callback
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -855,6 +921,60 @@
 </pre></div>
 
 </div>
+<h3 id="oauth-routes">OAuth routes<a class="headerlink" href="#oauth-routes" title="Permanent link">&para;</a></h3>
+<p>Each OAuth router you define will expose the two following routes.</p>
+<h4 id="get-authorize"><code>GET /authorize</code><a class="headerlink" href="#get-authorize" title="Permanent link">&para;</a></h4>
+<p>Return the authorization URL for the OAuth service where you should redirect your user.</p>
+<div class="admonition abstract">
+<p class="admonition-title">Query parameters</p>
+<ul>
+<li><code>authentication_backend</code>: Name of a defined <a href="../../configuration/authentication/">authentication method</a> to use to authenticate the user on successful callback.</li>
+<li><code>scopes</code>: Optional list of scopes to ask for. Expected format: <code>scopes=a&amp;scopes=b</code>.</li>
+</ul>
+</div>
+<div class="admonition success">
+<p class="admonition-title"><code>200 OK</code></p>
+<div class="codehilite"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;authorization_url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.tintagel.bt/oauth/authorize?client_id=CLIENT_ID&amp;scopes=a+b&amp;redirect_uri=https://www.camelot.bt/oauth/callback&quot;</span>
+<span class="p">}</span>
+</pre></div>
+
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>422 Validation Error</code></p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>400 Bad Request</code></p>
+<p>Unknown authentication backend.</p>
+</div>
+<h4 id="get-callback"><code>GET /callback</code><a class="headerlink" href="#get-callback" title="Permanent link">&para;</a></h4>
+<p>Handle the OAuth callback.</p>
+<div class="admonition abstract">
+<p class="admonition-title">Query parameters</p>
+<ul>
+<li><code>code</code>: OAuth callback code.</li>
+<li><code>state</code>: State token.</li>
+<li><code>error</code>: OAuth error.</li>
+</ul>
+</div>
+<p>Depending on the situation, several things can happen:</p>
+<ul>
+<li>The OAuth account exists in database and is linked to a user:<ul>
+<li>OAuth account is updated in database with fresh access token.</li>
+<li>The user is authenticated following the chosen <a href="../../configuration/authentication/">authentication method</a>.</li>
+</ul>
+</li>
+<li>The OAuth account doesn't exist in database but a user with the same email address exists:<ul>
+<li>OAuth account is linked to the user.</li>
+<li>The user is authenticated following the chosen <a href="../../configuration/authentication/">authentication method</a>.</li>
+</ul>
+</li>
+<li>The OAuth account doesn't exist in database and no user with the email address exists:<ul>
+<li>A new user is created and linked to the OAuth account.</li>
+<li>The user is authenticated following the chosen <a href="../../configuration/authentication/">authentication method</a>.</li>
+</ul>
+</li>
+</ul>
 <h2 id="authenticated">Authenticated<a class="headerlink" href="#authenticated" title="Permanent link">&para;</a></h2>
 <h3 id="get-me"><code>GET /me</code><a class="headerlink" href="#get-me" title="Permanent link">&para;</a></h3>
 <p>Return the current authenticated active user.</p>
@@ -1020,7 +1140,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../../configuration/full_example/" title="Full example" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../../configuration/oauth/" title="OAuth2" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1029,7 +1149,7 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Full example
+                OAuth2
               </span>
             </div>
           </a>
