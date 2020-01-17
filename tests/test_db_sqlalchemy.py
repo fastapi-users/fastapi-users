@@ -159,7 +159,6 @@ async def test_queries_custom_fields(
 
 @pytest.mark.asyncio
 @pytest.mark.db
-@pytest.mark.current
 async def test_queries_oauth(
     sqlalchemy_user_db_oauth: SQLAlchemyUserDatabase[UserDBOAuth],
     oauth_account1,

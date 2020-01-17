@@ -127,7 +127,6 @@ async def test_queries_custom_fields(tortoise_user_db: TortoiseUserDatabase[User
 
 @pytest.mark.asyncio
 @pytest.mark.db
-@pytest.mark.current
 async def test_queries_oauth(
     tortoise_user_db_oauth: TortoiseUserDatabase[UserDBOAuth],
     oauth_account1,
