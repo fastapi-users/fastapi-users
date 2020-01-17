@@ -30,6 +30,10 @@ class BaseUserDatabase(Generic[UD]):
         """Get a single user by email."""
         raise NotImplementedError()
 
+    async def get_by_oauth_account(self, oauth: str, account_id: str) -> Optional[UD]:
+        """Get a single user by OAuth account id."""
+        raise NotImplementedError()
+
     async def create(self, user: UD) -> UD:
         """Create a user."""
         raise NotImplementedError()

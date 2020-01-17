@@ -39,6 +39,9 @@ mongodb = [
 tortoise-orm = [
     "tortoise-orm ==0.15.7"
 ]
+oauth = [
+    "httpx-oauth ==0.2.0"
+]
 
 [tool.flit.metadata.urls]
 Documentation = "https://frankie567.github.io/fastapi-users/"
