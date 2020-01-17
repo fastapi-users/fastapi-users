@@ -4,6 +4,7 @@ import http.cookies
 import pytest
 from fastapi import Depends, FastAPI
 from fastapi.security import OAuth2PasswordBearer
+from httpx_oauth.oauth2 import OAuth2
 from starlette.requests import Request
 from starlette.responses import Response
 from starlette.testclient import TestClient
@@ -307,3 +308,19 @@ def get_test_auth_client(mock_user_db):
         return TestClient(app)
 
     return _get_test_auth_client
+
+
+@pytest.fixture()
+def oauth_client() -> OAuth2:
+    CLIENT_ID = "CLIENT_ID"
+    CLIENT_SECRET = "CLIENT_SECRET"
+    AUTHORIZE_ENDPOINT = "https://www.camelot.bt/authorize"
+    ACCESS_TOKEN_ENDPOINT = "https://www.camelot.bt/access-token"
+
+    return OAuth2(
+        CLIENT_ID,
+        CLIENT_SECRET,
+        AUTHORIZE_ENDPOINT,
+        ACCESS_TOKEN_ENDPOINT,
+        name="service1",
+    )

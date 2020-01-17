@@ -3,7 +3,6 @@ from unittest.mock import MagicMock
 import asynctest
 import pytest
 from fastapi import FastAPI
-from httpx_oauth.oauth2 import OAuth2
 from starlette import status
 from starlette.testclient import TestClient
 
@@ -14,22 +13,6 @@ from tests.conftest import MockAuthentication, UserDB
 
 
 SECRET = "SECRET"
-
-
-@pytest.fixture()
-def oauth_client() -> OAuth2:
-    CLIENT_ID = "CLIENT_ID"
-    CLIENT_SECRET = "CLIENT_SECRET"
-    AUTHORIZE_ENDPOINT = "https://www.camelot.bt/authorize"
-    ACCESS_TOKEN_ENDPOINT = "https://www.camelot.bt/access-token"
-
-    return OAuth2(
-        CLIENT_ID,
-        CLIENT_SECRET,
-        AUTHORIZE_ENDPOINT,
-        ACCESS_TOKEN_ENDPOINT,
-        name="service1",
-    )
 
 
 def event_handler_sync():

@@ -1,10 +1,11 @@
 import pytest
 from fastapi import Depends, FastAPI
+from httpx_oauth.oauth2 import OAuth2
 from starlette import status
 from starlette.testclient import TestClient
 
 from fastapi_users import FastAPIUsers
-from fastapi_users.router import Event
+from fastapi_users.router import Event, EventHandlersRouter
 from tests.conftest import User, UserCreate, UserUpdate, UserDB
 
 
@@ -165,3 +166,13 @@ class TestGetCurrentSuperuser:
             "/current-superuser", headers={"Authorization": f"Bearer {superuser.id}"}
         )
         assert response.status_code == status.HTTP_200_OK
+
+
+@pytest.mark.fastapi_users
+def test_get_oauth_router(mocker, fastapi_users: FastAPIUsers, oauth_client: OAuth2):
+    oauth_router = fastapi_users.get_oauth_router(oauth_client, "SECRET")
+
+    assert isinstance(oauth_router, EventHandlersRouter)
+    event_handlers = oauth_router.event_handlers
+    assert len(event_handlers[Event.ON_AFTER_REGISTER]) == 1
+    assert len(event_handlers[Event.ON_AFTER_FORGOT_PASSWORD]) == 1
