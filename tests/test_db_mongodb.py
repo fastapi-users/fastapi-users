@@ -166,7 +166,5 @@ async def test_queries_oauth(
     assert oauth_user.id == user.id
 
     # Unknown OAuth account
-    unknown_oauth_user = await mongodb_user_db_oauth.get_by_oauth_account(
-        "foo", "bar"
-    )
+    unknown_oauth_user = await mongodb_user_db_oauth.get_by_oauth_account("foo", "bar")
     assert unknown_oauth_user is None

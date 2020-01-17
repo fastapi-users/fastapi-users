@@ -1,20 +1,19 @@
-from typing import cast, Dict, List, Type
+from typing import Dict, List, Type, cast
 
 import jwt
 from fastapi import Depends, HTTPException, Query
 from httpx_oauth.integrations.fastapi import OAuth2AuthorizeCallback
 from httpx_oauth.oauth2 import BaseOAuth2
+from starlette import status
 from starlette.requests import Request
 from starlette.responses import Response
-from starlette import status
 
 from fastapi_users import models
 from fastapi_users.authentication import Authenticator
 from fastapi_users.db import BaseUserDatabase
+from fastapi_users.password import generate_password, get_password_hash
 from fastapi_users.router.common import ErrorCode, EventHandlersRouter
-from fastapi_users.password import get_password_hash, generate_password
 from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
-
 
 STATE_TOKEN_AUDIENCE = "fastapi-users:oauth-state"
 

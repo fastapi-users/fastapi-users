@@ -1,7 +1,7 @@
-from typing import Mapping, List, Optional, Type
+from typing import List, Mapping, Optional, Type
 
 from databases import Database
-from sqlalchemy import select, Boolean, Column, ForeignKey, Integer, String, Table
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Table, select
 from sqlalchemy.ext.declarative import declared_attr
 
 from fastapi_users.db.base import BaseUserDatabase
