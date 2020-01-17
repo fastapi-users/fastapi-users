@@ -12,7 +12,7 @@ from fastapi_users import models
 from fastapi_users.authentication import Authenticator
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.password import generate_password, get_password_hash
-from fastapi_users.router.common import ErrorCode, EventHandlersRouter
+from fastapi_users.router.common import ErrorCode, Event, EventHandlersRouter
 from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
 
 STATE_TOKEN_AUDIENCE = "fastapi-users:oauth-state"
@@ -118,6 +118,7 @@ def get_oauth_router(
                     oauth_accounts=[new_oauth_account],
                 )
                 await user_db.create(user)
+                await router.run_handlers(Event.ON_AFTER_REGISTER, user)
         else:
             # Update oauth
             updated_oauth_accounts = []

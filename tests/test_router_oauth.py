@@ -1,3 +1,5 @@
+from unittest.mock import MagicMock
+
 import asynctest
 import pytest
 from fastapi import FastAPI
@@ -6,7 +8,7 @@ from starlette import status
 from starlette.testclient import TestClient
 
 from fastapi_users.authentication import Authenticator
-from fastapi_users.router import ErrorCode
+from fastapi_users.router.common import ErrorCode, Event
 from fastapi_users.router.oauth import generate_state_token, get_oauth_router
 from tests.conftest import MockAuthentication, UserDB
 
@@ -30,15 +32,30 @@ def oauth_client() -> OAuth2:
     )
 
 
+def event_handler_sync():
+    return MagicMock(return_value=None)
+
+
+def event_handler_async():
+    return asynctest.CoroutineMock(return_value=None)
+
+
+@pytest.fixture(params=[event_handler_sync, event_handler_async])
+def event_handler(request):
+    return request.param()
+
+
 @pytest.fixture()
-def get_test_app_client(mock_user_db_oauth, mock_authentication, oauth_client):
+def get_test_app_client(
+    mock_user_db_oauth, mock_authentication, oauth_client, event_handler
+):
     def _get_test_app_client(redirect_url: str = None) -> TestClient:
         mock_authentication_bis = MockAuthentication(name="mock-bis")
         authenticator = Authenticator(
             [mock_authentication, mock_authentication_bis], mock_user_db_oauth
         )
 
-        userRouter = get_oauth_router(
+        oauth_router = get_oauth_router(
             oauth_client,
             mock_user_db_oauth,
             UserDB,
@@ -47,8 +64,10 @@ def get_test_app_client(mock_user_db_oauth, mock_authentication, oauth_client):
             redirect_url,
         )
 
+        oauth_router.add_event_handler(Event.ON_AFTER_REGISTER, event_handler)
+
         app = FastAPI()
-        app.include_router(userRouter)
+        app.include_router(oauth_router)
 
         return TestClient(app)
 
@@ -124,7 +143,9 @@ class TestAuthorize:
 @pytest.mark.router
 @pytest.mark.oauth
 class TestCallback:
-    def test_invalid_state(self, test_app_client: TestClient, oauth_client, user_oauth):
+    def test_invalid_state(
+        self, test_app_client: TestClient, oauth_client, user_oauth, event_handler
+    ):
         with asynctest.patch.object(
             oauth_client, "get_access_token"
         ) as get_access_token_mock:
@@ -143,8 +164,15 @@ class TestCallback:
         get_id_email_mock.assert_awaited_once_with("TOKEN")
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
+        assert event_handler.called is False
+
     def test_existing_user_with_oauth(
-        self, mock_user_db_oauth, test_app_client: TestClient, oauth_client, user_oauth
+        self,
+        mock_user_db_oauth,
+        test_app_client: TestClient,
+        oauth_client,
+        user_oauth,
+        event_handler,
     ):
         state_jwt = generate_state_token({"authentication_backend": "mock"}, "SECRET")
         with asynctest.patch.object(
@@ -171,12 +199,15 @@ class TestCallback:
 
         assert data["token"] == user_oauth.id
 
+        assert event_handler.called is False
+
     def test_existing_user_without_oauth(
         self,
         mock_user_db_oauth,
         test_app_client: TestClient,
         oauth_client,
         superuser_oauth,
+        event_handler,
     ):
         state_jwt = generate_state_token({"authentication_backend": "mock"}, "SECRET")
         with asynctest.patch.object(
@@ -206,8 +237,14 @@ class TestCallback:
 
         assert data["token"] == superuser_oauth.id
 
+        assert event_handler.called is False
+
     def test_unknown_user(
-        self, mock_user_db_oauth, test_app_client: TestClient, oauth_client,
+        self,
+        mock_user_db_oauth,
+        test_app_client: TestClient,
+        oauth_client,
+        event_handler,
     ):
         state_jwt = generate_state_token({"authentication_backend": "mock"}, "SECRET")
         with asynctest.patch.object(
@@ -237,12 +274,17 @@ class TestCallback:
 
         assert "token" in data
 
+        assert event_handler.called is True
+        actual_user = event_handler.call_args[0][0]
+        assert actual_user.id == data["token"]
+
     def test_inactive_user(
         self,
         mock_user_db_oauth,
         test_app_client: TestClient,
         oauth_client,
         inactive_user_oauth,
+        event_handler,
     ):
         state_jwt = generate_state_token({"authentication_backend": "mock"}, "SECRET")
         with asynctest.patch.object(
@@ -265,6 +307,8 @@ class TestCallback:
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert response.json()["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
+
+        assert event_handler.called is False
 
     def test_redirect_url_router(
         self,
