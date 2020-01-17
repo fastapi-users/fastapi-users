@@ -18,7 +18,9 @@ async def async_event_handler():
 
 
 @pytest.fixture(params=[sync_event_handler, async_event_handler])
-def fastapi_users(request, mock_user_db, mock_authentication) -> FastAPIUsers:
+def fastapi_users(
+    request, mock_user_db, mock_authentication, oauth_client
+) -> FastAPIUsers:
     fastapi_users = FastAPIUsers(
         mock_user_db,
         [mock_authentication],
@@ -28,6 +30,8 @@ def fastapi_users(request, mock_user_db, mock_authentication) -> FastAPIUsers:
         UserDB,
         "SECRET",
     )
+
+    fastapi_users.get_oauth_router(oauth_client, "SECRET")
 
     @fastapi_users.on_after_register()
     def on_after_register():
@@ -170,8 +174,16 @@ class TestGetCurrentSuperuser:
 
 @pytest.mark.fastapi_users
 def test_get_oauth_router(mocker, fastapi_users: FastAPIUsers, oauth_client: OAuth2):
-    oauth_router = fastapi_users.get_oauth_router(oauth_client, "SECRET")
+    # Check that existing OAuth router declared
+    # before the handlers decorators is correctly binded
+    existing_oauth_router = fastapi_users.oauth_routers[0]
+    event_handlers = existing_oauth_router.event_handlers
+    assert len(event_handlers[Event.ON_AFTER_REGISTER]) == 1
+    assert len(event_handlers[Event.ON_AFTER_FORGOT_PASSWORD]) == 1
 
+    # Check that OAuth router declared
+    # after the handlers decorators is correctly binded
+    oauth_router = fastapi_users.get_oauth_router(oauth_client, "SECRET")
     assert isinstance(oauth_router, EventHandlersRouter)
     event_handlers = oauth_router.event_handlers
     assert len(event_handlers[Event.ON_AFTER_REGISTER]) == 1
