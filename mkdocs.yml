@@ -39,6 +39,7 @@ nav:
       - configuration/authentication/cookie.md
     - configuration/router.md
     - configuration/full_example.md
+    - configuration/oauth.md
   - Usage:
     - usage/routes.md
     - usage/dependency-callables.md
