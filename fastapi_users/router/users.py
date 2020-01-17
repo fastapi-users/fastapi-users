@@ -1,10 +1,7 @@
-import asyncio
-from collections import defaultdict
-from enum import Enum, auto
-from typing import Any, Callable, DefaultDict, Dict, List, Type, cast
+from typing import Any, Dict, List, Type, cast
 
 import jwt
-from fastapi import APIRouter, Body, Depends, HTTPException
+from fastapi import Body, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import EmailStr
 from starlette import status
@@ -14,40 +11,14 @@ from fastapi_users import models
 from fastapi_users.authentication import Authenticator, BaseAuthentication
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.password import get_password_hash
+from fastapi_users.router.common import ErrorCode, Event, EventHandlersRouter
 from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
 
 
-class ErrorCode:
-    REGISTER_USER_ALREADY_EXISTS = "REGISTER_USER_ALREADY_EXISTS"
-    LOGIN_BAD_CREDENTIALS = "LOGIN_BAD_CREDENTIALS"
-    RESET_PASSWORD_BAD_TOKEN = "RESET_PASSWORD_BAD_TOKEN"
-
-
-class Event(Enum):
-    ON_AFTER_REGISTER = auto()
-    ON_AFTER_FORGOT_PASSWORD = auto()
-
-
-class UserRouter(APIRouter):
-    event_handlers: DefaultDict[Event, List[Callable]]
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.event_handlers = defaultdict(list)
-
-    def add_event_handler(self, event_type: Event, func: Callable) -> None:
-        self.event_handlers[event_type].append(func)
-
-    async def run_handlers(self, event_type: Event, *args, **kwargs) -> None:
-        for handler in self.event_handlers[event_type]:
-            if asyncio.iscoroutinefunction(handler):
-                await handler(*args, **kwargs)
-            else:
-                handler(*args, **kwargs)
-
-
 def _add_login_route(
-    router: UserRouter, user_db: BaseUserDatabase, auth_backend: BaseAuthentication
+    router: EventHandlersRouter,
+    user_db: BaseUserDatabase,
+    auth_backend: BaseAuthentication,
 ):
     @router.post(f"/login/{auth_backend.name}")
     async def login(
@@ -73,9 +44,9 @@ def get_user_router(
     authenticator: Authenticator,
     reset_password_token_secret: str,
     reset_password_token_lifetime_seconds: int = 3600,
-) -> UserRouter:
+) -> EventHandlersRouter:
     """Generate a router with the authentication routes."""
-    router = UserRouter()
+    router = EventHandlersRouter()
 
     reset_password_token_audience = "fastapi-users:reset"
 

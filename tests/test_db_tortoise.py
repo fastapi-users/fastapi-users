@@ -4,18 +4,26 @@ import pytest
 from tortoise.exceptions import IntegrityError
 from tortoise import Tortoise, fields
 
-from fastapi_users.db.tortoise import TortoiseUserDatabase, TortoiseBaseUserModel
+from fastapi_users.db.tortoise import (
+    TortoiseBaseOAuthAccountModel,
+    TortoiseBaseUserModel,
+    TortoiseUserDatabase,
+)
 from fastapi_users.password import get_password_hash
-from tests.conftest import UserDB
+from tests.conftest import UserDB, UserDBOAuth
 
 
 class User(TortoiseBaseUserModel):
     first_name = fields.CharField(null=True, max_length=255)
 
 
+class OAuthAccount(TortoiseBaseOAuthAccountModel):
+    user = fields.ForeignKeyField("models.User", related_name="oauth_accounts")
+
+
 @pytest.fixture
 async def tortoise_user_db() -> AsyncGenerator[TortoiseUserDatabase, None]:
-    DATABASE_URL = "sqlite://./test.db"
+    DATABASE_URL = "sqlite://./test-tortoise-user.db"
 
     await Tortoise.init(
         db_url=DATABASE_URL, modules={"models": ["tests.test_db_tortoise"]}
@@ -23,6 +31,21 @@ async def tortoise_user_db() -> AsyncGenerator[TortoiseUserDatabase, None]:
     await Tortoise.generate_schemas()
 
     yield TortoiseUserDatabase(UserDB, User)
+
+    await User.all().delete()
+    await Tortoise.close_connections()
+
+
+@pytest.fixture
+async def tortoise_user_db_oauth() -> AsyncGenerator[TortoiseUserDatabase, None]:
+    DATABASE_URL = "sqlite://./test-tortoise-user-oauth.db"
+
+    await Tortoise.init(
+        db_url=DATABASE_URL, modules={"models": ["tests.test_db_tortoise"]}
+    )
+    await Tortoise.generate_schemas()
+
+    yield TortoiseUserDatabase(UserDBOAuth, User, OAuthAccount)
 
     await User.all().delete()
     await Tortoise.close_connections()
@@ -100,3 +123,58 @@ async def test_queries_custom_fields(tortoise_user_db: TortoiseUserDatabase[User
     assert id_user is not None
     assert id_user.id == user.id
     assert id_user.first_name == user.first_name
+
+
+@pytest.mark.asyncio
+@pytest.mark.db
+async def test_queries_oauth(
+    tortoise_user_db_oauth: TortoiseUserDatabase[UserDBOAuth],
+    oauth_account1,
+    oauth_account2,
+):
+    user = UserDBOAuth(
+        id="111",
+        email="lancelot@camelot.bt",
+        hashed_password=get_password_hash("guinevere"),
+        oauth_accounts=[oauth_account1, oauth_account2],
+    )
+
+    # Create
+    user_db = await tortoise_user_db_oauth.create(user)
+    assert user_db.id is not None
+    assert hasattr(user_db, "oauth_accounts")
+    assert len(user_db.oauth_accounts) == 2
+
+    # Update
+    user_db.oauth_accounts[0].access_token = "NEW_TOKEN"
+    await tortoise_user_db_oauth.update(user_db)
+
+    # Get by id
+    id_user = await tortoise_user_db_oauth.get(user.id)
+    assert id_user is not None
+    assert id_user.id == user_db.id
+    assert id_user.oauth_accounts[0].access_token == "NEW_TOKEN"
+
+    # Get by email
+    email_user = await tortoise_user_db_oauth.get_by_email(str(user.email))
+    assert email_user is not None
+    assert email_user.id == user_db.id
+    assert len(email_user.oauth_accounts) == 2
+
+    # List
+    users = await tortoise_user_db_oauth.list()
+    assert len(users) == 1
+    first_user = users[0]
+    assert first_user.id == user_db.id
+    assert len(first_user.oauth_accounts) == 2
+
+    # Get by OAuth account
+    oauth_user = await tortoise_user_db_oauth.get_by_oauth_account(
+        oauth_account1.oauth_name, oauth_account1.account_id
+    )
+    assert oauth_user is not None
+    assert oauth_user.id == user.id
+
+    # Unknown OAuth account
+    unknown_oauth_user = await tortoise_user_db_oauth.get_by_oauth_account("foo", "bar")
+    assert unknown_oauth_user is None

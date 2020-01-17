@@ -33,6 +33,15 @@ class MongoDBUserDatabase(BaseUserDatabase[UD]):
         user = await self.collection.find_one({"email": email})
         return self.user_db_model(**user) if user else None
 
+    async def get_by_oauth_account(self, oauth: str, account_id: str) -> Optional[UD]:
+        user = await self.collection.find_one(
+            {
+                "oauth_accounts.oauth_name": oauth,
+                "oauth_accounts.account_id": account_id,
+            }
+        )
+        return self.user_db_model(**user) if user else None
+
     async def create(self, user: UD) -> UD:
         await self.collection.insert_one(user.dict())
         return user

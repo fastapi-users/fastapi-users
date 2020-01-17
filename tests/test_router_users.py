@@ -47,7 +47,7 @@ def test_app_client(mock_user_db, mock_authentication, event_handler) -> TestCli
         [mock_authentication, mock_authentication_bis], mock_user_db
     )
 
-    userRouter = get_user_router(
+    user_router = get_user_router(
         mock_user_db,
         User,
         UserCreate,
@@ -58,11 +58,11 @@ def test_app_client(mock_user_db, mock_authentication, event_handler) -> TestCli
         LIFETIME,
     )
 
-    userRouter.add_event_handler(Event.ON_AFTER_REGISTER, event_handler)
-    userRouter.add_event_handler(Event.ON_AFTER_FORGOT_PASSWORD, event_handler)
+    user_router.add_event_handler(Event.ON_AFTER_REGISTER, event_handler)
+    user_router.add_event_handler(Event.ON_AFTER_FORGOT_PASSWORD, event_handler)
 
     app = FastAPI()
-    app.include_router(userRouter)
+    app.include_router(user_router)
 
     return TestClient(app)
 

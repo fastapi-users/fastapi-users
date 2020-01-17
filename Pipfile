@@ -24,6 +24,7 @@ markdown-include = "*"
 pygments = "*"
 pymdown-extensions = "*"
 bumpversion = "*"
+httpx-oauth = "*"
 
 [packages]
 fastapi = "==0.46.0"

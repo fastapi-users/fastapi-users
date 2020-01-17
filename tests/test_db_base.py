@@ -28,6 +28,9 @@ async def test_not_implemented_methods(user):
         await base_user_db.get_by_email("lancelot@camelot.bt")
 
     with pytest.raises(NotImplementedError):
+        await base_user_db.get_by_oauth_account("google", "user_oauth1")
+
+    with pytest.raises(NotImplementedError):
         await base_user_db.create(user)
 
     with pytest.raises(NotImplementedError):

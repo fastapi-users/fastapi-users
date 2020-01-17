@@ -6,27 +6,44 @@ import pymongo.errors
 
 from fastapi_users.db.mongodb import MongoDBUserDatabase
 from fastapi_users.password import get_password_hash
-from tests.conftest import UserDB
+from tests.conftest import UserDB, UserDBOAuth
 
 
 @pytest.fixture
-async def mongodb_user_db() -> AsyncGenerator[MongoDBUserDatabase, None]:
-    client = motor.motor_asyncio.AsyncIOMotorClient(
-        "mongodb://localhost:27017", serverSelectionTimeoutMS=100
-    )
+def get_mongodb_user_db():
+    async def _get_mongodb_user_db(
+        user_model,
+    ) -> AsyncGenerator[MongoDBUserDatabase, None]:
+        client = motor.motor_asyncio.AsyncIOMotorClient(
+            "mongodb://localhost:27017", serverSelectionTimeoutMS=100
+        )
 
-    try:
-        await client.server_info()
-    except pymongo.errors.ServerSelectionTimeoutError:
-        pytest.skip("MongoDB not available", allow_module_level=True)
-        return
+        try:
+            await client.server_info()
+        except pymongo.errors.ServerSelectionTimeoutError:
+            pytest.skip("MongoDB not available", allow_module_level=True)
+            return
 
-    db = client["test_database"]
-    collection = db["users"]
+        db = client["test_database"]
+        collection = db["users"]
 
-    yield MongoDBUserDatabase(UserDB, collection)
+        yield MongoDBUserDatabase(user_model, collection)
 
-    await collection.drop()
+        await collection.drop()
+
+    return _get_mongodb_user_db
+
+
+@pytest.fixture
+async def mongodb_user_db(get_mongodb_user_db):
+    async for u in get_mongodb_user_db(UserDB):
+        yield u
+
+
+@pytest.fixture
+async def mongodb_user_db_oauth(get_mongodb_user_db):
+    async for u in get_mongodb_user_db(UserDBOAuth):
+        yield u
 
 
 @pytest.mark.asyncio
@@ -96,3 +113,58 @@ async def test_queries_custom_fields(mongodb_user_db: MongoDBUserDatabase[UserDB
     assert id_user is not None
     assert id_user.id == user.id
     assert id_user.first_name == user.first_name
+
+
+@pytest.mark.asyncio
+@pytest.mark.db
+async def test_queries_oauth(
+    mongodb_user_db_oauth: MongoDBUserDatabase[UserDBOAuth],
+    oauth_account1,
+    oauth_account2,
+):
+    user = UserDBOAuth(
+        id="111",
+        email="lancelot@camelot.bt",
+        hashed_password=get_password_hash("guinevere"),
+        oauth_accounts=[oauth_account1, oauth_account2],
+    )
+
+    # Create
+    user_db = await mongodb_user_db_oauth.create(user)
+    assert user_db.id is not None
+    assert hasattr(user_db, "oauth_accounts")
+    assert len(user_db.oauth_accounts) == 2
+
+    # Update
+    user_db.oauth_accounts[0].access_token = "NEW_TOKEN"
+    await mongodb_user_db_oauth.update(user_db)
+
+    # Get by id
+    id_user = await mongodb_user_db_oauth.get(user.id)
+    assert id_user is not None
+    assert id_user.id == user_db.id
+    assert id_user.oauth_accounts[0].access_token == "NEW_TOKEN"
+
+    # Get by email
+    email_user = await mongodb_user_db_oauth.get_by_email(str(user.email))
+    assert email_user is not None
+    assert email_user.id == user_db.id
+    assert len(email_user.oauth_accounts) == 2
+
+    # List
+    users = await mongodb_user_db_oauth.list()
+    assert len(users) == 1
+    first_user = users[0]
+    assert first_user.id == user_db.id
+    assert len(first_user.oauth_accounts) == 2
+
+    # Get by OAuth account
+    oauth_user = await mongodb_user_db_oauth.get_by_oauth_account(
+        oauth_account1.oauth_name, oauth_account1.account_id
+    )
+    assert oauth_user is not None
+    assert oauth_user.id == user.id
+
+    # Unknown OAuth account
+    unknown_oauth_user = await mongodb_user_db_oauth.get_by_oauth_account("foo", "bar")
+    assert unknown_oauth_user is None

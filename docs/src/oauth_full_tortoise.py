@@ -1,14 +1,23 @@
 from fastapi import FastAPI
 from fastapi_users import FastAPIUsers, models
 from fastapi_users.authentication import JWTAuthentication
-from fastapi_users.db import TortoiseBaseUserModel, TortoiseUserDatabase
+from fastapi_users.db import (
+    TortoiseBaseOAuthAccountModel,
+    TortoiseBaseUserModel,
+    TortoiseUserDatabase,
+)
+from httpx_oauth.clients.google import GoogleOAuth2
+from tortoise import fields
 from tortoise.contrib.starlette import register_tortoise
 
 DATABASE_URL = "sqlite://./test.db"
 SECRET = "SECRET"
 
 
-class User(models.BaseUser):
+google_oauth_client = GoogleOAuth2("CLIENT_ID", "CLIENT_SECRET")
+
+
+class User(models.BaseUser, models.BaseOAuthAccountMixin):
     pass
 
 
@@ -28,7 +37,11 @@ class UserModel(TortoiseBaseUserModel):
     pass
 
 
-user_db = TortoiseUserDatabase(UserDB, UserModel)
+class OAuthAccountModel(TortoiseBaseOAuthAccountModel):
+    user = fields.ForeignKeyField("models.UserModel", related_name="oauth_accounts")
+
+
+user_db = TortoiseUserDatabase(UserDB, UserModel, OAuthAccountModel)
 app = FastAPI()
 register_tortoise(app, db_url=DATABASE_URL, modules={"models": ["test"]})
 
@@ -40,6 +53,9 @@ fastapi_users = FastAPIUsers(
     user_db, auth_backends, User, UserCreate, UserUpdate, UserDB, SECRET,
 )
 app.include_router(fastapi_users.router, prefix="/users", tags=["users"])
+
+google_oauth_router = fastapi_users.get_oauth_router(google_oauth_client, SECRET)
+app.include_router(google_oauth_router, prefix="/google-oauth", tags=["users"])
 
 
 @fastapi_users.on_after_register()
