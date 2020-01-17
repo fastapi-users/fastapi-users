@@ -23,7 +23,7 @@ class OAuthAccount(TortoiseBaseOAuthAccountModel):
 
 @pytest.fixture
 async def tortoise_user_db() -> AsyncGenerator[TortoiseUserDatabase, None]:
-    DATABASE_URL = "sqlite://./test.db"
+    DATABASE_URL = "sqlite://./test-tortoise-user.db"
 
     await Tortoise.init(
         db_url=DATABASE_URL, modules={"models": ["tests.test_db_tortoise"]}
@@ -38,7 +38,7 @@ async def tortoise_user_db() -> AsyncGenerator[TortoiseUserDatabase, None]:
 
 @pytest.fixture
 async def tortoise_user_db_oauth() -> AsyncGenerator[TortoiseUserDatabase, None]:
-    DATABASE_URL = "sqlite://./test.db"
+    DATABASE_URL = "sqlite://./test-tortoise-user-oauth.db"
 
     await Tortoise.init(
         db_url=DATABASE_URL, modules={"models": ["tests.test_db_tortoise"]}

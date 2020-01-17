@@ -24,7 +24,7 @@ async def sqlalchemy_user_db() -> AsyncGenerator[SQLAlchemyUserDatabase, None]:
     class User(SQLAlchemyBaseUserTable, Base):
         first_name = Column(String, nullable=True)
 
-    DATABASE_URL = "sqlite:///./test.db"
+    DATABASE_URL = "sqlite:///./test-sqlalchemy-user.db"
     database = Database(DATABASE_URL)
 
     engine = sqlalchemy.create_engine(
@@ -49,7 +49,7 @@ async def sqlalchemy_user_db_oauth() -> AsyncGenerator[SQLAlchemyUserDatabase, N
     class OAuthAccount(SQLAlchemyBaseOAuthAccountTable, Base):
         pass
 
-    DATABASE_URL = "sqlite:///./test.db"
+    DATABASE_URL = "sqlite:///./test-sqlalchemy-user-oauth.db"
     database = Database(DATABASE_URL)
 
     engine = sqlalchemy.create_engine(
