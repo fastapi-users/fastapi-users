@@ -586,7 +586,7 @@
 <li><code>id</code> (<code>str</code>) – Unique identifier of the user. Default to a <strong>UUID4</strong>.</li>
 <li><code>email</code> (<code>str</code>) – Email of the user. Validated by <a href="https://github.com/JoshData/python-email-validator"><code>email-validator</code></a>.</li>
 <li><code>is_active</code> (<code>bool</code>) – Whether or not the user is active. If not, login and forgot password requests will be denied. Default to <code>True</code>.</li>
-<li><code>is_active</code> (<code>bool</code>) – Whether or not the user is a superuser. Useful to implement administration logic. Default to <code>False</code>.</li>
+<li><code>is_superuser</code> (<code>bool</code>) – Whether or not the user is a superuser. Useful to implement administration logic. Default to <code>False</code>.</li>
 </ul>
 <h2 id="define-your-models">Define your models<a class="headerlink" href="#define-your-models" title="Permanent link">&para;</a></h2>
 <p>There are four Pydantic models variations provided as mixins:</p>
