@@ -42,7 +42,7 @@ In order to be as unopinionated as possible, we expose decorators that allow you
 
 ### After register
 
-This event handler is called after a successful registration. It is called with **one argument**: the **user** that has just registered.
+This event handler is called after a successful registration. It is called with **two argument**: the **user** that has just registered, and the original **`Request` object**.
 
 Typically, you'll want to **send a welcome e-mail** or add it to your marketing analytics pipeline.
 
@@ -52,13 +52,17 @@ Example:
 
 ```py
 @fastapi_users.on_after_register()
-def on_after_register(user: User):
+def on_after_register(user: User, request: Request):
     print(f"User {user.id} has registered.")
 ```
 
 ### After forgot password
 
-This event handler is called after a successful forgot password request. It is called with **two arguments**: the **user** which has requested to reset their password and a ready-to-use **JWT token** that will be accepted by the reset password route.
+This event handler is called after a successful forgot password request. It is called with **three arguments**:
+
+* The **user** which has requested to reset their password.
+* A ready-to-use **JWT token** that will be accepted by the reset password route.
+* The original **`Request` object**.
 
 Typically, you'll want to **send an e-mail** with the link (and the token) that allows the user to reset their password.
 
@@ -68,7 +72,7 @@ Example:
 
 ```py
 @fastapi_users.on_after_forgot_password()
-def on_after_forgot_password(user: User, token: str):
+def on_after_forgot_password(user: User, token: str, request: Request):
     print(f"User {user.id} has forgot their password. Reset token: {token}")
 ```
 
