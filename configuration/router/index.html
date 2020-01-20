@@ -669,22 +669,27 @@
 <h2 id="event-handlers">Event handlers<a class="headerlink" href="#event-handlers" title="Permanent link">&para;</a></h2>
 <p>In order to be as unopinionated as possible, we expose decorators that allow you to plug your own logic after some actions. You can have several handlers per event.</p>
 <h3 id="after-register">After register<a class="headerlink" href="#after-register" title="Permanent link">&para;</a></h3>
-<p>This event handler is called after a successful registration. It is called with <strong>one argument</strong>: the <strong>user</strong> that has just registered.</p>
+<p>This event handler is called after a successful registration. It is called with <strong>two argument</strong>: the <strong>user</strong> that has just registered, and the original <strong><code>Request</code> object</strong>.</p>
 <p>Typically, you'll want to <strong>send a welcome e-mail</strong> or add it to your marketing analytics pipeline.</p>
 <p>You can define it as an <code>async</code> or standard method.</p>
 <p>Example:</p>
 <div class="codehilite"><pre><span></span><span class="nd">@fastapi_users</span><span class="o">.</span><span class="n">on_after_register</span><span class="p">()</span>
-<span class="k">def</span> <span class="nf">on_after_register</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">on_after_register</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User </span><span class="si">{user.id}</span><span class="s2"> has registered.&quot;</span><span class="p">)</span>
 </pre></div>
 
 <h3 id="after-forgot-password">After forgot password<a class="headerlink" href="#after-forgot-password" title="Permanent link">&para;</a></h3>
-<p>This event handler is called after a successful forgot password request. It is called with <strong>two arguments</strong>: the <strong>user</strong> which has requested to reset their password and a ready-to-use <strong>JWT token</strong> that will be accepted by the reset password route.</p>
+<p>This event handler is called after a successful forgot password request. It is called with <strong>three arguments</strong>:</p>
+<ul>
+<li>The <strong>user</strong> which has requested to reset their password.</li>
+<li>A ready-to-use <strong>JWT token</strong> that will be accepted by the reset password route.</li>
+<li>The original <strong><code>Request</code> object</strong>.</li>
+</ul>
 <p>Typically, you'll want to <strong>send an e-mail</strong> with the link (and the token) that allows the user to reset their password.</p>
 <p>You can define it as an <code>async</code> or standard method.</p>
 <p>Example:</p>
 <div class="codehilite"><pre><span></span><span class="nd">@fastapi_users</span><span class="o">.</span><span class="n">on_after_forgot_password</span><span class="p">()</span>
-<span class="k">def</span> <span class="nf">on_after_forgot_password</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">on_after_forgot_password</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User </span><span class="si">{user.id}</span><span class="s2"> has forgot their password. Reset token: </span><span class="si">{token}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 
