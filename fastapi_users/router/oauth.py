@@ -82,7 +82,9 @@ def get_oauth_router(
 
     @router.get("/callback", name=f"{oauth_client.name}-callback")
     async def callback(
-        response: Response, access_token_state=Depends(oauth2_authorize_callback)
+        request: Request,
+        response: Response,
+        access_token_state=Depends(oauth2_authorize_callback),
     ):
         token, state = access_token_state
         account_id, account_email = await oauth_client.get_id_email(
@@ -120,7 +122,7 @@ def get_oauth_router(
                     oauth_accounts=[new_oauth_account],
                 )
                 await user_db.create(user)
-                await router.run_handlers(Event.ON_AFTER_REGISTER, user)
+                await router.run_handlers(Event.ON_AFTER_REGISTER, user, request)
         else:
             # Update oauth
             updated_oauth_accounts = []

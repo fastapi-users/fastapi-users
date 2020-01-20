@@ -4,6 +4,7 @@ import asynctest
 import pytest
 from fastapi import FastAPI
 from starlette import status
+from starlette.requests import Request
 from starlette.testclient import TestClient
 
 from fastapi_users.authentication import Authenticator
@@ -270,6 +271,8 @@ class TestCallback:
         assert event_handler.called is True
         actual_user = event_handler.call_args[0][0]
         assert actual_user.id == data["token"]
+        request = event_handler.call_args[0][1]
+        assert isinstance(request, Request)
 
     def test_inactive_user(
         self,
