@@ -5,6 +5,7 @@ import jwt
 import pytest
 from fastapi import FastAPI
 from starlette import status
+from starlette.requests import Request
 from starlette.testclient import TestClient
 
 from fastapi_users.authentication import Authenticator
@@ -106,6 +107,8 @@ class TestRegister:
 
         actual_user = event_handler.call_args[0][0]
         assert actual_user.id == response_json["id"]
+        request = event_handler.call_args[0][1]
+        assert isinstance(request, Request)
 
     def test_valid_body_is_superuser(self, test_app_client: TestClient, event_handler):
         json = {
@@ -211,6 +214,8 @@ class TestForgotPassword:
             algorithms=[JWT_ALGORITHM],
         )
         assert decoded_token["user_id"] == user.id
+        request = event_handler.call_args[0][2]
+        assert isinstance(request, Request)
 
 
 @pytest.mark.router

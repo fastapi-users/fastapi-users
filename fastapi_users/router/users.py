@@ -5,6 +5,7 @@ from fastapi import Body, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import EmailStr
 from starlette import status
+from starlette.requests import Request
 from starlette.responses import Response
 
 from fastapi_users import models
@@ -74,7 +75,7 @@ def get_user_router(
     @router.post(
         "/register", response_model=user_model, status_code=status.HTTP_201_CREATED
     )
-    async def register(user: user_create_model):  # type: ignore
+    async def register(request: Request, user: user_create_model):  # type: ignore
         user = cast(models.BaseUserCreate, user)  # Prevent mypy complain
         existing_user = await user_db.get_by_email(user.email)
 
@@ -90,12 +91,14 @@ def get_user_router(
         )
         created_user = await user_db.create(db_user)
 
-        await router.run_handlers(Event.ON_AFTER_REGISTER, created_user)
+        await router.run_handlers(Event.ON_AFTER_REGISTER, created_user, request)
 
         return created_user
 
     @router.post("/forgot-password", status_code=status.HTTP_202_ACCEPTED)
-    async def forgot_password(email: EmailStr = Body(..., embed=True)):
+    async def forgot_password(
+        request: Request, email: EmailStr = Body(..., embed=True)
+    ):
         user = await user_db.get_by_email(email)
 
         if user is not None and user.is_active:
@@ -105,7 +108,9 @@ def get_user_router(
                 reset_password_token_lifetime_seconds,
                 reset_password_token_secret,
             )
-            await router.run_handlers(Event.ON_AFTER_FORGOT_PASSWORD, user, token)
+            await router.run_handlers(
+                Event.ON_AFTER_FORGOT_PASSWORD, user, token, request
+            )
 
         return None
 
