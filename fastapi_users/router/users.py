@@ -169,6 +169,7 @@ def get_user_router(
 
     @router.patch("/me", response_model=user_model)
     async def update_me(
+        request: Request,
         updated_user: user_update_model,  # type: ignore
         user: user_db_model = Depends(get_current_active_user),  # type: ignore
     ):
@@ -176,7 +177,13 @@ def get_user_router(
             models.BaseUserUpdate, updated_user,
         )  # Prevent mypy complain
         updated_user_data = updated_user.create_update_dict()
-        return await _update_user(user, updated_user_data)
+        updated_user = await _update_user(user, updated_user_data)
+
+        await router.run_handlers(
+            Event.ON_AFTER_UPDATE, updated_user, updated_user_data, request
+        )
+
+        return updated_user
 
     @router.get(
         "/",

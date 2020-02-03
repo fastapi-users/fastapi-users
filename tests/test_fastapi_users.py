@@ -41,6 +41,10 @@ def fastapi_users(
     def on_after_forgot_password():
         return request.param()
 
+    @fastapi_users.on_after_update()
+    def on_after_update():
+        return request.param()
+
     return fastapi_users
 
 

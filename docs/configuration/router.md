@@ -76,6 +76,26 @@ def on_after_forgot_password(user: User, token: str, request: Request):
     print(f"User {user.id} has forgot their password. Reset token: {token}")
 ```
 
+### After update
+
+This event handler is called after a successful update user request. It is called with **three arguments**:
+
+* The **user** which was updated.
+* The dictionary containing the updated fields.
+* The original **`Request` object**.
+
+It may be useful if you wish for example update your user in a data analytics or customer success platform.
+
+You can define it as an `async` or standard method.
+
+Example:
+
+```py
+@fastapi_users.on_after_update()
+def on_after_update(user: User, updated_user_data: Dict[str, Any], request: Request):
+    print(f"User {user.id} has been updated with the following data: {updated_user_data}")
+```
+
 ## Next steps
 
 Check out a [full example](full_example.md) that will show you the big picture.

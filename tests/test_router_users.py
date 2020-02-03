@@ -61,6 +61,7 @@ def test_app_client(mock_user_db, mock_authentication, event_handler) -> TestCli
 
     user_router.add_event_handler(Event.ON_AFTER_REGISTER, event_handler)
     user_router.add_event_handler(Event.ON_AFTER_FORGOT_PASSWORD, event_handler)
+    user_router.add_event_handler(Event.ON_AFTER_UPDATE, event_handler)
 
     app = FastAPI()
     app.include_router(user_router)
@@ -334,17 +335,21 @@ class TestMe:
 
 @pytest.mark.router
 class TestUpdateMe:
-    def test_missing_token(self, test_app_client: TestClient):
+    def test_missing_token(self, test_app_client: TestClient, event_handler):
         response = test_app_client.patch("/me")
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert event_handler.called is False
 
-    def test_inactive_user(self, test_app_client: TestClient, inactive_user: UserDB):
+    def test_inactive_user(
+        self, test_app_client: TestClient, inactive_user: UserDB, event_handler
+    ):
         response = test_app_client.patch(
             "/me", headers={"Authorization": f"Bearer {inactive_user.id}"}
         )
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert event_handler.called is False
 
-    def test_empty_body(self, test_app_client: TestClient, user: UserDB):
+    def test_empty_body(self, test_app_client: TestClient, user: UserDB, event_handler):
         response = test_app_client.patch(
             "/me", json={}, headers={"Authorization": f"Bearer {user.id}"}
         )
@@ -353,7 +358,15 @@ class TestUpdateMe:
         response_json = response.json()
         assert response_json["email"] == user.email
 
-    def test_valid_body(self, test_app_client: TestClient, user: UserDB):
+        assert event_handler.called is True
+        actual_user = event_handler.call_args[0][0]
+        assert actual_user.id == user.id
+        updated_fields = event_handler.call_args[0][1]
+        assert updated_fields == {}
+        request = event_handler.call_args[0][2]
+        assert isinstance(request, Request)
+
+    def test_valid_body(self, test_app_client: TestClient, user: UserDB, event_handler):
         json = {"email": "king.arthur@tintagel.bt"}
         response = test_app_client.patch(
             "/me", json=json, headers={"Authorization": f"Bearer {user.id}"}
@@ -363,7 +376,17 @@ class TestUpdateMe:
         response_json = response.json()
         assert response_json["email"] == "king.arthur@tintagel.bt"
 
-    def test_valid_body_is_superuser(self, test_app_client: TestClient, user: UserDB):
+        assert event_handler.called is True
+        actual_user = event_handler.call_args[0][0]
+        assert actual_user.id == user.id
+        updated_fields = event_handler.call_args[0][1]
+        assert updated_fields == {"email": "king.arthur@tintagel.bt"}
+        request = event_handler.call_args[0][2]
+        assert isinstance(request, Request)
+
+    def test_valid_body_is_superuser(
+        self, test_app_client: TestClient, user: UserDB, event_handler
+    ):
         json = {"is_superuser": True}
         response = test_app_client.patch(
             "/me", json=json, headers={"Authorization": f"Bearer {user.id}"}
@@ -373,7 +396,17 @@ class TestUpdateMe:
         response_json = response.json()
         assert response_json["is_superuser"] is False
 
-    def test_valid_body_is_active(self, test_app_client: TestClient, user: UserDB):
+        assert event_handler.called is True
+        actual_user = event_handler.call_args[0][0]
+        assert actual_user.id == user.id
+        updated_fields = event_handler.call_args[0][1]
+        assert updated_fields == {}
+        request = event_handler.call_args[0][2]
+        assert isinstance(request, Request)
+
+    def test_valid_body_is_active(
+        self, test_app_client: TestClient, user: UserDB, event_handler
+    ):
         json = {"is_active": False}
         response = test_app_client.patch(
             "/me", json=json, headers={"Authorization": f"Bearer {user.id}"}
@@ -383,8 +416,21 @@ class TestUpdateMe:
         response_json = response.json()
         assert response_json["is_active"] is True
 
+        assert event_handler.called is True
+        actual_user = event_handler.call_args[0][0]
+        assert actual_user.id == user.id
+        updated_fields = event_handler.call_args[0][1]
+        assert updated_fields == {}
+        request = event_handler.call_args[0][2]
+        assert isinstance(request, Request)
+
     def test_valid_body_password(
-        self, mocker, mock_user_db, test_app_client: TestClient, user: UserDB
+        self,
+        mocker,
+        mock_user_db,
+        test_app_client: TestClient,
+        user: UserDB,
+        event_handler,
     ):
         mocker.spy(mock_user_db, "update")
         current_hashed_passord = user.hashed_password
@@ -398,6 +444,14 @@ class TestUpdateMe:
 
         updated_user = mock_user_db.update.call_args[0][0]
         assert updated_user.hashed_password != current_hashed_passord
+
+        assert event_handler.called is True
+        actual_user = event_handler.call_args[0][0]
+        assert actual_user.id == user.id
+        updated_fields = event_handler.call_args[0][1]
+        assert updated_fields == {"password": "merlin"}
+        request = event_handler.call_args[0][2]
+        assert isinstance(request, Request)
 
 
 @pytest.mark.router

@@ -15,6 +15,7 @@ class ErrorCode:
 class Event(Enum):
     ON_AFTER_REGISTER = auto()
     ON_AFTER_FORGOT_PASSWORD = auto()
+    ON_AFTER_UPDATE = auto()
 
 
 class EventHandlersRouter(APIRouter):

@@ -78,6 +78,10 @@ class FastAPIUsers:
         """Add an event handler on successful forgot password request."""
         return self._on_event(Event.ON_AFTER_FORGOT_PASSWORD)
 
+    def on_after_update(self) -> Callable:
+        """Add an event handler on successful update user request."""
+        return self._on_event(Event.ON_AFTER_UPDATE)
+
     def get_oauth_router(
         self, oauth_client: BaseOAuth2, state_secret: str, redirect_url: str = None
     ) -> EventHandlersRouter:
