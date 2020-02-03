@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "71bd9672ba6225e491b9510ddfaae46e753b62fe20720886adbb4575dae3489c"
+            "sha256": "5defe55c097a2f61875cee03db13aa30c83904f084aa54d32375ebbba0cefb38"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -258,10 +258,10 @@
         },
         "sqlalchemy": {
             "hashes": [
-                "sha256:bfb8f464a5000b567ac1d350b9090cf081180ec1ab4aa87e7bca12dab25320ec"
+                "sha256:64a7b71846db6423807e96820993fa12a03b89127d278290ca25c0b11ed7b4fb"
             ],
             "index": "pypi",
-            "version": "==1.3.12"
+            "version": "==1.3.13"
         },
         "starlette": {
             "hashes": [
@@ -856,10 +856,10 @@
         },
         "sqlalchemy": {
             "hashes": [
-                "sha256:bfb8f464a5000b567ac1d350b9090cf081180ec1ab4aa87e7bca12dab25320ec"
+                "sha256:64a7b71846db6423807e96820993fa12a03b89127d278290ca25c0b11ed7b4fb"
             ],
             "index": "pypi",
-            "version": "==1.3.12"
+            "version": "==1.3.13"
         },
         "toml": {
             "hashes": [
