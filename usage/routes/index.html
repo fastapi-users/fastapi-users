@@ -510,6 +510,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#post-logoutname" class="md-nav__link">
+    POST /logout/{name}
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#post-forgot-password" class="md-nav__link">
     POST /forgot-password
   </a>
@@ -689,6 +696,13 @@
           <li class="md-nav__item">
   <a href="#post-loginname" class="md-nav__link">
     POST /login/{name}
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post-logoutname" class="md-nav__link">
+    POST /logout/{name}
   </a>
   
 </li>
@@ -880,6 +894,20 @@
 <span class="p">}</span>
 </pre></div>
 
+</div>
+<h3 id="post-logoutname"><code>POST /logout/{name}</code><a class="headerlink" href="#post-logoutname" title="Permanent link">&para;</a></h3>
+<p>Logout the authenticated user against the method named <code>name</code>. Check the corresponding <a href="../../configuration/authentication/">authentication method</a> to view the success response.</p>
+<div class="admonition fail">
+<p class="admonition-title"><code>401 Unauthorized</code></p>
+<p>Missing token or inactive user.</p>
+</div>
+<div class="admonition success">
+<p class="admonition-title"><code>200 OK</code></p>
+<p>The logout process was successful.</p>
+</div>
+<div class="admonition success">
+<p class="admonition-title"><code>202 Accepted</code></p>
+<p>The logout process is not applicable for this authentication backend (e.g. JWT).</p>
 </div>
 <h3 id="post-forgot-password"><code>POST /forgot-password</code><a class="headerlink" href="#post-forgot-password" title="Permanent link">&para;</a></h3>
 <p>Request a reset password procedure. Will generate a temporary token and call the <code>on_after_forgot_password</code> <a href="../../configuration/router/#event-handlers">event handlers</a> if the user exists.</p>
