@@ -17,7 +17,7 @@ black = "*"
 mypy = "*"
 codecov = "*"
 pytest-cov = "*"
-pytest-mock = "*"
+pytest-mock = {editable = true,git = "https://github.com/pytest-dev/pytest-mock.git",ref = "master"}
 asynctest = "*"
 flit = "*"
 markdown-include = "*"
