@@ -180,6 +180,25 @@ class TestLogin:
 
 
 @pytest.mark.router
+@pytest.mark.parametrize("path", ["/logout/mock", "/logout/mock-bis"])
+class TestLogout:
+    def test_missing_token(self, path, test_app_client: TestClient):
+        response = test_app_client.post(path)
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_unimplemented_logout(
+        self, mocker, path, test_app_client: TestClient, user: UserDB
+    ):
+        get_logout_response_spy = mocker.spy(MockAuthentication, "get_logout_response")
+        response = test_app_client.post(
+            path, headers={"Authorization": f"Bearer {user.id}"}
+        )
+        assert response.status_code == status.HTTP_202_ACCEPTED
+
+        get_logout_response_spy.assert_called_once()
+
+
+@pytest.mark.router
 class TestForgotPassword:
     def test_empty_body(self, test_app_client: TestClient, event_handler):
         response = test_app_client.post("/forgot-password", json={})

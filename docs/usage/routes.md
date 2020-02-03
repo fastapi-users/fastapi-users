@@ -57,6 +57,19 @@ Login a user against the method named `name`. Check the corresponding [authentic
     }
     ```
 
+### `POST /logout/{name}`
+
+Logout the authenticated user against the method named `name`. Check the corresponding [authentication method](../configuration/authentication/index.md) to view the success response.
+
+!!! fail "`401 Unauthorized`"
+    Missing token or inactive user.
+
+!!! success "`200 OK`"
+    The logout process was successful.
+
+!!! success "`202 Accepted`"
+    The logout process is not applicable for this authentication backend (e.g. JWT).
+
 ### `POST /forgot-password`
 
 Request a reset password procedure. Will generate a temporary token and call the `on_after_forgot_password` [event handlers](../configuration/router.md#event-handlers) if the user exists.

@@ -10,6 +10,8 @@ When checking authentication, each method is run one after the other. The first 
 
 Each defined method will generate a [`/login/{name}`](../../usage/routes.md#post-loginname) route where `name` is defined on the authentication method object.
 
+Each defined method will generate a [`/logout/{name}`](../../usage/routes.md#post-logoutname) route where `name` is defined on the authentication method object.
+
 ## Provided methods
 
 * [JWT authentication](jwt.md)

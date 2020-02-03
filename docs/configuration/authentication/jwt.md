@@ -41,6 +41,14 @@ This method will return a JWT token upon successful login:
 
 > Check documentation about [login route](../../usage/routes.md#post-loginname).
 
+## Logout
+
+This method is not applicable to this backend and won't do anything.
+
+!!! success "`202 Accepted`"
+
+> Check documentation about [logout route](../../usage/routes.md#post-logoutname).
+
 ## Authentication
 
 This method expects that you provide a `Bearer` authentication with a valid JWT.

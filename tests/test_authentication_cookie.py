@@ -132,3 +132,21 @@ async def test_get_login_response(
         cookie_value, SECRET, audience="fastapi-users:auth", algorithms=[JWT_ALGORITHM]
     )
     assert decoded["user_id"] == user.id
+
+
+@pytest.mark.authentication
+@pytest.mark.asyncio
+async def test_get_logout_response(user):
+    response = Response()
+    logout_response = await cookie_authentication.get_logout_response(user, response)
+
+    # We shouldn't return directly the response
+    # so that FastAPI can terminate it properly
+    assert logout_response is None
+
+    cookies = [header for header in response.raw_headers if header[0] == b"set-cookie"]
+    assert len(cookies) == 1
+
+    cookie = cookies[0][1].decode("latin-1")
+
+    assert f"Max-Age=0" in cookie

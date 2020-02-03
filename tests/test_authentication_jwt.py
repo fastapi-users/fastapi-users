@@ -78,3 +78,10 @@ async def test_get_login_response(jwt_authentication, user):
         token, SECRET, audience="fastapi-users:auth", algorithms=[JWT_ALGORITHM]
     )
     assert decoded["user_id"] == user.id
+
+
+@pytest.mark.authentication
+@pytest.mark.asyncio
+async def test_get_logout_response(jwt_authentication, user):
+    with pytest.raises(NotImplementedError):
+        await jwt_authentication.get_logout_response(user, Response())

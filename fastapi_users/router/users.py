@@ -36,6 +36,21 @@ def _add_login_route(
         return await auth_backend.get_login_response(user, response)
 
 
+def _add_logout_route(
+    router: EventHandlersRouter,
+    authenticator: Authenticator,
+    auth_backend: BaseAuthentication,
+):
+    @router.post(f"/logout/{auth_backend.name}")
+    async def logout(
+        response: Response, user=Depends(authenticator.get_current_active_user)
+    ):
+        try:
+            return await auth_backend.get_logout_response(user, response)
+        except NotImplementedError:
+            response.status_code = status.HTTP_202_ACCEPTED
+
+
 def get_user_router(
     user_db: BaseUserDatabase[models.BaseUserDB],
     user_model: Type[models.BaseUser],
@@ -71,6 +86,7 @@ def get_user_router(
 
     for auth_backend in authenticator.backends:
         _add_login_route(router, user_db, auth_backend)
+        _add_logout_route(router, authenticator, auth_backend)
 
     @router.post(
         "/register", response_model=user_model, status_code=status.HTTP_201_CREATED

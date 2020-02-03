@@ -67,5 +67,10 @@ class CookieAuthentication(JWTAuthentication):
         # so that FastAPI can terminate it properly
         return None
 
+    async def get_logout_response(self, user: BaseUserDB, response: Response) -> Any:
+        response.delete_cookie(
+            self.cookie_name, path=self.cookie_path, domain=self.cookie_domain
+        )
+
     async def _retrieve_token(self, request: Request) -> Optional[str]:
         return await self.api_key_cookie.__call__(request)

@@ -28,3 +28,6 @@ class BaseAuthentication:
 
     async def get_login_response(self, user: BaseUserDB, response: Response) -> Any:
         raise NotImplementedError()
+
+    async def get_logout_response(self, user: BaseUserDB, response: Response) -> Any:
+        raise NotImplementedError()
