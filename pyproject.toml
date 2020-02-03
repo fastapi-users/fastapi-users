@@ -30,7 +30,7 @@ requires = [
 
 [tool.flit.metadata.requires-extra]
 sqlalchemy = [
-    "sqlalchemy ==1.3.12",
+    "sqlalchemy ==1.3.13",
     "databases ==0.2.6",
 ]
 mongodb = [
