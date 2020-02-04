@@ -1,13 +1,13 @@
 from typing import List, Optional, Type
 
-from tortoise import Model, fields
+from tortoise import models, fields
 from tortoise.exceptions import DoesNotExist
 
 from fastapi_users.db.base import BaseUserDatabase
 from fastapi_users.models import UD
 
 
-class TortoiseBaseUserModel(Model):
+class TortoiseBaseUserModel(models.Model):
     id = fields.CharField(pk=True, generated=False, max_length=255)
     email = fields.CharField(index=True, unique=True, null=False, max_length=255)
     hashed_password = fields.CharField(null=False, max_length=255)
@@ -26,7 +26,7 @@ class TortoiseBaseUserModel(Model):
         abstract = True
 
 
-class TortoiseBaseOAuthAccountModel(Model):
+class TortoiseBaseOAuthAccountModel(models.Model):
     id = fields.CharField(pk=True, generated=False, max_length=255)
     oauth_name = fields.CharField(null=False, max_length=255)
     access_token = fields.CharField(null=False, max_length=255)
