@@ -22,7 +22,7 @@ description-file = "README.md"
 requires-python = ">=3.7"
 requires = [
     "fastapi ==0.47.1",
-    "passlib[bcrypt] ==1.7.1",
+    "passlib[bcrypt] ==1.7.2",
     "email-validator ==1.0.5",
     "pyjwt ==1.7.1",
     "python-multipart ==0.0.5",
