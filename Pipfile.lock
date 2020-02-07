@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "da69c295db6d06f8f183a7325b1595a663947816668dc311864213e6177847e8"
+            "sha256": "5369697c9c373cf50d90173f9ef22b254e8a86f5b042631495077ae46f9ab549"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -85,9 +85,9 @@
         },
         "ciso8601": {
             "hashes": [
-                "sha256:307342e8bb362ae41a3f3a089c11b374116823bce6fbe5d784e2a2dc37f2c753"
+                "sha256:bdbb5b366058b1c87735603b23060962c439ac9be66f1ae91e8c7dbd7d59e262"
             ],
-            "version": "==2.1.2"
+            "version": "==2.1.3"
         },
         "databases": {
             "hashes": [
@@ -482,18 +482,18 @@
         },
         "httpx": {
             "hashes": [
-                "sha256:2f2a7ce82cd4373af5a72d2646e20e4061da36b637ebcb88b93265083f132bff",
-                "sha256:abc46081611a86270d92c8fcaaf148f1eb33510c92096075fac27288bea3a9b2"
+                "sha256:1d3893d3e4244c569764a6bae5c5a9fbbc4a6ec3825450b5696602af7a275576",
+                "sha256:7d2bfb726eeed717953d15dddb22da9c2fcf48a4d70ba1456aa0a7faeda33cf7"
             ],
-            "version": "==0.11.0"
+            "version": "==0.11.1"
         },
         "httpx-oauth": {
             "hashes": [
-                "sha256:940f82eed06fe2abe9c2ab414ad5c4f7feb03009dc24bd5ea0c01473334424b8",
-                "sha256:ed34cda0748b66eda7f874290ca5e7e522487cd78a15df25bf12e71bdb47ac27"
+                "sha256:01c8709ec71a1ed7b334e712e22315c33f2dd1d456e874b7a87fd4e52637e24a",
+                "sha256:265e815be2c0ee3dab8b5f35d696d65c44b559f7f124c8c65c11e54027433659"
             ],
             "index": "pypi",
-            "version": "==0.2.0"
+            "version": "==0.2.1"
         },
         "hyperframe": {
             "hashes": [
@@ -527,10 +527,10 @@
         },
         "jinja2": {
             "hashes": [
-                "sha256:93187ffbc7808079673ef52771baa950426fd664d3aad1d0fa3e95644360e250",
-                "sha256:b0eaf100007721b5c16c1fc1eecb87409464edc10469ddc9a22a27a99123be49"
+                "sha256:c10142f819c2d22bdcd17548c46fa9b77cf4fda45097854c689666bf425e7484",
+                "sha256:c922560ac46888d47384de1dbdc3daaa2ea993af4b26a436dec31fa2c19ec668"
             ],
-            "version": "==2.11.1"
+            "version": "==3.0.0a1"
         },
         "jsmin": {
             "hashes": [
