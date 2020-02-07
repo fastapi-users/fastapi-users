@@ -9,6 +9,7 @@ from fastapi_users.db import (
 from httpx_oauth.clients.google import GoogleOAuth2
 from tortoise import fields
 from tortoise.contrib.starlette import register_tortoise
+from starlette.requests import Request
 
 DATABASE_URL = "sqlite://./test.db"
 SECRET = "SECRET"
@@ -59,10 +60,10 @@ app.include_router(google_oauth_router, prefix="/google-oauth", tags=["users"])
 
 
 @fastapi_users.on_after_register()
-def on_after_register(user: User):
+def on_after_register(user: User, request: Request):
     print(f"User {user.id} has registered.")
 
 
 @fastapi_users.on_after_forgot_password()
-def on_after_forgot_password(user: User, token: str):
+def on_after_forgot_password(user: User, token: str, request: Request):
     print(f"User {user.id} has forgot their password. Reset token: {token}")
