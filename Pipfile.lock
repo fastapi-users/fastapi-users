@@ -465,15 +465,9 @@
         },
         "hstspreload": {
             "hashes": [
-                "sha256:e1fc3184ddf1c8b1af7143b28d76cf648fe385cf29b6d4e7bc9d8fbab98867be"
+                "sha256:cfe1e9f4f01a787b8796e86fb60ff410364f46c7e854bd6270acdddb04ce1650"
             ],
-            "version": "==2020.2.5"
-        },
-        "htmlmin": {
-            "hashes": [
-                "sha256:50c1ef4630374a5d723900096a961cff426dff46b48f34d194a81bbe14eca178"
-            ],
-            "version": "==0.1.12"
+            "version": "==2020.2.15"
         },
         "httpx": {
             "hashes": [
@@ -526,12 +520,6 @@
                 "sha256:c922560ac46888d47384de1dbdc3daaa2ea993af4b26a436dec31fa2c19ec668"
             ],
             "version": "==3.0.0a1"
-        },
-        "jsmin": {
-            "hashes": [
-                "sha256:b6df99b2cd1c75d9d342e4335b535789b8da9107ec748212706ef7bbe5c2553b"
-            ],
-            "version": "==2.2.2"
         },
         "livereload": {
             "hashes": [
@@ -609,18 +597,11 @@
         },
         "mkdocs-material": {
             "hashes": [
-                "sha256:294275c4d3f3e5711b27645b013a0afe8b22a8ace8db81099cb1403ad47b4af5",
-                "sha256:4f32bfc8f8da74abc0bc65116d7f9e3d6b2e3e2dc43b61cfaab72e151c9c0431"
+                "sha256:1d486635b03f5a2ec87325842f7b10c7ae7daa0eef76b185572eece6a6ea212c",
+                "sha256:7f3afa0a09c07d0b89a6a9755fdb00513aee8f0cec3538bb903325c80f66f444"
             ],
             "index": "pypi",
-            "version": "==4.6.2"
-        },
-        "mkdocs-minify-plugin": {
-            "hashes": [
-                "sha256:12fc10173f1e13470e8ac66564dd43a33326b911c9d5c4bf92be62fe06ff19f4",
-                "sha256:14cdee6dd71b149a47e8d8dc3630e8c1c3bc8ada3ba159bea9990bf382651e2c"
-            ],
-            "version": "==0.2.3"
+            "version": "==4.6.3"
         },
         "more-itertools": {
             "hashes": [
