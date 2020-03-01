@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f791f381f99b8738bb3cb74a3af47416d1a8f838a20c1ed91681b13e21ac8c6f"
+            "sha256": "9df0172e80abaca1b6bd9efd21a630dcfcc88abb1c0821e927c57f36c396314e"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -107,11 +107,11 @@
         },
         "fastapi": {
             "hashes": [
-                "sha256:717dbd2871c270970c70406ef4e550c3504525a7941df817f3a1318de0857c13",
-                "sha256:c9296e05a011a53c5b4f0a12f06c261b95b7199685b3af986486e41a27545081"
+                "sha256:1b4b36052b281883f55ea116c03db476617712e709c6c6cd45e25b8f13b241f8",
+                "sha256:6e367f4f2ac7ac55d5f7e90bac9c48dd080e57e4d8759d67aaf6abc868f7c1a4"
             ],
             "index": "pypi",
-            "version": "==0.49.0"
+            "version": "==0.50.0"
         },
         "idna": {
             "hashes": [
@@ -260,16 +260,17 @@
         },
         "starlette": {
             "hashes": [
-                "sha256:c2ac9a42e0e0328ad20fe444115ac5e3760c1ee2ac1ff8cdb5ec915c4a453411"
+                "sha256:6169ee78ded501095d1dda7b141a1dc9f9934d37ad23196e180150ace2c6449b",
+                "sha256:a9bb130fa7aa736eda8a814b6ceb85ccf7a209ed53843d0d61e246b380afa10f"
             ],
-            "version": "==0.12.9"
+            "version": "==0.13.2"
         },
         "tortoise-orm": {
             "hashes": [
-                "sha256:ede37c0637a96189c2aa6395fb25e74d847841289acb5528bb0237aa7232e7e2"
+                "sha256:ffde6be026429b4aa32d750128d40404140482db5b46659017c9957ed0a459a4"
             ],
             "index": "pypi",
-            "version": "==0.15.15"
+            "version": "==0.15.17"
         },
         "typing-extensions": {
             "hashes": [
@@ -471,9 +472,9 @@
         },
         "hstspreload": {
             "hashes": [
-                "sha256:a1ba0c2730593a1922f93cd9c66ff620248090656102bf31e4559c01d7935e05"
+                "sha256:519feba70b0d490ac161d60120923e5d1d2abf23e72eeac4ac8622f6f518c50d"
             ],
-            "version": "==2020.2.25"
+            "version": "==2020.2.29"
         },
         "httpx": {
             "hashes": [

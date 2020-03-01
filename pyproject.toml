@@ -21,7 +21,7 @@ classifiers = [
 description-file = "README.md"
 requires-python = ">=3.7"
 requires = [
-    "fastapi ==0.49.0",
+    "fastapi >=0.50.0,<0.51.0",
     "passlib[bcrypt] ==1.7.2",
     "email-validator ==1.0.5",
     "pyjwt ==1.7.1",
@@ -37,7 +37,7 @@ mongodb = [
     "motor ==2.1.0",
 ]
 tortoise-orm = [
-    "tortoise-orm ==0.15.15"
+    "tortoise-orm ==0.15.17"
 ]
 oauth = [
     "httpx-oauth >0.2,<0.3"
