@@ -615,11 +615,11 @@
         },
         "mkdocs-material": {
             "hashes": [
-                "sha256:586f59943322d6648e381e05e834db9ebce51388b747fc9e6a3e8c810f109baf",
-                "sha256:ad40811e2e9dbc38324dbb1085007bd9453b01a72a5987c34143e666bf09997d"
+                "sha256:a9515564718306f585248de121c08a6b1499e51c9c22507b83f3798dec8798bd",
+                "sha256:a9a282bfe7265f34892f09a0207b224691d6b39d57c161222ef75a85f65dad65"
             ],
             "index": "pypi",
-            "version": "==5.0.0b2.post1"
+            "version": "==5.0.0b3.post1"
         },
         "more-itertools": {
             "hashes": [
@@ -663,10 +663,10 @@
         },
         "packaging": {
             "hashes": [
-                "sha256:170748228214b70b672c581a3dd610ee51f733018650740e98c7df862a583f73",
-                "sha256:e665345f9eef0c621aa0bf2f8d78cf6d21904eef16a93f020240b704a57f1334"
+                "sha256:3c292b474fda1671ec57d46d739d072bfd495a4f51ad01a055121d81e952b7a3",
+                "sha256:82f77b9bee21c1bafbf35a84905d604d5d1223801d639cf3ed140bd651c08752"
             ],
-            "version": "==20.1"
+            "version": "==20.3"
         },
         "pathspec": {
             "hashes": [
