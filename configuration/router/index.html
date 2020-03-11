@@ -648,7 +648,7 @@
 <p>Example:</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@fastapi_users</span><span class="o">.</span><span class="n">on_after_register</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">on_after_register</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User </span><span class="si">{user.id}</span><span class="s2"> has registered.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> has registered.&quot;</span><span class="p">)</span>
 </code></pre></div>
 
 <h3 id="after-forgot-password">After forgot password<a class="headerlink" href="#after-forgot-password" title="Permanent link">&para;</a></h3>
@@ -663,7 +663,7 @@
 <p>Example:</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@fastapi_users</span><span class="o">.</span><span class="n">on_after_forgot_password</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">on_after_forgot_password</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User </span><span class="si">{user.id}</span><span class="s2"> has forgot their password. Reset token: </span><span class="si">{token}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> has forgot their password. Reset token: </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
 
 <h3 id="after-update">After update<a class="headerlink" href="#after-update" title="Permanent link">&para;</a></h3>
@@ -678,7 +678,7 @@
 <p>Example:</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@fastapi_users</span><span class="o">.</span><span class="n">on_after_update</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">on_after_update</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">,</span> <span class="n">updated_user_data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User </span><span class="si">{user.id}</span><span class="s2"> has been updated with the following data: </span><span class="si">{updated_user_data}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> has been updated with the following data: </span><span class="si">{</span><span class="n">updated_user_data</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
 
 <h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>

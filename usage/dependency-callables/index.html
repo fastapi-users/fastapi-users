@@ -577,21 +577,21 @@
 <p>Get the current user (<strong>active or not</strong>). Will throw a <code>401 Unauthorized</code> if missing or wrong credentials.</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/protected-route&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">protected_route</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_current_user</span><span class="p">)):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Hello, </span><span class="si">{user.email}</span><span class="s1">&#39;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Hello, </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s1">&#39;</span>
 </code></pre></div>
 
 <h2 id="get_current_active_user"><code>get_current_active_user</code><a class="headerlink" href="#get_current_active_user" title="Permanent link">&para;</a></h2>
 <p>Get the current active user. Will throw a <code>401 Unauthorized</code> if missing or wrong credentials or if the user is not active.</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/protected-route&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">protected_route</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_current_active_user</span><span class="p">)):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Hello, </span><span class="si">{user.email}</span><span class="s1">&#39;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Hello, </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s1">&#39;</span>
 </code></pre></div>
 
 <h2 id="get_current_superuser"><code>get_current_superuser</code><a class="headerlink" href="#get_current_superuser" title="Permanent link">&para;</a></h2>
 <p>Get the current superuser. Will throw a <code>401 Unauthorized</code> if missing or wrong credentials or if the user is not active. Will throw a <code>403 Forbidden</code> if the user is not a superuser.</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/protected-route&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">protected_route</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_current_superuser</span><span class="p">)):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Hello, </span><span class="si">{user.email}</span><span class="s1">&#39;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Hello, </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s1">&#39;</span>
 </code></pre></div>
 
 <h2 id="in-path-operation">In path operation<a class="headerlink" href="#in-path-operation" title="Permanent link">&para;</a></h2>
