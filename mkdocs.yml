@@ -6,8 +6,9 @@ theme:
   palette:
     primary: 'red'
     accent: 'red'
-  logo:
-    icon: 'supervisor_account'
+  icon:
+    logo: material/account-supervisor
+    repo: fontawesome/brands/git-alt
   favicon: 'favicon.png'
 
 repo_name: frankie567/fastapi-users
