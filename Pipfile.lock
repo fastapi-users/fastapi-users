@@ -268,10 +268,10 @@
         },
         "tortoise-orm": {
             "hashes": [
-                "sha256:65e9dcf0f333bbbe74c67049fb1b4e181f1aaedc28116ef6253b7e0555c73bcf"
+                "sha256:e3dcad4983029e5769a29b8726acd062bc6d79bf478bcfbd20b3dc31dbd86703"
             ],
             "index": "pypi",
-            "version": "==0.15.18"
+            "version": "==0.15.19"
         },
         "typing-extensions": {
             "hashes": [
@@ -473,9 +473,9 @@
         },
         "hstspreload": {
             "hashes": [
-                "sha256:5f120aa14869019e547166d5d3efa7f40dc5569bf830b130e5ba8bdef5bc9d5a"
+                "sha256:0f02fd8f4fd40eb8dd406742c2a2531685dbdb6f7e96f3eb88c80b856de658fe"
             ],
-            "version": "==2020.3.4"
+            "version": "==2020.3.12"
         },
         "httpx": {
             "hashes": [
