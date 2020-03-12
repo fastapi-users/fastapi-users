@@ -254,10 +254,10 @@
         },
         "sqlalchemy": {
             "hashes": [
-                "sha256:b92d2de62e43499d85b1780274d1b562e5159c7996f6f04a9bb46cf681ced45f"
+                "sha256:c4cca4aed606297afbe90d4306b49ad3a4cd36feb3f87e4bfd655c57fd9ef445"
             ],
             "index": "pypi",
-            "version": "==1.3.14"
+            "version": "==1.3.15"
         },
         "starlette": {
             "hashes": [
@@ -473,9 +473,9 @@
         },
         "hstspreload": {
             "hashes": [
-                "sha256:5f120aa14869019e547166d5d3efa7f40dc5569bf830b130e5ba8bdef5bc9d5a"
+                "sha256:0f02fd8f4fd40eb8dd406742c2a2531685dbdb6f7e96f3eb88c80b856de658fe"
             ],
-            "version": "==2020.3.4"
+            "version": "==2020.3.12"
         },
         "httpx": {
             "hashes": [
@@ -856,10 +856,10 @@
         },
         "sqlalchemy": {
             "hashes": [
-                "sha256:b92d2de62e43499d85b1780274d1b562e5159c7996f6f04a9bb46cf681ced45f"
+                "sha256:c4cca4aed606297afbe90d4306b49ad3a4cd36feb3f87e4bfd655c57fd9ef445"
             ],
             "index": "pypi",
-            "version": "==1.3.14"
+            "version": "==1.3.15"
         },
         "toml": {
             "hashes": [
