@@ -37,7 +37,7 @@ mongodb = [
     "motor ==2.1.0",
 ]
 tortoise-orm = [
-    "tortoise-orm >=0.15.18,<0.16.0"
+    "tortoise-orm >=0.16.0,<0.17.0"
 ]
 oauth = [
     "httpx-oauth >0.2,<0.3"
