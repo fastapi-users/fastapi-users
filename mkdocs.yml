@@ -8,7 +8,6 @@ theme:
     accent: 'red'
   icon:
     logo: material/account-supervisor
-    repo: fontawesome/brands/git-alt
   favicon: 'favicon.png'
 
 repo_name: frankie567/fastapi-users
