@@ -268,10 +268,10 @@
         },
         "tortoise-orm": {
             "hashes": [
-                "sha256:5253214da643b8f557b7497bda480086885a78ab77f4976605bddaae3841cbca"
+                "sha256:57f14bf34d9b292084ba9a41975a2fd96edded34e892590ca881d1aa6f80d7af"
             ],
             "index": "pypi",
-            "version": "==0.16.1"
+            "version": "==0.16.2"
         },
         "typing-extensions": {
             "hashes": [
