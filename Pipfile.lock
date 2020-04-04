@@ -623,11 +623,11 @@
         },
         "mkdocs-material": {
             "hashes": [
-                "sha256:16d87f2f8cb1186c05c05bfa1a1fadb05e0361d2d6149a98f976c973d2cee3b3",
-                "sha256:abc3d51ac6c9a84e0bf2a9da4b642310dea385e694e561daf9982c0739793c2b"
+                "sha256:2bab93688d216c19d8e707143808eed3856af73b4883b3266409a9a5b119b235",
+                "sha256:5355970c2a3e401736ba1b70ddb236ac75cb88bf57b354e8cd9d28938bee8fc2"
             ],
             "index": "pypi",
-            "version": "==5.0.0rc3"
+            "version": "==5.0.0rc4"
         },
         "more-itertools": {
             "hashes": [
