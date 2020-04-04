@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "d02d18c4329aeaa0a563c7247b565df65bc0ec864502cb2b84c4bbb472557228"
+            "sha256": "80a3b299ff5ae7e4655509c2590544fbcc39efe6c03455af65ac716d730f7b4f"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -107,11 +107,11 @@
         },
         "fastapi": {
             "hashes": [
-                "sha256:532648b4e16dd33673d71dc0b35dff1b4d20c709d04078010e258b9f3a79771a",
-                "sha256:721b11d8ffde52c669f52741b6d9d761fe2e98778586f4cfd6f5e47254ba5016"
+                "sha256:a5cb9100d5f2b5dd82addbc2cdf8009258bce45b03ba21d3f5eecc88c7b5a716",
+                "sha256:cf26d47ede6bc6e179df951312f55fea7d4005dd53370245e216436ca4e22f22"
             ],
             "index": "pypi",
-            "version": "==0.52.0"
+            "version": "==0.53.2"
         },
         "idna": {
             "hashes": [
@@ -766,9 +766,12 @@
             "version": "==2.8.1"
         },
         "pytest-mock": {
-            "editable": true,
-            "git": "https://github.com/pytest-dev/pytest-mock.git",
-            "ref": "d0cceefcbb43a03de1af3720ab13c57ebaf67f26"
+            "hashes": [
+                "sha256:98e02534f170e4f37d7e1abdfc5973fd4207aa609582291717f643764e71c925",
+                "sha256:a4494016753a30231f8519bfd160242a0f3c8fb82ca36e7b6f82a7fb602ac6b8"
+            ],
+            "index": "pypi",
+            "version": "==3.0.0"
         },
         "pytoml": {
             "hashes": [
