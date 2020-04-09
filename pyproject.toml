@@ -21,7 +21,7 @@ classifiers = [
 description-file = "README.md"
 requires-python = ">=3.7"
 requires = [
-    "fastapi >=0.53.0,<0.54.0",
+    "fastapi >=0.54.0,<0.55.0",
     "passlib[bcrypt] ==1.7.2",
     "email-validator ==1.0.5",
     "pyjwt ==1.7.1",
@@ -40,7 +40,7 @@ tortoise-orm = [
     "tortoise-orm >=0.16.0,<0.17.0"
 ]
 oauth = [
-    "httpx-oauth >0.2,<0.3"
+    "httpx-oauth >=0.2.2,<0.3"
 ]
 
 [tool.flit.metadata.urls]
