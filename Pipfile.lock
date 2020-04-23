@@ -784,11 +784,11 @@
         },
         "pytest-mock": {
             "hashes": [
-                "sha256:98e02534f170e4f37d7e1abdfc5973fd4207aa609582291717f643764e71c925",
-                "sha256:a4494016753a30231f8519bfd160242a0f3c8fb82ca36e7b6f82a7fb602ac6b8"
+                "sha256:997729451dfc36b851a9accf675488c7020beccda15e11c75632ee3d1b1ccd71",
+                "sha256:ce610831cedeff5331f4e2fc453a5dd65384303f680ab34bee2c6533855b431c"
             ],
             "index": "pypi",
-            "version": "==3.0.0"
+            "version": "==3.1.0"
         },
         "pytoml": {
             "hashes": [
