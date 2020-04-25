@@ -1,12 +1,13 @@
+from typing import cast, Dict, Any
 from unittest.mock import MagicMock
 
 import asynctest
+import httpx
 import jwt
 import pytest
 from fastapi import FastAPI
 from starlette import status
 from starlette.requests import Request
-from starlette.testclient import TestClient
 
 from fastapi_users.authentication import Authenticator
 from fastapi_users.router import ErrorCode, Event, get_user_router
@@ -41,8 +42,11 @@ def event_handler(request):
     return request.param()
 
 
-@pytest.fixture()
-def test_app_client(mock_user_db, mock_authentication, event_handler) -> TestClient:
+@pytest.fixture
+@pytest.mark.asyncio
+async def test_app_client(
+    mock_user_db, mock_authentication, event_handler, get_test_client
+) -> httpx.AsyncClient:
     mock_authentication_bis = MockAuthentication(name="mock-bis")
     authenticator = Authenticator(
         [mock_authentication, mock_authentication_bis], mock_user_db
@@ -66,132 +70,149 @@ def test_app_client(mock_user_db, mock_authentication, event_handler) -> TestCli
     app = FastAPI()
     app.include_router(user_router)
 
-    return TestClient(app)
+    return await get_test_client(app)
 
 
 @pytest.mark.router
+@pytest.mark.asyncio
 class TestRegister:
-    def test_empty_body(self, test_app_client: TestClient, event_handler):
-        response = test_app_client.post("/register", json={})
+    async def test_empty_body(self, test_app_client: httpx.AsyncClient, event_handler):
+        response = await test_app_client.post("/register", json={})
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
         assert event_handler.called is False
 
-    def test_missing_password(self, test_app_client: TestClient, event_handler):
+    async def test_missing_password(
+        self, test_app_client: httpx.AsyncClient, event_handler
+    ):
         json = {"email": "king.arthur@camelot.bt"}
-        response = test_app_client.post("/register", json=json)
+        response = await test_app_client.post("/register", json=json)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
         assert event_handler.called is False
 
-    def test_wrong_email(self, test_app_client: TestClient, event_handler):
+    async def test_wrong_email(self, test_app_client: httpx.AsyncClient, event_handler):
         json = {"email": "king.arthur", "password": "guinevere"}
-        response = test_app_client.post("/register", json=json)
+        response = await test_app_client.post("/register", json=json)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
         assert event_handler.called is False
 
-    def test_existing_user(self, test_app_client: TestClient, event_handler):
+    async def test_existing_user(
+        self, test_app_client: httpx.AsyncClient, event_handler
+    ):
         json = {"email": "king.arthur@camelot.bt", "password": "guinevere"}
-        response = test_app_client.post("/register", json=json)
+        response = await test_app_client.post("/register", json=json)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
-        assert response.json()["detail"] == ErrorCode.REGISTER_USER_ALREADY_EXISTS
+        data = cast(Dict[str, Any], response.json())
+        assert data["detail"] == ErrorCode.REGISTER_USER_ALREADY_EXISTS
         assert event_handler.called is False
 
-    def test_valid_body(self, test_app_client: TestClient, event_handler):
+    async def test_valid_body(self, test_app_client: httpx.AsyncClient, event_handler):
         json = {"email": "lancelot@camelot.bt", "password": "guinevere"}
-        response = test_app_client.post("/register", json=json)
+        response = await test_app_client.post("/register", json=json)
         assert response.status_code == status.HTTP_201_CREATED
         assert event_handler.called is True
 
-        response_json = response.json()
-        assert "hashed_password" not in response_json
-        assert "password" not in response_json
-        assert response_json["id"] is not None
+        data = cast(Dict[str, Any], response.json())
+        assert "hashed_password" not in data
+        assert "password" not in data
+        assert data["id"] is not None
 
         actual_user = event_handler.call_args[0][0]
-        assert actual_user.id == response_json["id"]
+        assert actual_user.id == data["id"]
         request = event_handler.call_args[0][1]
         assert isinstance(request, Request)
 
-    def test_valid_body_is_superuser(self, test_app_client: TestClient, event_handler):
+    async def test_valid_body_is_superuser(
+        self, test_app_client: httpx.AsyncClient, event_handler
+    ):
         json = {
             "email": "lancelot@camelot.bt",
             "password": "guinevere",
             "is_superuser": True,
         }
-        response = test_app_client.post("/register", json=json)
+        response = await test_app_client.post("/register", json=json)
         assert response.status_code == status.HTTP_201_CREATED
         assert event_handler.called is True
 
-        response_json = response.json()
-        assert response_json["is_superuser"] is False
+        data = cast(Dict[str, Any], response.json())
+        assert data["is_superuser"] is False
 
-    def test_valid_body_is_active(self, test_app_client: TestClient, event_handler):
+    async def test_valid_body_is_active(
+        self, test_app_client: httpx.AsyncClient, event_handler
+    ):
         json = {
             "email": "lancelot@camelot.bt",
             "password": "guinevere",
             "is_active": False,
         }
-        response = test_app_client.post("/register", json=json)
+        response = await test_app_client.post("/register", json=json)
         assert response.status_code == status.HTTP_201_CREATED
         assert event_handler.called is True
 
-        response_json = response.json()
-        assert response_json["is_active"] is True
+        data = cast(Dict[str, Any], response.json())
+        assert data["is_active"] is True
 
 
 @pytest.mark.router
 @pytest.mark.parametrize("path", ["/login/mock", "/login/mock-bis"])
+@pytest.mark.asyncio
 class TestLogin:
-    def test_empty_body(self, path, test_app_client: TestClient):
-        response = test_app_client.post(path, data={})
+    async def test_empty_body(self, path, test_app_client: httpx.AsyncClient):
+        response = await test_app_client.post(path, data={})
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
-    def test_missing_username(self, path, test_app_client: TestClient):
+    async def test_missing_username(self, path, test_app_client: httpx.AsyncClient):
         data = {"password": "guinevere"}
-        response = test_app_client.post(path, data=data)
+        response = await test_app_client.post(path, data=data)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
-    def test_missing_password(self, path, test_app_client: TestClient):
+    async def test_missing_password(self, path, test_app_client: httpx.AsyncClient):
         data = {"username": "king.arthur@camelot.bt"}
-        response = test_app_client.post(path, data=data)
+        response = await test_app_client.post(path, data=data)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
-    def test_not_existing_user(self, path, test_app_client: TestClient):
+    async def test_not_existing_user(self, path, test_app_client: httpx.AsyncClient):
         data = {"username": "lancelot@camelot.bt", "password": "guinevere"}
-        response = test_app_client.post(path, data=data)
+        response = await test_app_client.post(path, data=data)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
-        assert response.json()["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
+        data = cast(Dict[str, Any], response.json())
+        assert data["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
 
-    def test_wrong_password(self, path, test_app_client: TestClient):
+    async def test_wrong_password(self, path, test_app_client: httpx.AsyncClient):
         data = {"username": "king.arthur@camelot.bt", "password": "percival"}
-        response = test_app_client.post(path, data=data)
+        response = await test_app_client.post(path, data=data)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
-        assert response.json()["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
+        data = cast(Dict[str, Any], response.json())
+        assert data["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
 
-    def test_valid_credentials(self, path, test_app_client: TestClient, user: UserDB):
+    async def test_valid_credentials(
+        self, path, test_app_client: httpx.AsyncClient, user: UserDB
+    ):
         data = {"username": "king.arthur@camelot.bt", "password": "guinevere"}
-        response = test_app_client.post(path, data=data)
+        response = await test_app_client.post(path, data=data)
         assert response.status_code == status.HTTP_200_OK
         assert response.json() == {"token": user.id}
 
-    def test_inactive_user(self, path, test_app_client: TestClient):
+    async def test_inactive_user(self, path, test_app_client: httpx.AsyncClient):
         data = {"username": "percival@camelot.bt", "password": "angharad"}
-        response = test_app_client.post(path, data=data)
+        response = await test_app_client.post(path, data=data)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
-        assert response.json()["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
+        data = cast(Dict[str, Any], response.json())
+        assert data["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
 
 
 @pytest.mark.router
 @pytest.mark.parametrize("path", ["/logout/mock", "/logout/mock-bis"])
+@pytest.mark.asyncio
 class TestLogout:
-    def test_missing_token(self, path, test_app_client: TestClient):
-        response = test_app_client.post(path)
+    async def test_missing_token(self, path, test_app_client: httpx.AsyncClient):
+        response = await test_app_client.post(path)
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    def test_unimplemented_logout(
-        self, mocker, path, test_app_client: TestClient, user: UserDB
+    async def test_unimplemented_logout(
+        self, mocker, path, test_app_client: httpx.AsyncClient, user: UserDB
     ):
         get_logout_response_spy = mocker.spy(MockAuthentication, "get_logout_response")
-        response = test_app_client.post(
+        response = await test_app_client.post(
             path, headers={"Authorization": f"Bearer {user.id}"}
         )
         assert response.status_code == status.HTTP_202_ACCEPTED
@@ -200,27 +221,34 @@ class TestLogout:
 
 
 @pytest.mark.router
+@pytest.mark.asyncio
 class TestForgotPassword:
-    def test_empty_body(self, test_app_client: TestClient, event_handler):
-        response = test_app_client.post("/forgot-password", json={})
+    async def test_empty_body(self, test_app_client: httpx.AsyncClient, event_handler):
+        response = await test_app_client.post("/forgot-password", json={})
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
         assert event_handler.called is False
 
-    def test_not_existing_user(self, test_app_client: TestClient, event_handler):
+    async def test_not_existing_user(
+        self, test_app_client: httpx.AsyncClient, event_handler
+    ):
         json = {"email": "lancelot@camelot.bt"}
-        response = test_app_client.post("/forgot-password", json=json)
+        response = await test_app_client.post("/forgot-password", json=json)
         assert response.status_code == status.HTTP_202_ACCEPTED
         assert event_handler.called is False
 
-    def test_inactive_user(self, test_app_client: TestClient, event_handler):
+    async def test_inactive_user(
+        self, test_app_client: httpx.AsyncClient, event_handler
+    ):
         json = {"email": "percival@camelot.bt"}
-        response = test_app_client.post("/forgot-password", json=json)
+        response = await test_app_client.post("/forgot-password", json=json)
         assert response.status_code == status.HTTP_202_ACCEPTED
         assert event_handler.called is False
 
-    def test_existing_user(self, test_app_client: TestClient, event_handler, user):
+    async def test_existing_user(
+        self, test_app_client: httpx.AsyncClient, event_handler, user
+    ):
         json = {"email": "king.arthur@camelot.bt"}
-        response = test_app_client.post("/forgot-password", json=json)
+        response = await test_app_client.post("/forgot-password", json=json)
         assert response.status_code == status.HTTP_202_ACCEPTED
         assert event_handler.called is True
 
@@ -239,43 +267,50 @@ class TestForgotPassword:
 
 
 @pytest.mark.router
+@pytest.mark.asyncio
 class TestResetPassword:
-    def test_empty_body(self, test_app_client: TestClient):
-        response = test_app_client.post("/reset-password", json={})
+    async def test_empty_body(self, test_app_client: httpx.AsyncClient):
+        response = await test_app_client.post("/reset-password", json={})
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
-    def test_missing_token(self, test_app_client: TestClient):
+    async def test_missing_token(self, test_app_client: httpx.AsyncClient):
         json = {"password": "guinevere"}
-        response = test_app_client.post("/reset-password", json=json)
+        response = await test_app_client.post("/reset-password", json=json)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
-    def test_missing_password(self, test_app_client: TestClient):
+    async def test_missing_password(self, test_app_client: httpx.AsyncClient):
         json = {"token": "foo"}
-        response = test_app_client.post("/reset-password", json=json)
+        response = await test_app_client.post("/reset-password", json=json)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
-    def test_invalid_token(self, test_app_client: TestClient):
+    async def test_invalid_token(self, test_app_client: httpx.AsyncClient):
         json = {"token": "foo", "password": "guinevere"}
-        response = test_app_client.post("/reset-password", json=json)
+        response = await test_app_client.post("/reset-password", json=json)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
-        assert response.json()["detail"] == ErrorCode.RESET_PASSWORD_BAD_TOKEN
+        data = cast(Dict[str, Any], response.json())
+        assert data["detail"] == ErrorCode.RESET_PASSWORD_BAD_TOKEN
 
-    def test_valid_token_missing_user_id_payload(
-        self, mocker, mock_user_db, test_app_client: TestClient, forgot_password_token
+    async def test_valid_token_missing_user_id_payload(
+        self,
+        mocker,
+        mock_user_db,
+        test_app_client: httpx.AsyncClient,
+        forgot_password_token,
     ):
         mocker.spy(mock_user_db, "update")
 
         json = {"token": forgot_password_token(), "password": "holygrail"}
-        response = test_app_client.post("/reset-password", json=json)
+        response = await test_app_client.post("/reset-password", json=json)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
-        assert response.json()["detail"] == ErrorCode.RESET_PASSWORD_BAD_TOKEN
+        data = cast(Dict[str, Any], response.json())
+        assert data["detail"] == ErrorCode.RESET_PASSWORD_BAD_TOKEN
         assert mock_user_db.update.called is False
 
-    def test_inactive_user(
+    async def test_inactive_user(
         self,
         mocker,
         mock_user_db,
-        test_app_client: TestClient,
+        test_app_client: httpx.AsyncClient,
         forgot_password_token,
         inactive_user: UserDB,
     ):
@@ -285,16 +320,17 @@ class TestResetPassword:
             "token": forgot_password_token(inactive_user.id),
             "password": "holygrail",
         }
-        response = test_app_client.post("/reset-password", json=json)
+        response = await test_app_client.post("/reset-password", json=json)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
-        assert response.json()["detail"] == ErrorCode.RESET_PASSWORD_BAD_TOKEN
+        data = cast(Dict[str, Any], response.json())
+        assert data["detail"] == ErrorCode.RESET_PASSWORD_BAD_TOKEN
         assert mock_user_db.update.called is False
 
-    def test_existing_user(
+    async def test_existing_user(
         self,
         mocker,
         mock_user_db,
-        test_app_client: TestClient,
+        test_app_client: httpx.AsyncClient,
         forgot_password_token,
         user: UserDB,
     ):
@@ -302,7 +338,7 @@ class TestResetPassword:
         current_hashed_passord = user.hashed_password
 
         json = {"token": forgot_password_token(user.id), "password": "holygrail"}
-        response = test_app_client.post("/reset-password", json=json)
+        response = await test_app_client.post("/reset-password", json=json)
         assert response.status_code == status.HTTP_200_OK
         assert mock_user_db.update.called is True
 
@@ -311,52 +347,60 @@ class TestResetPassword:
 
 
 @pytest.mark.router
+@pytest.mark.asyncio
 class TestMe:
-    def test_missing_token(self, test_app_client: TestClient):
-        response = test_app_client.get("/me")
+    async def test_missing_token(self, test_app_client: httpx.AsyncClient):
+        response = await test_app_client.get("/me")
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    def test_inactive_user(self, test_app_client: TestClient, inactive_user: UserDB):
-        response = test_app_client.get(
+    async def test_inactive_user(
+        self, test_app_client: httpx.AsyncClient, inactive_user: UserDB
+    ):
+        response = await test_app_client.get(
             "/me", headers={"Authorization": f"Bearer {inactive_user.id}"}
         )
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    def test_active_user(self, test_app_client: TestClient, user: UserDB):
-        response = test_app_client.get(
+    async def test_active_user(self, test_app_client: httpx.AsyncClient, user: UserDB):
+        response = await test_app_client.get(
             "/me", headers={"Authorization": f"Bearer {user.id}"}
         )
         assert response.status_code == status.HTTP_200_OK
 
-        response_json = response.json()
-        assert response_json["id"] == user.id
-        assert response_json["email"] == user.email
+        data = cast(Dict[str, Any], response.json())
+        assert data["id"] == user.id
+        assert data["email"] == user.email
 
 
 @pytest.mark.router
+@pytest.mark.asyncio
 class TestUpdateMe:
-    def test_missing_token(self, test_app_client: TestClient, event_handler):
-        response = test_app_client.patch("/me")
+    async def test_missing_token(
+        self, test_app_client: httpx.AsyncClient, event_handler
+    ):
+        response = await test_app_client.patch("/me")
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
         assert event_handler.called is False
 
-    def test_inactive_user(
-        self, test_app_client: TestClient, inactive_user: UserDB, event_handler
+    async def test_inactive_user(
+        self, test_app_client: httpx.AsyncClient, inactive_user: UserDB, event_handler
     ):
-        response = test_app_client.patch(
+        response = await test_app_client.patch(
             "/me", headers={"Authorization": f"Bearer {inactive_user.id}"}
         )
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
         assert event_handler.called is False
 
-    def test_empty_body(self, test_app_client: TestClient, user: UserDB, event_handler):
-        response = test_app_client.patch(
+    async def test_empty_body(
+        self, test_app_client: httpx.AsyncClient, user: UserDB, event_handler
+    ):
+        response = await test_app_client.patch(
             "/me", json={}, headers={"Authorization": f"Bearer {user.id}"}
         )
         assert response.status_code == status.HTTP_200_OK
 
-        response_json = response.json()
-        assert response_json["email"] == user.email
+        data = cast(Dict[str, Any], response.json())
+        assert data["email"] == user.email
 
         assert event_handler.called is True
         actual_user = event_handler.call_args[0][0]
@@ -366,15 +410,17 @@ class TestUpdateMe:
         request = event_handler.call_args[0][2]
         assert isinstance(request, Request)
 
-    def test_valid_body(self, test_app_client: TestClient, user: UserDB, event_handler):
+    async def test_valid_body(
+        self, test_app_client: httpx.AsyncClient, user: UserDB, event_handler
+    ):
         json = {"email": "king.arthur@tintagel.bt"}
-        response = test_app_client.patch(
+        response = await test_app_client.patch(
             "/me", json=json, headers={"Authorization": f"Bearer {user.id}"}
         )
         assert response.status_code == status.HTTP_200_OK
 
-        response_json = response.json()
-        assert response_json["email"] == "king.arthur@tintagel.bt"
+        data = cast(Dict[str, Any], response.json())
+        assert data["email"] == "king.arthur@tintagel.bt"
 
         assert event_handler.called is True
         actual_user = event_handler.call_args[0][0]
@@ -384,17 +430,17 @@ class TestUpdateMe:
         request = event_handler.call_args[0][2]
         assert isinstance(request, Request)
 
-    def test_valid_body_is_superuser(
-        self, test_app_client: TestClient, user: UserDB, event_handler
+    async def test_valid_body_is_superuser(
+        self, test_app_client: httpx.AsyncClient, user: UserDB, event_handler
     ):
         json = {"is_superuser": True}
-        response = test_app_client.patch(
+        response = await test_app_client.patch(
             "/me", json=json, headers={"Authorization": f"Bearer {user.id}"}
         )
         assert response.status_code == status.HTTP_200_OK
 
-        response_json = response.json()
-        assert response_json["is_superuser"] is False
+        data = cast(Dict[str, Any], response.json())
+        assert data["is_superuser"] is False
 
         assert event_handler.called is True
         actual_user = event_handler.call_args[0][0]
@@ -404,17 +450,17 @@ class TestUpdateMe:
         request = event_handler.call_args[0][2]
         assert isinstance(request, Request)
 
-    def test_valid_body_is_active(
-        self, test_app_client: TestClient, user: UserDB, event_handler
+    async def test_valid_body_is_active(
+        self, test_app_client: httpx.AsyncClient, user: UserDB, event_handler
     ):
         json = {"is_active": False}
-        response = test_app_client.patch(
+        response = await test_app_client.patch(
             "/me", json=json, headers={"Authorization": f"Bearer {user.id}"}
         )
         assert response.status_code == status.HTTP_200_OK
 
-        response_json = response.json()
-        assert response_json["is_active"] is True
+        data = cast(Dict[str, Any], response.json())
+        assert data["is_active"] is True
 
         assert event_handler.called is True
         actual_user = event_handler.call_args[0][0]
@@ -424,11 +470,11 @@ class TestUpdateMe:
         request = event_handler.call_args[0][2]
         assert isinstance(request, Request)
 
-    def test_valid_body_password(
+    async def test_valid_body_password(
         self,
         mocker,
         mock_user_db,
-        test_app_client: TestClient,
+        test_app_client: httpx.AsyncClient,
         user: UserDB,
         event_handler,
     ):
@@ -436,7 +482,7 @@ class TestUpdateMe:
         current_hashed_passord = user.hashed_password
 
         json = {"password": "merlin"}
-        response = test_app_client.patch(
+        response = await test_app_client.patch(
             "/me", json=json, headers={"Authorization": f"Bearer {user.id}"}
         )
         assert response.status_code == status.HTTP_200_OK
@@ -455,19 +501,22 @@ class TestUpdateMe:
 
 
 @pytest.mark.router
+@pytest.mark.asyncio
 class TestListUsers:
-    def test_missing_token(self, test_app_client: TestClient):
-        response = test_app_client.get("/")
+    async def test_missing_token(self, test_app_client: httpx.AsyncClient):
+        response = await test_app_client.get("/")
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    def test_regular_user(self, test_app_client: TestClient, user: UserDB):
-        response = test_app_client.get(
+    async def test_regular_user(self, test_app_client: httpx.AsyncClient, user: UserDB):
+        response = await test_app_client.get(
             "/", headers={"Authorization": f"Bearer {user.id}"}
         )
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
-    def test_superuser(self, test_app_client: TestClient, superuser: UserDB):
-        response = test_app_client.get(
+    async def test_superuser(
+        self, test_app_client: httpx.AsyncClient, superuser: UserDB
+    ):
+        response = await test_app_client.get(
             "/", headers={"Authorization": f"Bearer {superuser.id}"}
         )
         assert response.status_code == status.HTTP_200_OK
@@ -480,112 +529,118 @@ class TestListUsers:
 
 
 @pytest.mark.router
+@pytest.mark.asyncio
 class TestGetUser:
-    def test_missing_token(self, test_app_client: TestClient):
-        response = test_app_client.get("/000")
+    async def test_missing_token(self, test_app_client: httpx.AsyncClient):
+        response = await test_app_client.get("/000")
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    def test_regular_user(self, test_app_client: TestClient, user: UserDB):
-        response = test_app_client.get(
+    async def test_regular_user(self, test_app_client: httpx.AsyncClient, user: UserDB):
+        response = await test_app_client.get(
             "/000", headers={"Authorization": f"Bearer {user.id}"}
         )
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
-    def test_not_existing_user(self, test_app_client: TestClient, superuser: UserDB):
-        response = test_app_client.get(
+    async def test_not_existing_user(
+        self, test_app_client: httpx.AsyncClient, superuser: UserDB
+    ):
+        response = await test_app_client.get(
             "/000", headers={"Authorization": f"Bearer {superuser.id}"}
         )
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
-    def test_superuser(
-        self, test_app_client: TestClient, user: UserDB, superuser: UserDB
+    async def test_superuser(
+        self, test_app_client: httpx.AsyncClient, user: UserDB, superuser: UserDB
     ):
-        response = test_app_client.get(
+        response = await test_app_client.get(
             f"/{user.id}", headers={"Authorization": f"Bearer {superuser.id}"}
         )
         assert response.status_code == status.HTTP_200_OK
 
-        response_json = response.json()
-        assert response_json["id"] == user.id
-        assert "hashed_password" not in response_json
+        data = cast(Dict[str, Any], response.json())
+        assert data["id"] == user.id
+        assert "hashed_password" not in data
 
 
 @pytest.mark.router
+@pytest.mark.asyncio
 class TestUpdateUser:
-    def test_missing_token(self, test_app_client: TestClient):
-        response = test_app_client.patch("/000")
+    async def test_missing_token(self, test_app_client: httpx.AsyncClient):
+        response = await test_app_client.patch("/000")
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    def test_regular_user(self, test_app_client: TestClient, user: UserDB):
-        response = test_app_client.patch(
+    async def test_regular_user(self, test_app_client: httpx.AsyncClient, user: UserDB):
+        response = await test_app_client.patch(
             "/000", headers={"Authorization": f"Bearer {user.id}"}
         )
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
-    def test_not_existing_user(self, test_app_client: TestClient, superuser: UserDB):
-        response = test_app_client.patch(
+    async def test_not_existing_user(
+        self, test_app_client: httpx.AsyncClient, superuser: UserDB
+    ):
+        response = await test_app_client.patch(
             "/000", json={}, headers={"Authorization": f"Bearer {superuser.id}"}
         )
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
-    def test_empty_body(
-        self, test_app_client: TestClient, user: UserDB, superuser: UserDB
+    async def test_empty_body(
+        self, test_app_client: httpx.AsyncClient, user: UserDB, superuser: UserDB
     ):
-        response = test_app_client.patch(
+        response = await test_app_client.patch(
             f"/{user.id}", json={}, headers={"Authorization": f"Bearer {superuser.id}"}
         )
         assert response.status_code == status.HTTP_200_OK
 
-        response_json = response.json()
-        assert response_json["email"] == user.email
+        data = cast(Dict[str, Any], response.json())
+        assert data["email"] == user.email
 
-    def test_valid_body(
-        self, test_app_client: TestClient, user: UserDB, superuser: UserDB
+    async def test_valid_body(
+        self, test_app_client: httpx.AsyncClient, user: UserDB, superuser: UserDB
     ):
         json = {"email": "king.arthur@tintagel.bt"}
-        response = test_app_client.patch(
+        response = await test_app_client.patch(
             f"/{user.id}",
             json=json,
             headers={"Authorization": f"Bearer {superuser.id}"},
         )
         assert response.status_code == status.HTTP_200_OK
 
-        response_json = response.json()
-        assert response_json["email"] == "king.arthur@tintagel.bt"
+        data = cast(Dict[str, Any], response.json())
+        assert data["email"] == "king.arthur@tintagel.bt"
 
-    def test_valid_body_is_superuser(
-        self, test_app_client: TestClient, user: UserDB, superuser: UserDB
+    async def test_valid_body_is_superuser(
+        self, test_app_client: httpx.AsyncClient, user: UserDB, superuser: UserDB
     ):
         json = {"is_superuser": True}
-        response = test_app_client.patch(
+        response = await test_app_client.patch(
             f"/{user.id}",
             json=json,
             headers={"Authorization": f"Bearer {superuser.id}"},
         )
         assert response.status_code == status.HTTP_200_OK
 
-        response_json = response.json()
-        assert response_json["is_superuser"] is True
+        data = cast(Dict[str, Any], response.json())
+        assert data["is_superuser"] is True
 
-    def test_valid_body_is_active(
-        self, test_app_client: TestClient, user: UserDB, superuser: UserDB
+    async def test_valid_body_is_active(
+        self, test_app_client: httpx.AsyncClient, user: UserDB, superuser: UserDB
     ):
         json = {"is_active": False}
-        response = test_app_client.patch(
+        response = await test_app_client.patch(
             f"/{user.id}",
             json=json,
             headers={"Authorization": f"Bearer {superuser.id}"},
         )
         assert response.status_code == status.HTTP_200_OK
 
-        response_json = response.json()
-        assert response_json["is_active"] is False
+        data = cast(Dict[str, Any], response.json())
+        assert data["is_active"] is False
 
-    def test_valid_body_password(
+    async def test_valid_body_password(
         self,
         mocker,
         mock_user_db,
-        test_app_client: TestClient,
+        test_app_client: httpx.AsyncClient,
         user: UserDB,
         superuser: UserDB,
     ):
@@ -593,7 +648,7 @@ class TestUpdateUser:
         current_hashed_passord = user.hashed_password
 
         json = {"password": "merlin"}
-        response = test_app_client.patch(
+        response = await test_app_client.patch(
             f"/{user.id}",
             json=json,
             headers={"Authorization": f"Bearer {superuser.id}"},
@@ -606,34 +661,37 @@ class TestUpdateUser:
 
 
 @pytest.mark.router
+@pytest.mark.asyncio
 class TestDeleteUser:
-    def test_missing_token(self, test_app_client: TestClient):
-        response = test_app_client.delete("/000")
+    async def test_missing_token(self, test_app_client: httpx.AsyncClient):
+        response = await test_app_client.delete("/000")
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    def test_regular_user(self, test_app_client: TestClient, user: UserDB):
-        response = test_app_client.delete(
+    async def test_regular_user(self, test_app_client: httpx.AsyncClient, user: UserDB):
+        response = await test_app_client.delete(
             "/000", headers={"Authorization": f"Bearer {user.id}"}
         )
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
-    def test_not_existing_user(self, test_app_client: TestClient, superuser: UserDB):
-        response = test_app_client.delete(
+    async def test_not_existing_user(
+        self, test_app_client: httpx.AsyncClient, superuser: UserDB
+    ):
+        response = await test_app_client.delete(
             "/000", headers={"Authorization": f"Bearer {superuser.id}"}
         )
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
-    def test_superuser(
+    async def test_superuser(
         self,
         mocker,
         mock_user_db,
-        test_app_client: TestClient,
+        test_app_client: httpx.AsyncClient,
         user: UserDB,
         superuser: UserDB,
     ):
         mocker.spy(mock_user_db, "delete")
 
-        response = test_app_client.delete(
+        response = await test_app_client.delete(
             f"/{user.id}", headers={"Authorization": f"Bearer {superuser.id}"}
         )
         assert response.status_code == status.HTTP_204_NO_CONTENT

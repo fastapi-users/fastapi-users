@@ -1,8 +1,8 @@
 import pytest
+import httpx
 from fastapi import Depends, FastAPI
 from httpx_oauth.oauth2 import OAuth2
 from starlette import status
-from starlette.testclient import TestClient
 
 from fastapi_users import FastAPIUsers
 from fastapi_users.router import Event, EventHandlersRouter
@@ -48,9 +48,9 @@ def fastapi_users(
     return fastapi_users
 
 
-@pytest.fixture()
-@pytest.mark.fastapi_users
-def test_app_client(fastapi_users) -> TestClient:
+@pytest.fixture
+@pytest.mark.asyncio
+async def test_app_client(fastapi_users, get_test_client) -> httpx.AsyncClient:
     app = FastAPI()
     app.include_router(fastapi_users.router, prefix="/users")
 
@@ -66,7 +66,7 @@ def test_app_client(fastapi_users) -> TestClient:
     def current_superuser(user=Depends(fastapi_users.get_current_superuser)):
         return user
 
-    return TestClient(app)
+    return await get_test_client(app)
 
 
 @pytest.mark.fastapi_users
@@ -78,99 +78,105 @@ class TestFastAPIUsers:
 
 
 @pytest.mark.fastapi_users
+@pytest.mark.asyncio
 class TestRouter:
-    def test_routes_exist(self, test_app_client: TestClient):
-        response = test_app_client.post("/users/register")
+    async def test_routes_exist(self, test_app_client: httpx.AsyncClient):
+        response = await test_app_client.post("/users/register")
         assert response.status_code != status.HTTP_404_NOT_FOUND
 
-        response = test_app_client.post("/users/login")
+        response = await test_app_client.post("/users/login")
         assert response.status_code != status.HTTP_404_NOT_FOUND
 
-        response = test_app_client.post("/users/forgot-password")
+        response = await test_app_client.post("/users/forgot-password")
         assert response.status_code != status.HTTP_404_NOT_FOUND
 
-        response = test_app_client.post("/users/reset-password")
+        response = await test_app_client.post("/users/reset-password")
         assert response.status_code != status.HTTP_404_NOT_FOUND
 
-        response = test_app_client.get("/users")
+        response = await test_app_client.get("/users")
         assert response.status_code != status.HTTP_404_NOT_FOUND
 
-        response = test_app_client.get("/users/aaa")
+        response = await test_app_client.get("/users/aaa")
         assert response.status_code != status.HTTP_404_NOT_FOUND
 
-        response = test_app_client.patch("/users/aaa")
+        response = await test_app_client.patch("/users/aaa")
         assert response.status_code != status.HTTP_404_NOT_FOUND
 
 
 @pytest.mark.fastapi_users
+@pytest.mark.asyncio
 class TestGetCurrentUser:
-    def test_missing_token(self, test_app_client: TestClient):
-        response = test_app_client.get("/current-user")
+    async def test_missing_token(self, test_app_client: httpx.AsyncClient):
+        response = await test_app_client.get("/current-user")
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    def test_invalid_token(self, test_app_client: TestClient):
-        response = test_app_client.get(
+    async def test_invalid_token(self, test_app_client: httpx.AsyncClient):
+        response = await test_app_client.get(
             "/current-user", headers={"Authorization": "Bearer foo"}
         )
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    def test_valid_token(self, test_app_client: TestClient, user: UserDB):
-        response = test_app_client.get(
+    async def test_valid_token(self, test_app_client: httpx.AsyncClient, user: UserDB):
+        response = await test_app_client.get(
             "/current-user", headers={"Authorization": f"Bearer {user.id}"}
         )
         assert response.status_code == status.HTTP_200_OK
 
 
 @pytest.mark.fastapi_users
+@pytest.mark.asyncio
 class TestGetCurrentActiveUser:
-    def test_missing_token(self, test_app_client: TestClient):
-        response = test_app_client.get("/current-active-user")
+    async def test_missing_token(self, test_app_client: httpx.AsyncClient):
+        response = await test_app_client.get("/current-active-user")
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    def test_invalid_token(self, test_app_client: TestClient):
-        response = test_app_client.get(
+    async def test_invalid_token(self, test_app_client: httpx.AsyncClient):
+        response = await test_app_client.get(
             "/current-active-user", headers={"Authorization": "Bearer foo"}
         )
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    def test_valid_token_inactive_user(
-        self, test_app_client: TestClient, inactive_user: UserDB
+    async def test_valid_token_inactive_user(
+        self, test_app_client: httpx.AsyncClient, inactive_user: UserDB
     ):
-        response = test_app_client.get(
+        response = await test_app_client.get(
             "/current-active-user",
             headers={"Authorization": f"Bearer {inactive_user.id}"},
         )
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    def test_valid_token(self, test_app_client: TestClient, user: UserDB):
-        response = test_app_client.get(
+    async def test_valid_token(self, test_app_client: httpx.AsyncClient, user: UserDB):
+        response = await test_app_client.get(
             "/current-active-user", headers={"Authorization": f"Bearer {user.id}"}
         )
         assert response.status_code == status.HTTP_200_OK
 
 
 @pytest.mark.fastapi_users
+@pytest.mark.asyncio
 class TestGetCurrentSuperuser:
-    def test_missing_token(self, test_app_client: TestClient):
-        response = test_app_client.get("/current-superuser")
+    async def test_missing_token(self, test_app_client: httpx.AsyncClient):
+        response = await test_app_client.get("/current-superuser")
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    def test_invalid_token(self, test_app_client: TestClient):
-        response = test_app_client.get(
+    async def test_invalid_token(self, test_app_client: httpx.AsyncClient):
+        response = await test_app_client.get(
             "/current-superuser", headers={"Authorization": "Bearer foo"}
         )
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    def test_valid_token_regular_user(self, test_app_client: TestClient, user: UserDB):
-        response = test_app_client.get(
+    async def test_valid_token_regular_user(
+        self, test_app_client: httpx.AsyncClient, user: UserDB
+    ):
+        response = await test_app_client.get(
             "/current-superuser", headers={"Authorization": f"Bearer {user.id}"}
         )
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
-    def test_valid_token_superuser(
-        self, test_app_client: TestClient, superuser: UserDB
+    async def test_valid_token_superuser(
+        self, test_app_client: httpx.AsyncClient, superuser: UserDB
     ):
-        response = test_app_client.get(
+        response = await test_app_client.get(
             "/current-superuser", headers={"Authorization": f"Bearer {superuser.id}"}
         )
         assert response.status_code == status.HTTP_200_OK

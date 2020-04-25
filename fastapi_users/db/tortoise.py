@@ -1,6 +1,6 @@
 from typing import List, Optional, Type
 
-from tortoise import models, fields
+from tortoise import fields, models
 from tortoise.exceptions import DoesNotExist
 
 from fastapi_users.db.base import BaseUserDatabase

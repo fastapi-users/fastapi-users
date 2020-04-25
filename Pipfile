@@ -25,6 +25,8 @@ pygments = "*"
 pymdown-extensions = "*"
 bumpversion = "*"
 httpx-oauth = "*"
+httpx = "*"
+asgi_lifespan = "*"
 
 [packages]
 fastapi = ">=0.54.0,<0.55.0"

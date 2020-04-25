@@ -9,7 +9,7 @@ from fastapi_users.db import BaseUserDatabase
 from fastapi_users.models import BaseUserDB
 
 
-@pytest.fixture()
+@pytest.fixture
 def auth_backend_none():
     class BackendNone(BaseAuthentication):
         async def __call__(
@@ -20,7 +20,7 @@ def auth_backend_none():
     return BackendNone()
 
 
-@pytest.fixture()
+@pytest.fixture
 def auth_backend_user(user):
     class BackendUser(BaseAuthentication):
         async def __call__(
@@ -32,14 +32,18 @@ def auth_backend_user(user):
 
 
 @pytest.mark.authentication
-def test_authenticator(get_test_auth_client, auth_backend_none, auth_backend_user):
-    client = get_test_auth_client([auth_backend_none, auth_backend_user])
-    response = client.get("/test-current-user")
+@pytest.mark.asyncio
+async def test_authenticator(
+    get_test_auth_client, auth_backend_none, auth_backend_user
+):
+    client = await get_test_auth_client([auth_backend_none, auth_backend_user])
+    response = await client.get("/test-current-user")
     assert response.status_code == status.HTTP_200_OK
 
 
 @pytest.mark.authentication
-def test_authenticator_none(get_test_auth_client, auth_backend_none):
-    client = get_test_auth_client([auth_backend_none, auth_backend_none])
-    response = client.get("/test-current-user")
+@pytest.mark.asyncio
+async def test_authenticator_none(get_test_auth_client, auth_backend_none):
+    client = await get_test_auth_client([auth_backend_none, auth_backend_none])
+    response = await client.get("/test-current-user")
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
