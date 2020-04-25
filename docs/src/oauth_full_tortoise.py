@@ -7,9 +7,9 @@ from fastapi_users.db import (
     TortoiseUserDatabase,
 )
 from httpx_oauth.clients.google import GoogleOAuth2
+from starlette.requests import Request
 from tortoise import fields
 from tortoise.contrib.starlette import register_tortoise
-from starlette.requests import Request
 
 DATABASE_URL = "sqlite://./test.db"
 SECRET = "SECRET"

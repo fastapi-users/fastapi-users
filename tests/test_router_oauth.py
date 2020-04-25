@@ -1,11 +1,12 @@
 from unittest.mock import MagicMock
+from typing import Dict, Any, cast
 
 import asynctest
+import httpx
 import pytest
 from fastapi import FastAPI
 from starlette import status
 from starlette.requests import Request
-from starlette.testclient import TestClient
 
 from fastapi_users.authentication import Authenticator
 from fastapi_users.router.common import ErrorCode, Event
@@ -29,11 +30,15 @@ def event_handler(request):
     return request.param()
 
 
-@pytest.fixture()
+@pytest.fixture
 def get_test_app_client(
-    mock_user_db_oauth, mock_authentication, oauth_client, event_handler
+    mock_user_db_oauth,
+    mock_authentication,
+    oauth_client,
+    event_handler,
+    get_test_client,
 ):
-    def _get_test_app_client(redirect_url: str = None) -> TestClient:
+    async def _get_test_app_client(redirect_url: str = None) -> httpx.AsyncClient:
         mock_authentication_bis = MockAuthentication(name="mock-bis")
         authenticator = Authenticator(
             [mock_authentication, mock_authentication_bis], mock_user_db_oauth
@@ -53,41 +58,44 @@ def get_test_app_client(
         app = FastAPI()
         app.include_router(oauth_router)
 
-        return TestClient(app)
+        return await get_test_client(app)
 
     return _get_test_app_client
 
 
-@pytest.fixture()
-def test_app_client(get_test_app_client):
-    return get_test_app_client()
+@pytest.fixture
+@pytest.mark.asyncio
+async def test_app_client(get_test_app_client):
+    return await get_test_app_client()
 
 
-@pytest.fixture()
-def test_app_client_redirect_url(get_test_app_client):
-    return get_test_app_client("http://www.tintagel.bt/callback")
+@pytest.fixture
+@pytest.mark.asyncio
+async def test_app_client_redirect_url(get_test_app_client):
+    return await get_test_app_client("http://www.tintagel.bt/callback")
 
 
 @pytest.mark.router
 @pytest.mark.oauth
+@pytest.mark.asyncio
 class TestAuthorize:
-    def test_missing_authentication_backend(
-        self, test_app_client: TestClient, oauth_client
+    async def test_missing_authentication_backend(
+        self, test_app_client: httpx.AsyncClient, oauth_client
     ):
         with asynctest.patch.object(oauth_client, "get_authorization_url") as mock:
             mock.return_value = "AUTHORIZATION_URL"
-            response = test_app_client.get(
+            response = await test_app_client.get(
                 "/authorize", params={"scopes": ["scope1", "scope2"]},
             )
 
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
-    def test_wrong_authentication_backend(
-        self, test_app_client: TestClient, oauth_client
+    async def test_wrong_authentication_backend(
+        self, test_app_client: httpx.AsyncClient, oauth_client
     ):
         with asynctest.patch.object(oauth_client, "get_authorization_url") as mock:
             mock.return_value = "AUTHORIZATION_URL"
-            response = test_app_client.get(
+            response = await test_app_client.get(
                 "/authorize",
                 params={
                     "authentication_backend": "foo",
@@ -97,10 +105,10 @@ class TestAuthorize:
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
-    def test_success(self, test_app_client: TestClient, oauth_client):
+    async def test_success(self, test_app_client: httpx.AsyncClient, oauth_client):
         with asynctest.patch.object(oauth_client, "get_authorization_url") as mock:
             mock.return_value = "AUTHORIZATION_URL"
-            response = test_app_client.get(
+            response = await test_app_client.get(
                 "/authorize",
                 params={
                     "authentication_backend": "mock",
@@ -114,12 +122,12 @@ class TestAuthorize:
         data = response.json()
         assert "authorization_url" in data
 
-    def test_with_redirect_url(
-        self, test_app_client_redirect_url: TestClient, oauth_client
+    async def test_with_redirect_url(
+        self, test_app_client_redirect_url: httpx.AsyncClient, oauth_client
     ):
         with asynctest.patch.object(oauth_client, "get_authorization_url") as mock:
             mock.return_value = "AUTHORIZATION_URL"
-            response = test_app_client_redirect_url.get(
+            response = await test_app_client_redirect_url.get(
                 "/authorize",
                 params={
                     "authentication_backend": "mock",
@@ -136,9 +144,14 @@ class TestAuthorize:
 
 @pytest.mark.router
 @pytest.mark.oauth
+@pytest.mark.asyncio
 class TestCallback:
-    def test_invalid_state(
-        self, test_app_client: TestClient, oauth_client, user_oauth, event_handler
+    async def test_invalid_state(
+        self,
+        test_app_client: httpx.AsyncClient,
+        oauth_client,
+        user_oauth,
+        event_handler,
     ):
         with asynctest.patch.object(
             oauth_client, "get_access_token"
@@ -151,7 +164,7 @@ class TestCallback:
                 oauth_client, "get_id_email"
             ) as get_id_email_mock:
                 get_id_email_mock.return_value = ("user_oauth1", user_oauth.email)
-                response = test_app_client.get(
+                response = await test_app_client.get(
                     "/callback", params={"code": "CODE", "state": "STATE"},
                 )
 
@@ -160,10 +173,10 @@ class TestCallback:
 
         assert event_handler.called is False
 
-    def test_existing_user_with_oauth(
+    async def test_existing_user_with_oauth(
         self,
         mock_user_db_oauth,
-        test_app_client: TestClient,
+        test_app_client: httpx.AsyncClient,
         oauth_client,
         user_oauth,
         event_handler,
@@ -183,22 +196,22 @@ class TestCallback:
                     mock_user_db_oauth, "update"
                 ) as user_update_mock:
                     get_id_email_mock.return_value = ("user_oauth1", user_oauth.email)
-                    response = test_app_client.get(
+                    response = await test_app_client.get(
                         "/callback", params={"code": "CODE", "state": state_jwt},
                     )
 
         get_id_email_mock.assert_awaited_once_with("TOKEN")
         user_update_mock.assert_awaited_once()
-        data = response.json()
+        data = cast(Dict[str, Any], response.json())
 
         assert data["token"] == user_oauth.id
 
         assert event_handler.called is False
 
-    def test_existing_user_without_oauth(
+    async def test_existing_user_without_oauth(
         self,
         mock_user_db_oauth,
-        test_app_client: TestClient,
+        test_app_client: httpx.AsyncClient,
         oauth_client,
         superuser_oauth,
         event_handler,
@@ -221,22 +234,22 @@ class TestCallback:
                         "superuser_oauth1",
                         superuser_oauth.email,
                     )
-                    response = test_app_client.get(
+                    response = await test_app_client.get(
                         "/callback", params={"code": "CODE", "state": state_jwt},
                     )
 
         get_id_email_mock.assert_awaited_once_with("TOKEN")
         user_update_mock.assert_awaited_once()
-        data = response.json()
+        data = cast(Dict[str, Any], response.json())
 
         assert data["token"] == superuser_oauth.id
 
         assert event_handler.called is False
 
-    def test_unknown_user(
+    async def test_unknown_user(
         self,
         mock_user_db_oauth,
-        test_app_client: TestClient,
+        test_app_client: httpx.AsyncClient,
         oauth_client,
         event_handler,
     ):
@@ -258,13 +271,13 @@ class TestCallback:
                         "unknown_user_oauth1",
                         "galahad@camelot.bt",
                     )
-                    response = test_app_client.get(
+                    response = await test_app_client.get(
                         "/callback", params={"code": "CODE", "state": state_jwt},
                     )
 
         get_id_email_mock.assert_awaited_once_with("TOKEN")
         user_create_mock.assert_awaited_once()
-        data = response.json()
+        data = cast(Dict[str, Any], response.json())
 
         assert "token" in data
 
@@ -274,10 +287,10 @@ class TestCallback:
         request = event_handler.call_args[0][1]
         assert isinstance(request, Request)
 
-    def test_inactive_user(
+    async def test_inactive_user(
         self,
         mock_user_db_oauth,
-        test_app_client: TestClient,
+        test_app_client: httpx.AsyncClient,
         oauth_client,
         inactive_user_oauth,
         event_handler,
@@ -297,19 +310,20 @@ class TestCallback:
                     "inactive_user_oauth1",
                     inactive_user_oauth.email,
                 )
-                response = test_app_client.get(
+                response = await test_app_client.get(
                     "/callback", params={"code": "CODE", "state": state_jwt},
                 )
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
-        assert response.json()["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
+        data = cast(Dict[str, Any], response.json())
+        assert data["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
 
         assert event_handler.called is False
 
-    def test_redirect_url_router(
+    async def test_redirect_url_router(
         self,
         mock_user_db_oauth,
-        test_app_client_redirect_url: TestClient,
+        test_app_client_redirect_url: httpx.AsyncClient,
         oauth_client,
         user_oauth,
     ):
@@ -325,13 +339,13 @@ class TestCallback:
                 oauth_client, "get_id_email"
             ) as get_id_email_mock:
                 get_id_email_mock.return_value = ("user_oauth1", user_oauth.email)
-                response = test_app_client_redirect_url.get(
+                response = await test_app_client_redirect_url.get(
                     "/callback", params={"code": "CODE", "state": state_jwt},
                 )
 
         get_access_token_mock.assert_awaited_once_with(
             "CODE", "http://www.tintagel.bt/callback"
         )
-        data = response.json()
+        data = cast(Dict[str, Any], response.json())
 
         assert data["token"] == user_oauth.id

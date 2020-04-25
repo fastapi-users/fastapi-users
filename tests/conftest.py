@@ -1,13 +1,16 @@
+import asyncio
 from typing import Any, List, Mapping, Optional, Tuple
 
 import http.cookies
+import httpx
 import pytest
+from asgi_lifespan import LifespanManager
 from fastapi import Depends, FastAPI
 from fastapi.security import OAuth2PasswordBearer
 from httpx_oauth.oauth2 import OAuth2
+from starlette.applications import ASGIApp
 from starlette.requests import Request
 from starlette.responses import Response
-from starlette.testclient import TestClient
 
 from fastapi_users import models
 from fastapi_users.authentication import Authenticator, BaseAuthentication
@@ -43,6 +46,13 @@ class UserOAuth(User, BaseOAuthAccountMixin):
 
 class UserDBOAuth(UserOAuth, UserDB):
     pass
+
+
+@pytest.fixture
+def event_loop():
+    """Force the pytest-asyncio loop to be the main one."""
+    loop = asyncio.get_event_loop()
+    yield loop
 
 
 @pytest.fixture
@@ -284,8 +294,23 @@ def request_builder():
 
 
 @pytest.fixture
-def get_test_auth_client(mock_user_db):
-    def _get_test_auth_client(backends: List[BaseAuthentication]) -> TestClient:
+def get_test_client():
+    async def _get_test_client(app: ASGIApp) -> httpx.AsyncClient:
+        async with LifespanManager(app):
+            async with httpx.AsyncClient(
+                app=app, base_url="http://app.io"
+            ) as test_client:
+                return test_client
+
+    return _get_test_client
+
+
+@pytest.fixture
+@pytest.mark.asyncio
+def get_test_auth_client(mock_user_db, get_test_client):
+    async def _get_test_auth_client(
+        backends: List[BaseAuthentication],
+    ) -> httpx.AsyncClient:
         app = FastAPI()
         authenticator = Authenticator(backends, mock_user_db)
 
@@ -305,12 +330,12 @@ def get_test_auth_client(mock_user_db):
         ):
             return user
 
-        return TestClient(app)
+        return await get_test_client(app)
 
     return _get_test_auth_client
 
 
-@pytest.fixture()
+@pytest.fixture
 def oauth_client() -> OAuth2:
     CLIENT_ID = "CLIENT_ID"
     CLIENT_SECRET = "CLIENT_SECRET"
