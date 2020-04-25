@@ -1120,12 +1120,12 @@
 -H <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
 -X POST <span class="se">\</span>
 -d <span class="s2">&quot;{\&quot;email\&quot;: \&quot;king.arthur@camelot.bt\&quot;,\&quot;password\&quot;: \&quot;guinevere\&quot;}&quot;</span> <span class="se">\</span>
-http://localhost:9000/users/register
+http://localhost:8000/users/register
 </code></pre></div>
 
 </div>
 <input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">axios</label><div class="tabbed-content">
-<div class="highlight"><pre><span></span><code><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;http://localhost:9000/users/register&#39;</span><span class="p">,</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;http://localhost:8000/users/register&#39;</span><span class="p">,</span> <span class="p">{</span>
     <span class="nx">email</span><span class="o">:</span> <span class="s1">&#39;king.arthur@camelot.bt&#39;</span><span class="p">,</span>
     <span class="nx">password</span><span class="o">:</span> <span class="s1">&#39;guinevere&#39;</span><span class="p">,</span>
 <span class="p">})</span>
@@ -1165,7 +1165,7 @@ http://localhost:9000/users/register
 -X POST <span class="se">\</span>
 -F <span class="s2">&quot;username=king.arthur@camelot.bt&quot;</span> <span class="se">\</span>
 -F <span class="s2">&quot;password=guinevere&quot;</span> <span class="se">\</span>
-http://localhost:9000/users/login/jwt
+http://localhost:8000/users/login/jwt
 </code></pre></div>
 
 </div>
@@ -1174,7 +1174,7 @@ http://localhost:9000/users/login/jwt
 <span class="nx">formData</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;username&#39;</span><span class="p">,</span> <span class="s1">&#39;king.arthur@camelot.bt&#39;</span><span class="p">);</span>
 <span class="nx">formData</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;password&#39;</span><span class="p">,</span> <span class="s1">&#39;guinevere&#39;</span><span class="p">);</span>
 <span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span>
-    <span class="s1">&#39;http://localhost:9000/users/login/jwt&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;http://localhost:8000/users/login/jwt&#39;</span><span class="p">,</span>
     <span class="nx">formData</span><span class="p">,</span>
     <span class="p">{</span>
         <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
@@ -1209,7 +1209,7 @@ http://localhost:9000/users/login/jwt
 -X POST <span class="se">\</span>
 -F <span class="s2">&quot;username=king.arthur@camelot.bt&quot;</span> <span class="se">\</span>
 -F <span class="s2">&quot;password=guinevere&quot;</span> <span class="se">\</span>
-http://localhost:9000/users/login/cookie
+http://localhost:8000/users/login/cookie
 </code></pre></div>
 
 </div>
@@ -1218,7 +1218,7 @@ http://localhost:9000/users/login/cookie
 <span class="nx">formData</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;username&#39;</span><span class="p">,</span> <span class="s1">&#39;king.arthur@camelot.bt&#39;</span><span class="p">);</span>
 <span class="nx">formData</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;password&#39;</span><span class="p">,</span> <span class="s1">&#39;guinevere&#39;</span><span class="p">);</span>
 <span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span>
-    <span class="s1">&#39;http://localhost:9000/users/login/cookie&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;http://localhost:8000/users/login/cookie&#39;</span><span class="p">,</span>
     <span class="nx">formData</span><span class="p">,</span>
     <span class="p">{</span>
         <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
@@ -1255,14 +1255,14 @@ curl <span class="se">\</span>
 -H <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
 -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span> <span class="se">\</span>
 -X GET <span class="se">\</span>
-http://localhost:9000/users/me
+http://localhost:8000/users/me
 </code></pre></div>
 
 </div>
 <input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><label for="__tabbed_4_2">axios</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">TOKEN</span> <span class="o">=</span> <span class="s1">&#39;eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNGZkMzQ3N2ItZWNjZi00ZWUzLThmN2QtNjhhZDcyMjYxNDc2IiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTg3ODE4NDI5fQ.anO3JR8-WYCozZ4_2-PQ2Ov9O38RaLP2RAzQIiZhteM&#39;</span><span class="p">;</span>
 <span class="nx">axios</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span>
-    <span class="s1">&#39;http://localhost:9000/users/me&#39;</span><span class="p">,</span> <span class="p">{</span>
+    <span class="s1">&#39;http://localhost:8000/users/me&#39;</span><span class="p">,</span> <span class="p">{</span>
     <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
         <span class="s1">&#39;Authorization&#39;</span><span class="o">:</span> <span class="sb">`Bearer </span><span class="si">${</span><span class="nx">TOKEN</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span>
     <span class="p">},</span>
@@ -1296,13 +1296,13 @@ http://localhost:9000/users/me
 -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span> <span class="se">\</span>
 -X PATCH <span class="se">\</span>
 -d <span class="s2">&quot;{\&quot;password\&quot;: \&quot;lancelot\&quot;}&quot;</span> <span class="se">\</span>
-http://localhost:9000/users/me
+http://localhost:8000/users/me
 </code></pre></div>
 
 </div>
 <input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><label for="__tabbed_5_2">axios</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code><span class="nx">axios</span><span class="p">.</span><span class="nx">patch</span><span class="p">(</span>
-    <span class="s1">&#39;http://localhost:9000/users/me&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;http://localhost:8000/users/me&#39;</span><span class="p">,</span>
     <span class="p">{</span>
         <span class="nx">password</span><span class="o">:</span> <span class="s1">&#39;lancelot&#39;</span><span class="p">,</span>
     <span class="p">},</span>
@@ -1343,13 +1343,13 @@ http://localhost:9000/users/me
 -H <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
 -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span> <span class="se">\</span>
 -X GET <span class="se">\</span>
-http://localhost:9000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476
+http://localhost:8000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476
 </code></pre></div>
 
 </div>
 <input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><label for="__tabbed_6_2">axios</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code><span class="nx">axios</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span>
-    <span class="s1">&#39;http://localhost:9000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476&#39;</span><span class="p">,</span> <span class="p">{</span>
+    <span class="s1">&#39;http://localhost:8000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476&#39;</span><span class="p">,</span> <span class="p">{</span>
     <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
         <span class="s1">&#39;Authorization&#39;</span><span class="o">:</span> <span class="sb">`Bearer </span><span class="si">${</span><span class="nx">TOKEN</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span>
     <span class="p">},</span>
@@ -1379,13 +1379,13 @@ http://localhost:9000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476
 -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span> <span class="se">\</span>
 -X PATCH <span class="se">\</span>
  -d <span class="s2">&quot;{\&quot;is_superuser\&quot;: true}&quot;</span> <span class="se">\</span>
-http://localhost:9000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476
+http://localhost:8000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476
 </code></pre></div>
 
 </div>
 <input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><label for="__tabbed_7_2">axios</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code><span class="nx">axios</span><span class="p">.</span><span class="nx">patch</span><span class="p">(</span>
-    <span class="s1">&#39;http://localhost:9000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;http://localhost:8000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476&#39;</span><span class="p">,</span>
     <span class="p">{</span>
         <span class="nx">is_superuser</span>: <span class="kt">true</span><span class="p">,</span>
     <span class="p">},</span>
@@ -1419,13 +1419,13 @@ http://localhost:9000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476
 -H <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
 -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span> <span class="se">\</span>
 -X DELETE <span class="se">\</span>
-http://localhost:9000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476
+http://localhost:8000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476
 </code></pre></div>
 
 </div>
 <input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><label for="__tabbed_8_2">axios</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code><span class="nx">axios</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span>
-    <span class="s1">&#39;http://localhost:9000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;http://localhost:8000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476&#39;</span><span class="p">,</span>
     <span class="p">{</span>
         <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
             <span class="s1">&#39;Authorization&#39;</span><span class="o">:</span> <span class="sb">`Bearer </span><span class="si">${</span><span class="nx">TOKEN</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span>
@@ -1448,12 +1448,12 @@ http://localhost:9000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476
 -H <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
 -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span> <span class="se">\</span>
 -X POST <span class="se">\</span>
-http://localhost:9000/users/logout/cookie
+http://localhost:8000/users/logout/cookie
 </code></pre></div>
 
 </div>
 <input id="__tabbed_9_2" name="__tabbed_9" type="radio" /><label for="__tabbed_9_2">axios</label><div class="tabbed-content">
-<div class="highlight"><pre><span></span><code><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;http://localhost:9000/users/logout/cookie&#39;</span><span class="p">,</span>
+<div class="highlight"><pre><span></span><code><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;http://localhost:8000/users/logout/cookie&#39;</span><span class="p">,</span>
     <span class="kc">null</span><span class="p">,</span>
     <span class="p">{</span>
         <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
