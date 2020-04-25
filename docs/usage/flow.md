@@ -14,12 +14,12 @@ First step, of course, is to register as a user.
     -H "Content-Type: application/json" \
     -X POST \
     -d "{\"email\": \"king.arthur@camelot.bt\",\"password\": \"guinevere\"}" \
-    http://localhost:9000/users/register
+    http://localhost:8000/users/register
     ```
 
 === "axios"
     ```ts
-    axios.post('http://localhost:9000/users/register', {
+    axios.post('http://localhost:8000/users/register', {
         email: 'king.arthur@camelot.bt',
         password: 'guinevere',
     })
@@ -64,7 +64,7 @@ Each [authentication backend](../configuration/authentication/index.md) will pro
     -X POST \
     -F "username=king.arthur@camelot.bt" \
     -F "password=guinevere" \
-    http://localhost:9000/users/login/jwt
+    http://localhost:8000/users/login/jwt
     ```
 
 === "axios"
@@ -73,7 +73,7 @@ Each [authentication backend](../configuration/authentication/index.md) will pro
     formData.set('username', 'king.arthur@camelot.bt');
     formData.set('password', 'guinevere');
     axios.post(
-        'http://localhost:9000/users/login/jwt',
+        'http://localhost:8000/users/login/jwt',
         formData,
         {
             headers: {
@@ -112,7 +112,7 @@ You can use this token to make authenticated requests as the user `king.arthur@c
     -X POST \
     -F "username=king.arthur@camelot.bt" \
     -F "password=guinevere" \
-    http://localhost:9000/users/login/cookie
+    http://localhost:8000/users/login/cookie
     ```
 
 === "axios"
@@ -121,7 +121,7 @@ You can use this token to make authenticated requests as the user `king.arthur@c
     formData.set('username', 'king.arthur@camelot.bt');
     formData.set('password', 'guinevere');
     axios.post(
-        'http://localhost:9000/users/login/cookie',
+        'http://localhost:8000/users/login/cookie',
         formData,
         {
             headers: {
@@ -162,14 +162,14 @@ Now that we can authenticate, we can get our own profile data. Depending on your
     -H "Content-Type: application/json" \
     -H "Authorization: Bearer $TOKEN" \
     -X GET \
-    http://localhost:9000/users/me
+    http://localhost:8000/users/me
     ```
 
 === "axios"
     ```ts
     const TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNGZkMzQ3N2ItZWNjZi00ZWUzLThmN2QtNjhhZDcyMjYxNDc2IiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTg3ODE4NDI5fQ.anO3JR8-WYCozZ4_2-PQ2Ov9O38RaLP2RAzQIiZhteM';
     axios.get(
-        'http://localhost:9000/users/me', {
+        'http://localhost:8000/users/me', {
         headers: {
             'Authorization': `Bearer ${TOKEN}`,
         },
@@ -207,13 +207,13 @@ We can also update our own profile. For example, we can change our password like
     -H "Authorization: Bearer $TOKEN" \
     -X PATCH \
     -d "{\"password\": \"lancelot\"}" \
-    http://localhost:9000/users/me
+    http://localhost:8000/users/me
     ```
 
 === "axios"
     ```ts
     axios.patch(
-        'http://localhost:9000/users/me',
+        'http://localhost:8000/users/me',
         {
             password: 'lancelot',
         },
@@ -261,13 +261,13 @@ Now that you are a superuser, you can leverage the power of [superuser routes](.
     -H "Content-Type: application/json" \
     -H "Authorization: Bearer $TOKEN" \
     -X GET \
-    http://localhost:9000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476
+    http://localhost:8000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476
     ```
 
 === "axios"
     ```ts
     axios.get(
-        'http://localhost:9000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476', {
+        'http://localhost:8000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476', {
         headers: {
             'Authorization': `Bearer ${TOKEN}`,
         },
@@ -302,13 +302,13 @@ We can now update the profile of any user. For example, we can promote it as sup
     -H "Authorization: Bearer $TOKEN" \
     -X PATCH \
      -d "{\"is_superuser\": true}" \
-    http://localhost:9000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476
+    http://localhost:8000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476
     ```
 
 === "axios"
     ```ts
     axios.patch(
-        'http://localhost:9000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476',
+        'http://localhost:8000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476',
         {
             is_superuser: true,
         },
@@ -347,13 +347,13 @@ Finally, we can delete a user.
     -H "Content-Type: application/json" \
     -H "Authorization: Bearer $TOKEN" \
     -X DELETE \
-    http://localhost:9000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476
+    http://localhost:8000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476
     ```
 
 === "axios"
     ```ts
     axios.delete(
-        'http://localhost:9000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476',
+        'http://localhost:8000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476',
         {
             headers: {
                 'Authorization': `Bearer ${TOKEN}`,
@@ -380,12 +380,12 @@ We can also end the session. Note that it doesn't apply to every [authentication
     -H "Content-Type: application/json" \
     -H "Authorization: Bearer $TOKEN" \
     -X POST \
-    http://localhost:9000/users/logout/cookie
+    http://localhost:8000/users/logout/cookie
     ```
 
 === "axios"
     ```ts
-    axios.post('http://localhost:9000/users/logout/cookie',
+    axios.post('http://localhost:8000/users/logout/cookie',
         null,
         {
             headers: {
