@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "13ede3c78f004faead9c81285f4ff71ce2b709a7c1dc26de01e522b35fc75b89"
+            "sha256": "a48a987916237d8921c987fc4212dfc0f32a71235f5cbce8fe078e9e3b311be6"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -86,10 +86,10 @@
         },
         "databases": {
             "hashes": [
-                "sha256:a04db1d158a91db7bd49db16e14266e8e6c7336f06f88c700147690683c769a3"
+                "sha256:92b7f66c74d21eba54899ba88352311019131fb01ceaf076452949429e8d1b12"
             ],
             "index": "pypi",
-            "version": "==0.2.6"
+            "version": "==0.3.1"
         },
         "dnspython": {
             "hashes": [
@@ -423,10 +423,10 @@
         },
         "databases": {
             "hashes": [
-                "sha256:a04db1d158a91db7bd49db16e14266e8e6c7336f06f88c700147690683c769a3"
+                "sha256:92b7f66c74d21eba54899ba88352311019131fb01ceaf076452949429e8d1b12"
             ],
             "index": "pypi",
-            "version": "==0.2.6"
+            "version": "==0.3.1"
         },
         "docutils": {
             "hashes": [
@@ -505,6 +505,7 @@
                 "sha256:405b4749f597b1f45cae5bffc17b23dc251cce30a0c4c8126f1007b9e728a615",
                 "sha256:ce51c8e8ed2834447fde5a94650299fd74017b7da69cc786b6421fefda09a393"
             ],
+            "index": "pypi",
             "version": "==0.12.1"
         },
         "httpx-oauth": {

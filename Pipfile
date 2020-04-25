@@ -33,7 +33,7 @@ fastapi = ">=0.54.0,<0.55.0"
 passlib = {extras = ["bcrypt"],version = "==1.7.2"}
 email-validator = "==1.0.5"
 sqlalchemy = ">=1.3.13,<1.4"
-databases = "==0.2.6"
+databases = ">=0.3.0,<0.4"
 pyjwt = "==1.7.1"
 python-multipart = "==0.0.5"
 motor = "==2.1.0"
