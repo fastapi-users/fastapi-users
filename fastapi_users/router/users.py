@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Type, cast
+from typing import Any, Dict, Type, cast
 
 import jwt
 from fastapi import Body, Depends, HTTPException
@@ -184,14 +184,6 @@ def get_user_router(
         )
 
         return updated_user
-
-    @router.get(
-        "/",
-        response_model=List[user_model],  # type: ignore
-        dependencies=[Depends(get_current_superuser)],
-    )
-    async def list_users():
-        return await user_db.list()
 
     @router.get(
         "/{id}",

@@ -93,9 +93,6 @@ class TestRouter:
         response = await test_app_client.post("/users/reset-password")
         assert response.status_code != status.HTTP_404_NOT_FOUND
 
-        response = await test_app_client.get("/users")
-        assert response.status_code != status.HTTP_404_NOT_FOUND
-
         response = await test_app_client.get("/users/aaa")
         assert response.status_code != status.HTTP_404_NOT_FOUND
 

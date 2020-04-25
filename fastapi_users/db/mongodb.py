@@ -1,4 +1,4 @@
-from typing import List, Optional, Type
+from typing import Optional, Type
 
 from motor.motor_asyncio import AsyncIOMotorCollection
 
@@ -21,9 +21,6 @@ class MongoDBUserDatabase(BaseUserDatabase[UD]):
         self.collection = collection
         self.collection.create_index("id", unique=True)
         self.collection.create_index("email", unique=True)
-
-    async def list(self) -> List[UD]:
-        return [self.user_db_model(**user) async for user in self.collection.find()]
 
     async def get(self, id: str) -> Optional[UD]:
         user = await self.collection.find_one({"id": id})

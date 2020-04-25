@@ -502,34 +502,6 @@ class TestUpdateMe:
 
 @pytest.mark.router
 @pytest.mark.asyncio
-class TestListUsers:
-    async def test_missing_token(self, test_app_client: httpx.AsyncClient):
-        response = await test_app_client.get("/")
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
-
-    async def test_regular_user(self, test_app_client: httpx.AsyncClient, user: UserDB):
-        response = await test_app_client.get(
-            "/", headers={"Authorization": f"Bearer {user.id}"}
-        )
-        assert response.status_code == status.HTTP_403_FORBIDDEN
-
-    async def test_superuser(
-        self, test_app_client: httpx.AsyncClient, superuser: UserDB
-    ):
-        response = await test_app_client.get(
-            "/", headers={"Authorization": f"Bearer {superuser.id}"}
-        )
-        assert response.status_code == status.HTTP_200_OK
-
-        response_json = response.json()
-        assert len(response_json) == 3
-        for user in response_json:
-            assert "id" in user
-            assert "hashed_password" not in user
-
-
-@pytest.mark.router
-@pytest.mark.asyncio
 class TestGetUser:
     async def test_missing_token(self, test_app_client: httpx.AsyncClient):
         response = await test_app_client.get("/000")

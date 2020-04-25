@@ -1,4 +1,4 @@
-from typing import List, Mapping, Optional, Type
+from typing import Mapping, Optional, Type
 
 from databases import Database
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Table, select
@@ -74,11 +74,6 @@ class SQLAlchemyUserDatabase(BaseUserDatabase[UD]):
         self.database = database
         self.users = users
         self.oauth_accounts = oauth_accounts
-
-    async def list(self) -> List[UD]:
-        query = self.users.select()
-        users = await self.database.fetch_all(query)
-        return [await self._make_user(user) for user in users]
 
     async def get(self, id: str) -> Optional[UD]:
         query = self.users.select().where(self.users.c.id == id)

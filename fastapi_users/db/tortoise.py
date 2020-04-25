@@ -1,4 +1,4 @@
-from typing import List, Optional, Type
+from typing import Optional, Type
 
 from tortoise import fields, models
 from tortoise.exceptions import DoesNotExist
@@ -60,16 +60,6 @@ class TortoiseUserDatabase(BaseUserDatabase[UD]):
         super().__init__(user_db_model)
         self.model = model
         self.oauth_account_model = oauth_account_model
-
-    async def list(self) -> List[UD]:
-        query = self.model.all()
-
-        if self.oauth_account_model is not None:
-            query = query.prefetch_related("oauth_accounts")
-
-        users = await query
-
-        return [self.user_db_model(**await user.to_dict()) for user in users]
 
     async def get(self, id: str) -> Optional[UD]:
         try:

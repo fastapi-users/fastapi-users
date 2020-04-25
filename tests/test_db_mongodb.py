@@ -77,12 +77,6 @@ async def test_queries(mongodb_user_db: MongoDBUserDatabase[UserDB]):
     assert email_user is not None
     assert email_user.id == user_db.id
 
-    # List
-    users = await mongodb_user_db.list()
-    assert len(users) == 1
-    first_user = users[0]
-    assert first_user.id == user_db.id
-
     # Exception when inserting existing email
     with pytest.raises(pymongo.errors.DuplicateKeyError):
         await mongodb_user_db.create(user)
@@ -150,13 +144,6 @@ async def test_queries_oauth(
     assert email_user is not None
     assert email_user.id == user_db.id
     assert len(email_user.oauth_accounts) == 2
-
-    # List
-    users = await mongodb_user_db_oauth.list()
-    assert len(users) == 1
-    first_user = users[0]
-    assert first_user.id == user_db.id
-    assert len(first_user.oauth_accounts) == 2
 
     # Get by OAuth account
     oauth_user = await mongodb_user_db_oauth.get_by_oauth_account(

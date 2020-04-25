@@ -201,26 +201,6 @@ Update the current authenticated active user.
 
 ## Superuser
 
-### `GET /`
-
-Return the list of registered users.
-
-!!! success "`200 OK`"
-    ```json
-    [{
-        "id": "57cbb51a-ab71-4009-8802-3f54b4f2e23",
-        "email": "king.arthur@camelot.bt",
-        "is_active": true,
-        "is_superuser": false
-    }]
-    ```
-
-!!! fail "`401 Unauthorized`"
-    Missing token or inactive user.
-
-!!! fail "`403 Forbidden`"
-    Not a superuser.
-
 ### `GET /{user_id}`
 
 Return the user with id `user_id`.

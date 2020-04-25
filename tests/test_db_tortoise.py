@@ -82,12 +82,6 @@ async def test_queries(tortoise_user_db: TortoiseUserDatabase[UserDB]):
     assert email_user is not None
     assert email_user.id == user_db.id
 
-    # List
-    users = await tortoise_user_db.list()
-    assert len(users) == 1
-    first_user = users[0]
-    assert first_user.id == user_db.id
-
     # Exception when inserting existing email
     with pytest.raises(IntegrityError):
         await tortoise_user_db.create(user)
@@ -160,13 +154,6 @@ async def test_queries_oauth(
     assert email_user is not None
     assert email_user.id == user_db.id
     assert len(email_user.oauth_accounts) == 2
-
-    # List
-    users = await tortoise_user_db_oauth.list()
-    assert len(users) == 1
-    first_user = users[0]
-    assert first_user.id == user_db.id
-    assert len(first_user.oauth_accounts) == 2
 
     # Get by OAuth account
     oauth_user = await tortoise_user_db_oauth.get_by_oauth_account(

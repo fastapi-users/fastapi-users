@@ -19,9 +19,6 @@ async def test_not_implemented_methods(user):
     base_user_db = BaseUserDatabase(UserDB)
 
     with pytest.raises(NotImplementedError):
-        await base_user_db.list()
-
-    with pytest.raises(NotImplementedError):
         await base_user_db.get("aaa")
 
     with pytest.raises(NotImplementedError):

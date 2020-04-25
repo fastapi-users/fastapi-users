@@ -1,4 +1,4 @@
-from typing import Generic, List, Optional, Type
+from typing import Generic, Optional, Type
 
 from fastapi.security import OAuth2PasswordRequestForm
 
@@ -17,10 +17,6 @@ class BaseUserDatabase(Generic[UD]):
 
     def __init__(self, user_db_model: Type[UD]):
         self.user_db_model = user_db_model
-
-    async def list(self) -> List[UD]:
-        """List all users."""
-        raise NotImplementedError()
 
     async def get(self, id: str) -> Optional[UD]:
         """Get a single user by id."""

@@ -155,9 +155,6 @@ def oauth_account3() -> BaseOAuthAccount:
 @pytest.fixture
 def mock_user_db(user, inactive_user, superuser) -> BaseUserDatabase:
     class MockUserDatabase(BaseUserDatabase[UserDB]):
-        async def list(self) -> List[UserDB]:
-            return [user, inactive_user, superuser]
-
         async def get(self, id: str) -> Optional[UserDB]:
             if id == user.id:
                 return user
@@ -193,9 +190,6 @@ def mock_user_db_oauth(
     user_oauth, inactive_user_oauth, superuser_oauth
 ) -> BaseUserDatabase:
     class MockUserDatabase(BaseUserDatabase[UserDBOAuth]):
-        async def list(self) -> List[UserDBOAuth]:
-            return [user_oauth, inactive_user_oauth, superuser_oauth]
-
         async def get(self, id: str) -> Optional[UserDBOAuth]:
             if id == user_oauth.id:
                 return user_oauth
