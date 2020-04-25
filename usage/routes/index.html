@@ -445,6 +445,18 @@
           
           
 
+
+  <li class="md-nav__item">
+    <a href="../flow/" title="Flow" class="md-nav__link">
+      Flow
+    </a>
+  </li>
+
+        
+          
+          
+          
+
   
 
 
@@ -590,13 +602,6 @@
   
     <nav class="md-nav" aria-label="Superuser">
       <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#get" class="md-nav__link">
-    GET /
-  </a>
-  
-</li>
         
           <li class="md-nav__item">
   <a href="#get-user_id" class="md-nav__link">
@@ -782,13 +787,6 @@
   
     <nav class="md-nav" aria-label="Superuser">
       <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#get" class="md-nav__link">
-    GET /
-  </a>
-  
-</li>
         
           <li class="md-nav__item">
   <a href="#get-user_id" class="md-nav__link">
@@ -1042,27 +1040,6 @@
 <p>Missing token or inactive user.</p>
 </div>
 <h2 id="superuser">Superuser<a class="headerlink" href="#superuser" title="Permanent link">&para;</a></h2>
-<h3 id="get"><code>GET /</code><a class="headerlink" href="#get" title="Permanent link">&para;</a></h3>
-<p>Return the list of registered users.</p>
-<div class="admonition success">
-<p class="admonition-title"><code>200 OK</code></p>
-<div class="highlight"><pre><span></span><code><span class="p">[{</span>
-    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;57cbb51a-ab71-4009-8802-3f54b4f2e23&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;king.arthur@camelot.bt&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;is_active&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-    <span class="nt">&quot;is_superuser&quot;</span><span class="p">:</span> <span class="kc">false</span>
-<span class="p">}]</span>
-</code></pre></div>
-
-</div>
-<div class="admonition fail">
-<p class="admonition-title"><code>401 Unauthorized</code></p>
-<p>Missing token or inactive user.</p>
-</div>
-<div class="admonition fail">
-<p class="admonition-title"><code>403 Forbidden</code></p>
-<p>Not a superuser.</p>
-</div>
 <h3 id="get-user_id"><code>GET /{user_id}</code><a class="headerlink" href="#get-user_id" title="Permanent link">&para;</a></h3>
 <p>Return the user with id <code>user_id</code>.</p>
 <div class="admonition success">
@@ -1159,7 +1136,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../../configuration/oauth/" title="OAuth2" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../flow/" title="Flow" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" /></svg>
             </div>
@@ -1168,7 +1145,7 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                OAuth2
+                Flow
               </div>
             </div>
           </a>
