@@ -27,6 +27,7 @@ bumpversion = "*"
 httpx-oauth = "*"
 httpx = "*"
 asgi_lifespan = "*"
+uvicorn = "*"
 
 [packages]
 fastapi = ">=0.54.0,<0.55.0"

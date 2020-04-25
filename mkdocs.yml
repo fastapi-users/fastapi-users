@@ -23,6 +23,7 @@ markdown_extensions:
   - codehilite
   - pymdownx.superfences
   - pymdownx.tasklist
+  - pymdownx.tabbed
 
 nav:
   - About: index.md
@@ -41,5 +42,6 @@ nav:
     - configuration/full_example.md
     - configuration/oauth.md
   - Usage:
+    - usage/flow.md
     - usage/routes.md
     - usage/dependency-callables.md
