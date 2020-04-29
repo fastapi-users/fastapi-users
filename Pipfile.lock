@@ -372,10 +372,10 @@
         },
         "click": {
             "hashes": [
-                "sha256:8a18b4ea89d8820c5d0c7da8a64b2c324b4dabb695804dbfea19b9be9d88c0cc",
-                "sha256:e345d143d80bf5ee7534056164e5e112ea5e22716bbb1ce727941f4c8b471b9a"
+                "sha256:d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a",
+                "sha256:dacca89f4bfadd5de3d7489b7c8a566eee0d3676333fbb50030263894c38c0dc"
             ],
-            "version": "==7.1.1"
+            "version": "==7.1.2"
         },
         "codecov": {
             "hashes": [
@@ -495,10 +495,10 @@
         },
         "hstspreload": {
             "hashes": [
-                "sha256:82e6951342d43d8168262121ff80542b57f921a7f1278cdc34c0ac486078f32e",
-                "sha256:c945cbe179138c8a55ed58b673e4a87cdd00d97b4330cb8f1c845e237e36a66c"
+                "sha256:5e42c9c9b925d793d1732e20f59da7c9d6d340bde82ead7d49031bde59991219",
+                "sha256:f2571debd824aa5ec34816a2e08badda043181e908710317b9826b5c30d3bc17"
             ],
-            "version": "==2020.4.24"
+            "version": "==2020.4.28"
         },
         "httptools": {
             "hashes": [
@@ -991,11 +991,11 @@
         },
         "uvicorn": {
             "hashes": [
-                "sha256:0f58170165c4495f563d8224b2f415a0829af0412baa034d6f777904613087fd",
-                "sha256:6fdaf8e53bf1b2ddf0fe9ed06079b5348d7d1d87b3365fe2549e6de0d49e631c"
+                "sha256:a19de5b2f8dec56ec95bbbf3ce334b168efca6a238b2ba7c6cb020e3a42ce71a",
+                "sha256:aa6db2200cff18f8c550c869fab01f78ca987464d499f654e7aeb166fe0c0616"
             ],
             "index": "pypi",
-            "version": "==0.11.3"
+            "version": "==0.11.4"
         },
         "uvloop": {
             "hashes": [
