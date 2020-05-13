@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "0867361a489e0c0b3a9267aa3e8a7cb89e378db6e0e0d6c831d454982f8272d8"
+            "sha256": "cd178656ef0c106c2a71e1c48b5da4ef08a8dcc650838b9f21ba8c30c2cc417c"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -102,10 +102,11 @@
         },
         "email-validator": {
             "hashes": [
-                "sha256:e3e6ede1765d7c1e580d2050d834b2689361f7da2d50ce74df6a5968fca7cb13"
+                "sha256:2d515ed56eca41a2c91bbe1e0b1054d604a2502417487b553d3d26962945eda2",
+                "sha256:de2aad89b13574a73fd26c04a5200389b293bd9578602fc3b51537ada47af153"
             ],
             "index": "pypi",
-            "version": "==1.0.5"
+            "version": "==1.1.0"
         },
         "fastapi": {
             "hashes": [
