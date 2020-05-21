@@ -25,7 +25,9 @@ class UserDB(User, models.BaseUserDB):
     pass
 
 
-client = motor.motor_asyncio.AsyncIOMotorClient(DATABASE_URL)
+client = motor.motor_asyncio.AsyncIOMotorClient(
+    DATABASE_URL, uuidRepresentation="standard"
+)
 db = client["database_name"]
 collection = db["users"]
 user_db = MongoDBUserDatabase(UserDB, collection)
