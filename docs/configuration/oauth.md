@@ -56,7 +56,7 @@ class UserDB(User, models.BaseUserDB):
 
 Notice that we inherit from the `BaseOAuthAccountMixin`, which adds a `List` of `BaseOAuthAccount` objects. This object is structured like this:
 
-* `id` (`str`) – Unique identifier of the user. Default to a **UUID4**.
+* `id` (`UUID4`) – Unique identifier of the OAuth account information. Default to a **UUID4**.
 * `oauth_name` (`str`) – Name of the OAuth service. It corresponds to the `name` property of the OAuth client.
 * `access_token` (`str`) – Access token.
 * `expires_at` (`int`) - Timestamp at which the access token is expired.
@@ -100,7 +100,7 @@ class OAuthAccount(TortoiseBaseOAuthAccountModel):
 ```
 
 !!! warning
-    Note that you shouls define the foreign key yourself, so that you can point it the user model in your namespace.
+    Note that you should define the foreign key yourself, so that you can point it the user model in your namespace.
 
 Then, you should declare it on the database adapter:
 

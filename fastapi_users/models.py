@@ -1,21 +1,20 @@
 import uuid
 from typing import List, Optional, TypeVar
 
-import pydantic
-from pydantic import BaseModel, EmailStr
+from pydantic import UUID4, BaseModel, EmailStr, validator
 
 
 class BaseUser(BaseModel):
     """Base User model."""
 
-    id: Optional[str] = None
+    id: Optional[UUID4] = None
     email: Optional[EmailStr] = None
     is_active: Optional[bool] = True
     is_superuser: Optional[bool] = False
 
-    @pydantic.validator("id", pre=True, always=True)
+    @validator("id", pre=True, always=True)
     def default_id(cls, v):
-        return v or str(uuid.uuid4())
+        return v or uuid.uuid4()
 
     def create_update_dict(self):
         return self.dict(
@@ -37,7 +36,7 @@ class BaseUserUpdate(BaseUser):
 
 
 class BaseUserDB(BaseUser):
-    id: str
+    id: UUID4
     hashed_password: str
 
     class Config:
@@ -50,7 +49,7 @@ UD = TypeVar("UD", bound=BaseUserDB)
 class BaseOAuthAccount(BaseModel):
     """Base OAuth account model."""
 
-    id: Optional[str] = None
+    id: Optional[UUID4] = None
     oauth_name: str
     access_token: str
     expires_at: int
@@ -58,9 +57,9 @@ class BaseOAuthAccount(BaseModel):
     account_id: str
     account_email: str
 
-    @pydantic.validator("id", pre=True, always=True)
+    @validator("id", pre=True, always=True)
     def default_id(cls, v):
-        return v or str(uuid.uuid4())
+        return v or uuid.uuid4()
 
     class Config:
         orm_mode = True

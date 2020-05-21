@@ -45,3 +45,5 @@ nav:
     - usage/flow.md
     - usage/routes.md
     - usage/dependency-callables.md
+  - Migration:
+    - migration/08_to_10.md

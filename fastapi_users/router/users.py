@@ -3,7 +3,7 @@ from typing import Any, Dict, Type, cast
 import jwt
 from fastapi import Body, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
-from pydantic import EmailStr
+from pydantic import UUID4, EmailStr
 from starlette import status
 from starlette.requests import Request
 from starlette.responses import Response
@@ -69,7 +69,7 @@ def get_user_router(
     get_current_active_user = authenticator.get_current_active_user
     get_current_superuser = authenticator.get_current_superuser
 
-    async def _get_or_404(id: str) -> models.BaseUserDB:
+    async def _get_or_404(id: UUID4) -> models.BaseUserDB:
         user = await user_db.get(id)
         if user is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
@@ -118,7 +118,7 @@ def get_user_router(
         user = await user_db.get_by_email(email)
 
         if user is not None and user.is_active:
-            token_data = {"user_id": user.id, "aud": reset_password_token_audience}
+            token_data = {"user_id": str(user.id), "aud": reset_password_token_audience}
             token = generate_jwt(
                 token_data,
                 reset_password_token_lifetime_seconds,
@@ -146,7 +146,15 @@ def get_user_router(
                     detail=ErrorCode.RESET_PASSWORD_BAD_TOKEN,
                 )
 
-            user = await user_db.get(user_id)
+            try:
+                user_uiid = UUID4(user_id)
+            except ValueError:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=ErrorCode.RESET_PASSWORD_BAD_TOKEN,
+                )
+
+            user = await user_db.get(user_uiid)
             if user is None or not user.is_active:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
@@ -190,7 +198,7 @@ def get_user_router(
         response_model=user_model,
         dependencies=[Depends(get_current_superuser)],
     )
-    async def get_user(id: str,):
+    async def get_user(id: UUID4):
         return await _get_or_404(id)
 
     @router.patch(
@@ -199,7 +207,7 @@ def get_user_router(
         dependencies=[Depends(get_current_superuser)],
     )
     async def update_user(
-        id: str, updated_user: user_update_model,  # type: ignore
+        id: UUID4, updated_user: user_update_model,  # type: ignore
     ):
         updated_user = cast(
             models.BaseUserUpdate, updated_user,
@@ -213,7 +221,7 @@ def get_user_router(
         status_code=status.HTTP_204_NO_CONTENT,
         dependencies=[Depends(get_current_superuser)],
     )
-    async def delete_user(id: str):
+    async def delete_user(id: UUID4):
         user = await _get_or_404(id)
         await user_db.delete(user)
         return None

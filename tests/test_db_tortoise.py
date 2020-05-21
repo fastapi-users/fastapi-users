@@ -55,9 +55,7 @@ async def tortoise_user_db_oauth() -> AsyncGenerator[TortoiseUserDatabase, None]
 @pytest.mark.db
 async def test_queries(tortoise_user_db: TortoiseUserDatabase[UserDB]):
     user = UserDB(
-        id="111",
-        email="lancelot@camelot.bt",
-        hashed_password=get_password_hash("guinevere"),
+        email="lancelot@camelot.bt", hashed_password=get_password_hash("guinevere"),
     )
 
     # Create
@@ -88,7 +86,7 @@ async def test_queries(tortoise_user_db: TortoiseUserDatabase[UserDB]):
 
     # Exception when inserting non-nullable fields
     with pytest.raises(ValueError):
-        wrong_user = UserDB(id="222", hashed_password="aaa")
+        wrong_user = UserDB(hashed_password="aaa")
         await tortoise_user_db.create(wrong_user)
 
     # Unknown user
@@ -106,7 +104,6 @@ async def test_queries(tortoise_user_db: TortoiseUserDatabase[UserDB]):
 async def test_queries_custom_fields(tortoise_user_db: TortoiseUserDatabase[UserDB]):
     """It should output custom fields in query result."""
     user = UserDB(
-        id="111",
         email="lancelot@camelot.bt",
         hashed_password=get_password_hash("guinevere"),
         first_name="Lancelot",
@@ -127,7 +124,6 @@ async def test_queries_oauth(
     oauth_account2,
 ):
     user = UserDBOAuth(
-        id="111",
         email="lancelot@camelot.bt",
         hashed_password=get_password_hash("guinevere"),
         oauth_accounts=[oauth_account1, oauth_account2],

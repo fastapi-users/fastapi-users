@@ -1,6 +1,7 @@
 from typing import Generic, Optional, Type
 
 from fastapi.security import OAuth2PasswordRequestForm
+from pydantic import UUID4
 
 from fastapi_users import password
 from fastapi_users.models import UD
@@ -18,7 +19,7 @@ class BaseUserDatabase(Generic[UD]):
     def __init__(self, user_db_model: Type[UD]):
         self.user_db_model = user_db_model
 
-    async def get(self, id: str) -> Optional[UD]:
+    async def get(self, id: UUID4) -> Optional[UD]:
         """Get a single user by id."""
         raise NotImplementedError()
 
