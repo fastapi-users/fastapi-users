@@ -1,6 +1,7 @@
 from typing import Optional, Type
 
 from motor.motor_asyncio import AsyncIOMotorCollection
+from pydantic import UUID4
 
 from fastapi_users.db.base import BaseUserDatabase
 from fastapi_users.models import UD
@@ -22,7 +23,7 @@ class MongoDBUserDatabase(BaseUserDatabase[UD]):
         self.collection.create_index("id", unique=True)
         self.collection.create_index("email", unique=True)
 
-    async def get(self, id: str) -> Optional[UD]:
+    async def get(self, id: UUID4) -> Optional[UD]:
         user = await self.collection.find_one({"id": id})
         return self.user_db_model(**user) if user else None
 

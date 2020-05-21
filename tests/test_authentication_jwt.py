@@ -17,10 +17,10 @@ def jwt_authentication():
 
 @pytest.fixture
 def token():
-    def _token(user=None, lifetime=LIFETIME):
+    def _token(user_id=None, lifetime=LIFETIME):
         data = {"aud": "fastapi-users:auth"}
-        if user is not None:
-            data["user_id"] = user.id
+        if user_id is not None:
+            data["user_id"] = str(user_id)
         return generate_jwt(data, lifetime, SECRET, JWT_ALGORITHM)
 
     return _token
@@ -58,10 +58,18 @@ class TestAuthenticate:
         assert authenticated_user is None
 
     @pytest.mark.asyncio
+    async def test_valid_token_invalid_uuid(
+        self, jwt_authentication, mock_user_db, request_builder, token
+    ):
+        request = request_builder(headers={"Authorization": f"Bearer {token('foo')}"})
+        authenticated_user = await jwt_authentication(request, mock_user_db)
+        assert authenticated_user is None
+
+    @pytest.mark.asyncio
     async def test_valid_token(
         self, jwt_authentication, mock_user_db, request_builder, token, user
     ):
-        request = request_builder(headers={"Authorization": f"Bearer {token(user)}"})
+        request = request_builder(headers={"Authorization": f"Bearer {token(user.id)}"})
         authenticated_user = await jwt_authentication(request, mock_user_db)
         assert authenticated_user.id == user.id
 
@@ -77,7 +85,7 @@ async def test_get_login_response(jwt_authentication, user):
     decoded = jwt.decode(
         token, SECRET, audience="fastapi-users:auth", algorithms=[JWT_ALGORITHM]
     )
-    assert decoded["user_id"] == user.id
+    assert decoded["user_id"] == str(user.id)
 
 
 @pytest.mark.authentication

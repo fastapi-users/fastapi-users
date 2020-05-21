@@ -204,7 +204,7 @@ class TestCallback:
         user_update_mock.assert_awaited_once()
         data = cast(Dict[str, Any], response.json())
 
-        assert data["token"] == user_oauth.id
+        assert data["token"] == str(user_oauth.id)
 
         assert event_handler.called is False
 
@@ -242,7 +242,7 @@ class TestCallback:
         user_update_mock.assert_awaited_once()
         data = cast(Dict[str, Any], response.json())
 
-        assert data["token"] == superuser_oauth.id
+        assert data["token"] == str(superuser_oauth.id)
 
         assert event_handler.called is False
 
@@ -283,7 +283,7 @@ class TestCallback:
 
         assert event_handler.called is True
         actual_user = event_handler.call_args[0][0]
-        assert actual_user.id == data["token"]
+        assert str(actual_user.id) == data["token"]
         request = event_handler.call_args[0][1]
         assert isinstance(request, Request)
 
@@ -348,4 +348,4 @@ class TestCallback:
         )
         data = cast(Dict[str, Any], response.json())
 
-        assert data["token"] == user_oauth.id
+        assert data["token"] == str(user_oauth.id)

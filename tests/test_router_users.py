@@ -23,7 +23,7 @@ def forgot_password_token():
     def _forgot_password_token(user_id=None, lifetime=LIFETIME):
         data = {"aud": "fastapi-users:reset"}
         if user_id is not None:
-            data["user_id"] = user_id
+            data["user_id"] = str(user_id)
         return generate_jwt(data, lifetime, SECRET, JWT_ALGORITHM)
 
     return _forgot_password_token
@@ -117,7 +117,7 @@ class TestRegister:
         assert data["id"] is not None
 
         actual_user = event_handler.call_args[0][0]
-        assert actual_user.id == data["id"]
+        assert str(actual_user.id) == data["id"]
         request = event_handler.call_args[0][1]
         assert isinstance(request, Request)
 
@@ -190,7 +190,7 @@ class TestLogin:
         data = {"username": "king.arthur@camelot.bt", "password": "guinevere"}
         response = await test_app_client.post(path, data=data)
         assert response.status_code == status.HTTP_200_OK
-        assert response.json() == {"token": user.id}
+        assert response.json() == {"token": str(user.id)}
 
     async def test_inactive_user(self, path, test_app_client: httpx.AsyncClient):
         data = {"username": "percival@camelot.bt", "password": "angharad"}
@@ -261,7 +261,7 @@ class TestForgotPassword:
             audience="fastapi-users:reset",
             algorithms=[JWT_ALGORITHM],
         )
-        assert decoded_token["user_id"] == user.id
+        assert decoded_token["user_id"] == str(user.id)
         request = event_handler.call_args[0][2]
         assert isinstance(request, Request)
 
@@ -300,6 +300,22 @@ class TestResetPassword:
         mocker.spy(mock_user_db, "update")
 
         json = {"token": forgot_password_token(), "password": "holygrail"}
+        response = await test_app_client.post("/reset-password", json=json)
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        data = cast(Dict[str, Any], response.json())
+        assert data["detail"] == ErrorCode.RESET_PASSWORD_BAD_TOKEN
+        assert mock_user_db.update.called is False
+
+    async def test_valid_token_invalid_uuid(
+        self,
+        mocker,
+        mock_user_db,
+        test_app_client: httpx.AsyncClient,
+        forgot_password_token,
+    ):
+        mocker.spy(mock_user_db, "update")
+
+        json = {"token": forgot_password_token("foo"), "password": "holygrail"}
         response = await test_app_client.post("/reset-password", json=json)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
@@ -368,7 +384,7 @@ class TestMe:
         assert response.status_code == status.HTTP_200_OK
 
         data = cast(Dict[str, Any], response.json())
-        assert data["id"] == user.id
+        assert data["id"] == str(user.id)
         assert data["email"] == user.email
 
 
@@ -504,12 +520,13 @@ class TestUpdateMe:
 @pytest.mark.asyncio
 class TestGetUser:
     async def test_missing_token(self, test_app_client: httpx.AsyncClient):
-        response = await test_app_client.get("/000")
+        response = await test_app_client.get("/d35d213e-f3d8-4f08-954a-7e0d1bea286f")
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     async def test_regular_user(self, test_app_client: httpx.AsyncClient, user: UserDB):
         response = await test_app_client.get(
-            "/000", headers={"Authorization": f"Bearer {user.id}"}
+            "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
+            headers={"Authorization": f"Bearer {user.id}"},
         )
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
@@ -517,7 +534,8 @@ class TestGetUser:
         self, test_app_client: httpx.AsyncClient, superuser: UserDB
     ):
         response = await test_app_client.get(
-            "/000", headers={"Authorization": f"Bearer {superuser.id}"}
+            "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
+            headers={"Authorization": f"Bearer {superuser.id}"},
         )
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
@@ -530,7 +548,7 @@ class TestGetUser:
         assert response.status_code == status.HTTP_200_OK
 
         data = cast(Dict[str, Any], response.json())
-        assert data["id"] == user.id
+        assert data["id"] == str(user.id)
         assert "hashed_password" not in data
 
 
@@ -538,12 +556,13 @@ class TestGetUser:
 @pytest.mark.asyncio
 class TestUpdateUser:
     async def test_missing_token(self, test_app_client: httpx.AsyncClient):
-        response = await test_app_client.patch("/000")
+        response = await test_app_client.patch("/d35d213e-f3d8-4f08-954a-7e0d1bea286f")
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     async def test_regular_user(self, test_app_client: httpx.AsyncClient, user: UserDB):
         response = await test_app_client.patch(
-            "/000", headers={"Authorization": f"Bearer {user.id}"}
+            "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
+            headers={"Authorization": f"Bearer {user.id}"},
         )
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
@@ -551,7 +570,9 @@ class TestUpdateUser:
         self, test_app_client: httpx.AsyncClient, superuser: UserDB
     ):
         response = await test_app_client.patch(
-            "/000", json={}, headers={"Authorization": f"Bearer {superuser.id}"}
+            "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
+            json={},
+            headers={"Authorization": f"Bearer {superuser.id}"},
         )
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
@@ -636,12 +657,13 @@ class TestUpdateUser:
 @pytest.mark.asyncio
 class TestDeleteUser:
     async def test_missing_token(self, test_app_client: httpx.AsyncClient):
-        response = await test_app_client.delete("/000")
+        response = await test_app_client.delete("/d35d213e-f3d8-4f08-954a-7e0d1bea286f")
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     async def test_regular_user(self, test_app_client: httpx.AsyncClient, user: UserDB):
         response = await test_app_client.delete(
-            "/000", headers={"Authorization": f"Bearer {user.id}"}
+            "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
+            headers={"Authorization": f"Bearer {user.id}"},
         )
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
@@ -649,7 +671,8 @@ class TestDeleteUser:
         self, test_app_client: httpx.AsyncClient, superuser: UserDB
     ):
         response = await test_app_client.delete(
-            "/000", headers={"Authorization": f"Bearer {superuser.id}"}
+            "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
+            headers={"Authorization": f"Bearer {superuser.id}"},
         )
         assert response.status_code == status.HTTP_404_NOT_FOUND
 

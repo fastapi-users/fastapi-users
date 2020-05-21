@@ -8,6 +8,7 @@ from asgi_lifespan import LifespanManager
 from fastapi import Depends, FastAPI
 from fastapi.security import OAuth2PasswordBearer
 from httpx_oauth.oauth2 import OAuth2
+from pydantic import UUID4
 from starlette.applications import ASGIApp
 from starlette.requests import Request
 from starlette.responses import Response
@@ -58,16 +59,13 @@ def event_loop():
 @pytest.fixture
 def user() -> UserDB:
     return UserDB(
-        id="aaa",
-        email="king.arthur@camelot.bt",
-        hashed_password=guinevere_password_hash,
+        email="king.arthur@camelot.bt", hashed_password=guinevere_password_hash,
     )
 
 
 @pytest.fixture
 def user_oauth(oauth_account1, oauth_account2) -> UserDBOAuth:
     return UserDBOAuth(
-        id="aaa",
         email="king.arthur@camelot.bt",
         hashed_password=guinevere_password_hash,
         oauth_accounts=[oauth_account1, oauth_account2],
@@ -77,7 +75,6 @@ def user_oauth(oauth_account1, oauth_account2) -> UserDBOAuth:
 @pytest.fixture
 def inactive_user() -> UserDB:
     return UserDB(
-        id="bbb",
         email="percival@camelot.bt",
         hashed_password=angharad_password_hash,
         is_active=False,
@@ -87,7 +84,6 @@ def inactive_user() -> UserDB:
 @pytest.fixture
 def inactive_user_oauth(oauth_account3) -> UserDBOAuth:
     return UserDBOAuth(
-        id="bbb",
         email="percival@camelot.bt",
         hashed_password=angharad_password_hash,
         is_active=False,
@@ -98,7 +94,6 @@ def inactive_user_oauth(oauth_account3) -> UserDBOAuth:
 @pytest.fixture
 def superuser() -> UserDB:
     return UserDB(
-        id="ccc",
         email="merlin@camelot.bt",
         hashed_password=viviane_password_hash,
         is_superuser=True,
@@ -108,7 +103,6 @@ def superuser() -> UserDB:
 @pytest.fixture
 def superuser_oauth() -> UserDBOAuth:
     return UserDBOAuth(
-        id="ccc",
         email="merlin@camelot.bt",
         hashed_password=viviane_password_hash,
         is_superuser=True,
@@ -119,7 +113,6 @@ def superuser_oauth() -> UserDBOAuth:
 @pytest.fixture
 def oauth_account1() -> BaseOAuthAccount:
     return BaseOAuthAccount(
-        id="aaa",
         oauth_name="service1",
         access_token="TOKEN",
         expires_at=1579000751,
@@ -131,7 +124,6 @@ def oauth_account1() -> BaseOAuthAccount:
 @pytest.fixture
 def oauth_account2() -> BaseOAuthAccount:
     return BaseOAuthAccount(
-        id="bbb",
         oauth_name="service2",
         access_token="TOKEN",
         expires_at=1579000751,
@@ -143,7 +135,6 @@ def oauth_account2() -> BaseOAuthAccount:
 @pytest.fixture
 def oauth_account3() -> BaseOAuthAccount:
     return BaseOAuthAccount(
-        id="ccc",
         oauth_name="service3",
         access_token="TOKEN",
         expires_at=1579000751,
@@ -155,7 +146,7 @@ def oauth_account3() -> BaseOAuthAccount:
 @pytest.fixture
 def mock_user_db(user, inactive_user, superuser) -> BaseUserDatabase:
     class MockUserDatabase(BaseUserDatabase[UserDB]):
-        async def get(self, id: str) -> Optional[UserDB]:
+        async def get(self, id: UUID4) -> Optional[UserDB]:
             if id == user.id:
                 return user
             if id == inactive_user.id:
@@ -190,7 +181,7 @@ def mock_user_db_oauth(
     user_oauth, inactive_user_oauth, superuser_oauth
 ) -> BaseUserDatabase:
     class MockUserDatabase(BaseUserDatabase[UserDBOAuth]):
-        async def get(self, id: str) -> Optional[UserDBOAuth]:
+        async def get(self, id: UUID4) -> Optional[UserDBOAuth]:
             if id == user_oauth.id:
                 return user_oauth
             if id == inactive_user_oauth.id:
@@ -246,7 +237,11 @@ class MockAuthentication(BaseAuthentication):
     async def __call__(self, request: Request, user_db: BaseUserDatabase):
         token = await self.scheme.__call__(request)
         if token is not None:
-            return await user_db.get(token)
+            try:
+                token_uuid = UUID4(token)
+                return await user_db.get(token_uuid)
+            except ValueError:
+                return None
         return None
 
     async def get_login_response(self, user: BaseUserDB, response: Response):

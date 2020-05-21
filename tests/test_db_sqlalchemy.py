@@ -70,9 +70,7 @@ async def sqlalchemy_user_db_oauth() -> AsyncGenerator[SQLAlchemyUserDatabase, N
 @pytest.mark.db
 async def test_queries(sqlalchemy_user_db: SQLAlchemyUserDatabase[UserDB]):
     user = UserDB(
-        id="111",
-        email="lancelot@camelot.bt",
-        hashed_password=get_password_hash("guinevere"),
+        email="lancelot@camelot.bt", hashed_password=get_password_hash("guinevere"),
     )
 
     # Create
@@ -103,7 +101,7 @@ async def test_queries(sqlalchemy_user_db: SQLAlchemyUserDatabase[UserDB]):
 
     # Exception when inserting non-nullable fields
     with pytest.raises(sqlite3.IntegrityError):
-        wrong_user = UserDB(id="222", hashed_password="aaa")
+        wrong_user = UserDB(hashed_password="aaa")
         await sqlalchemy_user_db.create(wrong_user)
 
     # Unknown user
@@ -117,9 +115,7 @@ async def test_queries(sqlalchemy_user_db: SQLAlchemyUserDatabase[UserDB]):
 
     # Exception when creating/updating a OAuth user
     user_oauth = UserDBOAuth(
-        id="222",
-        email="lancelot@camelot.bt",
-        hashed_password=get_password_hash("guinevere"),
+        email="lancelot@camelot.bt", hashed_password=get_password_hash("guinevere"),
     )
     with pytest.raises(NotSetOAuthAccountTableError):
         await sqlalchemy_user_db.create(user_oauth)
@@ -138,7 +134,6 @@ async def test_queries_custom_fields(
 ):
     """It should output custom fields in query result."""
     user = UserDB(
-        id="111",
         email="lancelot@camelot.bt",
         hashed_password=get_password_hash("guinevere"),
         first_name="Lancelot",
@@ -159,7 +154,6 @@ async def test_queries_oauth(
     oauth_account2,
 ):
     user = UserDBOAuth(
-        id="111",
         email="lancelot@camelot.bt",
         hashed_password=get_password_hash("guinevere"),
         oauth_accounts=[oauth_account1, oauth_account2],

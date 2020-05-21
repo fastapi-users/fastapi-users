@@ -1,5 +1,6 @@
 from typing import Optional, Type
 
+from pydantic import UUID4
 from tortoise import fields, models
 from tortoise.exceptions import DoesNotExist
 
@@ -8,7 +9,7 @@ from fastapi_users.models import UD
 
 
 class TortoiseBaseUserModel(models.Model):
-    id = fields.CharField(pk=True, generated=False, max_length=255)
+    id = fields.UUIDField(pk=True, generated=False)
     email = fields.CharField(index=True, unique=True, null=False, max_length=255)
     hashed_password = fields.CharField(null=False, max_length=255)
     is_active = fields.BooleanField(default=True, null=False)
@@ -27,7 +28,7 @@ class TortoiseBaseUserModel(models.Model):
 
 
 class TortoiseBaseOAuthAccountModel(models.Model):
-    id = fields.CharField(pk=True, generated=False, max_length=255)
+    id = fields.UUIDField(pk=True, generated=False, max_length=255)
     oauth_name = fields.CharField(null=False, max_length=255)
     access_token = fields.CharField(null=False, max_length=255)
     expires_at = fields.IntField(null=False)
@@ -61,7 +62,7 @@ class TortoiseUserDatabase(BaseUserDatabase[UD]):
         self.model = model
         self.oauth_account_model = oauth_account_model
 
-    async def get(self, id: str) -> Optional[UD]:
+    async def get(self, id: UUID4) -> Optional[UD]:
         try:
             query = self.model.get(id=id)
 

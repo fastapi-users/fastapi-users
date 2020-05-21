@@ -31,7 +31,7 @@ def token():
     def _token(user=None, lifetime=LIFETIME):
         data = {"aud": "fastapi-users:auth"}
         if user is not None:
-            data["user_id"] = user.id
+            data["user_id"] = str(user.id)
         return generate_jwt(data, lifetime, SECRET, JWT_ALGORITHM)
 
     return _token
@@ -131,7 +131,7 @@ async def test_get_login_response(
     decoded = jwt.decode(
         cookie_value, SECRET, audience="fastapi-users:auth", algorithms=[JWT_ALGORITHM]
     )
-    assert decoded["user_id"] == user.id
+    assert decoded["user_id"] == str(user.id)
 
 
 @pytest.mark.authentication
@@ -149,4 +149,4 @@ async def test_get_logout_response(user):
 
     cookie = cookies[0][1].decode("latin-1")
 
-    assert f"Max-Age=0" in cookie
+    assert "Max-Age=0" in cookie

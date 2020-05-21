@@ -2,6 +2,7 @@ from typing import Any, Optional
 
 import jwt
 from fastapi.security import OAuth2PasswordBearer
+from pydantic import UUID4
 from starlette.requests import Request
 from starlette.responses import Response
 
@@ -56,7 +57,12 @@ class JWTAuthentication(BaseAuthentication):
                 return None
         except jwt.PyJWTError:
             return None
-        return await user_db.get(user_id)
+
+        try:
+            user_uiid = UUID4(user_id)
+            return await user_db.get(user_uiid)
+        except ValueError:
+            return None
 
     async def get_login_response(self, user: BaseUserDB, response: Response) -> Any:
         token = await self._generate_token(user)
@@ -66,5 +72,5 @@ class JWTAuthentication(BaseAuthentication):
         return await self.scheme.__call__(request)
 
     async def _generate_token(self, user: BaseUserDB) -> str:
-        data = {"user_id": user.id, "aud": self.token_audience}
+        data = {"user_id": str(user.id), "aud": self.token_audience}
         return generate_jwt(data, self.lifetime_seconds, self.secret, JWT_ALGORITHM)
