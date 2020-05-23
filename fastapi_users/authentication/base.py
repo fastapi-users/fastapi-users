@@ -1,7 +1,7 @@
 from typing import Any, Generic, Optional, TypeVar
 
+from fastapi import Response
 from fastapi.security.base import SecurityBase
-from starlette.responses import Response
 
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.models import BaseUserDB

@@ -1,12 +1,9 @@
 from typing import Any, Dict, Type, cast
 
 import jwt
-from fastapi import Body, Depends, HTTPException
+from fastapi import Body, Depends, HTTPException, Request, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import UUID4, EmailStr
-from starlette import status
-from starlette.requests import Request
-from starlette.responses import Response
 
 from fastapi_users import models
 from fastapi_users.authentication import Authenticator, BaseAuthentication

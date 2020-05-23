@@ -1,8 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi_users import FastAPIUsers, models
 from fastapi_users.authentication import JWTAuthentication
 from fastapi_users.db import TortoiseBaseUserModel, TortoiseUserDatabase
-from starlette.requests import Request
 from tortoise.contrib.starlette import register_tortoise
 
 DATABASE_URL = "sqlite://./test.db"

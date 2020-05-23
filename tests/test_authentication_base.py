@@ -1,5 +1,5 @@
 import pytest
-from starlette.responses import Response
+from fastapi import Response
 
 from fastapi_users.authentication import BaseAuthentication
 

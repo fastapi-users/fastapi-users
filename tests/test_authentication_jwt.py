@@ -1,6 +1,6 @@
 import jwt
 import pytest
-from starlette.responses import Response
+from fastapi import Response
 
 from fastapi_users.authentication.jwt import JWTAuthentication
 from fastapi_users.utils import JWT_ALGORITHM, generate_jwt

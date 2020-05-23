@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi_users import FastAPIUsers, models
 from fastapi_users.authentication import JWTAuthentication
 from fastapi_users.db import (
@@ -7,7 +7,6 @@ from fastapi_users.db import (
     TortoiseUserDatabase,
 )
 from httpx_oauth.clients.google import GoogleOAuth2
-from starlette.requests import Request
 from tortoise import fields
 from tortoise.contrib.starlette import register_tortoise
 

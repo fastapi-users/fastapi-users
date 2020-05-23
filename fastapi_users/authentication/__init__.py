@@ -2,9 +2,8 @@ import re
 from inspect import Parameter, Signature
 from typing import Sequence
 
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, status
 from makefun import with_signature
-from starlette import status
 
 from fastapi_users.authentication.base import BaseAuthentication  # noqa: F401
 from fastapi_users.authentication.cookie import CookieAuthentication  # noqa: F401

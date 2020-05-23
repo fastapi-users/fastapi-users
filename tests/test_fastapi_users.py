@@ -1,8 +1,7 @@
 import pytest
 import httpx
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, status
 from httpx_oauth.oauth2 import OAuth2
-from starlette import status
 
 from fastapi_users import FastAPIUsers
 from fastapi_users.router import Event, EventHandlersRouter

@@ -1,9 +1,9 @@
 from typing import Any, Optional
 
 import jwt
+from fastapi import Response
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import UUID4
-from starlette.responses import Response
 
 from fastapi_users.authentication.base import BaseAuthentication
 from fastapi_users.db.base import BaseUserDatabase

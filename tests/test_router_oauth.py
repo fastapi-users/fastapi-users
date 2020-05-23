@@ -4,9 +4,7 @@ from typing import Dict, Any, cast
 import asynctest
 import httpx
 import pytest
-from fastapi import FastAPI
-from starlette import status
-from starlette.requests import Request
+from fastapi import FastAPI, status, Request
 
 from fastapi_users.authentication import Authenticator
 from fastapi_users.router.common import ErrorCode, Event

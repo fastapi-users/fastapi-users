@@ -1,9 +1,8 @@
 import motor.motor_asyncio
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi_users import FastAPIUsers, models
 from fastapi_users.authentication import JWTAuthentication
 from fastapi_users.db import MongoDBUserDatabase
-from starlette.requests import Request
 
 DATABASE_URL = "mongodb://localhost:27017"
 SECRET = "SECRET"

@@ -1,12 +1,9 @@
 from typing import Dict, List, Type, cast
 
 import jwt
-from fastapi import Depends, HTTPException, Query
+from fastapi import Depends, HTTPException, Query, Request, Response, status
 from httpx_oauth.integrations.fastapi import OAuth2AuthorizeCallback
 from httpx_oauth.oauth2 import BaseOAuth2
-from starlette import status
-from starlette.requests import Request
-from starlette.responses import Response
 
 from fastapi_users import models
 from fastapi_users.authentication import Authenticator
