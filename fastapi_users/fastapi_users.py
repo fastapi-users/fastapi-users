@@ -11,7 +11,7 @@ from fastapi_users.router import (
     get_oauth_router,
     get_register_router,
     get_reset_password_router,
-    get_user_router,
+    get_users_router,
 )
 
 
@@ -49,7 +49,7 @@ class FastAPIUsers:
     ):
         self.db = db
         self.authenticator = Authenticator(auth_backends, db)
-        self.router = get_user_router(
+        self.router = get_users_router(
             self.db, user_model, user_update_model, user_db_model, self.authenticator,
         )
 
@@ -123,7 +123,7 @@ class FastAPIUsers:
         :param redirect_url: Optional arbitrary redirect URL for the OAuth2 flow.
         If not given, the URL to the callback endpoint will be generated.
         """
-        oauth_router = get_oauth_router(
+        return get_oauth_router(
             oauth_client,
             self.db,
             self._user_db_model,
@@ -132,4 +132,14 @@ class FastAPIUsers:
             redirect_url,
         )
 
-        return oauth_router
+    def get_users_router(self) -> APIRouter:
+        """
+        Return a router with routes to manage users.
+        """
+        return get_users_router(
+            self.db,
+            self._user_model,
+            self._user_update_model,
+            self._user_db_model,
+            self.authenticator,
+        )

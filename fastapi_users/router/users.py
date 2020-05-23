@@ -10,7 +10,7 @@ from fastapi_users.password import get_password_hash
 from fastapi_users.router.common import run_handler
 
 
-def get_user_router(
+def get_users_router(
     user_db: BaseUserDatabase[models.BaseUserDB],
     user_model: Type[models.BaseUser],
     user_update_model: Type[models.BaseUserUpdate],

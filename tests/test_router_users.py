@@ -7,7 +7,7 @@ import pytest
 from fastapi import FastAPI, status, Request
 
 from fastapi_users.authentication import Authenticator
-from fastapi_users.router import get_user_router
+from fastapi_users.router import get_users_router
 from tests.conftest import MockAuthentication, User, UserUpdate, UserDB
 
 SECRET = "SECRET"
@@ -37,7 +37,7 @@ async def test_app_client(
         [mock_authentication, mock_authentication_bis], mock_user_db
     )
 
-    user_router = get_user_router(
+    user_router = get_users_router(
         mock_user_db, User, UserUpdate, UserDB, authenticator, after_update,
     )
 

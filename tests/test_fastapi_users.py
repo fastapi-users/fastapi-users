@@ -16,11 +16,11 @@ async def test_app_client(
     )
 
     app = FastAPI()
-    app.include_router(fastapi_users.router, prefix="/users")
     app.include_router(fastapi_users.get_register_router())
     app.include_router(fastapi_users.get_reset_password_router("SECRET"))
     app.include_router(fastapi_users.get_auth_router(mock_authentication))
     app.include_router(fastapi_users.get_oauth_router(oauth_client, "SECRET"))
+    app.include_router(fastapi_users.get_users_router(), prefix="/users")
 
     @app.get("/current-user")
     def current_user(user=Depends(fastapi_users.get_current_user)):
