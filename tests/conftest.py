@@ -228,7 +228,7 @@ def mock_user_db_oauth(
 
 class MockAuthentication(BaseAuthentication[str]):
     def __init__(self, name: str = "mock"):
-        super().__init__(name, logout=False)
+        super().__init__(name, logout=True)
         self.scheme = OAuth2PasswordBearer("/users/login", auto_error=False)
 
     async def __call__(self, credentials: Optional[str], user_db: BaseUserDatabase):
@@ -242,6 +242,9 @@ class MockAuthentication(BaseAuthentication[str]):
 
     async def get_login_response(self, user: BaseUserDB, response: Response):
         return {"token": user.id}
+
+    async def get_logout_response(self, user: BaseUserDB, response: Response):
+        return None
 
 
 @pytest.fixture
