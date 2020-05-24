@@ -49,9 +49,6 @@ class FastAPIUsers:
     ):
         self.db = db
         self.authenticator = Authenticator(auth_backends, db)
-        self.router = get_users_router(
-            self.db, user_model, user_update_model, user_db_model, self.authenticator,
-        )
 
         self._user_model = user_model
         self._user_db_model = user_db_model
