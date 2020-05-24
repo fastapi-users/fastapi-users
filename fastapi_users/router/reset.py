@@ -17,9 +17,7 @@ def get_reset_password_router(
     user_db: BaseUserDatabase[models.BaseUserDB],
     reset_password_token_secret: str,
     reset_password_token_lifetime_seconds: int = 3600,
-    after_forgot_password: Optional[
-        Callable[[models.BaseUserDB, str, Request], None]
-    ] = None,
+    after_forgot_password: Optional[Callable[[models.UD, str, Request], None]] = None,
 ) -> APIRouter:
     """Generate a router with the reset password routes."""
     router = APIRouter()

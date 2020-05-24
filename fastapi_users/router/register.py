@@ -13,7 +13,7 @@ def get_register_router(
     user_model: Type[models.BaseUser],
     user_create_model: Type[models.BaseUserCreate],
     user_db_model: Type[models.BaseUserDB],
-    after_register: Optional[Callable[[models.BaseUserDB, Request], None]] = None,
+    after_register: Optional[Callable[[models.UD, Request], None]] = None,
 ) -> APIRouter:
     """Generate a router with the register route."""
     router = APIRouter()

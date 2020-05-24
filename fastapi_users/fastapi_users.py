@@ -64,13 +64,12 @@ class FastAPIUsers:
         self.get_current_superuser = self.authenticator.get_current_superuser
 
     def get_register_router(
-        self,
-        after_register: Optional[Callable[[models.BaseUserDB, Request], None]] = None,
+        self, after_register: Optional[Callable[[models.UD, Request], None]] = None,
     ) -> APIRouter:
         """
         Return a router with a register route.
 
-        :param after_forgot_password: Optional function called
+        :param after_register: Optional function called
         after a successful registration.
         """
         return get_register_router(
@@ -86,7 +85,7 @@ class FastAPIUsers:
         reset_password_token_secret: str,
         reset_password_token_lifetime_seconds: int = 3600,
         after_forgot_password: Optional[
-            Callable[[models.BaseUserDB, str, Request], None]
+            Callable[[models.UD, str, Request], None]
         ] = None,
     ) -> APIRouter:
         """
@@ -113,7 +112,11 @@ class FastAPIUsers:
         return get_auth_router(backend, self.db, self.authenticator)
 
     def get_oauth_router(
-        self, oauth_client: BaseOAuth2, state_secret: str, redirect_url: str = None
+        self,
+        oauth_client: BaseOAuth2,
+        state_secret: str,
+        redirect_url: str = None,
+        after_register: Optional[Callable[[models.UD, Request], None]] = None,
     ) -> APIRouter:
         """
         Return an OAuth router for a given OAuth client.
@@ -122,6 +125,8 @@ class FastAPIUsers:
         :param state_secret: Secret used to encode the state JWT.
         :param redirect_url: Optional arbitrary redirect URL for the OAuth2 flow.
         If not given, the URL to the callback endpoint will be generated.
+        :param after_register: Optional function called
+        after a successful registration.
         """
         return get_oauth_router(
             oauth_client,
@@ -130,12 +135,13 @@ class FastAPIUsers:
             self.authenticator,
             state_secret,
             redirect_url,
+            after_register,
         )
 
     def get_users_router(
         self,
         after_update: Optional[
-            Callable[[models.BaseUserDB, Dict[str, Any], Request], None]
+            Callable[[models.UD, Dict[str, Any], Request], None]
         ] = None,
     ) -> APIRouter:
         """

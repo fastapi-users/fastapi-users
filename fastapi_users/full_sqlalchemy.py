@@ -1,10 +1,11 @@
 import databases
 import sqlalchemy
-from fastapi import FastAPI, Request
-from fastapi_users import FastAPIUsers, models
-from fastapi_users.authentication import JWTAuthentication
-from fastapi_users.db import SQLAlchemyBaseUserTable, SQLAlchemyUserDatabase
+from fastapi import Depends, FastAPI
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
+
+from fastapi_users import FastAPIUsers, models
+from fastapi_users.authentication import CookieAuthentication, JWTAuthentication
+from fastapi_users.db import SQLAlchemyBaseUserTable, SQLAlchemyUserDatabase
 
 DATABASE_URL = "sqlite:///./test.db"
 SECRET = "SECRET"
@@ -43,34 +44,35 @@ users = UserTable.__table__
 user_db = SQLAlchemyUserDatabase(UserDB, database, users)
 
 
-def on_after_register(user: UserDB, request: Request):
-    print(f"User {user.id} has registered.")
-
-
-def on_after_forgot_password(user: UserDB, token: str, request: Request):
-    print(f"User {user.id} has forgot their password. Reset token: {token}")
-
-
-jwt_authentication = JWTAuthentication(secret=SECRET, lifetime_seconds=3600)
+auth_backends = [
+    JWTAuthentication(secret=SECRET, lifetime_seconds=3600),
+    CookieAuthentication(secret=SECRET, lifetime_seconds=3600),
+]
 
 app = FastAPI()
 fastapi_users = FastAPIUsers(
-    user_db, [jwt_authentication], User, UserCreate, UserUpdate, UserDB,
+    user_db, auth_backends, User, UserCreate, UserUpdate, UserDB
+)
+app.include_router(fastapi_users.get_register_router(), tags=["auth"])
+app.include_router(
+    fastapi_users.get_reset_password_router("SECRET"), tags=["auth"]
 )
 app.include_router(
-    fastapi_users.get_auth_router(jwt_authentication), prefix="/auth/jwt", tags=["auth"]
+    fastapi_users.get_users_router(), prefix="/users", tags=["users"]
 )
 app.include_router(
-    fastapi_users.get_register_router(on_after_register), prefix="/auth", tags=["auth"]
+    fastapi_users.get_auth_router(auth_backends[0]), prefix="/auth/jwt", tags=["auth"]
 )
 app.include_router(
-    fastapi_users.get_reset_password_router(
-        SECRET, after_forgot_password=on_after_forgot_password
-    ),
-    prefix="/auth",
+    fastapi_users.get_auth_router(auth_backends[1]),
+    prefix="/auth/cookie",
     tags=["auth"],
 )
-app.include_router(fastapi_users.get_users_router(), prefix="/users", tags=["users"])
+
+
+@app.get("/test")
+def test(u=Depends(fastapi_users.get_current_active_user)):
+    return u
 
 
 @app.on_event("startup")

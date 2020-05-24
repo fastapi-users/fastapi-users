@@ -35,7 +35,7 @@ def get_oauth_router(
     authenticator: Authenticator,
     state_secret: str,
     redirect_url: str = None,
-    after_register: Optional[Callable[[models.BaseUserDB, Request], None]] = None,
+    after_register: Optional[Callable[[models.UD, Request], None]] = None,
 ) -> APIRouter:
     """Generate a router with the OAuth routes."""
     router = APIRouter()

@@ -16,9 +16,7 @@ def get_users_router(
     user_update_model: Type[models.BaseUserUpdate],
     user_db_model: Type[models.BaseUserDB],
     authenticator: Authenticator,
-    after_update: Optional[
-        Callable[[models.BaseUserDB, Dict[str, Any], Request], None]
-    ] = None,
+    after_update: Optional[Callable[[models.UD, Dict[str, Any], Request], None]] = None,
 ) -> APIRouter:
     """Generate a router with the authentication routes."""
     router = APIRouter()

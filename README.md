@@ -37,6 +37,7 @@ Add quickly a registration and authentication system to your [FastAPI](https://f
 * [X] Multiple customizable authentication backends
     * [X] JWT authentication backend included
     * [X] Cookie authentication backend included
+* [X] Full OpenAPI schema support, even with several authentication backends
 
 ## Development
 
