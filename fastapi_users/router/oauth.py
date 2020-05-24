@@ -1,18 +1,15 @@
-from typing import Dict, List, Type, cast
+from typing import Callable, Dict, List, Optional, Type, cast
 
 import jwt
-from fastapi import Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 from httpx_oauth.integrations.fastapi import OAuth2AuthorizeCallback
 from httpx_oauth.oauth2 import BaseOAuth2
-from starlette import status
-from starlette.requests import Request
-from starlette.responses import Response
 
 from fastapi_users import models
 from fastapi_users.authentication import Authenticator
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.password import generate_password, get_password_hash
-from fastapi_users.router.common import ErrorCode, Event, EventHandlersRouter
+from fastapi_users.router.common import ErrorCode, run_handler
 from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
 
 STATE_TOKEN_AUDIENCE = "fastapi-users:oauth-state"
@@ -38,9 +35,10 @@ def get_oauth_router(
     authenticator: Authenticator,
     state_secret: str,
     redirect_url: str = None,
-) -> EventHandlersRouter:
+    after_register: Optional[Callable[[models.UD, Request], None]] = None,
+) -> APIRouter:
     """Generate a router with the OAuth routes."""
-    router = EventHandlersRouter()
+    router = APIRouter()
     callback_route_name = f"{oauth_client.name}-callback"
 
     if redirect_url is not None:
@@ -122,7 +120,8 @@ def get_oauth_router(
                     oauth_accounts=[new_oauth_account],
                 )
                 await user_db.create(user)
-                await router.run_handlers(Event.ON_AFTER_REGISTER, user, request)
+                if after_register:
+                    await run_handler(after_register, user, request)
         else:
             # Update oauth
             updated_oauth_accounts = []

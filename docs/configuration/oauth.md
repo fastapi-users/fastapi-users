@@ -121,12 +121,43 @@ google_oauth_client = GoogleOAuth2("CLIENT_ID", "CLIENT_SECRET")
 
 app = FastAPI()
 fastapi_users = FastAPIUsers(
-    user_db, auth_backends, User, UserCreate, UserUpdate, UserDB, SECRET,
+    user_db, auth_backends, User, UserCreate, UserUpdate, UserDB
 )
 
 google_oauth_router = fastapi_users.get_oauth_router(google_oauth_client, SECRET)
 
-app.include_router(google_oauth_router, prefix="/google-oauth", tags=["users"])
+app.include_router(google_oauth_router, prefix="/auth/google", tags=["auth"])
+```
+
+### After register
+
+You can provide a custom function to be called after a successful registration. It is called with **two argument**: the **user** that has just registered, and the original **`Request` object**.
+
+Typically, you'll want to **send a welcome e-mail** or add it to your marketing analytics pipeline.
+
+You can define it as an `async` or standard method.
+
+Example:
+
+```py
+from fastapi import FastAPI
+from fastapi_users import FastAPIUsers
+from httpx_oauth.clients.google import GoogleOAuth2
+
+
+def on_after_register(user: UserDB, request: Request):
+    print(f"User {user.id} has registered.")
+
+google_oauth_client = GoogleOAuth2("CLIENT_ID", "CLIENT_SECRET")
+
+app = FastAPI()
+fastapi_users = FastAPIUsers(
+    user_db, auth_backends, User, UserCreate, UserUpdate, UserDB
+)
+
+google_oauth_router = fastapi_users.get_oauth_router(google_oauth_client, SECRET, after_register=on_after_register)
+
+app.include_router(google_oauth_router, prefix="/auth/google", tags=["auth"])
 ```
 
 ### Full example

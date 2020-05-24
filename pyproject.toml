@@ -26,6 +26,7 @@ requires = [
     "email-validator ==1.1.0",
     "pyjwt ==1.7.1",
     "python-multipart ==0.0.5",
+    "makefun >=1.9.2,<1.10",
 ]
 
 [tool.flit.metadata.requires-extra]

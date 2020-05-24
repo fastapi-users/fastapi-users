@@ -1,6 +1,6 @@
 import jwt
 import pytest
-from starlette.responses import Response
+from fastapi import Response
 
 from fastapi_users.authentication.jwt import JWTAuthentication
 from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
@@ -34,43 +34,32 @@ def test_default_name(jwt_authentication):
 @pytest.mark.authentication
 class TestAuthenticate:
     @pytest.mark.asyncio
-    async def test_missing_token(
-        self, jwt_authentication, mock_user_db, request_builder
-    ):
-        request = request_builder(headers={})
-        authenticated_user = await jwt_authentication(request, mock_user_db)
+    async def test_missing_token(self, jwt_authentication, mock_user_db):
+        authenticated_user = await jwt_authentication(None, mock_user_db)
         assert authenticated_user is None
 
     @pytest.mark.asyncio
-    async def test_invalid_token(
-        self, jwt_authentication, mock_user_db, request_builder
-    ):
-        request = request_builder(headers={"Authorization": "Bearer foo"})
-        authenticated_user = await jwt_authentication(request, mock_user_db)
+    async def test_invalid_token(self, jwt_authentication, mock_user_db):
+        authenticated_user = await jwt_authentication("foo", mock_user_db)
         assert authenticated_user is None
 
     @pytest.mark.asyncio
     async def test_valid_token_missing_user_payload(
-        self, jwt_authentication, mock_user_db, request_builder, token
+        self, jwt_authentication, mock_user_db, token
     ):
-        request = request_builder(headers={"Authorization": f"Bearer {token()}"})
-        authenticated_user = await jwt_authentication(request, mock_user_db)
+        authenticated_user = await jwt_authentication(token(), mock_user_db)
         assert authenticated_user is None
 
     @pytest.mark.asyncio
     async def test_valid_token_invalid_uuid(
-        self, jwt_authentication, mock_user_db, request_builder, token
+        self, jwt_authentication, mock_user_db, token
     ):
-        request = request_builder(headers={"Authorization": f"Bearer {token('foo')}"})
-        authenticated_user = await jwt_authentication(request, mock_user_db)
+        authenticated_user = await jwt_authentication(token("foo"), mock_user_db)
         assert authenticated_user is None
 
     @pytest.mark.asyncio
-    async def test_valid_token(
-        self, jwt_authentication, mock_user_db, request_builder, token, user
-    ):
-        request = request_builder(headers={"Authorization": f"Bearer {token(user.id)}"})
-        authenticated_user = await jwt_authentication(request, mock_user_db)
+    async def test_valid_token(self, jwt_authentication, mock_user_db, token, user):
+        authenticated_user = await jwt_authentication(token(user.id), mock_user_db)
         assert authenticated_user.id == user.id
 
 

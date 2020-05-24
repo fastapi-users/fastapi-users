@@ -45,4 +45,4 @@ def protected_route():
     return 'Hello, some user.'
 ```
 
-You can see more about it [in FastAPI docs](https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/).
+You can read more about this [in FastAPI docs](https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/).

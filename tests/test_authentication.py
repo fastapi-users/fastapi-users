@@ -1,49 +1,63 @@
 from typing import Optional
 
 import pytest
-from starlette import status
-from starlette.requests import Request
+from fastapi import Request, status
+from fastapi.security.base import SecurityBase
 
-from fastapi_users.authentication import BaseAuthentication
+from fastapi_users.authentication import (
+    BaseAuthentication,
+    DuplicateBackendNamesError,
+)
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.models import BaseUserDB
 
 
-@pytest.fixture
-def auth_backend_none():
-    class BackendNone(BaseAuthentication):
-        async def __call__(
-            self, request: Request, user_db: BaseUserDatabase
-        ) -> Optional[BaseUserDB]:
-            return None
-
-    return BackendNone()
+class MockSecurityScheme(SecurityBase):
+    def __call__(self, request: Request) -> Optional[str]:
+        return "mock"
 
 
-@pytest.fixture
-def auth_backend_user(user):
-    class BackendUser(BaseAuthentication):
-        async def __call__(
-            self, request: Request, user_db: BaseUserDatabase
-        ) -> Optional[BaseUserDB]:
-            return user
+class BackendNone(BaseAuthentication[str]):
+    def __init__(self, name="none"):
+        super().__init__(name, logout=False)
+        self.scheme = MockSecurityScheme()
 
-    return BackendUser()
+    async def __call__(
+        self, credentials: Optional[str], user_db: BaseUserDatabase
+    ) -> Optional[BaseUserDB]:
+        return None
+
+
+class BackendUser(BaseAuthentication[str]):
+    def __init__(self, user: BaseUserDB, name="user"):
+        super().__init__(name, logout=False)
+        self.scheme = MockSecurityScheme()
+        self.user = user
+
+    async def __call__(
+        self, credentials: Optional[str], user_db: BaseUserDatabase
+    ) -> Optional[BaseUserDB]:
+        return self.user
 
 
 @pytest.mark.authentication
 @pytest.mark.asyncio
-async def test_authenticator(
-    get_test_auth_client, auth_backend_none, auth_backend_user
-):
-    client = await get_test_auth_client([auth_backend_none, auth_backend_user])
+async def test_authenticator(get_test_auth_client, user):
+    client = await get_test_auth_client([BackendNone(), BackendUser(user)])
     response = await client.get("/test-current-user")
     assert response.status_code == status.HTTP_200_OK
 
 
 @pytest.mark.authentication
 @pytest.mark.asyncio
-async def test_authenticator_none(get_test_auth_client, auth_backend_none):
-    client = await get_test_auth_client([auth_backend_none, auth_backend_none])
+async def test_authenticator_none(get_test_auth_client):
+    client = await get_test_auth_client([BackendNone(), BackendNone(name="none-bis")])
     response = await client.get("/test-current-user")
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+@pytest.mark.authentication
+@pytest.mark.asyncio
+async def test_authenticators_with_same_name(get_test_auth_client):
+    with pytest.raises(DuplicateBackendNamesError):
+        await get_test_auth_client([BackendNone(), BackendNone()])

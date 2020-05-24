@@ -1,70 +1,25 @@
-from typing import Any, Dict, Type, cast
+from typing import Any, Callable, Dict, Optional, Type, cast
 
-import jwt
-from fastapi import Body, Depends, HTTPException
-from fastapi.security import OAuth2PasswordRequestForm
-from pydantic import UUID4, EmailStr
-from starlette import status
-from starlette.requests import Request
-from starlette.responses import Response
+from fastapi import APIRouter, Depends, HTTPException, Request, status
+from pydantic import UUID4
 
 from fastapi_users import models
-from fastapi_users.authentication import Authenticator, BaseAuthentication
+from fastapi_users.authentication import Authenticator
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.password import get_password_hash
-from fastapi_users.router.common import ErrorCode, Event, EventHandlersRouter
-from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
+from fastapi_users.router.common import run_handler
 
 
-def _add_login_route(
-    router: EventHandlersRouter,
-    user_db: BaseUserDatabase,
-    auth_backend: BaseAuthentication,
-):
-    @router.post(f"/login/{auth_backend.name}")
-    async def login(
-        response: Response, credentials: OAuth2PasswordRequestForm = Depends()
-    ):
-        user = await user_db.authenticate(credentials)
-
-        if user is None or not user.is_active:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=ErrorCode.LOGIN_BAD_CREDENTIALS,
-            )
-
-        return await auth_backend.get_login_response(user, response)
-
-
-def _add_logout_route(
-    router: EventHandlersRouter,
-    authenticator: Authenticator,
-    auth_backend: BaseAuthentication,
-):
-    @router.post(f"/logout/{auth_backend.name}")
-    async def logout(
-        response: Response, user=Depends(authenticator.get_current_active_user)
-    ):
-        try:
-            return await auth_backend.get_logout_response(user, response)
-        except NotImplementedError:
-            response.status_code = status.HTTP_202_ACCEPTED
-
-
-def get_user_router(
+def get_users_router(
     user_db: BaseUserDatabase[models.BaseUserDB],
     user_model: Type[models.BaseUser],
-    user_create_model: Type[models.BaseUserCreate],
     user_update_model: Type[models.BaseUserUpdate],
     user_db_model: Type[models.BaseUserDB],
     authenticator: Authenticator,
-    reset_password_token_secret: str,
-    reset_password_token_lifetime_seconds: int = 3600,
-) -> EventHandlersRouter:
+    after_update: Optional[Callable[[models.UD, Dict[str, Any], Request], None]] = None,
+) -> APIRouter:
     """Generate a router with the authentication routes."""
-    router = EventHandlersRouter()
-
-    reset_password_token_audience = "fastapi-users:reset"
+    router = APIRouter()
 
     get_current_active_user = authenticator.get_current_active_user
     get_current_superuser = authenticator.get_current_superuser
@@ -75,99 +30,19 @@ def get_user_router(
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
         return user
 
-    async def _update_user(user: models.BaseUserDB, update_dict: Dict[str, Any]):
+    async def _update_user(
+        user: models.BaseUserDB, update_dict: Dict[str, Any], request: Request
+    ):
         for field in update_dict:
             if field == "password":
                 hashed_password = get_password_hash(update_dict[field])
                 user.hashed_password = hashed_password
             else:
                 setattr(user, field, update_dict[field])
-        return await user_db.update(user)
-
-    for auth_backend in authenticator.backends:
-        _add_login_route(router, user_db, auth_backend)
-        _add_logout_route(router, authenticator, auth_backend)
-
-    @router.post(
-        "/register", response_model=user_model, status_code=status.HTTP_201_CREATED
-    )
-    async def register(request: Request, user: user_create_model):  # type: ignore
-        user = cast(models.BaseUserCreate, user)  # Prevent mypy complain
-        existing_user = await user_db.get_by_email(user.email)
-
-        if existing_user is not None:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=ErrorCode.REGISTER_USER_ALREADY_EXISTS,
-            )
-
-        hashed_password = get_password_hash(user.password)
-        db_user = user_db_model(
-            **user.create_update_dict(), hashed_password=hashed_password
-        )
-        created_user = await user_db.create(db_user)
-
-        await router.run_handlers(Event.ON_AFTER_REGISTER, created_user, request)
-
-        return created_user
-
-    @router.post("/forgot-password", status_code=status.HTTP_202_ACCEPTED)
-    async def forgot_password(
-        request: Request, email: EmailStr = Body(..., embed=True)
-    ):
-        user = await user_db.get_by_email(email)
-
-        if user is not None and user.is_active:
-            token_data = {"user_id": str(user.id), "aud": reset_password_token_audience}
-            token = generate_jwt(
-                token_data,
-                reset_password_token_lifetime_seconds,
-                reset_password_token_secret,
-            )
-            await router.run_handlers(
-                Event.ON_AFTER_FORGOT_PASSWORD, user, token, request
-            )
-
-        return None
-
-    @router.post("/reset-password")
-    async def reset_password(token: str = Body(...), password: str = Body(...)):
-        try:
-            data = jwt.decode(
-                token,
-                reset_password_token_secret,
-                audience=reset_password_token_audience,
-                algorithms=[JWT_ALGORITHM],
-            )
-            user_id = data.get("user_id")
-            if user_id is None:
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=ErrorCode.RESET_PASSWORD_BAD_TOKEN,
-                )
-
-            try:
-                user_uiid = UUID4(user_id)
-            except ValueError:
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=ErrorCode.RESET_PASSWORD_BAD_TOKEN,
-                )
-
-            user = await user_db.get(user_uiid)
-            if user is None or not user.is_active:
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=ErrorCode.RESET_PASSWORD_BAD_TOKEN,
-                )
-
-            user.hashed_password = get_password_hash(password)
-            await user_db.update(user)
-        except jwt.PyJWTError:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=ErrorCode.RESET_PASSWORD_BAD_TOKEN,
-            )
+        updated_user = await user_db.update(user)
+        if after_update:
+            await run_handler(after_update, updated_user, update_dict, request)
+        return updated_user
 
     @router.get("/me", response_model=user_model)
     async def me(
@@ -185,11 +60,7 @@ def get_user_router(
             models.BaseUserUpdate, updated_user,
         )  # Prevent mypy complain
         updated_user_data = updated_user.create_update_dict()
-        updated_user = await _update_user(user, updated_user_data)
-
-        await router.run_handlers(
-            Event.ON_AFTER_UPDATE, updated_user, updated_user_data, request
-        )
+        updated_user = await _update_user(user, updated_user_data, request)
 
         return updated_user
 
@@ -207,14 +78,14 @@ def get_user_router(
         dependencies=[Depends(get_current_superuser)],
     )
     async def update_user(
-        id: UUID4, updated_user: user_update_model,  # type: ignore
+        id: UUID4, updated_user: user_update_model, request: Request  # type: ignore
     ):
         updated_user = cast(
             models.BaseUserUpdate, updated_user,
         )  # Prevent mypy complain
         user = await _get_or_404(id)
         updated_user_data = updated_user.create_update_dict_superuser()
-        return await _update_user(user, updated_user_data)
+        return await _update_user(user, updated_user_data, request)
 
     @router.delete(
         "/{id}",

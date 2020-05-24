@@ -1,5 +1,5 @@
 import pytest
-from starlette.responses import Response
+from fastapi import Response
 
 from fastapi_users.authentication import BaseAuthentication
 
@@ -12,12 +12,9 @@ def base_authentication():
 @pytest.mark.authentication
 class TestAuthenticate:
     @pytest.mark.asyncio
-    async def test_not_implemented(
-        self, base_authentication, mock_user_db, request_builder
-    ):
-        request = request_builder({})
+    async def test_not_implemented(self, base_authentication, mock_user_db):
         with pytest.raises(NotImplementedError):
-            await base_authentication(request, mock_user_db)
+            await base_authentication(None, mock_user_db)
 
 
 @pytest.mark.authentication
