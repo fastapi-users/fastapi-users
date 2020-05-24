@@ -23,7 +23,7 @@ requires-python = ">=3.7"
 requires = [
     "fastapi >=0.54.0,<0.55.0",
     "passlib[bcrypt] ==1.7.2",
-    "email-validator ==1.1.0",
+    "email-validator >=1.1.0,<1.2",
     "pyjwt ==1.7.1",
     "python-multipart ==0.0.5",
     "makefun >=1.9.2,<1.10",
