@@ -1,4 +1,4 @@
-from typing import Callable, Optional, Sequence, Type
+from typing import Any, Callable, Dict, Optional, Sequence, Type
 
 from fastapi import APIRouter, Request
 from httpx_oauth.oauth2 import BaseOAuth2
@@ -132,9 +132,17 @@ class FastAPIUsers:
             redirect_url,
         )
 
-    def get_users_router(self) -> APIRouter:
+    def get_users_router(
+        self,
+        after_update: Optional[
+            Callable[[models.BaseUserDB, Dict[str, Any], Request], None]
+        ] = None,
+    ) -> APIRouter:
         """
         Return a router with routes to manage users.
+
+        :param after_update: Optional function called
+        after a successful user update.
         """
         return get_users_router(
             self.db,
@@ -142,4 +150,5 @@ class FastAPIUsers:
             self._user_update_model,
             self._user_db_model,
             self.authenticator,
+            after_update,
         )
