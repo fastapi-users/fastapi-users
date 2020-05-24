@@ -18,16 +18,6 @@ auth_backends.append(cookie_authentication)
 
 As you can see, instantiation is quite simple. You just have to define a constant `SECRET` which is used to encode the token and the lifetime of the cookie (in seconds).
 
-You can optionally define the `name` which will be used to generate its [`/login` route](../../usage/routes.md#post-loginname). **Defaults to `cookie`**.
-
-```py
-cookie_authentication = CookieAuthentication(
-    secret=SECRET,
-    lifetime_seconds=3600,
-    name="my-cookie",
-)
-```
-
 You can also define the parameters for the generated cookie:
 
 * `cookie_name` (`fastapiusersauth`): Name of the cookie.
@@ -35,6 +25,17 @@ You can also define the parameters for the generated cookie:
 * `cookie_domain` (`None`): Cookie domain.
 * `cookie_secure` (`True`): Whether to only send the cookie to the server via SSL request.
 * `cookie_httponly` (`True`): Whether to prevent access to the cookie via JavaScript.
+
+!!! tip
+    You can also optionally define the `name`. It's useful in the case you wish to have several backends of the same class. Each backend should have a unique name. **Defaults to `cookie`**.
+
+    ```py
+    cookie_authentication = CookieAuthentication(
+        secret=SECRET,
+        lifetime_seconds=3600,
+        name="my-cookie",
+    )
+    ```
 
 !!! tip
     The value of the cookie is actually a JWT. This authentication backend shares most of its logic with the [JWT](./jwt.md) one.
@@ -61,4 +62,4 @@ This method expects that you provide a valid cookie in the headers.
 
 ## Next steps
 
-We will now configure the main **FastAPI Users** object that will expose the [API router](../router.md).
+We will now configure the main **FastAPI Users** object that will expose the [routers](../routers/index.md).

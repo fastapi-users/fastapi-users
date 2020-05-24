@@ -4,12 +4,10 @@ from typing import Dict, Any, cast
 import asynctest
 import httpx
 import pytest
-from fastapi import FastAPI
-from starlette import status
-from starlette.requests import Request
+from fastapi import FastAPI, status, Request
 
 from fastapi_users.authentication import Authenticator
-from fastapi_users.router.common import ErrorCode, Event
+from fastapi_users.router.common import ErrorCode
 from fastapi_users.router.oauth import generate_state_token, get_oauth_router
 from tests.conftest import MockAuthentication, UserDB
 
@@ -17,16 +15,16 @@ from tests.conftest import MockAuthentication, UserDB
 SECRET = "SECRET"
 
 
-def event_handler_sync():
+def after_register_sync():
     return MagicMock(return_value=None)
 
 
-def event_handler_async():
+def after_register_async():
     return asynctest.CoroutineMock(return_value=None)
 
 
-@pytest.fixture(params=[event_handler_sync, event_handler_async])
-def event_handler(request):
+@pytest.fixture(params=[after_register_sync, after_register_async])
+def after_register(request):
     return request.param()
 
 
@@ -35,7 +33,7 @@ def get_test_app_client(
     mock_user_db_oauth,
     mock_authentication,
     oauth_client,
-    event_handler,
+    after_register,
     get_test_client,
 ):
     async def _get_test_app_client(redirect_url: str = None) -> httpx.AsyncClient:
@@ -51,9 +49,8 @@ def get_test_app_client(
             authenticator,
             SECRET,
             redirect_url,
+            after_register,
         )
-
-        oauth_router.add_event_handler(Event.ON_AFTER_REGISTER, event_handler)
 
         app = FastAPI()
         app.include_router(oauth_router)
@@ -151,7 +148,7 @@ class TestCallback:
         test_app_client: httpx.AsyncClient,
         oauth_client,
         user_oauth,
-        event_handler,
+        after_register,
     ):
         with asynctest.patch.object(
             oauth_client, "get_access_token"
@@ -171,7 +168,7 @@ class TestCallback:
         get_id_email_mock.assert_awaited_once_with("TOKEN")
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
-        assert event_handler.called is False
+        assert after_register.called is False
 
     async def test_existing_user_with_oauth(
         self,
@@ -179,7 +176,7 @@ class TestCallback:
         test_app_client: httpx.AsyncClient,
         oauth_client,
         user_oauth,
-        event_handler,
+        after_register,
     ):
         state_jwt = generate_state_token({"authentication_backend": "mock"}, "SECRET")
         with asynctest.patch.object(
@@ -204,9 +201,9 @@ class TestCallback:
         user_update_mock.assert_awaited_once()
         data = cast(Dict[str, Any], response.json())
 
-        assert data["token"] == user_oauth.id
+        assert data["token"] == str(user_oauth.id)
 
-        assert event_handler.called is False
+        assert after_register.called is False
 
     async def test_existing_user_without_oauth(
         self,
@@ -214,7 +211,7 @@ class TestCallback:
         test_app_client: httpx.AsyncClient,
         oauth_client,
         superuser_oauth,
-        event_handler,
+        after_register,
     ):
         state_jwt = generate_state_token({"authentication_backend": "mock"}, "SECRET")
         with asynctest.patch.object(
@@ -242,16 +239,16 @@ class TestCallback:
         user_update_mock.assert_awaited_once()
         data = cast(Dict[str, Any], response.json())
 
-        assert data["token"] == superuser_oauth.id
+        assert data["token"] == str(superuser_oauth.id)
 
-        assert event_handler.called is False
+        assert after_register.called is False
 
     async def test_unknown_user(
         self,
         mock_user_db_oauth,
         test_app_client: httpx.AsyncClient,
         oauth_client,
-        event_handler,
+        after_register,
     ):
         state_jwt = generate_state_token({"authentication_backend": "mock"}, "SECRET")
         with asynctest.patch.object(
@@ -281,10 +278,10 @@ class TestCallback:
 
         assert "token" in data
 
-        assert event_handler.called is True
-        actual_user = event_handler.call_args[0][0]
-        assert actual_user.id == data["token"]
-        request = event_handler.call_args[0][1]
+        assert after_register.called is True
+        actual_user = after_register.call_args[0][0]
+        assert str(actual_user.id) == data["token"]
+        request = after_register.call_args[0][1]
         assert isinstance(request, Request)
 
     async def test_inactive_user(
@@ -293,7 +290,7 @@ class TestCallback:
         test_app_client: httpx.AsyncClient,
         oauth_client,
         inactive_user_oauth,
-        event_handler,
+        after_register,
     ):
         state_jwt = generate_state_token({"authentication_backend": "mock"}, "SECRET")
         with asynctest.patch.object(
@@ -318,7 +315,7 @@ class TestCallback:
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
 
-        assert event_handler.called is False
+        assert after_register.called is False
 
     async def test_redirect_url_router(
         self,
@@ -348,4 +345,4 @@ class TestCallback:
         )
         data = cast(Dict[str, Any], response.json())
 
-        assert data["token"] == user_oauth.id
+        assert data["token"] == str(user_oauth.id)

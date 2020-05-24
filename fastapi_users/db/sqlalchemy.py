@@ -1,11 +1,50 @@
+import uuid
 from typing import Mapping, Optional, Type
 
 from databases import Database
+from pydantic import UUID4
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Table, select
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declared_attr
+from sqlalchemy.types import CHAR, TypeDecorator
 
 from fastapi_users.db.base import BaseUserDatabase
 from fastapi_users.models import UD
+
+
+class GUID(TypeDecorator):  # pragma: no cover
+    """Platform-independent GUID type.
+
+    Uses PostgreSQL's UUID type, otherwise uses
+    CHAR(36), storing as regular strings.
+    """
+
+    impl = CHAR
+
+    def load_dialect_impl(self, dialect):
+        if dialect.name == "postgresql":
+            return dialect.type_descriptor(UUID())
+        else:
+            return dialect.type_descriptor(CHAR(36))
+
+    def process_bind_param(self, value, dialect):
+        if value is None:
+            return value
+        elif dialect.name == "postgresql":
+            return str(value)
+        else:
+            if not isinstance(value, uuid.UUID):
+                return str(uuid.UUID(value))
+            else:
+                return str(value)
+
+    def process_result_value(self, value, dialect):
+        if value is None:
+            return value
+        else:
+            if not isinstance(value, uuid.UUID):
+                value = uuid.UUID(value)
+            return value
 
 
 class SQLAlchemyBaseUserTable:
@@ -13,7 +52,7 @@ class SQLAlchemyBaseUserTable:
 
     __tablename__ = "user"
 
-    id = Column(String, primary_key=True)
+    id = Column(GUID, primary_key=True)
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
     is_active = Column(Boolean, default=True, nullable=False)
@@ -25,7 +64,7 @@ class SQLAlchemyBaseOAuthAccountTable:
 
     __tablename__ = "oauth_account"
 
-    id = Column(String, primary_key=True)
+    id = Column(GUID, primary_key=True)
     oauth_name = Column(String, index=True, nullable=False)
     access_token = Column(String, nullable=False)
     expires_at = Column(Integer, nullable=False)
@@ -35,7 +74,7 @@ class SQLAlchemyBaseOAuthAccountTable:
 
     @declared_attr
     def user_id(cls):
-        return Column(String, ForeignKey("user.id", ondelete="cascade"), nullable=False)
+        return Column(GUID, ForeignKey("user.id", ondelete="cascade"), nullable=False)
 
 
 class NotSetOAuthAccountTableError(Exception):
@@ -75,7 +114,7 @@ class SQLAlchemyUserDatabase(BaseUserDatabase[UD]):
         self.users = users
         self.oauth_accounts = oauth_accounts
 
-    async def get(self, id: str) -> Optional[UD]:
+    async def get(self, id: UUID4) -> Optional[UD]:
         query = self.users.select().where(self.users.c.id == id)
         user = await self.database.fetch_one(query)
         return await self._make_user(user) if user else None

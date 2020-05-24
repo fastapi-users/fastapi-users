@@ -1,14 +1,29 @@
+import re
+from inspect import Parameter, Signature
 from typing import Sequence
 
-from fastapi import HTTPException
-from starlette import status
-from starlette.requests import Request
+from fastapi import Depends, HTTPException, status
+from makefun import with_signature
 
 from fastapi_users.authentication.base import BaseAuthentication  # noqa: F401
 from fastapi_users.authentication.cookie import CookieAuthentication  # noqa: F401
 from fastapi_users.authentication.jwt import JWTAuthentication  # noqa: F401
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.models import BaseUserDB
+
+INVALID_CHARS_PATTERN = re.compile(r"[^0-9a-zA-Z_]")
+INVALID_LEADING_CHARS_PATTERN = re.compile(r"^[^a-zA-Z_]+")
+
+
+def name_to_variable_name(name: str) -> str:
+    """Transform a backend name string into a string safe to use as variable name."""
+    name = re.sub(INVALID_CHARS_PATTERN, "", name)
+    name = re.sub(INVALID_LEADING_CHARS_PATTERN, "", name)
+    return name
+
+
+class DuplicateBackendNamesError(Exception):
+    pass
 
 
 class Authenticator:
@@ -32,26 +47,52 @@ class Authenticator:
         self.backends = backends
         self.user_db = user_db
 
-    async def get_current_user(self, request: Request) -> BaseUserDB:
-        return await self._authenticate(request)
+        # Here comes some blood magic 🧙‍♂️
+        # Thank to "makefun", we are able to generate callable
+        # with a dynamic number of dependencies at runtime.
+        # This way, each security schemes are detected by the OpenAPI generator.
+        try:
+            parameters = [
+                Parameter(
+                    name=name_to_variable_name(backend.name),
+                    kind=Parameter.POSITIONAL_OR_KEYWORD,
+                    default=Depends(backend.scheme),  # type: ignore
+                )
+                for backend in self.backends
+            ]
+            signature = Signature(parameters)
+        except ValueError:
+            raise DuplicateBackendNamesError()
 
-    async def get_current_active_user(self, request: Request) -> BaseUserDB:
-        user = await self.get_current_user(request)
-        if not user.is_active:
-            raise self._get_credentials_exception()
-        return user
+        @with_signature(signature, func_name="get_current_user")
+        async def get_current_user(*args, **kwargs):
+            return await self._authenticate(*args, **kwargs)
 
-    async def get_current_superuser(self, request: Request) -> BaseUserDB:
-        user = await self.get_current_active_user(request)
-        if not user.is_superuser:
-            raise self._get_credentials_exception(status.HTTP_403_FORBIDDEN)
-        return user
+        @with_signature(signature, func_name="get_current_active_user")
+        async def get_current_active_user(*args, **kwargs):
+            user = await get_current_user(*args, **kwargs)
+            if not user.is_active:
+                raise self._get_credentials_exception()
+            return user
 
-    async def _authenticate(self, request: Request) -> BaseUserDB:
+        @with_signature(signature, func_name="get_current_superuser")
+        async def get_current_superuser(*args, **kwargs):
+            user = await get_current_active_user(*args, **kwargs)
+            if not user.is_superuser:
+                raise self._get_credentials_exception(status.HTTP_403_FORBIDDEN)
+            return user
+
+        self.get_current_user = get_current_user
+        self.get_current_active_user = get_current_active_user
+        self.get_current_superuser = get_current_superuser
+
+    async def _authenticate(self, *args, **kwargs) -> BaseUserDB:
         for backend in self.backends:
-            user = await backend(request, self.user_db)
-            if user is not None:
-                return user
+            token: str = kwargs[name_to_variable_name(backend.name)]
+            if token:
+                user = await backend(token, self.user_db)
+                if user is not None:
+                    return user
         raise self._get_credentials_exception()
 
     def _get_credentials_exception(

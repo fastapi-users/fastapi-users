@@ -1,16 +1,17 @@
-from collections import defaultdict
-from typing import Callable, DefaultDict, List, Sequence, Type
+from typing import Any, Callable, Dict, Optional, Sequence, Type
 
+from fastapi import APIRouter, Request
 from httpx_oauth.oauth2 import BaseOAuth2
 
 from fastapi_users import models
 from fastapi_users.authentication import Authenticator, BaseAuthentication
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.router import (
-    Event,
-    EventHandlersRouter,
+    get_auth_router,
     get_oauth_router,
-    get_user_router,
+    get_register_router,
+    get_reset_password_router,
+    get_users_router,
 )
 
 
@@ -24,20 +25,18 @@ class FastAPIUsers:
     :param user_create_model: Pydantic model for creating a user.
     :param user_update_model: Pydantic model for updating a user.
     :param user_db_model: Pydantic model of a DB representation of a user.
-    :param reset_password_token_secret: Secret to encode reset password token.
-    :param reset_password_token_lifetime_seconds: Lifetime of reset password token.
 
-    :attribute router: Router exposing authentication routes.
-    :attribute oauth_routers: List of OAuth routers created through `get_oauth_router`.
     :attribute get_current_user: Dependency callable to inject authenticated user.
+    :attribute get_current_active_user: Dependency callable to inject active user.
+    :attribute get_current_superuser: Dependency callable to inject superuser.
     """
 
     db: BaseUserDatabase
     authenticator: Authenticator
-    router: EventHandlersRouter
-    oauth_routers: List[EventHandlersRouter]
+    _user_model: Type[models.BaseUser]
+    _user_create_model: Type[models.BaseUserCreate]
+    _user_update_model: Type[models.BaseUserUpdate]
     _user_db_model: Type[models.BaseUserDB]
-    _event_handlers: DefaultDict[Event, List[Callable]]
 
     def __init__(
         self,
@@ -47,44 +46,78 @@ class FastAPIUsers:
         user_create_model: Type[models.BaseUserCreate],
         user_update_model: Type[models.BaseUserUpdate],
         user_db_model: Type[models.BaseUserDB],
-        reset_password_token_secret: str,
-        reset_password_token_lifetime_seconds: int = 3600,
     ):
         self.db = db
         self.authenticator = Authenticator(auth_backends, db)
-        self.router = get_user_router(
-            self.db,
-            user_model,
-            user_create_model,
-            user_update_model,
-            user_db_model,
-            self.authenticator,
-            reset_password_token_secret,
-            reset_password_token_lifetime_seconds,
+        self.router = get_users_router(
+            self.db, user_model, user_update_model, user_db_model, self.authenticator,
         )
-        self.oauth_routers = []
+
+        self._user_model = user_model
         self._user_db_model = user_db_model
-        self._event_handlers = defaultdict(list)
+        self._user_create_model = user_create_model
+        self._user_update_model = user_update_model
+        self._user_db_model = user_db_model
 
         self.get_current_user = self.authenticator.get_current_user
         self.get_current_active_user = self.authenticator.get_current_active_user
         self.get_current_superuser = self.authenticator.get_current_superuser
 
-    def on_after_register(self) -> Callable:
-        """Add an event handler on successful registration."""
-        return self._on_event(Event.ON_AFTER_REGISTER)
+    def get_register_router(
+        self, after_register: Optional[Callable[[models.UD, Request], None]] = None,
+    ) -> APIRouter:
+        """
+        Return a router with a register route.
 
-    def on_after_forgot_password(self) -> Callable:
-        """Add an event handler on successful forgot password request."""
-        return self._on_event(Event.ON_AFTER_FORGOT_PASSWORD)
+        :param after_register: Optional function called
+        after a successful registration.
+        """
+        return get_register_router(
+            self.db,
+            self._user_model,
+            self._user_create_model,
+            self._user_db_model,
+            after_register,
+        )
 
-    def on_after_update(self) -> Callable:
-        """Add an event handler on successful update user request."""
-        return self._on_event(Event.ON_AFTER_UPDATE)
+    def get_reset_password_router(
+        self,
+        reset_password_token_secret: str,
+        reset_password_token_lifetime_seconds: int = 3600,
+        after_forgot_password: Optional[
+            Callable[[models.UD, str, Request], None]
+        ] = None,
+    ) -> APIRouter:
+        """
+        Return a reset password process router.
+
+        :param reset_password_token_secret: Secret to encode reset password token.
+        :param reset_password_token_lifetime_seconds: Lifetime of reset password token.
+        :param after_forgot_password: Optional function called after a successful
+        forgot password request.
+        """
+        return get_reset_password_router(
+            self.db,
+            reset_password_token_secret,
+            reset_password_token_lifetime_seconds,
+            after_forgot_password,
+        )
+
+    def get_auth_router(self, backend: BaseAuthentication) -> APIRouter:
+        """
+        Return an auth router for a given authentication backend.
+
+        :param backend: The authentication backend instance.
+        """
+        return get_auth_router(backend, self.db, self.authenticator)
 
     def get_oauth_router(
-        self, oauth_client: BaseOAuth2, state_secret: str, redirect_url: str = None
-    ) -> EventHandlersRouter:
+        self,
+        oauth_client: BaseOAuth2,
+        state_secret: str,
+        redirect_url: str = None,
+        after_register: Optional[Callable[[models.UD, Request], None]] = None,
+    ) -> APIRouter:
         """
         Return an OAuth router for a given OAuth client.
 
@@ -92,30 +125,36 @@ class FastAPIUsers:
         :param state_secret: Secret used to encode the state JWT.
         :param redirect_url: Optional arbitrary redirect URL for the OAuth2 flow.
         If not given, the URL to the callback endpoint will be generated.
+        :param after_register: Optional function called
+        after a successful registration.
         """
-        oauth_router = get_oauth_router(
+        return get_oauth_router(
             oauth_client,
             self.db,
             self._user_db_model,
             self.authenticator,
             state_secret,
             redirect_url,
+            after_register,
         )
 
-        for event_type in self._event_handlers:
-            for handler in self._event_handlers[event_type]:
-                oauth_router.add_event_handler(event_type, handler)
+    def get_users_router(
+        self,
+        after_update: Optional[
+            Callable[[models.UD, Dict[str, Any], Request], None]
+        ] = None,
+    ) -> APIRouter:
+        """
+        Return a router with routes to manage users.
 
-        self.oauth_routers.append(oauth_router)
-
-        return oauth_router
-
-    def _on_event(self, event_type: Event) -> Callable:
-        def decorator(func: Callable) -> Callable:
-            self._event_handlers[event_type].append(func)
-            self.router.add_event_handler(event_type, func)
-            for oauth_router in self.oauth_routers:
-                oauth_router.add_event_handler(event_type, func)
-            return func
-
-        return decorator
+        :param after_update: Optional function called
+        after a successful user update.
+        """
+        return get_users_router(
+            self.db,
+            self._user_model,
+            self._user_update_model,
+            self._user_db_model,
+            self.authenticator,
+            after_update,
+        )

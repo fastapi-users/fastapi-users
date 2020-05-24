@@ -56,7 +56,7 @@ class UserDB(User, models.BaseUserDB):
 
 Notice that we inherit from the `BaseOAuthAccountMixin`, which adds a `List` of `BaseOAuthAccount` objects. This object is structured like this:
 
-* `id` (`str`) – Unique identifier of the user. Default to a **UUID4**.
+* `id` (`UUID4`) – Unique identifier of the OAuth account information. Default to a **UUID4**.
 * `oauth_name` (`str`) – Name of the OAuth service. It corresponds to the `name` property of the OAuth client.
 * `access_token` (`str`) – Access token.
 * `expires_at` (`int`) - Timestamp at which the access token is expired.
@@ -100,7 +100,7 @@ class OAuthAccount(TortoiseBaseOAuthAccountModel):
 ```
 
 !!! warning
-    Note that you shouls define the foreign key yourself, so that you can point it the user model in your namespace.
+    Note that you should define the foreign key yourself, so that you can point it the user model in your namespace.
 
 Then, you should declare it on the database adapter:
 
@@ -121,12 +121,43 @@ google_oauth_client = GoogleOAuth2("CLIENT_ID", "CLIENT_SECRET")
 
 app = FastAPI()
 fastapi_users = FastAPIUsers(
-    user_db, auth_backends, User, UserCreate, UserUpdate, UserDB, SECRET,
+    user_db, auth_backends, User, UserCreate, UserUpdate, UserDB
 )
 
 google_oauth_router = fastapi_users.get_oauth_router(google_oauth_client, SECRET)
 
-app.include_router(google_oauth_router, prefix="/google-oauth", tags=["users"])
+app.include_router(google_oauth_router, prefix="/auth/google", tags=["auth"])
+```
+
+### After register
+
+You can provide a custom function to be called after a successful registration. It is called with **two argument**: the **user** that has just registered, and the original **`Request` object**.
+
+Typically, you'll want to **send a welcome e-mail** or add it to your marketing analytics pipeline.
+
+You can define it as an `async` or standard method.
+
+Example:
+
+```py
+from fastapi import FastAPI
+from fastapi_users import FastAPIUsers
+from httpx_oauth.clients.google import GoogleOAuth2
+
+
+def on_after_register(user: UserDB, request: Request):
+    print(f"User {user.id} has registered.")
+
+google_oauth_client = GoogleOAuth2("CLIENT_ID", "CLIENT_SECRET")
+
+app = FastAPI()
+fastapi_users = FastAPIUsers(
+    user_db, auth_backends, User, UserCreate, UserUpdate, UserDB
+)
+
+google_oauth_router = fastapi_users.get_oauth_router(google_oauth_client, SECRET, after_register=on_after_register)
+
+app.include_router(google_oauth_router, prefix="/auth/google", tags=["auth"])
 ```
 
 ### Full example

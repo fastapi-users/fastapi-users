@@ -1,16 +1,14 @@
 import asyncio
-from typing import Any, List, Mapping, Optional, Tuple
+from typing import List, Optional
 
-import http.cookies
 import httpx
 import pytest
 from asgi_lifespan import LifespanManager
-from fastapi import Depends, FastAPI
+from fastapi import Depends, Response, FastAPI
 from fastapi.security import OAuth2PasswordBearer
 from httpx_oauth.oauth2 import OAuth2
+from pydantic import UUID4
 from starlette.applications import ASGIApp
-from starlette.requests import Request
-from starlette.responses import Response
 
 from fastapi_users import models
 from fastapi_users.authentication import Authenticator, BaseAuthentication
@@ -58,16 +56,13 @@ def event_loop():
 @pytest.fixture
 def user() -> UserDB:
     return UserDB(
-        id="aaa",
-        email="king.arthur@camelot.bt",
-        hashed_password=guinevere_password_hash,
+        email="king.arthur@camelot.bt", hashed_password=guinevere_password_hash,
     )
 
 
 @pytest.fixture
 def user_oauth(oauth_account1, oauth_account2) -> UserDBOAuth:
     return UserDBOAuth(
-        id="aaa",
         email="king.arthur@camelot.bt",
         hashed_password=guinevere_password_hash,
         oauth_accounts=[oauth_account1, oauth_account2],
@@ -77,7 +72,6 @@ def user_oauth(oauth_account1, oauth_account2) -> UserDBOAuth:
 @pytest.fixture
 def inactive_user() -> UserDB:
     return UserDB(
-        id="bbb",
         email="percival@camelot.bt",
         hashed_password=angharad_password_hash,
         is_active=False,
@@ -87,7 +81,6 @@ def inactive_user() -> UserDB:
 @pytest.fixture
 def inactive_user_oauth(oauth_account3) -> UserDBOAuth:
     return UserDBOAuth(
-        id="bbb",
         email="percival@camelot.bt",
         hashed_password=angharad_password_hash,
         is_active=False,
@@ -98,7 +91,6 @@ def inactive_user_oauth(oauth_account3) -> UserDBOAuth:
 @pytest.fixture
 def superuser() -> UserDB:
     return UserDB(
-        id="ccc",
         email="merlin@camelot.bt",
         hashed_password=viviane_password_hash,
         is_superuser=True,
@@ -108,7 +100,6 @@ def superuser() -> UserDB:
 @pytest.fixture
 def superuser_oauth() -> UserDBOAuth:
     return UserDBOAuth(
-        id="ccc",
         email="merlin@camelot.bt",
         hashed_password=viviane_password_hash,
         is_superuser=True,
@@ -119,7 +110,6 @@ def superuser_oauth() -> UserDBOAuth:
 @pytest.fixture
 def oauth_account1() -> BaseOAuthAccount:
     return BaseOAuthAccount(
-        id="aaa",
         oauth_name="service1",
         access_token="TOKEN",
         expires_at=1579000751,
@@ -131,7 +121,6 @@ def oauth_account1() -> BaseOAuthAccount:
 @pytest.fixture
 def oauth_account2() -> BaseOAuthAccount:
     return BaseOAuthAccount(
-        id="bbb",
         oauth_name="service2",
         access_token="TOKEN",
         expires_at=1579000751,
@@ -143,7 +132,6 @@ def oauth_account2() -> BaseOAuthAccount:
 @pytest.fixture
 def oauth_account3() -> BaseOAuthAccount:
     return BaseOAuthAccount(
-        id="ccc",
         oauth_name="service3",
         access_token="TOKEN",
         expires_at=1579000751,
@@ -155,7 +143,7 @@ def oauth_account3() -> BaseOAuthAccount:
 @pytest.fixture
 def mock_user_db(user, inactive_user, superuser) -> BaseUserDatabase:
     class MockUserDatabase(BaseUserDatabase[UserDB]):
-        async def get(self, id: str) -> Optional[UserDB]:
+        async def get(self, id: UUID4) -> Optional[UserDB]:
             if id == user.id:
                 return user
             if id == inactive_user.id:
@@ -190,7 +178,7 @@ def mock_user_db_oauth(
     user_oauth, inactive_user_oauth, superuser_oauth
 ) -> BaseUserDatabase:
     class MockUserDatabase(BaseUserDatabase[UserDBOAuth]):
-        async def get(self, id: str) -> Optional[UserDBOAuth]:
+        async def get(self, id: UUID4) -> Optional[UserDBOAuth]:
             if id == user_oauth.id:
                 return user_oauth
             if id == inactive_user_oauth.id:
@@ -238,53 +226,30 @@ def mock_user_db_oauth(
     return MockUserDatabase(UserDBOAuth)
 
 
-class MockAuthentication(BaseAuthentication):
+class MockAuthentication(BaseAuthentication[str]):
     def __init__(self, name: str = "mock"):
-        super().__init__(name)
+        super().__init__(name, logout=True)
         self.scheme = OAuth2PasswordBearer("/users/login", auto_error=False)
 
-    async def __call__(self, request: Request, user_db: BaseUserDatabase):
-        token = await self.scheme.__call__(request)
-        if token is not None:
-            return await user_db.get(token)
+    async def __call__(self, credentials: Optional[str], user_db: BaseUserDatabase):
+        if credentials is not None:
+            try:
+                token_uuid = UUID4(credentials)
+                return await user_db.get(token_uuid)
+            except ValueError:
+                return None
         return None
 
     async def get_login_response(self, user: BaseUserDB, response: Response):
         return {"token": user.id}
 
+    async def get_logout_response(self, user: BaseUserDB, response: Response):
+        return None
+
 
 @pytest.fixture
 def mock_authentication():
     return MockAuthentication()
-
-
-@pytest.fixture
-def request_builder():
-    def _request_builder(
-        headers: Mapping[str, Any] = None, cookies: Mapping[str, str] = None
-    ) -> Request:
-        encoded_headers: List[Tuple[bytes, bytes]] = []
-
-        if headers is not None:
-            encoded_headers += [
-                (key.lower().encode("latin-1"), headers[key].encode("latin-1"))
-                for key in headers
-            ]
-
-        if cookies is not None:
-            for key in cookies:
-                cookie = http.cookies.SimpleCookie()  # type: http.cookies.BaseCookie
-                cookie[key] = cookies[key]
-                cookie_val = cookie.output(header="").strip()
-                encoded_headers.append((b"cookie", cookie_val.encode("latin-1")))
-
-        scope = {
-            "type": "http",
-            "headers": encoded_headers,
-        }
-        return Request(scope)
-
-    return _request_builder
 
 
 @pytest.fixture
@@ -309,7 +274,7 @@ def get_test_auth_client(mock_user_db, get_test_client):
         authenticator = Authenticator(backends, mock_user_db)
 
         @app.get("/test-current-user")
-        def test_current_user(user: UserDB = Depends(authenticator.get_current_user),):
+        def test_current_user(user: UserDB = Depends(authenticator.get_current_user)):
             return user
 
         @app.get("/test-current-active-user")

@@ -14,12 +14,12 @@ First step, of course, is to register as a user.
     -H "Content-Type: application/json" \
     -X POST \
     -d "{\"email\": \"king.arthur@camelot.bt\",\"password\": \"guinevere\"}" \
-    http://localhost:8000/users/register
+    http://localhost:8000/auth/register
     ```
 
 === "axios"
     ```ts
-    axios.post('http://localhost:8000/users/register', {
+    axios.post('http://localhost:8000/auth/register', {
         email: 'king.arthur@camelot.bt',
         password: 'guinevere',
     })
@@ -51,7 +51,7 @@ You'll get a JSON response looking like this:
 
 Now, you can login as this new user.
 
-Each [authentication backend](../configuration/authentication/index.md) will produce a single route. For example, the [JWT backend](../configuration/authentication/jwt.md) will produce the `/users/login/jwt` route. Each backend will have a different response.
+You can generate a [login route](../configuration/routers/auth.md) for each [authentication backend](../configuration/authentication/index.md). Each backend will have a different response.
 
 ### JWT backend
 
@@ -64,7 +64,7 @@ Each [authentication backend](../configuration/authentication/index.md) will pro
     -X POST \
     -F "username=king.arthur@camelot.bt" \
     -F "password=guinevere" \
-    http://localhost:8000/users/login/jwt
+    http://localhost:8000/auth/jwt/login
     ```
 
 === "axios"
@@ -73,7 +73,7 @@ Each [authentication backend](../configuration/authentication/index.md) will pro
     formData.set('username', 'king.arthur@camelot.bt');
     formData.set('password', 'guinevere');
     axios.post(
-        'http://localhost:8000/users/login/jwt',
+        'http://localhost:8000/auth/jwt/login',
         formData,
         {
             headers: {
@@ -112,7 +112,7 @@ You can use this token to make authenticated requests as the user `king.arthur@c
     -X POST \
     -F "username=king.arthur@camelot.bt" \
     -F "password=guinevere" \
-    http://localhost:8000/users/login/cookie
+    http://localhost:8000/auth/cookie/login
     ```
 
 === "axios"
@@ -121,7 +121,7 @@ You can use this token to make authenticated requests as the user `king.arthur@c
     formData.set('username', 'king.arthur@camelot.bt');
     formData.set('password', 'guinevere');
     axios.post(
-        'http://localhost:8000/users/login/cookie',
+        'http://localhost:8000/auth/cookie/login',
         formData,
         {
             headers: {
@@ -380,12 +380,12 @@ We can also end the session. Note that it doesn't apply to every [authentication
     -H "Content-Type: application/json" \
     -H "Authorization: Bearer $TOKEN" \
     -X POST \
-    http://localhost:8000/users/logout/cookie
+    http://localhost:8000/auth/cookie/logout
     ```
 
 === "axios"
     ```ts
-    axios.post('http://localhost:8000/users/logout/cookie',
+    axios.post('http://localhost:8000/auth/cookie/logout',
         null,
         {
             headers: {

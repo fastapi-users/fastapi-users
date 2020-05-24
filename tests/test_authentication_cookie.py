@@ -2,7 +2,7 @@ import re
 
 import jwt
 import pytest
-from starlette.responses import Response
+from fastapi import Response
 
 from fastapi_users.authentication.cookie import CookieAuthentication
 from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
@@ -28,10 +28,10 @@ cookie_authentication_httponly = CookieAuthentication(
 
 @pytest.fixture
 def token():
-    def _token(user=None, lifetime=LIFETIME):
+    def _token(user_id=None, lifetime=LIFETIME):
         data = {"aud": "fastapi-users:auth"}
-        if user is not None:
-            data["user_id"] = user.id
+        if user_id is not None:
+            data["user_id"] = str(user_id)
         return generate_jwt(data, lifetime, SECRET, JWT_ALGORITHM)
 
     return _token
@@ -45,35 +45,28 @@ def test_default_name():
 @pytest.mark.authentication
 class TestAuthenticate:
     @pytest.mark.asyncio
-    async def test_missing_token(self, mock_user_db, request_builder):
-        request = request_builder()
-        authenticated_user = await cookie_authentication(request, mock_user_db)
+    async def test_missing_token(self, mock_user_db):
+        authenticated_user = await cookie_authentication(None, mock_user_db)
         assert authenticated_user is None
 
     @pytest.mark.asyncio
-    async def test_invalid_token(self, mock_user_db, request_builder):
-        cookies = {}
-        cookies[COOKIE_NAME] = "foo"
-        request = request_builder(cookies=cookies)
-        authenticated_user = await cookie_authentication(request, mock_user_db)
+    async def test_invalid_token(self, mock_user_db):
+        authenticated_user = await cookie_authentication("foo", mock_user_db)
         assert authenticated_user is None
 
     @pytest.mark.asyncio
-    async def test_valid_token_missing_user_payload(
-        self, mock_user_db, request_builder, token
-    ):
-        cookies = {}
-        cookies[COOKIE_NAME] = token()
-        request = request_builder(cookies=cookies)
-        authenticated_user = await cookie_authentication(request, mock_user_db)
+    async def test_valid_token_missing_user_payload(self, mock_user_db, token):
+        authenticated_user = await cookie_authentication(token(), mock_user_db)
         assert authenticated_user is None
 
     @pytest.mark.asyncio
-    async def test_valid_token(self, mock_user_db, request_builder, token, user):
-        cookies = {}
-        cookies[COOKIE_NAME] = token(user)
-        request = request_builder(cookies=cookies)
-        authenticated_user = await cookie_authentication(request, mock_user_db)
+    async def test_valid_token_invalid_uuid(self, mock_user_db, token):
+        authenticated_user = await cookie_authentication(token("foo"), mock_user_db)
+        assert authenticated_user is None
+
+    @pytest.mark.asyncio
+    async def test_valid_token(self, mock_user_db, token, user):
+        authenticated_user = await cookie_authentication(token(user.id), mock_user_db)
         assert authenticated_user.id == user.id
 
 
@@ -131,7 +124,7 @@ async def test_get_login_response(
     decoded = jwt.decode(
         cookie_value, SECRET, audience="fastapi-users:auth", algorithms=[JWT_ALGORITHM]
     )
-    assert decoded["user_id"] == user.id
+    assert decoded["user_id"] == str(user.id)
 
 
 @pytest.mark.authentication
@@ -149,4 +142,4 @@ async def test_get_logout_response(user):
 
     cookie = cookies[0][1].decode("latin-1")
 
-    assert f"Max-Age=0" in cookie
+    assert "Max-Age=0" in cookie

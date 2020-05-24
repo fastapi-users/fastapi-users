@@ -38,10 +38,17 @@ nav:
       - Introduction: configuration/authentication/index.md
       - configuration/authentication/jwt.md
       - configuration/authentication/cookie.md
-    - configuration/router.md
+    - Routers:
+      - Introduction: configuration/routers/index.md
+      - configuration/routers/auth.md
+      - configuration/routers/register.md
+      - configuration/routers/reset.md
+      - configuration/routers/users.md
     - configuration/full_example.md
     - configuration/oauth.md
   - Usage:
     - usage/flow.md
     - usage/routes.md
     - usage/dependency-callables.md
+  - Migration:
+    - migration/08_to_10.md

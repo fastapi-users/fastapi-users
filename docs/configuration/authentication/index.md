@@ -8,9 +8,7 @@ You can have **several** authentication methods, e.g. a cookie authentication fo
 
 When checking authentication, each method is run one after the other. The first method yielding a user wins. If no method yields a user, an `HTTPException` is raised.
 
-Each defined method will generate a [`/login/{name}`](../../usage/routes.md#post-loginname) route where `name` is defined on the authentication method object.
-
-Each defined method will generate a [`/logout/{name}`](../../usage/routes.md#post-logoutname) route where `name` is defined on the authentication method object.
+For each backend, you'll be able to add a router with the corresponding `/login` and `/logout` (if applicable routes). More on this in the [routers documentation](routers/index.md).
 
 ## Provided methods
 
