@@ -13,7 +13,7 @@
       
       
       <link rel="shortcut icon" href="../../favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.2.0">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.2.1">
     
     
       
@@ -21,7 +21,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.18ac144a.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.71dfd922.min.css">
       
         <link rel="stylesheet" href="../../assets/stylesheets/palette.616af814.min.css">
       
@@ -430,10 +430,88 @@
           
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-4" type="checkbox" id="nav-3-4">
+    
+    <label class="md-nav__link" for="nav-3-4">
+      Routers
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Routers" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-4">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Routers
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
-    <a href="../router/" title="Router" class="md-nav__link">
-      Router
+    <a href="../routers/" title="Introduction" class="md-nav__link">
+      Introduction
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../routers/auth/" title="Auth router" class="md-nav__link">
+      Auth router
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../routers/register/" title="Register routes" class="md-nav__link">
+      Register routes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../routers/reset/" title="Reset password router" class="md-nav__link">
+      Reset password router
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../routers/users/" title="Users router" class="md-nav__link">
+      Users router
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -532,6 +610,48 @@
   </li>
 
     
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Migration
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Migration" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Migration
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../migration/08_to_10/" title="0.8.x ➡️ 1.0.x" class="md-nav__link">
+      0.8.x ➡️ 1.0.x
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
   </ul>
 </nav>
                   </div>
@@ -590,7 +710,7 @@
                 <h1 id="user-model">User model<a class="headerlink" href="#user-model" title="Permanent link">&para;</a></h1>
 <p><strong>FastAPI Users</strong> defines a minimal User model for authentication purposes. It is structured like this:</p>
 <ul>
-<li><code>id</code> (<code>str</code>) – Unique identifier of the user. Default to a <strong>UUID4</strong>.</li>
+<li><code>id</code> (<code>UUID4</code>) – Unique identifier of the user. Default to a <strong>UUID4</strong>.</li>
 <li><code>email</code> (<code>str</code>) – Email of the user. Validated by <a href="https://github.com/JoshData/python-email-validator"><code>email-validator</code></a>.</li>
 <li><code>is_active</code> (<code>bool</code>) – Whether or not the user is active. If not, login and forgot password requests will be denied. Default to <code>True</code>.</li>
 <li><code>is_superuser</code> (<code>bool</code>) – Whether or not the user is a superuser. Useful to implement administration logic. Default to <code>False</code>.</li>

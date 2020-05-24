@@ -13,7 +13,7 @@
       
       
       <link rel="shortcut icon" href="../../favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.2.0">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.2.1">
     
     
       
@@ -21,7 +21,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.18ac144a.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.71dfd922.min.css">
       
         <link rel="stylesheet" href="../../assets/stylesheets/palette.616af814.min.css">
       
@@ -379,10 +379,88 @@
           
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-4" type="checkbox" id="nav-3-4">
+    
+    <label class="md-nav__link" for="nav-3-4">
+      Routers
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Routers" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-4">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Routers
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
-    <a href="../../configuration/router/" title="Router" class="md-nav__link">
-      Router
+    <a href="../../configuration/routers/" title="Introduction" class="md-nav__link">
+      Introduction
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../configuration/routers/auth/" title="Auth router" class="md-nav__link">
+      Auth router
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../configuration/routers/register/" title="Register routes" class="md-nav__link">
+      Register routes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../configuration/routers/reset/" title="Reset password router" class="md-nav__link">
+      Reset password router
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../configuration/routers/users/" title="Users router" class="md-nav__link">
+      Users router
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -495,11 +573,38 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#unauthenticated" class="md-nav__link">
-    Unauthenticated
+  <a href="#auth-router" class="md-nav__link">
+    Auth router
   </a>
   
-    <nav class="md-nav" aria-label="Unauthenticated">
+    <nav class="md-nav" aria-label="Auth router">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#post-login" class="md-nav__link">
+    POST /login
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post-logout" class="md-nav__link">
+    POST /logout
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#register-router" class="md-nav__link">
+    Register router
+  </a>
+  
+    <nav class="md-nav" aria-label="Register router">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -509,19 +614,18 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#post-loginname" class="md-nav__link">
-    POST /login/{name}
-  </a>
+      </ul>
+    </nav>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#post-logoutname" class="md-nav__link">
-    POST /logout/{name}
+      
+        <li class="md-nav__item">
+  <a href="#reset-password-router" class="md-nav__link">
+    Reset password router
   </a>
   
-</li>
+    <nav class="md-nav" aria-label="Reset password router">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#post-forgot-password" class="md-nav__link">
@@ -537,12 +641,17 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#oauth-routes" class="md-nav__link">
-    OAuth routes
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#oauth-router" class="md-nav__link">
+    OAuth router
   </a>
   
-    <nav class="md-nav" aria-label="OAuth routes">
+    <nav class="md-nav" aria-label="OAuth router">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -563,18 +672,13 @@
     </nav>
   
 </li>
-        
-      </ul>
-    </nav>
-  
-</li>
       
         <li class="md-nav__item">
-  <a href="#authenticated" class="md-nav__link">
-    Authenticated
+  <a href="#users-router" class="md-nav__link">
+    Users router
   </a>
   
-    <nav class="md-nav" aria-label="Authenticated">
+    <nav class="md-nav" aria-label="Users router">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -590,19 +694,6 @@
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#superuser" class="md-nav__link">
-    Superuser
-  </a>
-  
-    <nav class="md-nav" aria-label="Superuser">
-      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#get-user_id" class="md-nav__link">
@@ -654,6 +745,48 @@
   </li>
 
     
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Migration
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Migration" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Migration
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../migration/08_to_10/" title="0.8.x ➡️ 1.0.x" class="md-nav__link">
+      0.8.x ➡️ 1.0.x
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
   </ul>
 </nav>
                   </div>
@@ -680,11 +813,38 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#unauthenticated" class="md-nav__link">
-    Unauthenticated
+  <a href="#auth-router" class="md-nav__link">
+    Auth router
   </a>
   
-    <nav class="md-nav" aria-label="Unauthenticated">
+    <nav class="md-nav" aria-label="Auth router">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#post-login" class="md-nav__link">
+    POST /login
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post-logout" class="md-nav__link">
+    POST /logout
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#register-router" class="md-nav__link">
+    Register router
+  </a>
+  
+    <nav class="md-nav" aria-label="Register router">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -694,19 +854,18 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#post-loginname" class="md-nav__link">
-    POST /login/{name}
-  </a>
+      </ul>
+    </nav>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#post-logoutname" class="md-nav__link">
-    POST /logout/{name}
+      
+        <li class="md-nav__item">
+  <a href="#reset-password-router" class="md-nav__link">
+    Reset password router
   </a>
   
-</li>
+    <nav class="md-nav" aria-label="Reset password router">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#post-forgot-password" class="md-nav__link">
@@ -722,12 +881,17 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#oauth-routes" class="md-nav__link">
-    OAuth routes
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#oauth-router" class="md-nav__link">
+    OAuth router
   </a>
   
-    <nav class="md-nav" aria-label="OAuth routes">
+    <nav class="md-nav" aria-label="OAuth router">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -748,18 +912,13 @@
     </nav>
   
 </li>
-        
-      </ul>
-    </nav>
-  
-</li>
       
         <li class="md-nav__item">
-  <a href="#authenticated" class="md-nav__link">
-    Authenticated
+  <a href="#users-router" class="md-nav__link">
+    Users router
   </a>
   
-    <nav class="md-nav" aria-label="Authenticated">
+    <nav class="md-nav" aria-label="Users router">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -775,19 +934,6 @@
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#superuser" class="md-nav__link">
-    Superuser
-  </a>
-  
-    <nav class="md-nav" aria-label="Superuser">
-      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#get-user_id" class="md-nav__link">
@@ -833,9 +979,45 @@
                 
                 <h1 id="routes">Routes<a class="headerlink" href="#routes" title="Permanent link">&para;</a></h1>
 <p>You'll find here the routes exposed by <strong>FastAPI Users</strong>. Note that you can also review them through the <a href="https://fastapi.tiangolo.com/tutorial/first-steps/#interactive-api-docs">interactive API docs</a>.</p>
-<h2 id="unauthenticated">Unauthenticated<a class="headerlink" href="#unauthenticated" title="Permanent link">&para;</a></h2>
+<h2 id="auth-router">Auth router<a class="headerlink" href="#auth-router" title="Permanent link">&para;</a></h2>
+<p>Each <a href="../../configuration/authentication/">authentication backend</a> you <a href="../../configuration/routers/auth/">generate a router for</a> will produce the following routes. Take care about the prefix you gave it, especially if you have several backends.</p>
+<h3 id="post-login"><code>POST /login</code><a class="headerlink" href="#post-login" title="Permanent link">&para;</a></h3>
+<p>Login a user against the method named <code>name</code>. Check the corresponding <a href="../../configuration/authentication/">authentication method</a> to view the success response.</p>
+<div class="admonition abstract">
+<p class="admonition-title">Payload (<code>application/x-www-form-urlencoded</code>)</p>
+<div class="highlight"><pre><span></span><code>username=king.arthur@camelot.bt&amp;password=guinevere
+</code></pre></div>
+
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>422 Validation Error</code></p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>400 Bad Request</code></p>
+<p>Bad credentials or the user is inactive.</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+    <span class="nt">&quot;detail&quot;</span><span class="p">:</span> <span class="s2">&quot;LOGIN_BAD_CREDENTIALS&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+</div>
+<h3 id="post-logout"><code>POST /logout</code><a class="headerlink" href="#post-logout" title="Permanent link">&para;</a></h3>
+<p>Logout the authenticated user against the method named <code>name</code>. Check the corresponding <a href="../../configuration/authentication/">authentication method</a> to view the success response.</p>
+<div class="admonition fail">
+<p class="admonition-title"><code>401 Unauthorized</code></p>
+<p>Missing token or inactive user.</p>
+</div>
+<div class="admonition success">
+<p class="admonition-title"><code>200 OK</code></p>
+<p>The logout process was successful.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Some backend (like JWT) won't produce this route.</p>
+</div>
+<h2 id="register-router">Register router<a class="headerlink" href="#register-router" title="Permanent link">&para;</a></h2>
 <h3 id="post-register"><code>POST /register</code><a class="headerlink" href="#post-register" title="Permanent link">&para;</a></h3>
-<p>Register a new user. Will call the <code>on_after_register</code> <a href="../../configuration/router/#event-handlers">event handlers</a> on successful registration.</p>
+<p>Register a new user. Will call the <code>after_register</code> <a href="../../configuration/routers/register/#after-register">handler</a> on successful registration.</p>
 <div class="admonition abstract">
 <p class="admonition-title">Payload</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
@@ -868,42 +1050,9 @@
 </code></pre></div>
 
 </div>
-<h3 id="post-loginname"><code>POST /login/{name}</code><a class="headerlink" href="#post-loginname" title="Permanent link">&para;</a></h3>
-<p>Login a user against the method named <code>name</code>. Check the corresponding <a href="../../configuration/authentication/">authentication method</a> to view the success response.</p>
-<div class="admonition abstract">
-<p class="admonition-title">Payload (<code>application/x-www-form-urlencoded</code>)</p>
-<div class="highlight"><pre><span></span><code>username=king.arthur@camelot.bt&amp;password=guinevere
-</code></pre></div>
-
-</div>
-<div class="admonition fail">
-<p class="admonition-title"><code>422 Validation Error</code></p>
-</div>
-<div class="admonition fail">
-<p class="admonition-title"><code>400 Bad Request</code></p>
-<p>Bad credentials or the user is inactive.</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">&quot;detail&quot;</span><span class="p">:</span> <span class="s2">&quot;LOGIN_BAD_CREDENTIALS&quot;</span>
-<span class="p">}</span>
-</code></pre></div>
-
-</div>
-<h3 id="post-logoutname"><code>POST /logout/{name}</code><a class="headerlink" href="#post-logoutname" title="Permanent link">&para;</a></h3>
-<p>Logout the authenticated user against the method named <code>name</code>. Check the corresponding <a href="../../configuration/authentication/">authentication method</a> to view the success response.</p>
-<div class="admonition fail">
-<p class="admonition-title"><code>401 Unauthorized</code></p>
-<p>Missing token or inactive user.</p>
-</div>
-<div class="admonition success">
-<p class="admonition-title"><code>200 OK</code></p>
-<p>The logout process was successful.</p>
-</div>
-<div class="admonition success">
-<p class="admonition-title"><code>202 Accepted</code></p>
-<p>The logout process is not applicable for this authentication backend (e.g. JWT).</p>
-</div>
+<h2 id="reset-password-router">Reset password router<a class="headerlink" href="#reset-password-router" title="Permanent link">&para;</a></h2>
 <h3 id="post-forgot-password"><code>POST /forgot-password</code><a class="headerlink" href="#post-forgot-password" title="Permanent link">&para;</a></h3>
-<p>Request a reset password procedure. Will generate a temporary token and call the <code>on_after_forgot_password</code> <a href="../../configuration/router/#event-handlers">event handlers</a> if the user exists.</p>
+<p>Request a reset password procedure. Will generate a temporary token and call the <code>after_forgot_password</code> <a href="../../configuration/routers/reset/#after-forgot-password">handlers</a> if the user exists.</p>
 <p>To prevent malicious users from guessing existing users in your databse, the route will always return a <code>202 Accepted</code> response, even if the user requested does not exist.</p>
 <div class="admonition abstract">
 <p class="admonition-title">Payload</p>
@@ -942,9 +1091,9 @@
 </code></pre></div>
 
 </div>
-<h3 id="oauth-routes">OAuth routes<a class="headerlink" href="#oauth-routes" title="Permanent link">&para;</a></h3>
+<h2 id="oauth-router">OAuth router<a class="headerlink" href="#oauth-router" title="Permanent link">&para;</a></h2>
 <p>Each OAuth router you define will expose the two following routes.</p>
-<h4 id="get-authorize"><code>GET /authorize</code><a class="headerlink" href="#get-authorize" title="Permanent link">&para;</a></h4>
+<h3 id="get-authorize"><code>GET /authorize</code><a class="headerlink" href="#get-authorize" title="Permanent link">&para;</a></h3>
 <p>Return the authorization URL for the OAuth service where you should redirect your user.</p>
 <div class="admonition abstract">
 <p class="admonition-title">Query parameters</p>
@@ -968,7 +1117,7 @@
 <p class="admonition-title"><code>400 Bad Request</code></p>
 <p>Unknown authentication backend.</p>
 </div>
-<h4 id="get-callback"><code>GET /callback</code><a class="headerlink" href="#get-callback" title="Permanent link">&para;</a></h4>
+<h3 id="get-callback"><code>GET /callback</code><a class="headerlink" href="#get-callback" title="Permanent link">&para;</a></h3>
 <p>Handle the OAuth callback.</p>
 <div class="admonition abstract">
 <p class="admonition-title">Query parameters</p>
@@ -996,7 +1145,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="authenticated">Authenticated<a class="headerlink" href="#authenticated" title="Permanent link">&para;</a></h2>
+<h2 id="users-router">Users router<a class="headerlink" href="#users-router" title="Permanent link">&para;</a></h2>
 <h3 id="get-me"><code>GET /me</code><a class="headerlink" href="#get-me" title="Permanent link">&para;</a></h3>
 <p>Return the current authenticated active user.</p>
 <div class="admonition success">
@@ -1040,7 +1189,6 @@
 <p class="admonition-title"><code>401 Unauthorized</code></p>
 <p>Missing token or inactive user.</p>
 </div>
-<h2 id="superuser">Superuser<a class="headerlink" href="#superuser" title="Permanent link">&para;</a></h2>
 <h3 id="get-user_id"><code>GET /{user_id}</code><a class="headerlink" href="#get-user_id" title="Permanent link">&para;</a></h3>
 <p>Return the user with id <code>user_id</code>.</p>
 <div class="admonition success">

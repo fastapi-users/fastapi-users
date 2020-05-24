@@ -13,7 +13,7 @@
       
       
       <link rel="shortcut icon" href="../../favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.2.0">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.2.1">
     
     
       
@@ -21,7 +21,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.18ac144a.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.71dfd922.min.css">
       
         <link rel="stylesheet" href="../../assets/stylesheets/palette.616af814.min.css">
       
@@ -379,10 +379,88 @@
           
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-4" type="checkbox" id="nav-3-4">
+    
+    <label class="md-nav__link" for="nav-3-4">
+      Routers
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Routers" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-4">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Routers
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
-    <a href="../../configuration/router/" title="Router" class="md-nav__link">
-      Router
+    <a href="../../configuration/routers/" title="Introduction" class="md-nav__link">
+      Introduction
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../configuration/routers/auth/" title="Auth router" class="md-nav__link">
+      Auth router
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../configuration/routers/register/" title="Register routes" class="md-nav__link">
+      Register routes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../configuration/routers/reset/" title="Reset password router" class="md-nav__link">
+      Reset password router
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../configuration/routers/users/" title="Users router" class="md-nav__link">
+      Users router
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -794,6 +872,48 @@
   </li>
 
     
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Migration
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Migration" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Migration
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../migration/08_to_10/" title="0.8.x ➡️ 1.0.x" class="md-nav__link">
+      0.8.x ➡️ 1.0.x
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
   </ul>
 </nav>
                   </div>
@@ -1121,12 +1241,12 @@
 -H <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
 -X POST <span class="se">\</span>
 -d <span class="s2">&quot;{\&quot;email\&quot;: \&quot;king.arthur@camelot.bt\&quot;,\&quot;password\&quot;: \&quot;guinevere\&quot;}&quot;</span> <span class="se">\</span>
-http://localhost:8000/users/register
+http://localhost:8000/auth/register
 </code></pre></div>
 
 </div>
 <input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">axios</label><div class="tabbed-content">
-<div class="highlight"><pre><span></span><code><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;http://localhost:8000/users/register&#39;</span><span class="p">,</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;http://localhost:8000/auth/register&#39;</span><span class="p">,</span> <span class="p">{</span>
     <span class="nx">email</span><span class="o">:</span> <span class="s1">&#39;king.arthur@camelot.bt&#39;</span><span class="p">,</span>
     <span class="nx">password</span><span class="o">:</span> <span class="s1">&#39;guinevere&#39;</span><span class="p">,</span>
 <span class="p">})</span>
@@ -1157,7 +1277,7 @@ http://localhost:8000/users/register
 </div>
 <h2 id="2-login">2. Login<a class="headerlink" href="#2-login" title="Permanent link">&para;</a></h2>
 <p>Now, you can login as this new user.</p>
-<p>Each <a href="../../configuration/authentication/">authentication backend</a> will produce a single route. For example, the <a href="../../configuration/authentication/jwt/">JWT backend</a> will produce the <code>/users/login/jwt</code> route. Each backend will have a different response.</p>
+<p>You can generate a <a href="../../configuration/routers/auth/">login route</a> for each <a href="../../configuration/authentication/">authentication backend</a>. Each backend will have a different response.</p>
 <h3 id="jwt-backend">JWT backend<a class="headerlink" href="#jwt-backend" title="Permanent link">&para;</a></h3>
 <h4 id="request_1">Request<a class="headerlink" href="#request_1" title="Permanent link">&para;</a></h4>
 <div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">cURL</label><div class="tabbed-content">
@@ -1166,7 +1286,7 @@ http://localhost:8000/users/register
 -X POST <span class="se">\</span>
 -F <span class="s2">&quot;username=king.arthur@camelot.bt&quot;</span> <span class="se">\</span>
 -F <span class="s2">&quot;password=guinevere&quot;</span> <span class="se">\</span>
-http://localhost:8000/users/login/jwt
+http://localhost:8000/auth/jwt/login
 </code></pre></div>
 
 </div>
@@ -1175,7 +1295,7 @@ http://localhost:8000/users/login/jwt
 <span class="nx">formData</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;username&#39;</span><span class="p">,</span> <span class="s1">&#39;king.arthur@camelot.bt&#39;</span><span class="p">);</span>
 <span class="nx">formData</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;password&#39;</span><span class="p">,</span> <span class="s1">&#39;guinevere&#39;</span><span class="p">);</span>
 <span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span>
-    <span class="s1">&#39;http://localhost:8000/users/login/jwt&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;http://localhost:8000/auth/jwt/login&#39;</span><span class="p">,</span>
     <span class="nx">formData</span><span class="p">,</span>
     <span class="p">{</span>
         <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
@@ -1210,7 +1330,7 @@ http://localhost:8000/users/login/jwt
 -X POST <span class="se">\</span>
 -F <span class="s2">&quot;username=king.arthur@camelot.bt&quot;</span> <span class="se">\</span>
 -F <span class="s2">&quot;password=guinevere&quot;</span> <span class="se">\</span>
-http://localhost:8000/users/login/cookie
+http://localhost:8000/auth/cookie/login
 </code></pre></div>
 
 </div>
@@ -1219,7 +1339,7 @@ http://localhost:8000/users/login/cookie
 <span class="nx">formData</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;username&#39;</span><span class="p">,</span> <span class="s1">&#39;king.arthur@camelot.bt&#39;</span><span class="p">);</span>
 <span class="nx">formData</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;password&#39;</span><span class="p">,</span> <span class="s1">&#39;guinevere&#39;</span><span class="p">);</span>
 <span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span>
-    <span class="s1">&#39;http://localhost:8000/users/login/cookie&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;http://localhost:8000/auth/cookie/login&#39;</span><span class="p">,</span>
     <span class="nx">formData</span><span class="p">,</span>
     <span class="p">{</span>
         <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
@@ -1449,12 +1569,12 @@ http://localhost:8000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476
 -H <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
 -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span> <span class="se">\</span>
 -X POST <span class="se">\</span>
-http://localhost:8000/users/logout/cookie
+http://localhost:8000/auth/cookie/logout
 </code></pre></div>
 
 </div>
 <input id="__tabbed_9_2" name="__tabbed_9" type="radio" /><label for="__tabbed_9_2">axios</label><div class="tabbed-content">
-<div class="highlight"><pre><span></span><code><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;http://localhost:8000/users/logout/cookie&#39;</span><span class="p">,</span>
+<div class="highlight"><pre><span></span><code><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;http://localhost:8000/auth/cookie/logout&#39;</span><span class="p">,</span>
     <span class="kc">null</span><span class="p">,</span>
     <span class="p">{</span>
         <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>

@@ -13,7 +13,7 @@
       
       
       <link rel="shortcut icon" href="../../../favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.2.0">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.2.1">
     
     
       
@@ -21,7 +21,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.18ac144a.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.71dfd922.min.css">
       
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.616af814.min.css">
       
@@ -453,10 +453,88 @@
           
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-4" type="checkbox" id="nav-3-4">
+    
+    <label class="md-nav__link" for="nav-3-4">
+      Routers
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Routers" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-4">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Routers
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
-    <a href="../../router/" title="Router" class="md-nav__link">
-      Router
+    <a href="../../routers/" title="Introduction" class="md-nav__link">
+      Introduction
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../routers/auth/" title="Auth router" class="md-nav__link">
+      Auth router
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../routers/register/" title="Register routes" class="md-nav__link">
+      Register routes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../routers/reset/" title="Reset password router" class="md-nav__link">
+      Reset password router
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../routers/users/" title="Users router" class="md-nav__link">
+      Users router
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -546,6 +624,48 @@
   <li class="md-nav__item">
     <a href="../../../usage/dependency-callables/" title="Dependency callables" class="md-nav__link">
       Dependency callables
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Migration
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Migration" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Migration
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../migration/08_to_10/" title="0.8.x ➡️ 1.0.x" class="md-nav__link">
+      0.8.x ➡️ 1.0.x
     </a>
   </li>
 
@@ -646,14 +766,6 @@
 </code></pre></div>
 
 <p>As you can see, instantiation is quite simple. You just have to define a constant <code>SECRET</code> which is used to encode the token and the lifetime of the cookie (in seconds).</p>
-<p>You can optionally define the <code>name</code> which will be used to generate its <a href="../../../usage/routes/#post-loginname"><code>/login</code> route</a>. <strong>Defaults to <code>cookie</code></strong>.</p>
-<div class="highlight"><pre><span></span><code><span class="n">cookie_authentication</span> <span class="o">=</span> <span class="n">CookieAuthentication</span><span class="p">(</span>
-    <span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span>
-    <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;my-cookie&quot;</span><span class="p">,</span>
-<span class="p">)</span>
-</code></pre></div>
-
 <p>You can also define the parameters for the generated cookie:</p>
 <ul>
 <li><code>cookie_name</code> (<code>fastapiusersauth</code>): Name of the cookie.</li>
@@ -662,6 +774,17 @@
 <li><code>cookie_secure</code> (<code>True</code>): Whether to only send the cookie to the server via SSL request.</li>
 <li><code>cookie_httponly</code> (<code>True</code>): Whether to prevent access to the cookie via JavaScript.</li>
 </ul>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>You can also optionally define the <code>name</code>. It's useful in the case you wish to have several backends of the same class. Each backend should have a unique name. <strong>Defaults to <code>cookie</code></strong>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">cookie_authentication</span> <span class="o">=</span> <span class="n">CookieAuthentication</span><span class="p">(</span>
+    <span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span>
+    <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;my-cookie&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+
+</div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>The value of the cookie is actually a JWT. This authentication backend shares most of its logic with the <a href="../jwt/">JWT</a> one.</p>
@@ -685,7 +808,7 @@
 <h2 id="authentication">Authentication<a class="headerlink" href="#authentication" title="Permanent link">&para;</a></h2>
 <p>This method expects that you provide a valid cookie in the headers.</p>
 <h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
-<p>We will now configure the main <strong>FastAPI Users</strong> object that will expose the <a href="../../router/">API router</a>.</p>
+<p>We will now configure the main <strong>FastAPI Users</strong> object that will expose the <a href="../../routers/">routers</a>.</p>
                 
               
               
@@ -719,13 +842,13 @@
           </a>
         
         
-          <a href="../../router/" title="Router" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../../routers/" title="Introduction" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Router
+                Introduction
               </div>
             </div>
             <div class="md-footer-nav__button md-icon">
