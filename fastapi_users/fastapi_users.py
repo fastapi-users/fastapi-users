@@ -59,6 +59,13 @@ class FastAPIUsers:
         self.get_current_user = self.authenticator.get_current_user
         self.get_current_active_user = self.authenticator.get_current_active_user
         self.get_current_superuser = self.authenticator.get_current_superuser
+        self.get_optional_current_user = self.authenticator.get_optional_current_user
+        self.get_optional_current_active_user = (
+            self.authenticator.get_optional_current_active_user
+        )
+        self.get_optional_current_superuser = (
+            self.authenticator.get_optional_current_superuser
+        )
 
     def get_register_router(
         self, after_register: Optional[Callable[[models.UD, Request], None]] = None,

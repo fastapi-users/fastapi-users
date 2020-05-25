@@ -1,6 +1,6 @@
 import re
 from inspect import Parameter, Signature
-from typing import Sequence
+from typing import Optional, Sequence
 
 from fastapi import Depends, HTTPException, status
 from makefun import with_signature
@@ -64,20 +64,43 @@ class Authenticator:
         except ValueError:
             raise DuplicateBackendNamesError()
 
+        @with_signature(signature, func_name="get_optional_current_user")
+        async def get_optional_current_user(*args, **kwargs):
+            return await self._authenticate(*args, **kwargs)
+
+        @with_signature(signature, func_name="get_optional_current_active_user")
+        async def get_optional_current_active_user(*args, **kwargs):
+            user = await get_optional_current_user(*args, **kwargs)
+            if not user or not user.is_active:
+                return None
+            return user
+
+        @with_signature(signature, func_name="get_optional_current_superuser")
+        async def get_optional_current_superuser(*args, **kwargs):
+            user = await get_optional_current_active_user(*args, **kwargs)
+            if not user or not user.is_superuser:
+                return None
+            return user
+
         @with_signature(signature, func_name="get_current_user")
         async def get_current_user(*args, **kwargs):
-            return await self._authenticate(*args, **kwargs)
+            user = await get_optional_current_user(*args, **kwargs)
+            if user is None:
+                raise self._get_credentials_exception()
+            return user
 
         @with_signature(signature, func_name="get_current_active_user")
         async def get_current_active_user(*args, **kwargs):
-            user = await get_current_user(*args, **kwargs)
-            if not user.is_active:
+            user = await get_optional_current_active_user(*args, **kwargs)
+            if user is None:
                 raise self._get_credentials_exception()
             return user
 
         @with_signature(signature, func_name="get_current_superuser")
         async def get_current_superuser(*args, **kwargs):
-            user = await get_current_active_user(*args, **kwargs)
+            user = await get_optional_current_active_user(*args, **kwargs)
+            if user is None:
+                raise self._get_credentials_exception()
             if not user.is_superuser:
                 raise self._get_credentials_exception(status.HTTP_403_FORBIDDEN)
             return user
@@ -85,15 +108,18 @@ class Authenticator:
         self.get_current_user = get_current_user
         self.get_current_active_user = get_current_active_user
         self.get_current_superuser = get_current_superuser
+        self.get_optional_current_user = get_optional_current_user
+        self.get_optional_current_active_user = get_optional_current_active_user
+        self.get_optional_current_superuser = get_optional_current_superuser
 
-    async def _authenticate(self, *args, **kwargs) -> BaseUserDB:
+    async def _authenticate(self, *args, **kwargs) -> Optional[BaseUserDB]:
         for backend in self.backends:
             token: str = kwargs[name_to_variable_name(backend.name)]
             if token:
                 user = await backend(token, self.user_db)
                 if user is not None:
                     return user
-        raise self._get_credentials_exception()
+        return None
 
     def _get_credentials_exception(
         self, status_code: int = status.HTTP_401_UNAUTHORIZED

@@ -34,6 +34,22 @@ async def test_app_client(
     def current_superuser(user=Depends(fastapi_users.get_current_superuser)):
         return user
 
+    @app.get("/optional-current-user")
+    def optional_current_user(user=Depends(fastapi_users.get_optional_current_user)):
+        return user
+
+    @app.get("/optional-current-active-user")
+    def optional_current_active_user(
+        user=Depends(fastapi_users.get_optional_current_active_user),
+    ):
+        return user
+
+    @app.get("/optional-current-superuser")
+    def optional_current_superuser(
+        user=Depends(fastapi_users.get_optional_current_superuser),
+    ):
+        return user
+
     return await get_test_client(app)
 
 
@@ -161,3 +177,96 @@ class TestGetCurrentSuperuser:
             "/current-superuser", headers={"Authorization": f"Bearer {superuser.id}"}
         )
         assert response.status_code == status.HTTP_200_OK
+
+
+@pytest.mark.fastapi_users
+@pytest.mark.asyncio
+class TestOptionalGetCurrentUser:
+    async def test_missing_token(self, test_app_client: httpx.AsyncClient):
+        response = await test_app_client.get("/optional-current-user")
+        assert response.status_code == status.HTTP_200_OK
+        assert response.json() is None
+
+    async def test_invalid_token(self, test_app_client: httpx.AsyncClient):
+        response = await test_app_client.get(
+            "/optional-current-user", headers={"Authorization": "Bearer foo"}
+        )
+        assert response.status_code == status.HTTP_200_OK
+        assert response.json() is None
+
+    async def test_valid_token(self, test_app_client: httpx.AsyncClient, user: UserDB):
+        response = await test_app_client.get(
+            "/optional-current-user", headers={"Authorization": f"Bearer {user.id}"}
+        )
+        assert response.status_code == status.HTTP_200_OK
+        assert response.json() is not None
+
+
+@pytest.mark.fastapi_users
+@pytest.mark.asyncio
+class TestOptionalGetCurrentActiveUser:
+    async def test_missing_token(self, test_app_client: httpx.AsyncClient):
+        response = await test_app_client.get("/optional-current-active-user")
+        assert response.status_code == status.HTTP_200_OK
+        assert response.json() is None
+
+    async def test_invalid_token(self, test_app_client: httpx.AsyncClient):
+        response = await test_app_client.get(
+            "/optional-current-active-user", headers={"Authorization": "Bearer foo"}
+        )
+        assert response.status_code == status.HTTP_200_OK
+        assert response.json() is None
+
+    async def test_valid_token_inactive_user(
+        self, test_app_client: httpx.AsyncClient, inactive_user: UserDB
+    ):
+        response = await test_app_client.get(
+            "/optional-current-active-user",
+            headers={"Authorization": f"Bearer {inactive_user.id}"},
+        )
+        assert response.status_code == status.HTTP_200_OK
+        assert response.json() is None
+
+    async def test_valid_token(self, test_app_client: httpx.AsyncClient, user: UserDB):
+        response = await test_app_client.get(
+            "/optional-current-active-user",
+            headers={"Authorization": f"Bearer {user.id}"},
+        )
+        assert response.status_code == status.HTTP_200_OK
+        assert response.json() is not None
+
+
+@pytest.mark.fastapi_users
+@pytest.mark.asyncio
+class TestOptionalGetCurrentSuperuser:
+    async def test_missing_token(self, test_app_client: httpx.AsyncClient):
+        response = await test_app_client.get("/optional-current-superuser")
+        assert response.status_code == status.HTTP_200_OK
+        assert response.json() is None
+
+    async def test_invalid_token(self, test_app_client: httpx.AsyncClient):
+        response = await test_app_client.get(
+            "/optional-current-superuser", headers={"Authorization": "Bearer foo"}
+        )
+        assert response.status_code == status.HTTP_200_OK
+        assert response.json() is None
+
+    async def test_valid_token_regular_user(
+        self, test_app_client: httpx.AsyncClient, user: UserDB
+    ):
+        response = await test_app_client.get(
+            "/optional-current-superuser",
+            headers={"Authorization": f"Bearer {user.id}"},
+        )
+        assert response.status_code == status.HTTP_200_OK
+        assert response.json() is None
+
+    async def test_valid_token_superuser(
+        self, test_app_client: httpx.AsyncClient, superuser: UserDB
+    ):
+        response = await test_app_client.get(
+            "/optional-current-superuser",
+            headers={"Authorization": f"Bearer {superuser.id}"},
+        )
+        assert response.status_code == status.HTTP_200_OK
+        assert response.json() is not None
