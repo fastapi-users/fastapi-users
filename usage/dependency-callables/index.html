@@ -606,6 +606,27 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#get_optional_current_user" class="md-nav__link">
+    get_optional_current_user
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get_optional_current_active_user" class="md-nav__link">
+    get_optional_current_active_user
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get_optional_current_superuser" class="md-nav__link">
+    get_optional_current_superuser
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#in-path-operation" class="md-nav__link">
     In path operation
   </a>
@@ -713,6 +734,27 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#get_optional_current_user" class="md-nav__link">
+    get_optional_current_user
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get_optional_current_active_user" class="md-nav__link">
+    get_optional_current_active_user
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get_optional_current_superuser" class="md-nav__link">
+    get_optional_current_superuser
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#in-path-operation" class="md-nav__link">
     In path operation
   </a>
@@ -743,30 +785,60 @@
 </div>
 <h2 id="get_current_user"><code>get_current_user</code><a class="headerlink" href="#get_current_user" title="Permanent link">&para;</a></h2>
 <p>Get the current user (<strong>active or not</strong>). Will throw a <code>401 Unauthorized</code> if missing or wrong credentials.</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/protected-route&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/protected-route&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">protected_route</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_current_user</span><span class="p">)):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Hello, </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">&quot;</span>
 </code></pre></div>
 
 <h2 id="get_current_active_user"><code>get_current_active_user</code><a class="headerlink" href="#get_current_active_user" title="Permanent link">&para;</a></h2>
 <p>Get the current active user. Will throw a <code>401 Unauthorized</code> if missing or wrong credentials or if the user is not active.</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/protected-route&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/protected-route&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">protected_route</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_current_active_user</span><span class="p">)):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Hello, </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">&quot;</span>
 </code></pre></div>
 
 <h2 id="get_current_superuser"><code>get_current_superuser</code><a class="headerlink" href="#get_current_superuser" title="Permanent link">&para;</a></h2>
 <p>Get the current superuser. Will throw a <code>401 Unauthorized</code> if missing or wrong credentials or if the user is not active. Will throw a <code>403 Forbidden</code> if the user is not a superuser.</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/protected-route&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/protected-route&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">protected_route</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_current_superuser</span><span class="p">)):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Hello, </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">&quot;</span>
+</code></pre></div>
+
+<h2 id="get_optional_current_user"><code>get_optional_current_user</code><a class="headerlink" href="#get_optional_current_user" title="Permanent link">&para;</a></h2>
+<p>Get the current user (<strong>active or not</strong>). Will return <code>None</code> if missing or wrong credentials. It can be useful if you wish to change the behaviour of your endpoint if a user is logged in or not.</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/optional-user-route&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">optional_user_route</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">User</span><span class="p">]</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_optional_current_user</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="n">user</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;Hello, anonymous&quot;</span>
+</code></pre></div>
+
+<h2 id="get_optional_current_active_user"><code>get_optional_current_active_user</code><a class="headerlink" href="#get_optional_current_active_user" title="Permanent link">&para;</a></h2>
+<p>Get the current active user. Will return <code>None</code> if missing or wrong credentials. It can be useful if you wish to change the behaviour of your endpoint if a user is logged in or not.</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/optional-user-route&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">optional_user_route</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_optional_current_active_user</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="n">user</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;Hello, anonymous&quot;</span>
+</code></pre></div>
+
+<h2 id="get_optional_current_superuser"><code>get_optional_current_superuser</code><a class="headerlink" href="#get_optional_current_superuser" title="Permanent link">&para;</a></h2>
+<p>Get the current superuser. Will return <code>None</code> if missing or wrong credentials. It can be useful if you wish to change the behaviour of your endpoint if a user is logged in or not.</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/optional-user-route&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">optional_user_route</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_optional_current_superuser</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="n">user</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;Hello, anonymous&quot;</span>
 </code></pre></div>
 
 <h2 id="in-path-operation">In path operation<a class="headerlink" href="#in-path-operation" title="Permanent link">&para;</a></h2>
 <p>If you don't need a user, you can use more clear way:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/protected-route&#39;</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="n">Depends</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_current_superuser</span><span class="p">)])</span>
+<div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/protected-route&quot;</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="n">Depends</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_current_superuser</span><span class="p">)])</span>
 <span class="k">def</span> <span class="nf">protected_route</span><span class="p">():</span>
-    <span class="k">return</span> <span class="s1">&#39;Hello, some user.&#39;</span>
+    <span class="k">return</span> <span class="s2">&quot;Hello, some user.&quot;</span>
 </code></pre></div>
 
 <p>You can read more about this <a href="https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/">in FastAPI docs</a>.</p>
