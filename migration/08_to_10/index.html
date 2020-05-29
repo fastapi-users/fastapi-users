@@ -639,6 +639,19 @@
     In Python code
   </a>
   
+    <nav class="md-nav" aria-label="In Python code">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mongodb" class="md-nav__link">
+    MongoDB
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -664,9 +677,29 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#mongodb" class="md-nav__link">
+  <a href="#mongodb_1" class="md-nav__link">
     MongoDB
   </a>
+  
+    <nav class="md-nav" aria-label="MongoDB">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mongo-shell" class="md-nav__link">
+    Mongo shell
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python" class="md-nav__link">
+    Python
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -757,6 +790,19 @@
     In Python code
   </a>
   
+    <nav class="md-nav" aria-label="In Python code">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mongodb" class="md-nav__link">
+    MongoDB
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -782,9 +828,29 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#mongodb" class="md-nav__link">
+  <a href="#mongodb_1" class="md-nav__link">
     MongoDB
   </a>
+  
+    <nav class="md-nav" aria-label="MongoDB">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mongo-shell" class="md-nav__link">
+    Mongo shell
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python" class="md-nav__link">
+    Python
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -866,6 +932,15 @@
     <span class="n">user_id</span><span class="p">:</span> <span class="n">UUID4</span>
 </code></pre></div>
 
+<h4 id="mongodb">MongoDB<a class="headerlink" href="#mongodb" title="Permanent link">&para;</a></h4>
+<p>To avoid any issues, it's recommended to use the <code>standard</code> UUID representation when instantiating the MongoDB client:</p>
+<div class="highlight"><pre><span></span><code><span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;mongodb://localhost:27017&quot;</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">motor</span><span class="o">.</span><span class="n">motor_asyncio</span><span class="o">.</span><span class="n">AsyncIOMotorClient</span><span class="p">(</span>
+    <span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">uuidRepresentation</span><span class="o">=</span><span class="s2">&quot;standard&quot;</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>This parameter controls how the UUID values will be encoded in the database. By default, it's set to <code>pythonLegacy</code> but new applications should consider setting this to <code>standard</code> for cross language compatibility. <a href="https://pymongo.readthedocs.io/en/stable/api/pymongo/mongo_client.html#pymongo.mongo_client.MongoClient">Read more about this</a>.</p>
 <h3 id="in-database">In database<a class="headerlink" href="#in-database" title="Permanent link">&para;</a></h3>
 <p>Id. were before stored as strings in the database. You should make a migration to convert string data to UUID data.</p>
 <div class="admonition danger">
@@ -896,12 +971,33 @@
 <div class="highlight"><pre><span></span><code><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="ss">&quot;user&quot;</span> <span class="k">MODIFY</span> <span class="n">id</span> <span class="nb">CHAR</span><span class="p">(</span><span class="mi">36</span><span class="p">);</span>
 </code></pre></div>
 
-<h4 id="mongodb">MongoDB<a class="headerlink" href="#mongodb" title="Permanent link">&para;</a></h4>
+<h4 id="mongodb_1">MongoDB<a class="headerlink" href="#mongodb_1" title="Permanent link">&para;</a></h4>
+<h5 id="mongo-shell">Mongo shell<a class="headerlink" href="#mongo-shell" title="Permanent link">&para;</a></h5>
 <p>For MongoDB, we can use a <code>forEach</code> iterator to convert the id. for each document:</p>
 <div class="highlight"><pre><span></span><code><span class="nx">db</span><span class="p">.</span><span class="nx">getCollection</span><span class="p">(</span><span class="s1">&#39;users&#39;</span><span class="p">).</span><span class="nx">find</span><span class="p">().</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">uuid</span> <span class="o">=</span> <span class="nx">UUID</span><span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
   <span class="nx">db</span><span class="p">.</span><span class="nx">getCollection</span><span class="p">(</span><span class="s1">&#39;users&#39;</span><span class="p">).</span><span class="nx">update</span><span class="p">({</span><span class="nx">_id</span><span class="o">:</span> <span class="nx">user</span><span class="p">.</span><span class="nx">_id</span><span class="p">},</span> <span class="p">[{</span><span class="nx">$set</span><span class="o">:</span> <span class="p">{</span><span class="nx">id</span><span class="o">:</span> <span class="nx">uuid</span><span class="p">}}]);</span>
 <span class="p">});</span>
+</code></pre></div>
+
+<h5 id="python">Python<a class="headerlink" href="#python" title="Permanent link">&para;</a></h5>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">uuid</span>
+
+<span class="kn">import</span> <span class="nn">motor.motor_asyncio</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">migrate_uuid</span><span class="p">():</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">motor</span><span class="o">.</span><span class="n">motor_asyncio</span><span class="o">.</span><span class="n">AsyncIOMotorClient</span><span class="p">(</span>
+        <span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">uuidRepresentation</span><span class="o">=</span><span class="s2">&quot;standard&quot;</span>
+    <span class="p">)</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="s2">&quot;database_name&quot;</span><span class="p">]</span>
+    <span class="n">users</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="s2">&quot;users&quot;</span><span class="p">]</span>
+
+    <span class="k">async</span> <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">users</span><span class="o">.</span><span class="n">find</span><span class="p">({}):</span>
+        <span class="k">await</span> <span class="n">users</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span>
+            <span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;_id&quot;</span><span class="p">]},</span>
+            <span class="p">{</span><span class="s2">&quot;$set&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">uuid</span><span class="o">.</span><span class="n">UUID</span><span class="p">(</span><span class="n">user</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">])}},</span>
+        <span class="p">)</span>
 </code></pre></div>
 
 <h2 id="splitted-routers">Splitted routers<a class="headerlink" href="#splitted-routers" title="Permanent link">&para;</a></h2>
