@@ -68,7 +68,7 @@ class TestAuthenticate:
 async def test_get_login_response(jwt_authentication, user):
     login_response = await jwt_authentication.get_login_response(user, Response())
 
-    assert "token" in login_response
+    assert "access_token" in login_response
 
     token = login_response["token"]
     decoded = jwt.decode(
