@@ -70,7 +70,7 @@ async def test_get_login_response(jwt_authentication, user):
 
     assert "access_token" in login_response
 
-    token = login_response["token"]
+    token = login_response["access_token"]
     decoded = jwt.decode(
         token, SECRET, audience="fastapi-users:auth", algorithms=[JWT_ALGORITHM]
     )
