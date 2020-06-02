@@ -1,18 +1,22 @@
 from typing import Any, Callable, Dict, Optional, Sequence, Type
 
 from fastapi import APIRouter, Request
-from httpx_oauth.oauth2 import BaseOAuth2
 
 from fastapi_users import models
 from fastapi_users.authentication import Authenticator, BaseAuthentication
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.router import (
     get_auth_router,
-    get_oauth_router,
     get_register_router,
     get_reset_password_router,
     get_users_router,
 )
+
+try:
+    from httpx_oauth.oauth2 import BaseOAuth2
+    from fastapi_users.router import get_oauth_router
+except ModuleNotFoundError:  # pragma: no cover
+    BaseOAuth2 = Type
 
 
 class FastAPIUsers:
