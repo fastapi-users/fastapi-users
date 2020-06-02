@@ -41,7 +41,7 @@ tortoise-orm = [
     "tortoise-orm >=0.16.0,<0.17.0"
 ]
 oauth = [
-    "httpx-oauth >=0.2.2,<0.3"
+    "httpx-oauth >=0.3,<0.4"
 ]
 
 [tool.flit.metadata.urls]
