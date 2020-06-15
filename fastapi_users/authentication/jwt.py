@@ -65,7 +65,7 @@ class JWTAuthentication(BaseAuthentication[str]):
 
     async def get_login_response(self, user: BaseUserDB, response: Response) -> Any:
         token = await self._generate_token(user)
-        return {"token": token}
+        return {"access_token": token, "token_type": "bearer"}
 
     async def _generate_token(self, user: BaseUserDB) -> str:
         data = {"user_id": str(user.id), "aud": self.token_audience}

@@ -68,9 +68,10 @@ class TestAuthenticate:
 async def test_get_login_response(jwt_authentication, user):
     login_response = await jwt_authentication.get_login_response(user, Response())
 
-    assert "token" in login_response
+    assert "access_token" in login_response
+    assert login_response["token_type"] == "bearer"
 
-    token = login_response["token"]
+    token = login_response["access_token"]
     decoded = jwt.decode(
         token, SECRET, audience="fastapi-users:auth", algorithms=[JWT_ALGORITHM]
     )
