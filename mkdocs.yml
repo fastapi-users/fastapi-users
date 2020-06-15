@@ -51,4 +51,5 @@ nav:
     - usage/routes.md
     - usage/dependency-callables.md
   - Migration:
-    - migration/08_to_10.md
+    - migration/08_to_1x.md
+    - migration/1x_to_2x.md
