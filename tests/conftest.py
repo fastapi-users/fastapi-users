@@ -229,7 +229,7 @@ def mock_user_db_oauth(
 class MockAuthentication(BaseAuthentication[str]):
     def __init__(self, name: str = "mock"):
         super().__init__(name, logout=True)
-        self.scheme = OAuth2PasswordBearer("/users/login", auto_error=False)
+        self.scheme = OAuth2PasswordBearer("/login", auto_error=False)
 
     async def __call__(self, credentials: Optional[str], user_db: BaseUserDatabase):
         if credentials is not None:
