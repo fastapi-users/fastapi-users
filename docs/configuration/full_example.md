@@ -2,6 +2,10 @@
 
 Here is a full working example with JWT authentication to help get you started.
 
+!!! warning
+    Notice that **SECRET** should be changed to a strong passphrase. 
+    Insecure passwords may give attackers full access to your database.
+
 ``` py tab="SQLAlchemy"
 {!./src/full_sqlalchemy.py!}
 ```

@@ -162,6 +162,10 @@ app.include_router(google_oauth_router, prefix="/auth/google", tags=["auth"])
 
 ### Full example
 
+!!! warning
+    Notice that **SECRET** should be changed to a strong passphrase.
+    Insecure passwords may give attackers full access to your database.
+
 ``` py tab="SQLAlchemy"
 {!./src/oauth_full_sqlalchemy.py!}
 ```
