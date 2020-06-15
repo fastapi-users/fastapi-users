@@ -30,7 +30,7 @@ class JWTAuthentication(BaseAuthentication[str]):
         self,
         secret: str,
         lifetime_seconds: int,
-        tokenUrl: str = "/users/login",
+        tokenUrl: str = "/login",
         name: str = "jwt",
     ):
         super().__init__(name, logout=False)
