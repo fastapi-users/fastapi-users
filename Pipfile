@@ -30,7 +30,7 @@ asgi_lifespan = "*"
 uvicorn = "*"
 
 [packages]
-fastapi = ">=0.54.0,<0.58.0"
+fastapi = ">=0.54.0,<0.59.0"
 passlib = {extras = ["bcrypt"],version = "==1.7.2"}
 email-validator = ">=1.1.0,<1.2"
 sqlalchemy = ">=1.3.13,<1.4"
