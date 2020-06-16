@@ -26,12 +26,12 @@ class BaseUser(BaseModel):
         return self.dict(exclude_unset=True, exclude={"id"})
 
 
-class BaseUserCreate(BaseUser):
+class BaseUserCreate(BaseModel):
     email: EmailStr
     password: str
 
 
-class BaseUserUpdate(BaseUser):
+class BaseUserUpdate(BaseModel):
     password: Optional[str]
 
 
