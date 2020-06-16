@@ -22,11 +22,11 @@ class User(models.BaseUser, models.BaseOAuthAccountMixin):
     pass
 
 
-class UserCreate(User, models.BaseUserCreate):
+class UserCreate(models.BaseUserCreate):
     pass
 
 
-class UserUpdate(User, models.BaseUserUpdate):
+class UserUpdate(models.BaseUserUpdate):
     pass
 
 

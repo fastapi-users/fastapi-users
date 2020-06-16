@@ -30,6 +30,15 @@ class BaseUserCreate(BaseModel):
     email: EmailStr
     password: str
 
+    def create_update_dict(self):
+        return self.dict(
+            exclude_unset=True,
+            exclude={"id", "is_superuser", "is_active", "oauth_accounts"},
+        )
+
+    def create_update_dict_superuser(self):
+        return self.dict(exclude_unset=True, exclude={"id"})
+
 
 class BaseUserUpdate(BaseModel):
     password: Optional[str]
