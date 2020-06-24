@@ -89,10 +89,10 @@
         },
         "dnspython": {
             "hashes": [
-                "sha256:36c5e8e38d4369a08b6780b7f27d790a292b2b08eea01607865bf0936c558e01",
-                "sha256:f69c21288a962f4da86e56c4905b49d11aba7938d3d740e80d9e366ee4f1632d"
+                "sha256:25007cc5fd287575970d729fe354f7ec4d79aeb13289d8198b36c46f9506a921",
+                "sha256:593cf321a2bf099e760285136fc5cd7ddd85aaea7141dfe19e824897ebb90a02"
             ],
-            "version": "==1.16.0"
+            "version": "==2.0.0rc1"
         },
         "email-validator": {
             "hashes": [
@@ -250,9 +250,9 @@
         },
         "pypika": {
             "hashes": [
-                "sha256:20bebc05983cd401d428e3beb62d037e5f0271daab2bb5aba82f4e092d4a3694"
+                "sha256:00db855782f0657c591723dbcd176dded76bd9d90b8a7908afe541e068020908"
             ],
-            "version": "==0.37.7"
+            "version": "==0.37.9"
         },
         "python-multipart": {
             "hashes": [
@@ -388,10 +388,10 @@
         },
         "certifi": {
             "hashes": [
-                "sha256:5ad7e9a056d25ffa5082862e36f119f7f7cec6457fa07ee2f8c339814b80c9b1",
-                "sha256:9cd41137dc19af6a5e03b630eefe7d1f458d964d406342dd3edf625839b944cc"
+                "sha256:5930595817496dd21bb8dc35dad090f1c2cd0adfaf21204bf6732ca5d8ee34d3",
+                "sha256:8fc0819f1f30ba15bdb34cceffb9ef04d99f420f68eb75d901e9560b8749fc41"
             ],
-            "version": "==2020.4.5.2"
+            "version": "==2020.6.20"
         },
         "chardet": {
             "hashes": [
@@ -526,10 +526,10 @@
         },
         "hstspreload": {
             "hashes": [
-                "sha256:1534715db2f5224debb605a82e3f79ee9f891031b748cdcf0441eb672d5f3aa2",
-                "sha256:697987b7e849f315e5c4625cab662b390e991e7ef951884aa6013106c9c48000"
+                "sha256:4c55cb73ebe3549277a4e5e5a95867350cd3888ebe09d41f61a42718e4a3909e",
+                "sha256:8eb6a839c39d0995bfac3213dc08de780bb3d4d4386d9958ea29d86f20fd3659"
             ],
-            "version": "==2020.6.9"
+            "version": "==2020.6.23"
         },
         "httpcore": {
             "hashes": [
@@ -766,10 +766,10 @@
         },
         "py": {
             "hashes": [
-                "sha256:5e27081401262157467ad6e7f851b7aa402c5852dbcb3dae06768434de5752aa",
-                "sha256:c20fdd83a5dbc0af9efd622bee9a5564e278f6380fffcacc43ba6f43db2813b0"
+                "sha256:a673fa23d7000440cc885c17dbd34fafcb7d7a6e230b29f6766400de36a33c44",
+                "sha256:f3b3a4c36512a4c4f024041ab51866f11761cc169670204b235f6b20523d4e6b"
             ],
-            "version": "==1.8.1"
+            "version": "==1.8.2"
         },
         "pycodestyle": {
             "hashes": [
@@ -825,10 +825,11 @@
         },
         "pytest-asyncio": {
             "hashes": [
-                "sha256:475bd2f3dc0bc11d2463656b3cbaafdbec5a47b47508ea0b329ee693040eebd2"
+                "sha256:2eae1e34f6c68fc0a9dc12d4bea190483843ff4708d24277c41568d6b6044f1d",
+                "sha256:9882c0c6b24429449f5f969a5158b528f39bde47dc32e85b9f0403965017e700"
             ],
             "index": "pypi",
-            "version": "==0.12.0"
+            "version": "==0.14.0"
         },
         "pytest-cov": {
             "hashes": [
@@ -1059,10 +1060,10 @@
         },
         "wcwidth": {
             "hashes": [
-                "sha256:79375666b9954d4a1a10739315816324c3e73110af9d0e102d906fdb0aec009f",
-                "sha256:8c6b5b6ee1360b842645f336d9e5d68c55817c26d3050f46b235ef2bc650e48f"
+                "sha256:beb4802a9cebb9144e99086eff703a642a13d6a0052920003a230f3294bbe784",
+                "sha256:c4d647b99872929fdb7bdcaa4fbe7f01413ed3d98077df798530e5b04f116c83"
             ],
-            "version": "==0.2.4"
+            "version": "==0.2.5"
         },
         "websockets": {
             "hashes": [
