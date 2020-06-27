@@ -732,7 +732,7 @@
 <p>There are four Pydantic models variations provided as mixins:</p>
 <ul>
 <li><code>BaseUser</code>, which provides the basic fields and validation ;</li>
-<li><code>BaseCreateUser</code>, dedicated to user registration, which makes the <code>email</code> compulsory and adds a compulsory <code>password</code> field ;</li>
+<li><code>BaseCreateUser</code>, dedicated to user registration, which consists of compulsory <code>email</code> and <code>password</code> fields ;</li>
 <li><code>BaseUpdateUser</code>, dedicated to user profile update, which adds an optional <code>password</code> field ;</li>
 <li><code>BaseUserDB</code>, which is a representation of the user in database, adding a <code>hashed_password</code> field.</li>
 </ul>
@@ -744,7 +744,7 @@
     <span class="k">pass</span>
 
 
-<span class="k">class</span> <span class="nc">UserCreate</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserCreate</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">UserCreate</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUserCreate</span><span class="p">):</span>
     <span class="k">pass</span>
 
 
