@@ -14,7 +14,7 @@ class User(models.BaseUser):
     pass
 
 
-class UserCreate(User, models.BaseUserCreate):
+class UserCreate(models.BaseUserCreate):
     pass
 
 

@@ -4,7 +4,18 @@ from typing import List, Optional, TypeVar
 from pydantic import UUID4, BaseModel, EmailStr, validator
 
 
-class BaseUser(BaseModel):
+class CreateUpdateDictModel(BaseModel):
+    def create_update_dict(self):
+        return self.dict(
+            exclude_unset=True,
+            exclude={"id", "is_superuser", "is_active", "oauth_accounts"},
+        )
+
+    def create_update_dict_superuser(self):
+        return self.dict(exclude_unset=True, exclude={"id"})
+
+
+class BaseUser(CreateUpdateDictModel):
     """Base User model."""
 
     id: Optional[UUID4] = None
@@ -16,17 +27,8 @@ class BaseUser(BaseModel):
     def default_id(cls, v):
         return v or uuid.uuid4()
 
-    def create_update_dict(self):
-        return self.dict(
-            exclude_unset=True,
-            exclude={"id", "is_superuser", "is_active", "oauth_accounts"},
-        )
 
-    def create_update_dict_superuser(self):
-        return self.dict(exclude_unset=True, exclude={"id"})
-
-
-class BaseUserCreate(BaseUser):
+class BaseUserCreate(CreateUpdateDictModel):
     email: EmailStr
     password: str
 
