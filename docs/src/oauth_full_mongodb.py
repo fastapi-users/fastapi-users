@@ -20,7 +20,7 @@ class UserCreate(models.BaseUserCreate):
     pass
 
 
-class UserUpdate(models.BaseUserUpdate):
+class UserUpdate(User, models.BaseUserUpdate):
     pass
 
 
