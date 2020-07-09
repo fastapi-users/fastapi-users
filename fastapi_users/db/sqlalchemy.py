@@ -3,7 +3,7 @@ from typing import Mapping, Optional, Type
 
 from databases import Database
 from pydantic import UUID4
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Table, select, func
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Table, func, select
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.types import CHAR, TypeDecorator
