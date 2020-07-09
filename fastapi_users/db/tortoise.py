@@ -77,18 +77,18 @@ class TortoiseUserDatabase(BaseUserDatabase[UD]):
             return None
 
     async def get_by_email(self, email: str) -> Optional[UD]:
-        try:
-            query = self.model.get(email=email)
+        query = self.model.filter(email__iexact=email).first()
 
-            if self.oauth_account_model is not None:
-                query = query.prefetch_related("oauth_accounts")
+        if self.oauth_account_model is not None:
+            query = query.prefetch_related("oauth_accounts")
 
-            user = await query
-            user_dict = await user.to_dict()
+        user = await query
 
-            return self.user_db_model(**user_dict)
-        except DoesNotExist:
+        if user is None:
             return None
+
+        user_dict = await user.to_dict()
+        return self.user_db_model(**user_dict)
 
     async def get_by_oauth_account(self, oauth: str, account_id: str) -> Optional[UD]:
         try:
