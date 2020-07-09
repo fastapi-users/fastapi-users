@@ -28,7 +28,9 @@ class MongoDBUserDatabase(BaseUserDatabase[UD]):
         return self.user_db_model(**user) if user else None
 
     async def get_by_email(self, email: str) -> Optional[UD]:
-        user = await self.collection.find_one({"email": email})
+        user = await self.collection.find_one(
+            {"email": {"$regex": email, "$options": "i"}}
+        )
         return self.user_db_model(**user) if user else None
 
     async def get_by_oauth_account(self, oauth: str, account_id: str) -> Optional[UD]:

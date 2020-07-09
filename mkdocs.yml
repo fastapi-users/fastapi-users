@@ -53,3 +53,4 @@ nav:
   - Migration:
     - migration/08_to_1x.md
     - migration/1x_to_2x.md
+    - migration/2x_to_3x.md

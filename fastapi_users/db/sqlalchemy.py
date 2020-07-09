@@ -3,7 +3,7 @@ from typing import Mapping, Optional, Type
 
 from databases import Database
 from pydantic import UUID4
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Table, select
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Table, func, select
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.types import CHAR, TypeDecorator
@@ -120,7 +120,9 @@ class SQLAlchemyUserDatabase(BaseUserDatabase[UD]):
         return await self._make_user(user) if user else None
 
     async def get_by_email(self, email: str) -> Optional[UD]:
-        query = self.users.select().where(self.users.c.email == email)
+        query = self.users.select().where(
+            func.lower(self.users.c.email) == func.lower(email)
+        )
         user = await self.database.fetch_one(query)
         return await self._make_user(user) if user else None
 

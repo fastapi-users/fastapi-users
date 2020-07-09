@@ -153,11 +153,12 @@ def mock_user_db(user, inactive_user, superuser) -> BaseUserDatabase:
             return None
 
         async def get_by_email(self, email: str) -> Optional[UserDB]:
-            if email == user.email:
+            lower_email = email.lower()
+            if lower_email == user.email.lower():
                 return user
-            if email == inactive_user.email:
+            if lower_email == inactive_user.email.lower():
                 return inactive_user
-            if email == superuser.email:
+            if lower_email == superuser.email.lower():
                 return superuser
             return None
 
@@ -188,11 +189,12 @@ def mock_user_db_oauth(
             return None
 
         async def get_by_email(self, email: str) -> Optional[UserDBOAuth]:
-            if email == user_oauth.email:
+            lower_email = email.lower()
+            if lower_email == user_oauth.email.lower():
                 return user_oauth
-            if email == inactive_user_oauth.email:
+            if lower_email == inactive_user_oauth.email.lower():
                 return inactive_user_oauth
-            if email == superuser_oauth.email:
+            if lower_email == superuser_oauth.email.lower():
                 return superuser_oauth
             return None
 
