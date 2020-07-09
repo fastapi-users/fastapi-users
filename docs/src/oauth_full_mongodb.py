@@ -44,7 +44,9 @@ def on_after_forgot_password(user: UserDB, token: str, request: Request):
     print(f"User {user.id} has forgot their password. Reset token: {token}")
 
 
-jwt_authentication = JWTAuthentication(secret=SECRET, lifetime_seconds=3600, tokenUrl='/auth/jwt/login')
+jwt_authentication = JWTAuthentication(
+    secret=SECRET, lifetime_seconds=3600, tokenUrl="/auth/jwt/login"
+)
 
 app = FastAPI()
 fastapi_users = FastAPIUsers(
