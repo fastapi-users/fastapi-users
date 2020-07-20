@@ -126,7 +126,7 @@ Each OAuth router you define will expose the two following routes.
 Return the authorization URL for the OAuth service where you should redirect your user.
 
 !!! abstract "Query parameters"
-    * `authentication_backend`: Name of a defined [authentication method](../configuration/authentication/index.md) to use to authenticate the user on successful callback.
+    * `authentication_backend`: `name` property of a defined [authentication method](../configuration/authentication/index.md) to use to authenticate the user on successful callback. Usually `jwt` or `cookie`.
     * `scopes`: Optional list of scopes to ask for. Expected format: `scopes=a&scopes=b`.
 
 !!! success "`200 OK`"

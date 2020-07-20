@@ -55,6 +55,19 @@ This method expects that you provide a `Bearer` authentication with a valid JWT.
 curl http://localhost:9000/protected-route -H'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiOTIyMWZmYzktNjQwZi00MzcyLTg2ZDMtY2U2NDJjYmE1NjAzIiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTcxNTA0MTkzfQ.M10bjOe45I5Ncu_uXvOmVV8QxnL-nZfcH96U90JaocI'
 ```
 
+## Tip: Refresh
+
+The default implementation **does not** provide a mechanism to refresh the JWT. However, you can implement it quite easily like this:
+
+```py
+from fastapi import Depends, Response
+
+
+@router.post("/auth/jwt/refresh")
+async def refresh_jwt(response: Response, user=Depends(fastapi_users.get_current_active_user)):
+    return await jwt_authentication.get_login_response(user, response)
+```
+
 ## Next steps
 
 We will now configure the main **FastAPI Users** object that will expose the [routers](../routers/index.md).
