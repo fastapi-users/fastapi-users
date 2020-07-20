@@ -419,6 +419,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#tip-refresh" class="md-nav__link">
+    Tip: Refresh
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     Next steps
   </a>
@@ -754,6 +761,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#tip-refresh" class="md-nav__link">
+    Tip: Refresh
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     Next steps
   </a>
@@ -821,6 +835,16 @@
 <h2 id="authentication">Authentication<a class="headerlink" href="#authentication" title="Permanent link">&para;</a></h2>
 <p>This method expects that you provide a <code>Bearer</code> authentication with a valid JWT.</p>
 <div class="highlight"><pre><span></span><code>curl http://localhost:9000/protected-route -H<span class="s1">&#39;Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiOTIyMWZmYzktNjQwZi00MzcyLTg2ZDMtY2U2NDJjYmE1NjAzIiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTcxNTA0MTkzfQ.M10bjOe45I5Ncu_uXvOmVV8QxnL-nZfcH96U90JaocI&#39;</span>
+</code></pre></div>
+
+<h2 id="tip-refresh">Tip: Refresh<a class="headerlink" href="#tip-refresh" title="Permanent link">&para;</a></h2>
+<p>The default implementation <strong>does not</strong> provide a mechanism to refresh the JWT. However, you can implement it quite easily like this:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">Response</span>
+
+
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/auth/jwt/refresh&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">refresh_jwt</span><span class="p">(</span><span class="n">response</span><span class="p">:</span> <span class="n">Response</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_current_active_user</span><span class="p">)):</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">jwt_authentication</span><span class="o">.</span><span class="n">get_login_response</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
 </code></pre></div>
 
 <h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
