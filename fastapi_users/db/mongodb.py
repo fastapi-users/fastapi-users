@@ -2,6 +2,7 @@ from typing import Optional, Type
 
 from motor.motor_asyncio import AsyncIOMotorCollection
 from pydantic import UUID4
+from pymongo.collation import Collation
 
 from fastapi_users.db.base import BaseUserDatabase
 from fastapi_users.models import UD
@@ -16,12 +17,29 @@ class MongoDBUserDatabase(BaseUserDatabase[UD]):
     """
 
     collection: AsyncIOMotorCollection
+    email_collation: Collation
 
-    def __init__(self, user_db_model: Type[UD], collection: AsyncIOMotorCollection):
+    def __init__(
+        self,
+        user_db_model: Type[UD],
+        collection: AsyncIOMotorCollection,
+        email_collation: Optional[Collation] = None,
+    ):
         super().__init__(user_db_model)
         self.collection = collection
         self.collection.create_index("id", unique=True)
         self.collection.create_index("email", unique=True)
+
+        if email_collation:
+            self.email_collation = email_collation  # pragma: no cover
+        else:
+            self.email_collation = Collation("en", strength=2)
+
+        self.collection.create_index(
+            "email",
+            name="case_insensitive_email_index",
+            collation=self.email_collation,
+        )
 
     async def get(self, id: UUID4) -> Optional[UD]:
         user = await self.collection.find_one({"id": id})
@@ -29,7 +47,7 @@ class MongoDBUserDatabase(BaseUserDatabase[UD]):
 
     async def get_by_email(self, email: str) -> Optional[UD]:
         user = await self.collection.find_one(
-            {"email": {"$regex": email, "$options": "i"}}
+            {"email": email}, collation=self.email_collation
         )
         return self.user_db_model(**user) if user else None
 

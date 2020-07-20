@@ -98,6 +98,37 @@ async def test_queries(mongodb_user_db: MongoDBUserDatabase[UserDB]):
 
 @pytest.mark.asyncio
 @pytest.mark.db
+@pytest.mark.parametrize(
+    "email,query,found",
+    [
+        ("lancelot@camelot.bt", "lancelot@camelot.bt", True),
+        ("lancelot@camelot.bt", "LanceloT@camelot.bt", True),
+        ("lancelot@camelot.bt", "lancelot.@camelot.bt", False),
+        ("lancelot@camelot.bt", "lancelot.*", False),
+        ("lancelot@camelot.bt", "lancelot+guinevere@camelot.bt", False),
+        ("lancelot+guinevere@camelot.bt", "lancelot+guinevere@camelot.bt", True),
+        ("lancelot+guinevere@camelot.bt", "lancelot.*", False),
+        ("квіточка@пошта.укр", "квіточка@пошта.укр", True),
+        ("квіточка@пошта.укр", "КВІТОЧКА@ПОШТА.УКР", True),
+    ],
+)
+async def test_email_query(
+    mongodb_user_db: MongoDBUserDatabase[UserDB], email: str, query: str, found: bool
+):
+    user = UserDB(email=email, hashed_password=get_password_hash("guinevere"),)
+    await mongodb_user_db.create(user)
+
+    email_user = await mongodb_user_db.get_by_email(query)
+
+    if found:
+        assert email_user is not None
+        assert email_user.id == user.id
+    else:
+        assert email_user is None
+
+
+@pytest.mark.asyncio
+@pytest.mark.db
 async def test_queries_custom_fields(mongodb_user_db: MongoDBUserDatabase[UserDB]):
     """It should output custom fields in query result."""
     user = UserDB(
