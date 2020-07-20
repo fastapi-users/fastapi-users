@@ -49,6 +49,14 @@ class TestRegister:
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
         assert after_register.called is False
 
+    async def test_missing_email(
+        self, test_app_client: httpx.AsyncClient, after_register
+    ):
+        json = {"password": "guinevere"}
+        response = await test_app_client.post("/register", json=json)
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert after_register.called is False
+
     async def test_missing_password(
         self, test_app_client: httpx.AsyncClient, after_register
     ):

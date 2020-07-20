@@ -26,8 +26,8 @@ class User(models.BaseUser):
     first_name: Optional[str]
 
 
-class UserCreate(User, models.BaseUserCreate):
-    pass
+class UserCreate(models.BaseUserCreate):
+    first_name: Optional[str]
 
 
 class UserUpdate(User, models.BaseUserUpdate):
