@@ -11,7 +11,7 @@ SECRET = "SECRET"
 
 auth_backends = []
 
-cookie_authentication = CookieAuthentication(secret=SECRET, lifetime_seconds=3600))
+cookie_authentication = CookieAuthentication(secret=SECRET, lifetime_seconds=3600)
 
 auth_backends.append(cookie_authentication)
 ```
