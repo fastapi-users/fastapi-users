@@ -11,7 +11,7 @@ SECRET = "SECRET"
 
 auth_backends = []
 
-jwt_authentication = JWTAuthentication(secret=SECRET, lifetime_seconds=3600))
+jwt_authentication = JWTAuthentication(secret=SECRET, lifetime_seconds=3600)
 
 auth_backends.append(jwt_authentication)
 ```
