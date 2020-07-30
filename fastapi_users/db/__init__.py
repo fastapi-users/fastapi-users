@@ -22,3 +22,8 @@ try:
     )
 except ImportError:  # pragma: no cover
     pass
+
+try:
+    from fastapi_users.db.dynamodb import DynamoDBUserDatabase  # noqa: F401
+except ImportError:  # pragma: no cover
+    pass
