@@ -3,18 +3,24 @@
 Here is a full working example with JWT authentication to help get you started.
 
 !!! warning
-    Notice that **SECRET** should be changed to a strong passphrase. 
+    Notice that **SECRET** should be changed to a strong passphrase.
     Insecure passwords may give attackers full access to your database.
 
-``` py tab="SQLAlchemy"
+## SQLAlchemy
+
+```py
 {!./src/full_sqlalchemy.py!}
 ```
 
-```py tab="MongoDB"
+## MongoDB
+
+```py
 {!./src/full_mongodb.py!}
 ```
 
-```py tab="Tortoise ORM"
+## Tortoise ORM
+
+```py
 {!./src/full_tortoise.py!}
 ```
 

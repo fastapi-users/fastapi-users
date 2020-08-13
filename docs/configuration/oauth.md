@@ -166,14 +166,20 @@ app.include_router(google_oauth_router, prefix="/auth/google", tags=["auth"])
     Notice that **SECRET** should be changed to a strong passphrase.
     Insecure passwords may give attackers full access to your database.
 
-``` py tab="SQLAlchemy"
+#### SQLAlchemy
+
+``` py
 {!./src/oauth_full_sqlalchemy.py!}
 ```
 
-```py tab="MongoDB"
+#### MongoDB
+
+```py
 {!./src/oauth_full_mongodb.py!}
 ```
 
-```py tab="Tortoise ORM"
+#### Tortoise ORM
+
+```py
 {!./src/oauth_full_tortoise.py!}
 ```
