@@ -12,7 +12,7 @@ format: isort-src isort-docs
 
 test:
 	docker stop $(MONGODB_CONTAINER_NAME) || true
-	docker run -d --rm --name $(MONGODB_CONTAINER_NAME) -p 27017:27017 mvertes/alpine-mongo
+	docker run -d --rm --name $(MONGODB_CONTAINER_NAME) -p 27017:27017 mongo:4.2
 	$(PIPENV_RUN) pytest --cov=fastapi_users/ --cov-report=term-missing
 	docker stop $(MONGODB_CONTAINER_NAME)
 
