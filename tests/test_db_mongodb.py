@@ -32,6 +32,7 @@ def get_mongodb_user_db():
         yield MongoDBUserDatabase(user_model, collection)
 
         await collection.drop()
+        client.close()
 
     return _get_mongodb_user_db
 

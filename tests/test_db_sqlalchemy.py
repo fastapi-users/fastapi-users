@@ -37,6 +37,7 @@ async def sqlalchemy_user_db() -> AsyncGenerator[SQLAlchemyUserDatabase, None]:
     yield SQLAlchemyUserDatabase(UserDB, database, User.__table__)
 
     Base.metadata.drop_all(engine)
+    await database.disconnect()
 
 
 @pytest.fixture
