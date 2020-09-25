@@ -25,6 +25,7 @@ You can also define the parameters for the generated cookie:
 * `cookie_domain` (`None`): Cookie domain.
 * `cookie_secure` (`True`): Whether to only send the cookie to the server via SSL request.
 * `cookie_httponly` (`True`): Whether to prevent access to the cookie via JavaScript.
+* `cookie_samesite` (`lax`): A string that specifies the samesite strategy for the cookie. Valid values are 'lax', 'strict' and 'none'. Defaults to 'lax'. 
 
 !!! tip
     You can also optionally define the `name`. It's useful in the case you wish to have several backends of the same class. Each backend should have a unique name. **Defaults to `cookie`**.

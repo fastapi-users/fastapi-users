@@ -24,7 +24,10 @@ def generate_state_token(
 
 def decode_state_token(token: str, secret: str) -> Dict[str, str]:
     return jwt.decode(
-        token, secret, audience=STATE_TOKEN_AUDIENCE, algorithms=[JWT_ALGORITHM],
+        token,
+        secret,
+        audience=STATE_TOKEN_AUDIENCE,
+        algorithms=[JWT_ALGORITHM],
     )
 
 
@@ -43,16 +46,20 @@ def get_oauth_router(
 
     if redirect_url is not None:
         oauth2_authorize_callback = OAuth2AuthorizeCallback(
-            oauth_client, redirect_url=redirect_url,
+            oauth_client,
+            redirect_url=redirect_url,
         )
     else:
         oauth2_authorize_callback = OAuth2AuthorizeCallback(
-            oauth_client, route_name=callback_route_name,
+            oauth_client,
+            route_name=callback_route_name,
         )
 
     @router.get("/authorize")
     async def authorize(
-        request: Request, authentication_backend: str, scopes: List[str] = Query(None),
+        request: Request,
+        authentication_backend: str,
+        scopes: List[str] = Query(None),
     ):
         # Check that authentication_backend exists
         backend_exists = False
@@ -73,7 +80,9 @@ def get_oauth_router(
         }
         state = generate_state_token(state_data, state_secret)
         authorization_url = await oauth_client.get_authorization_url(
-            authorize_redirect_url, state, scopes,
+            authorize_redirect_url,
+            state,
+            scopes,
         )
 
         return {"authorization_url": authorization_url}

@@ -55,7 +55,8 @@ async def tortoise_user_db_oauth() -> AsyncGenerator[TortoiseUserDatabase, None]
 @pytest.mark.db
 async def test_queries(tortoise_user_db: TortoiseUserDatabase[UserDB]):
     user = UserDB(
-        email="lancelot@camelot.bt", hashed_password=get_password_hash("guinevere"),
+        email="lancelot@camelot.bt",
+        hashed_password=get_password_hash("guinevere"),
     )
 
     # Create

@@ -47,7 +47,7 @@ class CookieAuthentication(BaseAuthentication[str]):
         cookie_domain: str = None,
         cookie_secure: bool = True,
         cookie_httponly: bool = True,
-        cookie_samesite: str = 'lax',
+        cookie_samesite: str = "lax",
         name: str = "cookie",
     ):
         super().__init__(name, logout=True)
@@ -62,7 +62,9 @@ class CookieAuthentication(BaseAuthentication[str]):
         self.scheme = APIKeyCookie(name=self.cookie_name, auto_error=False)
 
     async def __call__(
-        self, credentials: Optional[str], user_db: BaseUserDatabase,
+        self,
+        credentials: Optional[str],
+        user_db: BaseUserDatabase,
     ) -> Optional[BaseUserDB]:
         if credentials is None:
             return None

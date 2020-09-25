@@ -56,7 +56,8 @@ def event_loop():
 @pytest.fixture
 def user() -> UserDB:
     return UserDB(
-        email="king.arthur@camelot.bt", hashed_password=guinevere_password_hash,
+        email="king.arthur@camelot.bt",
+        hashed_password=guinevere_password_hash,
     )
 
 

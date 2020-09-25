@@ -57,7 +57,8 @@ def get_users_router(
         user: user_db_model = Depends(get_current_active_user),  # type: ignore
     ):
         updated_user = cast(
-            models.BaseUserUpdate, updated_user,
+            models.BaseUserUpdate,
+            updated_user,
         )  # Prevent mypy complain
         updated_user_data = updated_user.create_update_dict()
         updated_user = await _update_user(user, updated_user_data, request)
@@ -81,7 +82,8 @@ def get_users_router(
         id: UUID4, updated_user: user_update_model, request: Request  # type: ignore
     ):
         updated_user = cast(
-            models.BaseUserUpdate, updated_user,
+            models.BaseUserUpdate,
+            updated_user,
         )  # Prevent mypy complain
         user = await _get_or_404(id)
         updated_user_data = updated_user.create_update_dict_superuser()

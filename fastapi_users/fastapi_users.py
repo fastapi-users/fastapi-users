@@ -73,7 +73,8 @@ class FastAPIUsers:
         )
 
     def get_register_router(
-        self, after_register: Optional[Callable[[models.UD, Request], None]] = None,
+        self,
+        after_register: Optional[Callable[[models.UD, Request], None]] = None,
     ) -> APIRouter:
         """
         Return a router with a register route.

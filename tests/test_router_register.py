@@ -32,7 +32,11 @@ async def test_app_client(
     mock_user_db, mock_authentication, after_register, get_test_client
 ) -> httpx.AsyncClient:
     register_router = get_register_router(
-        mock_user_db, User, UserCreate, UserDB, after_register,
+        mock_user_db,
+        User,
+        UserCreate,
+        UserDB,
+        after_register,
     )
 
     app = FastAPI()

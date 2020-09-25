@@ -39,7 +39,9 @@ class JWTAuthentication(BaseAuthentication[str]):
         self.lifetime_seconds = lifetime_seconds
 
     async def __call__(
-        self, credentials: Optional[str], user_db: BaseUserDatabase,
+        self,
+        credentials: Optional[str],
+        user_db: BaseUserDatabase,
     ) -> Optional[BaseUserDB]:
         if credentials is None:
             return None

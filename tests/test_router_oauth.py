@@ -82,7 +82,8 @@ class TestAuthorize:
         with asynctest.patch.object(oauth_client, "get_authorization_url") as mock:
             mock.return_value = "AUTHORIZATION_URL"
             response = await test_app_client.get(
-                "/authorize", params={"scopes": ["scope1", "scope2"]},
+                "/authorize",
+                params={"scopes": ["scope1", "scope2"]},
             )
 
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
@@ -162,7 +163,8 @@ class TestCallback:
             ) as get_id_email_mock:
                 get_id_email_mock.return_value = ("user_oauth1", user_oauth.email)
                 response = await test_app_client.get(
-                    "/callback", params={"code": "CODE", "state": "STATE"},
+                    "/callback",
+                    params={"code": "CODE", "state": "STATE"},
                 )
 
         get_id_email_mock.assert_awaited_once_with("TOKEN")
@@ -194,7 +196,8 @@ class TestCallback:
                 ) as user_update_mock:
                     get_id_email_mock.return_value = ("user_oauth1", user_oauth.email)
                     response = await test_app_client.get(
-                        "/callback", params={"code": "CODE", "state": state_jwt},
+                        "/callback",
+                        params={"code": "CODE", "state": state_jwt},
                     )
 
         get_id_email_mock.assert_awaited_once_with("TOKEN")
@@ -232,7 +235,8 @@ class TestCallback:
                         superuser_oauth.email,
                     )
                     response = await test_app_client.get(
-                        "/callback", params={"code": "CODE", "state": state_jwt},
+                        "/callback",
+                        params={"code": "CODE", "state": state_jwt},
                     )
 
         get_id_email_mock.assert_awaited_once_with("TOKEN")
@@ -269,7 +273,8 @@ class TestCallback:
                         "galahad@camelot.bt",
                     )
                     response = await test_app_client.get(
-                        "/callback", params={"code": "CODE", "state": state_jwt},
+                        "/callback",
+                        params={"code": "CODE", "state": state_jwt},
                     )
 
         get_id_email_mock.assert_awaited_once_with("TOKEN")
@@ -308,7 +313,8 @@ class TestCallback:
                     inactive_user_oauth.email,
                 )
                 response = await test_app_client.get(
-                    "/callback", params={"code": "CODE", "state": state_jwt},
+                    "/callback",
+                    params={"code": "CODE", "state": state_jwt},
                 )
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -337,7 +343,8 @@ class TestCallback:
             ) as get_id_email_mock:
                 get_id_email_mock.return_value = ("user_oauth1", user_oauth.email)
                 response = await test_app_client_redirect_url.get(
-                    "/callback", params={"code": "CODE", "state": state_jwt},
+                    "/callback",
+                    params={"code": "CODE", "state": state_jwt},
                 )
 
         get_access_token_mock.assert_awaited_once_with(
