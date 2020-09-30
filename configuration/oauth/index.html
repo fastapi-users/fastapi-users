@@ -1112,7 +1112,12 @@ Insecure passwords may give attackers full access to your database.</p>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
 <span class="n">fastapi_users</span> <span class="o">=</span> <span class="n">FastAPIUsers</span><span class="p">(</span>
-    <span class="n">user_db</span><span class="p">,</span> <span class="p">[</span><span class="n">jwt_authentication</span><span class="p">],</span> <span class="n">User</span><span class="p">,</span> <span class="n">UserCreate</span><span class="p">,</span> <span class="n">UserUpdate</span><span class="p">,</span> <span class="n">UserDB</span><span class="p">,</span>
+    <span class="n">user_db</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">jwt_authentication</span><span class="p">],</span>
+    <span class="n">User</span><span class="p">,</span>
+    <span class="n">UserCreate</span><span class="p">,</span>
+    <span class="n">UserUpdate</span><span class="p">,</span>
+    <span class="n">UserDB</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
     <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_auth_router</span><span class="p">(</span><span class="n">jwt_authentication</span><span class="p">),</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/auth/jwt&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;auth&quot;</span><span class="p">]</span>
@@ -1198,7 +1203,12 @@ Insecure passwords may give attackers full access to your database.</p>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
 <span class="n">fastapi_users</span> <span class="o">=</span> <span class="n">FastAPIUsers</span><span class="p">(</span>
-    <span class="n">user_db</span><span class="p">,</span> <span class="p">[</span><span class="n">jwt_authentication</span><span class="p">],</span> <span class="n">User</span><span class="p">,</span> <span class="n">UserCreate</span><span class="p">,</span> <span class="n">UserUpdate</span><span class="p">,</span> <span class="n">UserDB</span><span class="p">,</span>
+    <span class="n">user_db</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">jwt_authentication</span><span class="p">],</span>
+    <span class="n">User</span><span class="p">,</span>
+    <span class="n">UserCreate</span><span class="p">,</span>
+    <span class="n">UserUpdate</span><span class="p">,</span>
+    <span class="n">UserDB</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
     <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_auth_router</span><span class="p">(</span><span class="n">jwt_authentication</span><span class="p">),</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/auth/jwt&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;auth&quot;</span><span class="p">]</span>
@@ -1283,7 +1293,12 @@ Insecure passwords may give attackers full access to your database.</p>
 <span class="p">)</span>
 
 <span class="n">fastapi_users</span> <span class="o">=</span> <span class="n">FastAPIUsers</span><span class="p">(</span>
-    <span class="n">user_db</span><span class="p">,</span> <span class="p">[</span><span class="n">jwt_authentication</span><span class="p">],</span> <span class="n">User</span><span class="p">,</span> <span class="n">UserCreate</span><span class="p">,</span> <span class="n">UserUpdate</span><span class="p">,</span> <span class="n">UserDB</span><span class="p">,</span>
+    <span class="n">user_db</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">jwt_authentication</span><span class="p">],</span>
+    <span class="n">User</span><span class="p">,</span>
+    <span class="n">UserCreate</span><span class="p">,</span>
+    <span class="n">UserUpdate</span><span class="p">,</span>
+    <span class="n">UserDB</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
     <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_auth_router</span><span class="p">(</span><span class="n">jwt_authentication</span><span class="p">),</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/auth/jwt&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;auth&quot;</span><span class="p">]</span>
