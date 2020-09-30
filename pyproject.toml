@@ -10,7 +10,7 @@ author-email = "fvoron@gmail.com"
 home-page = "https://github.com/frankie567/fastapi-users"
 classifiers = [
     "License :: OSI Approved :: MIT License",
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 5 - Production/Stable",
     "Framework :: AsyncIO",
     "Intended Audience :: Developers",
     "Programming Language :: Python :: 3.7",
