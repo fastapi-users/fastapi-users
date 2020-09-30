@@ -38,7 +38,12 @@ async def test_app_client(
     )
 
     user_router = get_users_router(
-        mock_user_db, User, UserUpdate, UserDB, authenticator, after_update,
+        mock_user_db,
+        User,
+        UserUpdate,
+        UserDB,
+        authenticator,
+        after_update,
     )
 
     app = FastAPI()

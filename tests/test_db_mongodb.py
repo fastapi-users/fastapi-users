@@ -53,7 +53,8 @@ async def mongodb_user_db_oauth(get_mongodb_user_db):
 @pytest.mark.db
 async def test_queries(mongodb_user_db: MongoDBUserDatabase[UserDB]):
     user = UserDB(
-        email="lancelot@camelot.bt", hashed_password=get_password_hash("guinevere"),
+        email="lancelot@camelot.bt",
+        hashed_password=get_password_hash("guinevere"),
     )
 
     # Create
@@ -116,7 +117,10 @@ async def test_queries(mongodb_user_db: MongoDBUserDatabase[UserDB]):
 async def test_email_query(
     mongodb_user_db: MongoDBUserDatabase[UserDB], email: str, query: str, found: bool
 ):
-    user = UserDB(email=email, hashed_password=get_password_hash("guinevere"),)
+    user = UserDB(
+        email=email,
+        hashed_password=get_password_hash("guinevere"),
+    )
     await mongodb_user_db.create(user)
 
     email_user = await mongodb_user_db.get_by_email(query)

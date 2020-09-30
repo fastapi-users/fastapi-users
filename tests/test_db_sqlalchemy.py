@@ -71,7 +71,8 @@ async def sqlalchemy_user_db_oauth() -> AsyncGenerator[SQLAlchemyUserDatabase, N
 @pytest.mark.db
 async def test_queries(sqlalchemy_user_db: SQLAlchemyUserDatabase[UserDB]):
     user = UserDB(
-        email="lancelot@camelot.bt", hashed_password=get_password_hash("guinevere"),
+        email="lancelot@camelot.bt",
+        hashed_password=get_password_hash("guinevere"),
     )
 
     # Create
@@ -121,7 +122,8 @@ async def test_queries(sqlalchemy_user_db: SQLAlchemyUserDatabase[UserDB]):
 
     # Exception when creating/updating a OAuth user
     user_oauth = UserDBOAuth(
-        email="lancelot@camelot.bt", hashed_password=get_password_hash("guinevere"),
+        email="lancelot@camelot.bt",
+        hashed_password=get_password_hash("guinevere"),
     )
     with pytest.raises(NotSetOAuthAccountTableError):
         await sqlalchemy_user_db.create(user_oauth)

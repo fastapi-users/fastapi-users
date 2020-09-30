@@ -12,7 +12,12 @@ async def test_app_client(
     mock_user_db, mock_authentication, oauth_client, get_test_client
 ) -> httpx.AsyncClient:
     fastapi_users = FastAPIUsers(
-        mock_user_db, [mock_authentication], User, UserCreate, UserUpdate, UserDB,
+        mock_user_db,
+        [mock_authentication],
+        User,
+        UserCreate,
+        UserUpdate,
+        UserDB,
     )
 
     app = FastAPI()
