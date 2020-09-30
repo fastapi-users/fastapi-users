@@ -35,7 +35,7 @@ sqlalchemy = [
     "databases >=0.3.0,<0.4",
 ]
 mongodb = [
-    "motor ==2.2.0",
+    "motor >=2.2.0,<3.0.0",
 ]
 tortoise-orm = [
     "tortoise-orm >=0.16.0,<0.17.0"
