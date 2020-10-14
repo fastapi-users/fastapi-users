@@ -53,8 +53,8 @@ class SQLAlchemyBaseUserTable:
     __tablename__ = "user"
 
     id = Column(GUID, primary_key=True)
-    email = Column(String, unique=True, index=True, nullable=False)
-    hashed_password = Column(String, nullable=False)
+    email = Column(String(length=320), unique=True, index=True, nullable=False)
+    hashed_password = Column(String(length=72), nullable=False)
     is_active = Column(Boolean, default=True, nullable=False)
     is_superuser = Column(Boolean, default=False, nullable=False)
 
@@ -65,12 +65,12 @@ class SQLAlchemyBaseOAuthAccountTable:
     __tablename__ = "oauth_account"
 
     id = Column(GUID, primary_key=True)
-    oauth_name = Column(String, index=True, nullable=False)
-    access_token = Column(String, nullable=False)
+    oauth_name = Column(String(length=100), index=True, nullable=False)
+    access_token = Column(String(length=1024), nullable=False)
     expires_at = Column(Integer, nullable=False)
-    refresh_token = Column(String, nullable=True)
-    account_id = Column(String, index=True, nullable=False)
-    account_email = Column(String, nullable=False)
+    refresh_token = Column(String(length=1024), nullable=True)
+    account_id = Column(String(length=320), index=True, nullable=False)
+    account_email = Column(String(length=320), nullable=False)
 
     @declared_attr
     def user_id(cls):
