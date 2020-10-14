@@ -1,4 +1,4 @@
-from typing import cast, Dict, Any
+from typing import AsyncGenerator, cast, Dict, Any
 from unittest.mock import MagicMock
 
 import asynctest
@@ -31,7 +31,7 @@ def after_update(request):
 @pytest.mark.asyncio
 async def test_app_client(
     mock_user_db, mock_authentication, after_update, get_test_client
-) -> httpx.AsyncClient:
+) -> AsyncGenerator[httpx.AsyncClient, None]:
     mock_authentication_bis = MockAuthentication(name="mock-bis")
     authenticator = Authenticator(
         [mock_authentication, mock_authentication_bis], mock_user_db
@@ -49,7 +49,8 @@ async def test_app_client(
     app = FastAPI()
     app.include_router(user_router)
 
-    return await get_test_client(app)
+    async for client in get_test_client(app):
+        yield client
 
 
 @pytest.mark.router

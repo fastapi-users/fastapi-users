@@ -1,3 +1,5 @@
+from typing import AsyncGenerator
+
 import pytest
 import httpx
 from fastapi import Depends, FastAPI, status
@@ -10,7 +12,7 @@ from tests.conftest import User, UserCreate, UserUpdate, UserDB
 @pytest.mark.asyncio
 async def test_app_client(
     mock_user_db, mock_authentication, oauth_client, get_test_client
-) -> httpx.AsyncClient:
+) -> AsyncGenerator[httpx.AsyncClient, None]:
     fastapi_users = FastAPIUsers(
         mock_user_db,
         [mock_authentication],
@@ -55,7 +57,8 @@ async def test_app_client(
     ):
         return user
 
-    return await get_test_client(app)
+    async for client in get_test_client(app):
+        yield client
 
 
 @pytest.mark.fastapi_users

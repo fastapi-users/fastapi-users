@@ -1,5 +1,5 @@
 import asyncio
-from typing import List, Optional
+from typing import AsyncGenerator, List, Optional
 
 import httpx
 import pytest
@@ -257,12 +257,12 @@ def mock_authentication():
 
 @pytest.fixture
 def get_test_client():
-    async def _get_test_client(app: ASGIApp) -> httpx.AsyncClient:
+    async def _get_test_client(app: ASGIApp) -> AsyncGenerator[httpx.AsyncClient, None]:
         async with LifespanManager(app):
             async with httpx.AsyncClient(
                 app=app, base_url="http://app.io"
             ) as test_client:
-                return test_client
+                yield test_client
 
     return _get_test_client
 
@@ -272,7 +272,7 @@ def get_test_client():
 def get_test_auth_client(mock_user_db, get_test_client):
     async def _get_test_auth_client(
         backends: List[BaseAuthentication],
-    ) -> httpx.AsyncClient:
+    ) -> AsyncGenerator[httpx.AsyncClient, None]:
         app = FastAPI()
         authenticator = Authenticator(backends, mock_user_db)
 
@@ -292,7 +292,8 @@ def get_test_auth_client(mock_user_db, get_test_client):
         ):
             return user
 
-        return await get_test_client(app)
+        async for client in get_test_client(app):
+            yield client
 
     return _get_test_auth_client
 

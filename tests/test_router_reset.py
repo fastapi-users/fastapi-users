@@ -1,4 +1,4 @@
-from typing import cast, Dict, Any
+from typing import AsyncGenerator, cast, Dict, Any
 from unittest.mock import MagicMock
 
 import asynctest
@@ -43,7 +43,7 @@ def after_forgot_password(request):
 @pytest.mark.asyncio
 async def test_app_client(
     mock_user_db, mock_authentication, after_forgot_password, get_test_client
-) -> httpx.AsyncClient:
+) -> AsyncGenerator[httpx.AsyncClient, None]:
     reset_router = get_reset_password_router(
         mock_user_db, SECRET, LIFETIME, after_forgot_password
     )
@@ -51,7 +51,8 @@ async def test_app_client(
     app = FastAPI()
     app.include_router(reset_router)
 
-    return await get_test_client(app)
+    async for client in get_test_client(app):
+        yield client
 
 
 @pytest.mark.router

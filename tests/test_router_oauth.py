@@ -1,5 +1,5 @@
 from unittest.mock import MagicMock
-from typing import Dict, Any, cast
+from typing import AsyncGenerator, Dict, Any, cast
 
 import asynctest
 import httpx
@@ -36,7 +36,9 @@ def get_test_app_client(
     after_register,
     get_test_client,
 ):
-    async def _get_test_app_client(redirect_url: str = None) -> httpx.AsyncClient:
+    async def _get_test_app_client(
+        redirect_url: str = None,
+    ) -> AsyncGenerator[httpx.AsyncClient, None]:
         mock_authentication_bis = MockAuthentication(name="mock-bis")
         authenticator = Authenticator(
             [mock_authentication, mock_authentication_bis], mock_user_db_oauth
@@ -55,7 +57,8 @@ def get_test_app_client(
         app = FastAPI()
         app.include_router(oauth_router)
 
-        return await get_test_client(app)
+        async for client in get_test_client(app):
+            yield client
 
     return _get_test_app_client
 
@@ -63,13 +66,15 @@ def get_test_app_client(
 @pytest.fixture
 @pytest.mark.asyncio
 async def test_app_client(get_test_app_client):
-    return await get_test_app_client()
+    async for client in get_test_app_client():
+        yield client
 
 
 @pytest.fixture
 @pytest.mark.asyncio
 async def test_app_client_redirect_url(get_test_app_client):
-    return await get_test_app_client("http://www.tintagel.bt/callback")
+    async for client in get_test_app_client("http://www.tintagel.bt/callback"):
+        yield client
 
 
 @pytest.mark.router

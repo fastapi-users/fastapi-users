@@ -1,4 +1,4 @@
-from typing import cast, Dict, Any
+from typing import AsyncGenerator, cast, Dict, Any
 
 import httpx
 import pytest
@@ -13,7 +13,7 @@ from tests.conftest import MockAuthentication, UserDB
 @pytest.mark.asyncio
 async def test_app_client(
     mock_user_db, mock_authentication, get_test_client
-) -> httpx.AsyncClient:
+) -> AsyncGenerator[httpx.AsyncClient, None]:
     mock_authentication_bis = MockAuthentication(name="mock-bis")
     authenticator = Authenticator(
         [mock_authentication, mock_authentication_bis], mock_user_db
@@ -28,7 +28,8 @@ async def test_app_client(
     app.include_router(mock_auth_router, prefix="/mock")
     app.include_router(mock_bis_auth_router, prefix="/mock-bis")
 
-    return await get_test_client(app)
+    async for client in get_test_client(app):
+        yield client
 
 
 @pytest.mark.router

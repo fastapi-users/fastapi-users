@@ -43,21 +43,24 @@ class BackendUser(BaseAuthentication[str]):
 @pytest.mark.authentication
 @pytest.mark.asyncio
 async def test_authenticator(get_test_auth_client, user):
-    client = await get_test_auth_client([BackendNone(), BackendUser(user)])
-    response = await client.get("/test-current-user")
-    assert response.status_code == status.HTTP_200_OK
+    async for client in get_test_auth_client([BackendNone(), BackendUser(user)]):
+        response = await client.get("/test-current-user")
+        assert response.status_code == status.HTTP_200_OK
 
 
 @pytest.mark.authentication
 @pytest.mark.asyncio
 async def test_authenticator_none(get_test_auth_client):
-    client = await get_test_auth_client([BackendNone(), BackendNone(name="none-bis")])
-    response = await client.get("/test-current-user")
-    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+    async for client in get_test_auth_client(
+        [BackendNone(), BackendNone(name="none-bis")]
+    ):
+        response = await client.get("/test-current-user")
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
 @pytest.mark.authentication
 @pytest.mark.asyncio
 async def test_authenticators_with_same_name(get_test_auth_client):
     with pytest.raises(DuplicateBackendNamesError):
-        await get_test_auth_client([BackendNone(), BackendNone()])
+        async for client in get_test_auth_client([BackendNone(), BackendNone()]):
+            pass
