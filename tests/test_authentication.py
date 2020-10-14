@@ -4,10 +4,7 @@ import pytest
 from fastapi import Request, status
 from fastapi.security.base import SecurityBase
 
-from fastapi_users.authentication import (
-    BaseAuthentication,
-    DuplicateBackendNamesError,
-)
+from fastapi_users.authentication import BaseAuthentication, DuplicateBackendNamesError
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.models import BaseUserDB
 

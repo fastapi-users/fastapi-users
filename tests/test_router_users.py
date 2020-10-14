@@ -1,14 +1,14 @@
-from typing import AsyncGenerator, cast, Dict, Any
+from typing import Any, AsyncGenerator, Dict, cast
 from unittest.mock import MagicMock
 
 import asynctest
 import httpx
 import pytest
-from fastapi import FastAPI, status, Request
+from fastapi import FastAPI, Request, status
 
 from fastapi_users.authentication import Authenticator
 from fastapi_users.router import get_users_router
-from tests.conftest import MockAuthentication, User, UserUpdate, UserDB
+from tests.conftest import MockAuthentication, User, UserDB, UserUpdate
 
 SECRET = "SECRET"
 LIFETIME = 3600

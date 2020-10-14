@@ -2,7 +2,7 @@ PIPENV_RUN := pipenv run
 MONGODB_CONTAINER_NAME := fastapi-users-test-mongo
 
 isort-src:
-	$(PIPENV_RUN) isort ./fastapi_users
+	$(PIPENV_RUN) isort ./fastapi_users ./tests
 
 isort-docs:
 	$(PIPENV_RUN) isort ./docs/src -o fastapi_users

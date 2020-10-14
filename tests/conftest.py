@@ -4,7 +4,7 @@ from typing import AsyncGenerator, List, Optional
 import httpx
 import pytest
 from asgi_lifespan import LifespanManager
-from fastapi import Depends, Response, FastAPI
+from fastapi import Depends, FastAPI, Response
 from fastapi.security import OAuth2PasswordBearer
 from httpx_oauth.oauth2 import OAuth2
 from pydantic import UUID4

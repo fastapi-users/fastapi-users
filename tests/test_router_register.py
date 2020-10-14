@@ -1,10 +1,10 @@
-from typing import AsyncGenerator, cast, Dict, Any
+from typing import Any, AsyncGenerator, Dict, cast
 from unittest.mock import MagicMock
 
 import asynctest
 import httpx
 import pytest
-from fastapi import FastAPI, status, Request
+from fastapi import FastAPI, Request, status
 
 from fastapi_users.router import ErrorCode, get_register_router
 from tests.conftest import User, UserCreate, UserDB

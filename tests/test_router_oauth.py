@@ -1,16 +1,15 @@
+from typing import Any, AsyncGenerator, Dict, cast
 from unittest.mock import MagicMock
-from typing import AsyncGenerator, Dict, Any, cast
 
 import asynctest
 import httpx
 import pytest
-from fastapi import FastAPI, status, Request
+from fastapi import FastAPI, Request, status
 
 from fastapi_users.authentication import Authenticator
 from fastapi_users.router.common import ErrorCode
 from fastapi_users.router.oauth import generate_state_token, get_oauth_router
 from tests.conftest import MockAuthentication, UserDB
-
 
 SECRET = "SECRET"
 

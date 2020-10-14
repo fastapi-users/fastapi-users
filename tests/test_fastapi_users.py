@@ -1,11 +1,11 @@
 from typing import AsyncGenerator
 
-import pytest
 import httpx
+import pytest
 from fastapi import Depends, FastAPI, status
 
 from fastapi_users import FastAPIUsers
-from tests.conftest import User, UserCreate, UserUpdate, UserDB
+from tests.conftest import User, UserCreate, UserDB, UserUpdate
 
 
 @pytest.fixture

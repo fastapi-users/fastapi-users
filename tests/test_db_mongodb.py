@@ -1,8 +1,8 @@
 from typing import AsyncGenerator
 
 import motor.motor_asyncio
-import pytest
 import pymongo.errors
+import pytest
 
 from fastapi_users.db.mongodb import MongoDBUserDatabase
 from fastapi_users.password import get_password_hash

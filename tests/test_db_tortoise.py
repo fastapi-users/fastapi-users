@@ -1,8 +1,8 @@
 from typing import AsyncGenerator
 
 import pytest
-from tortoise.exceptions import IntegrityError
 from tortoise import Tortoise, fields
+from tortoise.exceptions import IntegrityError
 
 from fastapi_users.db.tortoise import (
     TortoiseBaseOAuthAccountModel,
