@@ -44,11 +44,14 @@ Notice that we pass a reference to your [`UserDB` model](../model.md).
 
 For using Tortoise ORM we must register our models and database.
 
-Tortoise ORM supports integration with Starlette/FastAPI out-of-the-box. It will automatically bind startup and shutdown events.
+Tortoise ORM supports integration with FastAPI out-of-the-box. It will automatically bind startup and shutdown events.
 
-```py hl_lines="33"
+```py hl_lines="33 34 35 36 37 38"
 {!./src/db_tortoise.py!}
 ```
+
+!!! warning
+    In production, it's strongly recommended to setup a migration system to update your SQL schemas. See [https://tortoise-orm.readthedocs.io/en/latest/migration.html](https://tortoise-orm.readthedocs.io/en/latest/migration.html).
 
 ## Next steps
 

@@ -32,14 +32,14 @@ As you can see, **FastAPI Users** provides a mixin that will include base fields
 
 ## Create the tables
 
-We'll now create an SQLAlchemy enigne and ask it to create all the defined tables.
+We'll now create an SQLAlchemy engine and ask it to create all the defined tables.
 
 ```py hl_lines="36 37 38 39 40"
 {!./src/db_sqlalchemy.py!}
 ```
 
-!!!tip
-    In production, you would probably want to create the tables with Alembic, integrated with migrations, etc.
+!!! warning
+    In production, it's strongly recommended to setup a migration system to update your SQL schemas. See [Alembic](https://alembic.sqlalchemy.org/en/latest/).
 
 ## Create the database adapter
 
