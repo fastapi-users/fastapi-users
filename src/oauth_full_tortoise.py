@@ -8,7 +8,7 @@ from fastapi_users.db import (
 )
 from httpx_oauth.clients.google import GoogleOAuth2
 from tortoise import fields
-from tortoise.contrib.starlette import register_tortoise
+from tortoise.contrib.fastapi import register_tortoise
 
 DATABASE_URL = "sqlite://./test.db"
 SECRET = "SECRET"
@@ -43,7 +43,12 @@ class OAuthAccountModel(TortoiseBaseOAuthAccountModel):
 
 user_db = TortoiseUserDatabase(UserDB, UserModel, OAuthAccountModel)
 app = FastAPI()
-register_tortoise(app, db_url=DATABASE_URL, modules={"models": ["test"]})
+register_tortoise(
+    app,
+    db_url=DATABASE_URL,
+    modules={"models": ["path_to_your_package"]},
+    generate_schemas=True,
+)
 
 
 def on_after_register(user: UserDB, request: Request):

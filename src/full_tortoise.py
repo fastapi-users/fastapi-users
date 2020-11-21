@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi_users import FastAPIUsers, models
 from fastapi_users.authentication import JWTAuthentication
 from fastapi_users.db import TortoiseBaseUserModel, TortoiseUserDatabase
-from tortoise.contrib.starlette import register_tortoise
+from tortoise.contrib.fastapi import register_tortoise
 
 DATABASE_URL = "sqlite://./test.db"
 SECRET = "SECRET"
@@ -30,7 +30,12 @@ class UserModel(TortoiseBaseUserModel):
 
 user_db = TortoiseUserDatabase(UserDB, UserModel)
 app = FastAPI()
-register_tortoise(app, db_url=DATABASE_URL, modules={"models": ["test"]})
+register_tortoise(
+    app,
+    db_url=DATABASE_URL,
+    modules={"models": ["path_to_your_package"]},
+    generate_schemas=True,
+)
 
 
 def on_after_register(user: UserDB, request: Request):

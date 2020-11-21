@@ -827,7 +827,7 @@
 </code></pre></div>
 <p>As you can see, <strong>FastAPI Users</strong> provides a mixin that will include base fields for our User table. You can of course add you own fields there to fit to your needs!</p>
 <h2 id="create-the-tables">Create the tables<a class="headerlink" href="#create-the-tables" title="Permanent link">&para;</a></h2>
-<p>We'll now create an SQLAlchemy enigne and ask it to create all the defined tables.</p>
+<p>We'll now create an SQLAlchemy engine and ask it to create all the defined tables.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">databases</span>
 <span class="kn">import</span> <span class="nn">sqlalchemy</span>
 <span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
@@ -884,9 +884,9 @@
 <span class="k">async</span> <span class="k">def</span> <span class="nf">shutdown</span><span class="p">():</span>
     <span class="k">await</span> <span class="n">database</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
 </code></pre></div>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>In production, you would probably want to create the tables with Alembic, integrated with migrations, etc.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In production, it's strongly recommended to setup a migration system to update your SQL schemas. See <a href="https://alembic.sqlalchemy.org/en/latest/">Alembic</a>.</p>
 </div>
 <h2 id="create-the-database-adapter">Create the database adapter<a class="headerlink" href="#create-the-database-adapter" title="Permanent link">&para;</a></h2>
 <p>The database adapter of <strong>FastAPI Users</strong> makes the link between your database configuration and the users logic. Create it like this.</p>
