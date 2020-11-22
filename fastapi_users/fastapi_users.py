@@ -11,6 +11,7 @@ from fastapi_users.router import (
     get_reset_password_router,
     get_users_router,
 )
+from fastapi_users.user import CreateUserProtocol, get_create_user
 
 try:
     from httpx_oauth.oauth2 import BaseOAuth2
@@ -31,6 +32,7 @@ class FastAPIUsers:
     :param user_update_model: Pydantic model for updating a user.
     :param user_db_model: Pydantic model of a DB representation of a user.
 
+    :attribute create_user: Helper function to create a user programmatically.
     :attribute get_current_user: Dependency callable to inject authenticated user.
     :attribute get_current_active_user: Dependency callable to inject active user.
     :attribute get_current_superuser: Dependency callable to inject superuser.
@@ -38,6 +40,7 @@ class FastAPIUsers:
 
     db: BaseUserDatabase
     authenticator: Authenticator
+    create_user: CreateUserProtocol
     _user_model: Type[models.BaseUser]
     _user_create_model: Type[models.BaseUserCreate]
     _user_update_model: Type[models.BaseUserUpdate]
@@ -61,6 +64,8 @@ class FastAPIUsers:
         self._user_update_model = user_update_model
         self._user_db_model = user_db_model
 
+        self.create_user = get_create_user(db, user_db_model)
+
         self.get_current_user = self.authenticator.get_current_user
         self.get_current_active_user = self.authenticator.get_current_active_user
         self.get_current_superuser = self.authenticator.get_current_superuser
@@ -83,10 +88,9 @@ class FastAPIUsers:
         after a successful registration.
         """
         return get_register_router(
-            self.db,
+            self.create_user,
             self._user_model,
             self._user_create_model,
-            self._user_db_model,
             after_register,
         )
 

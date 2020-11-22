@@ -31,6 +31,8 @@ class BaseUser(CreateUpdateDictModel):
 class BaseUserCreate(CreateUpdateDictModel):
     email: EmailStr
     password: str
+    is_active: Optional[bool] = True
+    is_superuser: Optional[bool] = False
 
 
 class BaseUserUpdate(BaseUser):

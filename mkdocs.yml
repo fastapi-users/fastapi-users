@@ -50,6 +50,7 @@ nav:
     - usage/flow.md
     - usage/routes.md
     - usage/dependency-callables.md
+    - usage/helpers.md
   - Migration:
     - migration/08_to_1x.md
     - migration/1x_to_2x.md
