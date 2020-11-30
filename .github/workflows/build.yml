@@ -32,6 +32,11 @@ jobs:
       run: |
         pipenv run pytest --cov=fastapi_users/
         pipenv run codecov
+    - name: Build and install it on system host
+      run: |
+        pipenv run flit build
+        pipenv run flit install --python $(which python)
+        python test_build.py
 
   release:
     runs-on: ubuntu-latest
