@@ -40,6 +40,7 @@ python-multipart = "==0.0.5"
 motor = ">=2.2.0,<3.0.0"
 tortoise-orm = ">=0.15.18,<0.17.0"
 makefun = ">=1.9.2,<1.10"
+typing-extensions = ">=3.7.4.3"
 
 [requires]
 python_version = "3.7"
