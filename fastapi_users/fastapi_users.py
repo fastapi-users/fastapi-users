@@ -80,6 +80,9 @@ class FastAPIUsers:
     def get_register_router(
         self,
         after_register: Optional[Callable[[models.UD, Request], None]] = None,
+        activation_callback: Optional[Callable[[models.UD, str, Request], None]] = None,
+        activation_token_secret: str = None,
+        activation_token_lifetime_seconds: int = 3600,
     ) -> APIRouter:
         """
         Return a router with a register route.
@@ -92,6 +95,9 @@ class FastAPIUsers:
             self._user_model,
             self._user_create_model,
             after_register,
+            activation_callback,
+            activation_token_secret,
+            activation_token_lifetime_seconds,
         )
 
     def get_reset_password_router(

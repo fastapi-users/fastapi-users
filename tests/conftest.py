@@ -71,6 +71,15 @@ def user_oauth(oauth_account1, oauth_account2) -> UserDBOAuth:
 
 
 @pytest.fixture
+def active_user() -> UserDB:
+    return UserDB(
+        email="percival@camelot.bt",
+        hashed_password=angharad_password_hash,
+        is_active=True,
+    )
+
+
+@pytest.fixture
 def inactive_user() -> UserDB:
     return UserDB(
         email="percival@camelot.bt",
@@ -142,11 +151,13 @@ def oauth_account3() -> BaseOAuthAccount:
 
 
 @pytest.fixture
-def mock_user_db(user, inactive_user, superuser) -> BaseUserDatabase:
+def mock_user_db(user, active_user, inactive_user, superuser) -> BaseUserDatabase:
     class MockUserDatabase(BaseUserDatabase[UserDB]):
         async def get(self, id: UUID4) -> Optional[UserDB]:
             if id == user.id:
                 return user
+            if id == active_user.id:
+                return active_user
             if id == inactive_user.id:
                 return inactive_user
             if id == superuser.id:

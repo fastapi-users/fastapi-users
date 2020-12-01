@@ -44,7 +44,7 @@ Logout the authenticated user against the method named `name`. Check the corresp
 
 ### `POST /register`
 
-Register a new user. Will call the `after_register` [handler](../configuration/routers/register.md#after-register) on successful registration.
+Register a new user. Will call the `after_register` [handler](../configuration/routers/register.md#after-register) on successful activation.
 
 !!! abstract "Payload"
     ```json
@@ -54,12 +54,26 @@ Register a new user. Will call the `after_register` [handler](../configuration/r
     }
     ```
 
+If `activation_callback` not supplied:
+
 !!! success "`201 Created`"
     ```json
     {
         "id": "57cbb51a-ab71-4009-8802-3f54b4f2e23",
         "email": "king.arthur@camelot.bt",
         "is_active": true,
+        "is_superuser": false
+    }
+    ```
+
+If `activation_callback` supplied:
+
+!!! success "`201 Created`"
+    ```json
+    {
+        "id": "57cbb51a-ab71-4009-8802-3f54b4f2e23",
+        "email": "king.arthur@camelot.bt",
+        "is_active": false,
         "is_superuser": false
     }
     ```
@@ -74,6 +88,49 @@ Register a new user. Will call the `after_register` [handler](../configuration/r
         "detail": "REGISTER_USER_ALREADY_EXISTS"
     }
     ```
+## Activate router
+
+### `POST /activate`
+
+Activate a new user. Will call the `after_register` [handler](../configuration/routers/register.md#activation-callback) on successful activation.
+
+!!! abstract "Payload"
+    ```json
+    {
+        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNmJhYTI4OWYtOGE0OC00ZGMwLThiM2UtMmViOTgwOGIxODQ2IiwiYXVkIjoiZmFzdGFwaS11c2VyczphY3RpdmF0ZSIsImV4cCI6MTYwNjMyOTA5OH0.-HWG4j5_ygtRahiiBcwLfMHOFq_ydcJegHyK65ppchs"
+    }
+    ```
+
+!!! success "`202 Accepted`" User has been activated
+
+!!! fail "`400 Bad Request`"
+    The link has already been used.
+
+    ```json
+    {
+        "detail": "ACTIVATE_USER_LINK_USED"
+    }
+    ```
+
+!!! fail "`400 Bad Request`"
+    The token expired.
+
+    ```json
+    {
+        "detail": "ACTIVATE_USER_TOKEN_EXPIRED"
+    }
+    ```
+
+!!! fail "`400 Bad Request`"
+    Bad token.
+
+    ```json
+    {
+        "detail": "ACTIVATE_USER_BAD_TOKEN"
+    }
+    ```
+
+!!! fail "`422 Validation Error`"
 
 ## Reset password router
 

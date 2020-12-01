@@ -4,7 +4,7 @@
 
 * `id` (`UUID4`) – Unique identifier of the user. Default to a **UUID4**.
 * `email` (`str`) – Email of the user. Validated by [`email-validator`](https://github.com/JoshData/python-email-validator).
-* `is_active` (`bool`) – Whether or not the user is active. If not, login and forgot password requests will be denied. Default to `True`.
+* `is_active` (`bool`) – Whether or not the user is activated. If not, login and forgot password requests will be denied. Default to `True` if `activation_callback` is not supplied. Default to `False` if `activation_callback` is supplied.
 * `is_superuser` (`bool`) – Whether or not the user is a superuser. Useful to implement administration logic. Default to `False`.
 
 ## Define your models
@@ -38,11 +38,11 @@ class UserDB(User, models.BaseUserDB):
     pass
 ```
 
-You can of course add you own properties there to fit to your needs!
+You can of course add your own properties there to fit to your needs!
 
 ## Next steps
 
-Depending on your database backend, database configuration will differ a bit.
+Depending on your database backend, the database configuration will differ a bit.
 
 [I'm using SQLAlchemy](databases/sqlalchemy.md)
 
