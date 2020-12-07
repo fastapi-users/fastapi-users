@@ -1543,12 +1543,12 @@ http://localhost:8000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476
 <h4 id="response_7">Response<a class="headerlink" href="#response_7" title="Permanent link">&para;</a></h4>
 <p>You'll get an empty response.</p>
 <h2 id="6-logout">6. Logout<a class="headerlink" href="#6-logout" title="Permanent link">&para;</a></h2>
-<p>We can also end the session. Note that it doesn't apply to every <a href="../../configuration/authentication/">authentication backends</a>. For JWT, it doesn't make sense to end the session, the token is valid until it expires. However, for Cookie backend, the server will clear the cookie.</p>
+<p>We can also end the session. Note that it doesn't apply to every <a href="../../configuration/authentication/">authentication backends</a>. For JWT, it doesn't make sense to end the session, the token is valid until it expires. However, for <strong>Cookie</strong> backend, the server will clear the cookie.</p>
 <h3 id="request_8">Request<a class="headerlink" href="#request_8" title="Permanent link">&para;</a></h3>
 <div class="tabbed-set" data-tabs="9:2"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><label for="__tabbed_9_1">cURL</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code>curl <span class="se">\</span>
 -H <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
--H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span> <span class="se">\</span>
+-H <span class="s2">&quot;Cookie: fastapiusersauth=</span><span class="nv">$TOKEN</span><span class="s2">&quot;</span> <span class="se">\</span>
 -X POST <span class="se">\</span>
 http://localhost:8000/auth/cookie/logout
 </code></pre></div>
@@ -1558,7 +1558,7 @@ http://localhost:8000/auth/cookie/logout
     <span class="kc">null</span><span class="p">,</span>
     <span class="p">{</span>
         <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
-            <span class="s1">&#39;Authorization&#39;</span><span class="o">:</span> <span class="sb">`Bearer </span><span class="si">${</span><span class="nx">TOKEN</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span>
+            <span class="s1">&#39;Cookie&#39;</span><span class="o">:</span> <span class="sb">`fastapiusersauth=</span><span class="si">${</span><span class="nx">TOKEN</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span>
         <span class="p">},</span>
     <span class="p">}</span>
 <span class="p">)</span>
