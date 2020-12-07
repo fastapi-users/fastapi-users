@@ -371,7 +371,7 @@ You'll get an empty response.
 
 ## 6. Logout
 
-We can also end the session. Note that it doesn't apply to every [authentication backends](../configuration/authentication/index.md). For JWT, it doesn't make sense to end the session, the token is valid until it expires. However, for Cookie backend, the server will clear the cookie.
+We can also end the session. Note that it doesn't apply to every [authentication backends](../configuration/authentication/index.md). For JWT, it doesn't make sense to end the session, the token is valid until it expires. However, for **Cookie** backend, the server will clear the cookie.
 
 ### Request
 
@@ -379,7 +379,7 @@ We can also end the session. Note that it doesn't apply to every [authentication
     ``` bash
     curl \
     -H "Content-Type: application/json" \
-    -H "Authorization: Bearer $TOKEN" \
+    -H "Cookie: fastapiusersauth=$TOKEN" \
     -X POST \
     http://localhost:8000/auth/cookie/logout
     ```
@@ -390,7 +390,7 @@ We can also end the session. Note that it doesn't apply to every [authentication
         null,
         {
             headers: {
-                'Authorization': `Bearer ${TOKEN}`,
+                'Cookie': `fastapiusersauth=${TOKEN}`,
             },
         }
     )
