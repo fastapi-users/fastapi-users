@@ -70,6 +70,12 @@ Alternatively, you can run `pytest` yourself. The MongoDB unit tests will be ski
 pytest
 ```
 
+There are quite a few unit tests, so you might run into ulimit issues where there are too many open file descriptors. You may be able to set a new, higher limit temporarily with:
+
+```bash
+ulimit -n 2048
+```
+
 ### Format the code
 
 Execute the following command to apply `isort` and `black` formatting:

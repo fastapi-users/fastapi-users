@@ -5,6 +5,8 @@ try:
 except ImportError:
     from typing_extensions import Protocol  # type: ignore
 
+from pydantic import EmailStr
+
 from fastapi_users import models
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.password import get_password_hash
@@ -18,13 +20,17 @@ class UserNotExists(Exception):
     pass
 
 
-class UserAlreadyActivated(Exception):
+class UserAlreadyVerified(Exception):
     pass
 
 
 class CreateUserProtocol(Protocol):  # pragma: no cover
     def __call__(
-        self, user: models.BaseUserCreate, safe: bool = False, is_active: bool = None
+        self,
+        user: models.BaseUserCreate,
+        safe: bool = False,
+        is_active: bool = None,
+        is_verified: bool = None,
     ) -> Awaitable[models.BaseUserDB]:
         pass
 
@@ -34,7 +40,10 @@ def get_create_user(
     user_db_model: Type[models.BaseUserDB],
 ) -> CreateUserProtocol:
     async def create_user(
-        user: models.BaseUserCreate, safe: bool = False, is_active: bool = None
+        user: models.BaseUserCreate,
+        safe: bool = False,
+        is_active: bool = None,
+        is_verified: bool = None,
     ) -> models.BaseUserDB:
         existing_user = await user_db.get_by_email(user.email)
 
@@ -47,30 +56,54 @@ def get_create_user(
         )
         if is_active is not None:
             user_dict["is_active"] = is_active
+        if is_verified is not None:
+            user_dict["is_verified"] = is_verified
         db_user = user_db_model(**user_dict, hashed_password=hashed_password)
         return await user_db.create(db_user)
 
     return create_user
 
 
-class ActivateUserProtocol(Protocol):
+class VerifyUserProtocol(Protocol):
     def __call__(self, user_uuid: str) -> Awaitable[models.BaseUserDB]:
         pass
 
 
-def get_activate_user(
+def get_verify_user(
     user_db: BaseUserDatabase[models.BaseUserDB],
-) -> ActivateUserProtocol:
-    async def activate_user(user_uuid: str) -> models.BaseUserDB:
+) -> VerifyUserProtocol:
+    async def verify_user(user_uuid: str) -> models.BaseUserDB:
         user = await user_db.get(user_uuid)
 
         if user is None:
             raise UserNotExists()
 
-        if user.is_active:
-            raise UserAlreadyActivated()
+        if user.is_verified:
+            raise UserAlreadyVerified()
 
-        user.is_active = True
+        user.is_verified = True
         return await user_db.update(user)
 
-    return activate_user
+    return verify_user
+
+
+class GetUserProtocol(Protocol):
+    def __call__(self, user_uuid: str) -> Awaitable[models.BaseUserDB]:
+        pass
+
+
+def get_get_user(
+    user_db: BaseUserDatabase[models.BaseUserDB],
+) -> GetUserProtocol:
+    async def get_user(user_email: EmailStr) -> models.BaseUserDB:
+        if not (user_email == EmailStr(user_email)):
+            raise UserNotExists()
+
+        user = await user_db.get_by_email(user_email)
+
+        if user is None:
+            raise UserNotExists()
+
+        return user
+
+    return get_user

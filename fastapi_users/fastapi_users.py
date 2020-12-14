@@ -10,8 +10,16 @@ from fastapi_users.router import (
     get_register_router,
     get_reset_password_router,
     get_users_router,
+    get_verify_router,
 )
-from fastapi_users.user import CreateUserProtocol, get_create_user
+from fastapi_users.user import (
+    CreateUserProtocol,
+    GetUserProtocol,
+    VerifyUserProtocol,
+    get_create_user,
+    get_get_user,
+    get_verify_user,
+)
 
 try:
     from httpx_oauth.oauth2 import BaseOAuth2
@@ -35,12 +43,16 @@ class FastAPIUsers:
     :attribute create_user: Helper function to create a user programmatically.
     :attribute get_current_user: Dependency callable to inject authenticated user.
     :attribute get_current_active_user: Dependency callable to inject active user.
+    :attribute get_current_verified_user: Dependency callable to inject verified user.
     :attribute get_current_superuser: Dependency callable to inject superuser.
+    :attribute get_current_verified_superuser: Dependency callable to inject verified superuser.
     """
 
     db: BaseUserDatabase
     authenticator: Authenticator
     create_user: CreateUserProtocol
+    verify_user: VerifyUserProtocol
+    get_user: GetUserProtocol
     _user_model: Type[models.BaseUser]
     _user_create_model: Type[models.BaseUserCreate]
     _user_update_model: Type[models.BaseUserUpdate]
@@ -65,24 +77,33 @@ class FastAPIUsers:
         self._user_db_model = user_db_model
 
         self.create_user = get_create_user(db, user_db_model)
+        self.verify_user = get_verify_user(db)
+        self.get_user = get_get_user(db)
 
         self.get_current_user = self.authenticator.get_current_user
         self.get_current_active_user = self.authenticator.get_current_active_user
+        self.get_current_verified_user = self.authenticator.get_current_verified_user
         self.get_current_superuser = self.authenticator.get_current_superuser
+        self.get_current_verified_superuser = (
+            self.authenticator.get_current_verified_superuser
+        )
         self.get_optional_current_user = self.authenticator.get_optional_current_user
         self.get_optional_current_active_user = (
             self.authenticator.get_optional_current_active_user
         )
+        self.get_optional_current_verified_user = (
+            self.authenticator.get_optional_current_verified_user
+        )
         self.get_optional_current_superuser = (
             self.authenticator.get_optional_current_superuser
+        )
+        self.get_optional_current_verified_superuser = (
+            self.authenticator.get_optional_current_verified_superuser
         )
 
     def get_register_router(
         self,
         after_register: Optional[Callable[[models.UD, Request], None]] = None,
-        activation_callback: Optional[Callable[[models.UD, str, Request], None]] = None,
-        activation_token_secret: str = None,
-        activation_token_lifetime_seconds: int = 3600,
     ) -> APIRouter:
         """
         Return a router with a register route.
@@ -95,9 +116,29 @@ class FastAPIUsers:
             self._user_model,
             self._user_create_model,
             after_register,
-            activation_callback,
-            activation_token_secret,
-            activation_token_lifetime_seconds,
+        )
+
+    def get_verify_router(
+        self,
+        after_verification_request: Callable[[models.UD, str, Request], None],
+        verification_token_secret: str,
+        verification_token_lifetime_seconds: int = 3600,
+        after_verification: Optional[Callable[[models.UD, Request], None]] = None,
+    ) -> APIRouter:
+        """
+        Return a router with a register route.
+
+        :param after_register: Optional function called
+        after a successful registration.
+        """
+        return get_verify_router(
+            self.verify_user,
+            self.get_user,
+            self._user_model,
+            after_verification_request,
+            verification_token_secret,
+            verification_token_lifetime_seconds,
+            after_verification,
         )
 
     def get_reset_password_router(
@@ -123,13 +164,20 @@ class FastAPIUsers:
             after_forgot_password,
         )
 
-    def get_auth_router(self, backend: BaseAuthentication) -> APIRouter:
+    def get_auth_router(
+        self, backend: BaseAuthentication, requires_verification: bool = False
+    ) -> APIRouter:
         """
         Return an auth router for a given authentication backend.
 
         :param backend: The authentication backend instance.
         """
-        return get_auth_router(backend, self.db, self.authenticator)
+        return get_auth_router(
+            backend,
+            self.db,
+            self.authenticator,
+            requires_verification,
+        )
 
     def get_oauth_router(
         self,
@@ -163,6 +211,7 @@ class FastAPIUsers:
         after_update: Optional[
             Callable[[models.UD, Dict[str, Any], Request], None]
         ] = None,
+        requires_verification: bool = False,
     ) -> APIRouter:
         """
         Return a router with routes to manage users.
@@ -177,4 +226,5 @@ class FastAPIUsers:
             self._user_db_model,
             self.authenticator,
             after_update,
+            requires_verification,
         )
