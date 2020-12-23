@@ -24,11 +24,11 @@ Steps to reproduce the behavior:
 A clear and concise description of what you expected to happen.
 
 ## Configuration
- - Python version : 
- - FastAPI version : 
+ - Python version :
+ - FastAPI version :
  - FastAPI Users version :
 
-### FastAPI Users configuration**
+### FastAPI Users configuration
 
 ```py
 # Please copy/paste your FastAPI Users configuration here.
