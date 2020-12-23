@@ -1,0 +1,4 @@
+contact_links:
+  - name: Community discussions
+    url: https://github.com/frankie567/fastapi-users/discussions
+    about: ➡ If you have any question about the usage of FastAPI Users that's not clearly a bug, please open a discussion first.
