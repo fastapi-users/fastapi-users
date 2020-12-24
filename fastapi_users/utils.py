@@ -11,4 +11,4 @@ def generate_jwt(
     payload = data.copy()
     expire = datetime.utcnow() + timedelta(seconds=lifetime_seconds)
     payload["exp"] = expire
-    return jwt.encode(payload, secret, algorithm=algorithm).decode("utf-8")
+    return jwt.encode(payload, secret, algorithm=algorithm)
