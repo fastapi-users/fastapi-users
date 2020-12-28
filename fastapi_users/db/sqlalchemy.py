@@ -67,7 +67,7 @@ class SQLAlchemyBaseOAuthAccountTable:
     id = Column(GUID, primary_key=True)
     oauth_name = Column(String(length=100), index=True, nullable=False)
     access_token = Column(String(length=1024), nullable=False)
-    expires_at = Column(Integer, nullable=False)
+    expires_at = Column(Integer, nullable=True)
     refresh_token = Column(String(length=1024), nullable=True)
     account_id = Column(String(length=320), index=True, nullable=False)
     account_email = Column(String(length=320), nullable=False)

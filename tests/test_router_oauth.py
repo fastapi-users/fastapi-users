@@ -147,10 +147,18 @@ class TestAuthorize:
 @pytest.mark.router
 @pytest.mark.oauth
 @pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "access_token",
+    [
+        ({"access_token": "TOKEN", "expires_at": 1579179542}),
+        ({"access_token": "TOKEN"}),
+    ],
+)
 class TestCallback:
     async def test_invalid_state(
         self,
         test_app_client: httpx.AsyncClient,
+        access_token,
         oauth_client,
         user_oauth,
         after_register,
@@ -158,10 +166,7 @@ class TestCallback:
         with asynctest.patch.object(
             oauth_client, "get_access_token"
         ) as get_access_token_mock:
-            get_access_token_mock.return_value = {
-                "access_token": "TOKEN",
-                "expires_at": 1579179542,
-            }
+            get_access_token_mock.return_value = access_token
             with asynctest.patch.object(
                 oauth_client, "get_id_email"
             ) as get_id_email_mock:
@@ -180,6 +185,7 @@ class TestCallback:
         self,
         mock_user_db_oauth,
         test_app_client: httpx.AsyncClient,
+        access_token,
         oauth_client,
         user_oauth,
         after_register,
@@ -188,10 +194,7 @@ class TestCallback:
         with asynctest.patch.object(
             oauth_client, "get_access_token"
         ) as get_access_token_mock:
-            get_access_token_mock.return_value = {
-                "access_token": "TOKEN",
-                "expires_at": 1579179542,
-            }
+            get_access_token_mock.return_value = access_token
             with asynctest.patch.object(
                 oauth_client, "get_id_email"
             ) as get_id_email_mock:
@@ -216,6 +219,7 @@ class TestCallback:
         self,
         mock_user_db_oauth,
         test_app_client: httpx.AsyncClient,
+        access_token,
         oauth_client,
         superuser_oauth,
         after_register,
@@ -224,10 +228,7 @@ class TestCallback:
         with asynctest.patch.object(
             oauth_client, "get_access_token"
         ) as get_access_token_mock:
-            get_access_token_mock.return_value = {
-                "access_token": "TOKEN",
-                "expires_at": 1579179542,
-            }
+            get_access_token_mock.return_value = access_token
             with asynctest.patch.object(
                 oauth_client, "get_id_email"
             ) as get_id_email_mock:
@@ -255,6 +256,7 @@ class TestCallback:
         self,
         mock_user_db_oauth,
         test_app_client: httpx.AsyncClient,
+        access_token,
         oauth_client,
         after_register,
     ):
@@ -262,10 +264,7 @@ class TestCallback:
         with asynctest.patch.object(
             oauth_client, "get_access_token"
         ) as get_access_token_mock:
-            get_access_token_mock.return_value = {
-                "access_token": "TOKEN",
-                "expires_at": 1579179542,
-            }
+            get_access_token_mock.return_value = access_token
             with asynctest.patch.object(
                 oauth_client, "get_id_email"
             ) as get_id_email_mock:
@@ -297,6 +296,7 @@ class TestCallback:
         self,
         mock_user_db_oauth,
         test_app_client: httpx.AsyncClient,
+        access_token,
         oauth_client,
         inactive_user_oauth,
         after_register,
@@ -305,10 +305,7 @@ class TestCallback:
         with asynctest.patch.object(
             oauth_client, "get_access_token"
         ) as get_access_token_mock:
-            get_access_token_mock.return_value = {
-                "access_token": "TOKEN",
-                "expires_at": 1579179542,
-            }
+            get_access_token_mock.return_value = access_token
             with asynctest.patch.object(
                 oauth_client, "get_id_email"
             ) as get_id_email_mock:
@@ -331,6 +328,7 @@ class TestCallback:
         self,
         mock_user_db_oauth,
         test_app_client_redirect_url: httpx.AsyncClient,
+        access_token,
         oauth_client,
         user_oauth,
     ):
@@ -338,10 +336,7 @@ class TestCallback:
         with asynctest.patch.object(
             oauth_client, "get_access_token"
         ) as get_access_token_mock:
-            get_access_token_mock.return_value = {
-                "access_token": "TOKEN",
-                "expires_at": 1579179542,
-            }
+            get_access_token_mock.return_value = access_token
             with asynctest.patch.object(
                 oauth_client, "get_id_email"
             ) as get_id_email_mock:

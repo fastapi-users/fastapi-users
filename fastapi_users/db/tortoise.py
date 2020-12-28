@@ -31,7 +31,7 @@ class TortoiseBaseOAuthAccountModel(models.Model):
     id = fields.UUIDField(pk=True, generated=False, max_length=255)
     oauth_name = fields.CharField(null=False, max_length=255)
     access_token = fields.CharField(null=False, max_length=255)
-    expires_at = fields.IntField(null=False)
+    expires_at = fields.IntField(null=True)
     refresh_token = fields.CharField(null=True, max_length=255)
     account_id = fields.CharField(index=True, null=False, max_length=255)
     account_email = fields.CharField(null=False, max_length=255)

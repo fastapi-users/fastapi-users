@@ -59,7 +59,7 @@ Notice that we inherit from the `BaseOAuthAccountMixin`, which adds a `List` of 
 * `id` (`UUID4`) – Unique identifier of the OAuth account information. Default to a **UUID4**.
 * `oauth_name` (`str`) – Name of the OAuth service. It corresponds to the `name` property of the OAuth client.
 * `access_token` (`str`) – Access token.
-* `expires_at` (`int`) - Timestamp at which the access token is expired.
+* `expires_at` (`Optional[int]`) - Timestamp at which the access token is expired.
 * `refresh_token` (`Optional[str]`) – On services that support it, a token to get a fresh access token.
 * `account_id` (`str`) - Identifier of the OAuth account on the corresponding service.
 * `account_email` (`str`) - Email address of the OAuth account on the corresponding service.

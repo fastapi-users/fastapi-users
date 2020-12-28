@@ -56,7 +56,7 @@ class BaseOAuthAccount(BaseModel):
     id: Optional[UUID4] = None
     oauth_name: str
     access_token: str
-    expires_at: int
+    expires_at: Optional[int] = None
     refresh_token: Optional[str] = None
     account_id: str
     account_email: str

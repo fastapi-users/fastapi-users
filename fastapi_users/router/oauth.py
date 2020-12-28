@@ -108,7 +108,7 @@ def get_oauth_router(
         new_oauth_account = models.BaseOAuthAccount(
             oauth_name=oauth_client.name,
             access_token=token["access_token"],
-            expires_at=token["expires_at"],
+            expires_at=token.get("expires_at"),
             refresh_token=token.get("refresh_token"),
             account_id=account_id,
             account_email=account_email,
