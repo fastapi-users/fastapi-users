@@ -811,6 +811,19 @@
   </li>
 
         
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../../migration/3x_to_4x/" class="md-nav__link">
+      3.x.x ➡️ 4.x.x
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -1011,7 +1024,7 @@
 <li><code>id</code> (<code>UUID4</code>) – Unique identifier of the OAuth account information. Default to a <strong>UUID4</strong>.</li>
 <li><code>oauth_name</code> (<code>str</code>) – Name of the OAuth service. It corresponds to the <code>name</code> property of the OAuth client.</li>
 <li><code>access_token</code> (<code>str</code>) – Access token.</li>
-<li><code>expires_at</code> (<code>int</code>) - Timestamp at which the access token is expired.</li>
+<li><code>expires_at</code> (<code>Optional[int]</code>) - Timestamp at which the access token is expired.</li>
 <li><code>refresh_token</code> (<code>Optional[str]</code>) – On services that support it, a token to get a fresh access token.</li>
 <li><code>account_id</code> (<code>str</code>) - Identifier of the OAuth account on the corresponding service.</li>
 <li><code>account_email</code> (<code>str</code>) - Email address of the OAuth account on the corresponding service.</li>
