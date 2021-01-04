@@ -28,7 +28,7 @@ def get_verify_router(
 ):
     router = APIRouter()
 
-    @router.post("/request_verify_token", status_code=status.HTTP_202_ACCEPTED)
+    @router.post("/request-verify-token", status_code=status.HTTP_202_ACCEPTED)
     async def request_verify_token(
         request: Request, email: EmailStr = Body(..., embed=True)
     ):

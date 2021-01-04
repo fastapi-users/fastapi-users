@@ -5,7 +5,7 @@ try:
 except ImportError:
     from typing_extensions import Protocol  # type: ignore
 
-from pydantic import EmailStr
+from pydantic import EmailStr, UUID4
 
 from fastapi_users import models
 from fastapi_users.db import BaseUserDatabase
@@ -47,17 +47,13 @@ def get_create_user(
     ) -> models.BaseUserDB:
         existing_user = await user_db.get_by_email(user.email)
 
-        if existing_user is not None and existing_user.is_active:
+        if existing_user is not None:
             raise UserAlreadyExists()
 
         hashed_password = get_password_hash(user.password)
         user_dict = (
             user.create_update_dict() if safe else user.create_update_dict_superuser()
         )
-        if is_active is not None:
-            user_dict["is_active"] = is_active
-        if is_verified is not None:
-            user_dict["is_verified"] = is_verified
         db_user = user_db_model(**user_dict, hashed_password=hashed_password)
         return await user_db.create(db_user)
 
@@ -65,14 +61,14 @@ def get_create_user(
 
 
 class VerifyUserProtocol(Protocol):
-    def __call__(self, user_uuid: str) -> Awaitable[models.BaseUserDB]:
+    def __call__(self, user_uuid: UUID4) -> Awaitable[models.BaseUserDB]:
         pass
 
 
 def get_verify_user(
     user_db: BaseUserDatabase[models.BaseUserDB],
 ) -> VerifyUserProtocol:
-    async def verify_user(user_uuid: str) -> models.BaseUserDB:
+    async def verify_user(user_uuid: UUID4) -> models.BaseUserDB:
         user = await user_db.get(user_uuid)
 
         if user is None:
@@ -88,7 +84,7 @@ def get_verify_user(
 
 
 class GetUserProtocol(Protocol):
-    def __call__(self, user_uuid: str) -> Awaitable[models.BaseUserDB]:
+    def __call__(self, user_email: EmailStr) -> Awaitable[models.BaseUserDB]:
         pass
 
 
