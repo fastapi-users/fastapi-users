@@ -34,7 +34,7 @@ async def test_app_client(
     app.include_router(
         fastapi_users.get_verify_router(
             after_verification_request=verification_callback,
-            verification_token_secret="teststring",
+            verification_token_secret="SECRET",
         )
     )
 
@@ -102,7 +102,7 @@ class TestRoutes:
             status.HTTP_405_METHOD_NOT_ALLOWED,
         )
 
-        response = await test_app_client.post("/request_verify_token")
+        response = await test_app_client.post("/request-verify-token")
         assert response.status_code not in (
             status.HTTP_404_NOT_FOUND,
             status.HTTP_405_METHOD_NOT_ALLOWED,
