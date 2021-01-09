@@ -114,7 +114,7 @@ def get_verify_router(
             )
 
         try:
-            user = await verify_user(user_uuid)
+            user = await verify_user(user_check)
         except UserAlreadyVerified:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,

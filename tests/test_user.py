@@ -1,6 +1,13 @@
 import pytest
 
-from fastapi_users.user import CreateUserProtocol, UserAlreadyExists, get_create_user
+from fastapi_users.user import (
+    CreateUserProtocol,
+    UserAlreadyExists,
+    UserAlreadyVerified,
+    VerifyUserProtocol,
+    get_create_user,
+    get_verify_user,
+)
 from tests.conftest import UserCreate, UserDB
 
 
@@ -11,7 +18,6 @@ def create_user(
     return get_create_user(mock_user_db, UserDB)
 
 
-@pytest.mark.router
 @pytest.mark.asyncio
 class TestCreateUser:
     @pytest.mark.parametrize(
@@ -45,3 +51,21 @@ class TestCreateUser:
         created_user = await create_user(user, safe)
         assert type(created_user) == UserDB
         assert created_user.is_active is result
+
+
+@pytest.fixture
+def verify_user(
+    mock_user_db,
+) -> VerifyUserProtocol:
+    return get_verify_user(mock_user_db)
+
+
+@pytest.mark.asyncio
+class TestVerifyUser:
+    async def test_already_verified_user(self, verify_user, verified_user):
+        with pytest.raises(UserAlreadyVerified):
+            await verify_user(verified_user)
+
+    async def test_non_verified_user(self, verify_user, user):
+        user = await verify_user(user)
+        assert user.is_verified
