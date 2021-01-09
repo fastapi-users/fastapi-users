@@ -63,7 +63,7 @@ def get_verify_router(
     @router.post(
         "/verify", response_model=user_model, status_code=status.HTTP_202_ACCEPTED
     )
-    async def verify(request: Request, token: str = Body(...)):
+    async def verify(request: Request, token: str = Body(..., embed=True)):
         try:
             data = jwt.decode(
                 token,

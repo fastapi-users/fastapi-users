@@ -4,7 +4,7 @@ from unittest.mock import MagicMock
 import asynctest
 import httpx
 import pytest
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI, status
 
 from fastapi_users.router import ErrorCode, get_verify_router
 from fastapi_users.user import get_get_user, get_verify_user
@@ -16,8 +16,18 @@ LIFETIME = 3600
 VERIFY_USER_TOKEN_AUDIENCE = "fastapi-users:verify"
 JWT_ALGORITHM = "HS256"
 
-verification_token_secret = SECRET
-verification_token_lifetime_seconds = LIFETIME
+
+@pytest.fixture
+def verify_token():
+    def _verify_token(user_id=None, email=None, lifetime=LIFETIME):
+        data = {"aud": VERIFY_USER_TOKEN_AUDIENCE}
+        if user_id is not None:
+            data["user_id"] = str(user_id)
+        if email is not None:
+            data["email"] = email
+        return generate_jwt(data, lifetime, SECRET, JWT_ALGORITHM)
+
+    return _verify_token
 
 
 def after_verification_sync():
@@ -52,7 +62,6 @@ def after_verification_request(request):
 @pytest.mark.asyncio
 async def test_app_client(
     mock_user_db,
-    mock_authentication,
     after_verification_request,
     after_verification,
     get_test_client,
@@ -64,8 +73,8 @@ async def test_app_client(
         get_user,
         User,
         after_verification_request,
-        verification_token_secret,
-        verification_token_lifetime_seconds,
+        SECRET,
+        LIFETIME,
         after_verification,
     )
 
@@ -83,7 +92,6 @@ class TestVerifyTokenRequest:
         self,
         test_app_client: httpx.AsyncClient,
         after_verification_request,
-        after_verification,
     ):
         response = await test_app_client.post("/request-verify-token", json={})
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
@@ -93,7 +101,6 @@ class TestVerifyTokenRequest:
         self,
         test_app_client: httpx.AsyncClient,
         after_verification_request,
-        after_verification,
     ):
         json = {"email": "king.arthur"}
         response = await test_app_client.post("/request-verify-token", json=json)
@@ -104,7 +111,6 @@ class TestVerifyTokenRequest:
         self,
         test_app_client: httpx.AsyncClient,
         after_verification_request,
-        after_verification,
     ):
         json = {"email": "user@example.com"}
         response = await test_app_client.post("/request-verify-token", json=json)
@@ -118,7 +124,6 @@ class TestVerifyTokenRequest:
         test_app_client: httpx.AsyncClient,
         verified_user: UserDB,
         after_verification_request,
-        after_verification,
     ):
         input_user = verified_user
         json = {"email": input_user.email}
@@ -133,7 +138,6 @@ class TestVerifyTokenRequest:
         test_app_client: httpx.AsyncClient,
         inactive_user: UserDB,
         after_verification_request,
-        after_verification,
     ):
         input_user = inactive_user
         json = {"email": input_user.email}
@@ -146,15 +150,12 @@ class TestVerifyTokenRequest:
         test_app_client: httpx.AsyncClient,
         user: UserDB,
         after_verification_request,
-        after_verification,
     ):
         input_user = user
         json = {"email": input_user.email}
         response = await test_app_client.post("/request-verify-token", json=json)
         assert response.status_code == status.HTTP_202_ACCEPTED
         assert after_verification_request.called is True
-        actual_user = after_verification_request.call_args[0][0]
-        token = after_verification_request.call_args[0][1]
 
 
 @pytest.mark.router
@@ -163,14 +164,11 @@ class TestVerify:
     async def test_empty_body(
         self,
         test_app_client: httpx.AsyncClient,
-        user: UserDB,
         after_verification_request,
         after_verification,
     ):
-        response = await test_app_client.post("/verify", json="")
-        assert response.status_code == status.HTTP_400_BAD_REQUEST
-        data = cast(Dict[str, Any], response.json())
-        assert data["detail"] == ErrorCode.VERIFY_USER_BAD_TOKEN
+        response = await test_app_client.post("/verify", json={})
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
         assert after_verification.called is False
         assert after_verification_request.called is False
 
@@ -181,8 +179,8 @@ class TestVerify:
         after_verification_request,
         after_verification,
     ):
-        token = "foo"
-        response = await test_app_client.post("/verify", json=token)
+        json = {"token": "foo"}
+        response = await test_app_client.post("/verify", json=json)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.VERIFY_USER_BAD_TOKEN
@@ -192,22 +190,13 @@ class TestVerify:
     async def test_valid_token_missing_user_id(
         self,
         test_app_client: httpx.AsyncClient,
+        verify_token,
         user: UserDB,
         after_verification_request,
         after_verification,
     ):
-        input_user = user
-        token_data = {
-            "user_id": str(""),
-            "email": str(input_user.email),
-            "aud": VERIFY_USER_TOKEN_AUDIENCE,
-        }
-        token = generate_jwt(
-            token_data,
-            verification_token_lifetime_seconds,
-            verification_token_secret,
-        )
-        response = await test_app_client.post("/verify", json=token)
+        json = {"token": verify_token(None, user.email)}
+        response = await test_app_client.post("/verify", json=json)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.VERIFY_USER_BAD_TOKEN
@@ -217,22 +206,13 @@ class TestVerify:
     async def test_valid_token_missing_email(
         self,
         test_app_client: httpx.AsyncClient,
+        verify_token,
         user: UserDB,
         after_verification_request,
         after_verification,
     ):
-        input_user = user
-        token_data = {
-            "user_id": str(input_user.id),
-            "email": str(""),
-            "aud": VERIFY_USER_TOKEN_AUDIENCE,
-        }
-        token = generate_jwt(
-            token_data,
-            verification_token_lifetime_seconds,
-            verification_token_secret,
-        )
-        response = await test_app_client.post("/verify", json=token)
+        json = {"token": verify_token(user.id, None)}
+        response = await test_app_client.post("/verify", json=json)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.VERIFY_USER_BAD_TOKEN
@@ -242,22 +222,13 @@ class TestVerify:
     async def test_valid_token_invalid_uuid(
         self,
         test_app_client: httpx.AsyncClient,
+        verify_token,
         user: UserDB,
         after_verification_request,
         after_verification,
     ):
-        input_user = user
-        token_data = {
-            "user_id": str("foo"),
-            "email": str(input_user.email),
-            "aud": VERIFY_USER_TOKEN_AUDIENCE,
-        }
-        token = generate_jwt(
-            token_data,
-            verification_token_lifetime_seconds,
-            verification_token_secret,
-        )
-        response = await test_app_client.post("/verify", json=token)
+        json = {"token": verify_token("foo", user.email)}
+        response = await test_app_client.post("/verify", json=json)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.VERIFY_USER_BAD_TOKEN
@@ -267,22 +238,13 @@ class TestVerify:
     async def test_valid_token_invalid_email(
         self,
         test_app_client: httpx.AsyncClient,
+        verify_token,
         user: UserDB,
         after_verification_request,
         after_verification,
     ):
-        input_user = user
-        token_data = {
-            "user_id": str(input_user.id),
-            "email": str("foo"),
-            "aud": VERIFY_USER_TOKEN_AUDIENCE,
-        }
-        token = generate_jwt(
-            token_data,
-            verification_token_lifetime_seconds,
-            verification_token_secret,
-        )
-        response = await test_app_client.post("/verify", json=token)
+        json = {"token": verify_token(user.id, "foo")}
+        response = await test_app_client.post("/verify", json=json)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.VERIFY_USER_BAD_TOKEN
@@ -292,23 +254,13 @@ class TestVerify:
     async def test_expired_token(
         self,
         test_app_client: httpx.AsyncClient,
+        verify_token,
         user: UserDB,
         after_verification_request,
         after_verification,
     ):
-        verification_token_lifetime_seconds = -1
-        input_user = user
-        token_data = {
-            "user_id": str(input_user.id),
-            "email": str(input_user.email),
-            "aud": VERIFY_USER_TOKEN_AUDIENCE,
-        }
-        token = generate_jwt(
-            token_data,
-            verification_token_lifetime_seconds,
-            verification_token_secret,
-        )
-        response = await test_app_client.post("/verify", json=token)
+        json = {"token": verify_token(user.id, user.email, -1)}
+        response = await test_app_client.post("/verify", json=json)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.VERIFY_USER_TOKEN_EXPIRED
@@ -318,22 +270,13 @@ class TestVerify:
     async def test_inactive_user(
         self,
         test_app_client: httpx.AsyncClient,
+        verify_token,
         inactive_user: UserDB,
         after_verification_request,
         after_verification,
     ):
-        input_user = inactive_user
-        token_data = {
-            "user_id": str(input_user.id),
-            "email": str(input_user.email),
-            "aud": VERIFY_USER_TOKEN_AUDIENCE,
-        }
-        token = generate_jwt(
-            token_data,
-            verification_token_lifetime_seconds,
-            verification_token_secret,
-        )
-        response = await test_app_client.post("/verify", json=token)
+        json = {"token": verify_token(inactive_user.id, inactive_user.email)}
+        response = await test_app_client.post("/verify", json=json)
 
         assert response.status_code == status.HTTP_202_ACCEPTED
         assert after_verification.called is True
@@ -344,22 +287,13 @@ class TestVerify:
     async def test_verified_user(
         self,
         test_app_client: httpx.AsyncClient,
+        verify_token,
         verified_user: UserDB,
         after_verification_request,
         after_verification,
     ):
-        input_user = verified_user
-        token_data = {
-            "user_id": str(input_user.id),
-            "email": str(input_user.email),
-            "aud": VERIFY_USER_TOKEN_AUDIENCE,
-        }
-        token = generate_jwt(
-            token_data,
-            verification_token_lifetime_seconds,
-            verification_token_secret,
-        )
-        response = await test_app_client.post("/verify", json=token)
+        json = {"token": verify_token(verified_user.id, verified_user.email)}
+        response = await test_app_client.post("/verify", json=json)
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
@@ -371,22 +305,13 @@ class TestVerify:
     async def test_active_user(
         self,
         test_app_client: httpx.AsyncClient,
+        verify_token,
         user: UserDB,
         after_verification_request,
         after_verification,
     ):
-        input_user = user
-        token_data = {
-            "user_id": str(input_user.id),
-            "email": str(input_user.email),
-            "aud": VERIFY_USER_TOKEN_AUDIENCE,
-        }
-        token = generate_jwt(
-            token_data,
-            verification_token_lifetime_seconds,
-            verification_token_secret,
-        )
-        response = await test_app_client.post("/verify", json=token)
+        json = {"token": verify_token(user.id, user.email)}
+        response = await test_app_client.post("/verify", json=json)
 
         assert response.status_code == status.HTTP_202_ACCEPTED
         assert after_verification.called is True
