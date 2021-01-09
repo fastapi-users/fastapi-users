@@ -1,4 +1,4 @@
-from typing import Callable, Optional, Type
+from typing import Callable, Optional, Type, cast
 
 import jwt
 from fastapi import APIRouter, Body, HTTPException, Request, status
@@ -83,12 +83,14 @@ def get_verify_router(
             )
 
         user_id = data.get("user_id")
-        email = data.get("email")
+        email = cast(EmailStr, data.get("email"))
+
         if user_id is None:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=ErrorCode.VERIFY_USER_BAD_TOKEN,
             )
+
         try:
             user_check = await get_user(email)
         except UserNotExists:
@@ -96,11 +98,7 @@ def get_verify_router(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=ErrorCode.VERIFY_USER_BAD_TOKEN,
             )
-        if not (str(user_check.id) == user_id):
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=ErrorCode.VERIFY_USER_BAD_TOKEN,
-            )
+
         try:
             user_uuid = UUID4(user_id)
         except ValueError:
@@ -109,20 +107,23 @@ def get_verify_router(
                 detail=ErrorCode.VERIFY_USER_BAD_TOKEN,
             )
 
-        try:
-            user = await verify_user(user_uuid)
-        except UserNotExists:
+        if user_check.id != user_uuid:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=ErrorCode.VERIFY_USER_BAD_TOKEN,
             )
+
+        try:
+            user = await verify_user(user_uuid)
         except UserAlreadyVerified:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=ErrorCode.VERIFY_USER_ALREADY_VERIFIED,
             )
+
         if after_verification:
             await run_handler(after_verification, user, request)
+
         return user
 
     return router

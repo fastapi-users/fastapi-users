@@ -251,6 +251,23 @@ class TestVerify:
         assert after_verification.called is False
         assert after_verification_request.called is False
 
+    async def test_valid_token_email_id_mismatch(
+        self,
+        test_app_client: httpx.AsyncClient,
+        verify_token,
+        user: UserDB,
+        inactive_user: UserDB,
+        after_verification_request,
+        after_verification,
+    ):
+        json = {"token": verify_token(user.id, inactive_user.email)}
+        response = await test_app_client.post("/verify", json=json)
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        data = cast(Dict[str, Any], response.json())
+        assert data["detail"] == ErrorCode.VERIFY_USER_BAD_TOKEN
+        assert after_verification.called is False
+        assert after_verification_request.called is False
+
     async def test_expired_token(
         self,
         test_app_client: httpx.AsyncClient,
