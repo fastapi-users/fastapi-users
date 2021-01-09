@@ -21,9 +21,11 @@ def get_verify_router(
     verify_user: VerifyUserProtocol,
     get_user: GetUserProtocol,
     user_model: Type[models.BaseUser],
-    after_verification_request: Callable[[models.UD, str, Request], None],
     verification_token_secret: str,
     verification_token_lifetime_seconds: int = 3600,
+    after_verification_request: Optional[
+        Callable[[models.UD, str, Request], None]
+    ] = None,
     after_verification: Optional[Callable[[models.UD, Request], None]] = None,
 ):
     router = APIRouter()
@@ -56,7 +58,8 @@ def get_verify_router(
                 verification_token_secret,
             )
 
-            await run_handler(after_verification_request, user, token, request)
+            if after_verification_request:
+                await run_handler(after_verification_request, user, token, request)
 
         return None
 

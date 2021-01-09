@@ -72,9 +72,9 @@ async def test_app_client(
         verify_user,
         get_user,
         User,
-        after_verification_request,
         SECRET,
         LIFETIME,
+        after_verification_request,
         after_verification,
     )
 

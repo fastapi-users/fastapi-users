@@ -2,7 +2,7 @@ from typing import AsyncGenerator
 
 import httpx
 import pytest
-from fastapi import Depends, FastAPI, Request, status
+from fastapi import Depends, FastAPI, status
 
 from fastapi_users import FastAPIUsers
 from tests.conftest import User, UserCreate, UserDB, UserUpdate
@@ -22,21 +22,13 @@ async def test_app_client(
         UserDB,
     )
 
-    def verification_callback(user: UserDB, token: str, request: Request):
-        pass
-
     app = FastAPI()
     app.include_router(fastapi_users.get_register_router())
     app.include_router(fastapi_users.get_reset_password_router("SECRET"))
     app.include_router(fastapi_users.get_auth_router(mock_authentication))
     app.include_router(fastapi_users.get_oauth_router(oauth_client, "SECRET"))
     app.include_router(fastapi_users.get_users_router(), prefix="/users")
-    app.include_router(
-        fastapi_users.get_verify_router(
-            after_verification_request=verification_callback,
-            verification_token_secret="SECRET",
-        )
-    )
+    app.include_router(fastapi_users.get_verify_router("SECRET"))
 
     @app.get("/current-user")
     def current_user(user=Depends(fastapi_users.get_current_user)):

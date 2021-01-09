@@ -120,9 +120,11 @@ class FastAPIUsers:
 
     def get_verify_router(
         self,
-        after_verification_request: Callable[[models.UD, str, Request], None],
         verification_token_secret: str,
         verification_token_lifetime_seconds: int = 3600,
+        after_verification_request: Optional[
+            Callable[[models.UD, str, Request], None]
+        ] = None,
         after_verification: Optional[Callable[[models.UD, Request], None]] = None,
     ) -> APIRouter:
         """
@@ -135,9 +137,9 @@ class FastAPIUsers:
             self.verify_user,
             self.get_user,
             self._user_model,
-            after_verification_request,
             verification_token_secret,
             verification_token_lifetime_seconds,
+            after_verification_request,
             after_verification,
         )
 
