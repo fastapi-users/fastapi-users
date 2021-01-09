@@ -36,36 +36,31 @@ def get_verify_router(
     ):
         try:
             user = await get_user(email)
-        except UserNotExists:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=ErrorCode.VERIFY_USER_NOT_EXISTS,
-            )
-        if user.is_verified:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=ErrorCode.VERIFY_USER_ALREADY_VERIFIED,
-            )
-        elif user.is_active:
-            token_data = {
-                "user_id": str(user.id),
-                "email": email,
-                "aud": VERIFY_USER_TOKEN_AUDIENCE,
-            }
-            token = generate_jwt(
-                token_data,
-                verification_token_lifetime_seconds,
-                verification_token_secret,
-            )
+            if user.is_verified:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=ErrorCode.VERIFY_USER_ALREADY_VERIFIED,
+                )
+            elif user.is_active:
+                token_data = {
+                    "user_id": str(user.id),
+                    "email": email,
+                    "aud": VERIFY_USER_TOKEN_AUDIENCE,
+                }
+                token = generate_jwt(
+                    token_data,
+                    verification_token_lifetime_seconds,
+                    verification_token_secret,
+                )
 
-            if after_verification_request:
-                await run_handler(after_verification_request, user, token, request)
+                if after_verification_request:
+                    await run_handler(after_verification_request, user, token, request)
+        except UserNotExists:
+            pass
 
         return None
 
-    @router.post(
-        "/verify", response_model=user_model, status_code=status.HTTP_202_ACCEPTED
-    )
+    @router.post("/verify", response_model=user_model)
     async def verify(request: Request, token: str = Body(..., embed=True)):
         try:
             data = jwt.decode(

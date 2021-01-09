@@ -114,9 +114,7 @@ class TestVerifyTokenRequest:
     ):
         json = {"email": "user@example.com"}
         response = await test_app_client.post("/request-verify-token", json=json)
-        assert response.status_code == status.HTTP_400_BAD_REQUEST
-        data = cast(Dict[str, Any], response.json())
-        assert data["detail"] == ErrorCode.VERIFY_USER_NOT_EXISTS
+        assert response.status_code == status.HTTP_202_ACCEPTED
         assert after_verification_request.called is False
 
     async def test_user_verified_valid_request(
@@ -295,7 +293,7 @@ class TestVerify:
         json = {"token": verify_token(inactive_user.id, inactive_user.email)}
         response = await test_app_client.post("/verify", json=json)
 
-        assert response.status_code == status.HTTP_202_ACCEPTED
+        assert response.status_code == status.HTTP_200_OK
         assert after_verification.called is True
         assert after_verification_request.called is False
         data = cast(Dict[str, Any], response.json())
@@ -330,7 +328,7 @@ class TestVerify:
         json = {"token": verify_token(user.id, user.email)}
         response = await test_app_client.post("/verify", json=json)
 
-        assert response.status_code == status.HTTP_202_ACCEPTED
+        assert response.status_code == status.HTTP_200_OK
         assert after_verification.called is True
         assert after_verification_request.called is False
         data = cast(Dict[str, Any], response.json())
