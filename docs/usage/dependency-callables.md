@@ -25,6 +25,16 @@ def protected_route(user: User = Depends(fastapi_users.get_current_active_user))
     return f"Hello, {user.email}"
 ```
 
+## `get_current_verified_user`
+
+Get the current active and verified user. Will throw a `401 Unauthorized` if missing or wrong credentials or if the user is not active and verified.
+
+```py
+@app.get("/protected-route")
+def protected_route(user: User = Depends(fastapi_users.get_current_verified_user)):
+    return f"Hello, {user.email}"
+```
+
 ## `get_current_superuser`
 
 Get the current superuser. Will throw a `401 Unauthorized` if missing or wrong credentials or if the user is not active. Will throw a `403 Forbidden` if the user is not a superuser.
@@ -32,6 +42,16 @@ Get the current superuser. Will throw a `401 Unauthorized` if missing or wrong c
 ```py
 @app.get("/protected-route")
 def protected_route(user: User = Depends(fastapi_users.get_current_superuser)):
+    return f"Hello, {user.email}"
+```
+
+## `get_current_verified_superuser`
+
+Get the current verified superuser. Will throw a `401 Unauthorized` if missing or wrong credentials or if the user is not active and verified. Will throw a `403 Forbidden` if the user is not a superuser.
+
+```py
+@app.get("/protected-route")
+def protected_route(user: User = Depends(fastapi_users.get_current_verified_superuser)):
     return f"Hello, {user.email}"
 ```
 
@@ -50,7 +70,7 @@ def optional_user_route(user: Optional[User] = Depends(fastapi_users.get_optiona
 
 ## `get_optional_current_active_user`
 
-Get the current active user. Will return `None` if missing or wrong credentials. It can be useful if you wish to change the behaviour of your endpoint if a user is logged in or not.
+Get the current active user. Will return `None` if missing or wrong credentials or if the user is not active. It can be useful if you wish to change the behaviour of your endpoint if a user is logged in or not.
 
 ```py
 @app.get("/optional-user-route")
@@ -61,9 +81,22 @@ def optional_user_route(user: User = Depends(fastapi_users.get_optional_current_
         return "Hello, anonymous"
 ```
 
+## `get_optional_current_verified_user`
+
+Get the current active and verified user. Will return `None` if missing or wrong credentials or if the user is not active and verified. It can be useful if you wish to change the behaviour of your endpoint if a user is logged in or not.
+
+```py
+@app.get("/optional-user-route")
+def optional_user_route(user: User = Depends(fastapi_users.get_optional_current_verified_user)):
+    if user:
+        return f"Hello, {user.email}"
+    else:
+        return "Hello, anonymous"
+```
+
 ## `get_optional_current_superuser`
 
-Get the current superuser. Will return `None` if missing or wrong credentials. It can be useful if you wish to change the behaviour of your endpoint if a user is logged in or not.
+Get the current superuser. Will return `None` if missing or wrong credentials or if the user is not active. It can be useful if you wish to change the behaviour of your endpoint if a user is logged in or not.
 
 ```py
 @app.get("/optional-user-route")
@@ -74,9 +107,22 @@ def optional_user_route(user: User = Depends(fastapi_users.get_optional_current_
         return "Hello, anonymous"
 ```
 
+## `get_optional_current_verified_superuser`
+
+Get the current active and verified superuser. Will return `None` if missing or wrong credentials or if the user is not active and verified. It can be useful if you wish to change the behaviour of your endpoint if a user is logged in or not.
+
+```py
+@app.get("/optional-user-route")
+def optional_user_route(user: User = Depends(fastapi_users.get_optional_current_verified_superuser)):
+    if user:
+        return f"Hello, {user.email}"
+    else:
+        return "Hello, anonymous"
+```
+
 ## In path operation
 
-If you don't need a user, you can use more clear way:
+If you don't need the user in the route logic, you can use this syntax:
 
 ```py
 @app.get("/protected-route", dependencies=[Depends(fastapi_users.get_current_superuser)])

@@ -25,6 +25,18 @@ app.include_router(
 )
 ```
 
+### Optional: user verification
+
+You can require the user to be **verified** (i.e. `is_verified` property set to `True`) to access those routes. You have to set the `requires_validation` parameter to `True` on the router instantiation method:
+
+```py
+app.include_router(
+    fastapi_users.get_users_router(requires_verification=True),
+    prefix="/users",
+    tags=["users"],
+)
+```
+
 ## After update
 
 You can provide a custom function to be called after a successful update user request. It is called with **three arguments**:

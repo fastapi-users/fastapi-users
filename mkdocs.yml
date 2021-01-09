@@ -44,6 +44,7 @@ nav:
       - configuration/routers/register.md
       - configuration/routers/reset.md
       - configuration/routers/users.md
+      - configuration/routers/verify.md
     - configuration/full_example.md
     - configuration/oauth.md
   - Usage:
