@@ -1,5 +1,5 @@
 import asyncio
-from typing import AsyncGenerator, List, Optional
+from typing import Any, AsyncGenerator, Callable, List, Optional
 
 import httpx
 import pytest
@@ -20,6 +20,7 @@ guinevere_password_hash = get_password_hash("guinevere")
 angharad_password_hash = get_password_hash("angharad")
 viviane_password_hash = get_password_hash("viviane")
 lancelot_password_hash = get_password_hash("lancelot")
+excalibur_password_hash = get_password_hash("excalibur")
 
 
 class User(models.BaseUser):
@@ -90,6 +91,26 @@ def inactive_user_oauth(oauth_account3) -> UserDBOAuth:
 
 
 @pytest.fixture
+def verified_user() -> UserDB:
+    return UserDB(
+        email="lake.lady@camelot.bt",
+        hashed_password=excalibur_password_hash,
+        is_active=True,
+        is_verified=True,
+    )
+
+
+@pytest.fixture
+def verified_user_oauth(oauth_account4) -> UserDBOAuth:
+    return UserDBOAuth(
+        email="lake.lady@camelot.bt",
+        hashed_password=excalibur_password_hash,
+        is_active=False,
+        oauth_accounts=[oauth_account4],
+    )
+
+
+@pytest.fixture
 def superuser() -> UserDB:
     return UserDB(
         email="merlin@camelot.bt",
@@ -104,6 +125,27 @@ def superuser_oauth() -> UserDBOAuth:
         email="merlin@camelot.bt",
         hashed_password=viviane_password_hash,
         is_superuser=True,
+        oauth_accounts=[],
+    )
+
+
+@pytest.fixture
+def verified_superuser() -> UserDB:
+    return UserDB(
+        email="the.real.merlin@camelot.bt",
+        hashed_password=viviane_password_hash,
+        is_superuser=True,
+        is_verified=True,
+    )
+
+
+@pytest.fixture
+def verified_superuser_oauth() -> UserDBOAuth:
+    return UserDBOAuth(
+        email="the.real.merlin@camelot.bt",
+        hashed_password=viviane_password_hash,
+        is_superuser=True,
+        is_verified=True,
         oauth_accounts=[],
     )
 
@@ -142,25 +184,57 @@ def oauth_account3() -> BaseOAuthAccount:
 
 
 @pytest.fixture
-def mock_user_db(user, inactive_user, superuser) -> BaseUserDatabase:
+def oauth_account4() -> BaseOAuthAccount:
+    return BaseOAuthAccount(
+        oauth_name="service4",
+        access_token="TOKEN",
+        expires_at=1579000751,
+        account_id="verified_user_oauth1",
+        account_email="lake.lady@camelot.bt",
+    )
+
+
+@pytest.fixture
+def oauth_account5() -> BaseOAuthAccount:
+    return BaseOAuthAccount(
+        oauth_name="service5",
+        access_token="TOKEN",
+        expires_at=1579000751,
+        account_id="verified_superuser_oauth1",
+        account_email="the.real.merlin@camelot.bt",
+    )
+
+
+@pytest.fixture
+def mock_user_db(
+    user, verified_user, inactive_user, superuser, verified_superuser
+) -> BaseUserDatabase:
     class MockUserDatabase(BaseUserDatabase[UserDB]):
         async def get(self, id: UUID4) -> Optional[UserDB]:
             if id == user.id:
                 return user
+            if id == verified_user.id:
+                return verified_user
             if id == inactive_user.id:
                 return inactive_user
             if id == superuser.id:
                 return superuser
+            if id == verified_superuser.id:
+                return verified_superuser
             return None
 
         async def get_by_email(self, email: str) -> Optional[UserDB]:
             lower_email = email.lower()
             if lower_email == user.email.lower():
                 return user
+            if lower_email == verified_user.email.lower():
+                return verified_user
             if lower_email == inactive_user.email.lower():
                 return inactive_user
             if lower_email == superuser.email.lower():
                 return superuser
+            if lower_email == verified_superuser.email.lower():
+                return verified_superuser
             return None
 
         async def create(self, user: UserDB) -> UserDB:
@@ -177,26 +251,38 @@ def mock_user_db(user, inactive_user, superuser) -> BaseUserDatabase:
 
 @pytest.fixture
 def mock_user_db_oauth(
-    user_oauth, inactive_user_oauth, superuser_oauth
+    user_oauth,
+    verified_user_oauth,
+    inactive_user_oauth,
+    superuser_oauth,
+    verified_superuser_oauth,
 ) -> BaseUserDatabase:
     class MockUserDatabase(BaseUserDatabase[UserDBOAuth]):
         async def get(self, id: UUID4) -> Optional[UserDBOAuth]:
             if id == user_oauth.id:
                 return user_oauth
+            if id == verified_user_oauth.id:
+                return verified_user_oauth
             if id == inactive_user_oauth.id:
                 return inactive_user_oauth
             if id == superuser_oauth.id:
                 return superuser_oauth
+            if id == verified_superuser_oauth.id:
+                return verified_superuser_oauth
             return None
 
         async def get_by_email(self, email: str) -> Optional[UserDBOAuth]:
             lower_email = email.lower()
             if lower_email == user_oauth.email.lower():
                 return user_oauth
+            if lower_email == verified_user_oauth.email.lower():
+                return verified_user_oauth
             if lower_email == inactive_user_oauth.email.lower():
                 return inactive_user_oauth
             if lower_email == superuser_oauth.email.lower():
                 return superuser_oauth
+            if lower_email == verified_superuser_oauth.email.lower():
+                return verified_superuser_oauth
             return None
 
         async def get_by_oauth_account(
@@ -265,6 +351,25 @@ def get_test_client():
                 yield test_client
 
     return _get_test_client
+
+
+@pytest.fixture
+def get_param_test_client():
+    async def _get_param_test_client(
+        app_fact: Callable[[Any], ASGIApp]
+    ) -> AsyncGenerator[Callable[[Any], httpx.AsyncClient], None]:
+        async def test_client_fact(*args, **kwargs):
+            app = await app_fact(*args, **kwargs)
+
+            async with LifespanManager(app):
+                async with httpx.AsyncClient(
+                    app=app, base_url="http://app.io"
+                ) as test_client:
+                    yield test_client
+
+        yield test_client_fact
+
+    return _get_param_test_client
 
 
 @pytest.fixture

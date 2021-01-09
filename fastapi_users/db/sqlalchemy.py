@@ -57,6 +57,7 @@ class SQLAlchemyBaseUserTable:
     hashed_password = Column(String(length=72), nullable=False)
     is_active = Column(Boolean, default=True, nullable=False)
     is_superuser = Column(Boolean, default=False, nullable=False)
+    is_verified = Column(Boolean, default=False, nullable=False)
 
 
 class SQLAlchemyBaseOAuthAccountTable:

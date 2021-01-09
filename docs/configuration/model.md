@@ -38,7 +38,7 @@ class UserDB(User, models.BaseUserDB):
     pass
 ```
 
-You can of course add you own properties there to fit to your needs!
+You can of course add your own properties there to fit to your needs!
 
 ## Password validation
 
@@ -59,7 +59,7 @@ class UserCreate(models.BaseUserCreate):
 
 ## Next steps
 
-Depending on your database backend, database configuration will differ a bit.
+Depending on your database backend, the database configuration will differ a bit.
 
 [I'm using SQLAlchemy](databases/sqlalchemy.md)
 

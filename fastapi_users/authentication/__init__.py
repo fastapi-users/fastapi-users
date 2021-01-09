@@ -75,9 +75,23 @@ class Authenticator:
                 return None
             return user
 
+        @with_signature(signature, func_name="get_optional_current_verified_user")
+        async def get_optional_current_verified_user(*args, **kwargs):
+            user = await get_optional_current_active_user(*args, **kwargs)
+            if not user or not user.is_verified:
+                return None
+            return user
+
         @with_signature(signature, func_name="get_optional_current_superuser")
         async def get_optional_current_superuser(*args, **kwargs):
             user = await get_optional_current_active_user(*args, **kwargs)
+            if not user or not user.is_superuser:
+                return None
+            return user
+
+        @with_signature(signature, func_name="get_optional_current_verified_superuser")
+        async def get_optional_current_verified_superuser(*args, **kwargs):
+            user = await get_optional_current_verified_user(*args, **kwargs)
             if not user or not user.is_superuser:
                 return None
             return user
@@ -96,6 +110,13 @@ class Authenticator:
                 raise self._get_credentials_exception()
             return user
 
+        @with_signature(signature, func_name="get_current_verified_user")
+        async def get_current_verified_user(*args, **kwargs):
+            user = await get_optional_current_verified_user(*args, **kwargs)
+            if user is None:
+                raise self._get_credentials_exception()
+            return user
+
         @with_signature(signature, func_name="get_current_superuser")
         async def get_current_superuser(*args, **kwargs):
             user = await get_optional_current_active_user(*args, **kwargs)
@@ -105,12 +126,27 @@ class Authenticator:
                 raise self._get_credentials_exception(status.HTTP_403_FORBIDDEN)
             return user
 
+        @with_signature(signature, func_name="get_current_verified_superuser")
+        async def get_current_verified_superuser(*args, **kwargs):
+            user = await get_optional_current_verified_user(*args, **kwargs)
+            if user is None:
+                raise self._get_credentials_exception()
+            if not user.is_superuser:
+                raise self._get_credentials_exception(status.HTTP_403_FORBIDDEN)
+            return user
+
         self.get_current_user = get_current_user
         self.get_current_active_user = get_current_active_user
+        self.get_current_verified_user = get_current_verified_user
         self.get_current_superuser = get_current_superuser
+        self.get_current_verified_superuser = get_current_verified_superuser
         self.get_optional_current_user = get_optional_current_user
         self.get_optional_current_active_user = get_optional_current_active_user
+        self.get_optional_current_verified_user = get_optional_current_verified_user
         self.get_optional_current_superuser = get_optional_current_superuser
+        self.get_optional_current_verified_superuser = (
+            get_optional_current_verified_superuser
+        )
 
     async def _authenticate(self, *args, **kwargs) -> Optional[BaseUserDB]:
         for backend in self.backends:
