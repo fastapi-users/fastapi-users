@@ -5,7 +5,7 @@ try:
 except ImportError:
     from typing_extensions import Protocol  # type: ignore
 
-from pydantic import EmailStr, UUID4
+from pydantic import UUID4, EmailStr
 
 from fastapi_users import models
 from fastapi_users.db import BaseUserDatabase
@@ -60,7 +60,7 @@ def get_create_user(
     return create_user
 
 
-class VerifyUserProtocol(Protocol):
+class VerifyUserProtocol(Protocol):  # pragma: no cover
     def __call__(self, user_uuid: UUID4) -> Awaitable[models.BaseUserDB]:
         pass
 
@@ -83,7 +83,7 @@ def get_verify_user(
     return verify_user
 
 
-class GetUserProtocol(Protocol):
+class GetUserProtocol(Protocol):   # pragma: no cover
     def __call__(self, user_email: EmailStr) -> Awaitable[models.BaseUserDB]:
         pass
 
