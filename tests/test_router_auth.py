@@ -1,4 +1,4 @@
-from typing import Any, AsyncGenerator, Callable, Dict, cast
+from typing import Any, AsyncGenerator, Dict, Tuple, cast
 
 import httpx
 import pytest
@@ -10,12 +10,8 @@ from tests.conftest import MockAuthentication, UserDB
 
 
 @pytest.fixture
-@pytest.mark.asyncio
-async def test_app_client_factory(
-    mock_user_db, mock_authentication, get_param_test_client
-) -> AsyncGenerator[httpx.AsyncClient, None]:
-    async def app_factory(requires_verification):
-
+def app_factory(mock_user_db, mock_authentication):
+    def _app_factory(requires_verification: bool) -> FastAPI:
         mock_authentication_bis = MockAuthentication(name="mock-bis")
         authenticator = Authenticator(
             [mock_authentication, mock_authentication_bis], mock_user_db
@@ -40,11 +36,23 @@ async def test_app_client_factory(
 
         return app
 
-    async for client in get_param_test_client(app_factory):
-        yield client
+    return _app_factory
 
 
-@pytest.mark.parametrize("requires_verification", [True, False])
+@pytest.fixture(
+    params=[True, False], ids=["required_verification", "not_required_verification"]
+)
+@pytest.mark.asyncio
+async def test_app_client(
+    request, get_test_client, app_factory
+) -> AsyncGenerator[Tuple[httpx.AsyncClient, bool], None]:
+    requires_verification = request.param
+    app = app_factory(requires_verification)
+
+    async for client in get_test_client(app):
+        yield client, requires_verification
+
+
 @pytest.mark.router
 @pytest.mark.parametrize("path", ["/mock/login", "/mock-bis/login"])
 @pytest.mark.asyncio
@@ -52,55 +60,52 @@ class TestLogin:
     async def test_empty_body(
         self,
         path,
-        test_app_client_factory: Callable[[Any], httpx.AsyncClient],
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.post(path, data={})
+        client, _ = test_app_client
+        response = await client.post(path, data={})
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     async def test_missing_username(
-        self, path, test_app_client_factory: httpx.AsyncClient, requires_verification
+        self,
+        path,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, _ = test_app_client
         data = {"password": "guinevere"}
-        response = await test_app_client.post(path, data=data)
+        response = await client.post(path, data=data)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     async def test_missing_password(
-        self, path, test_app_client_factory: httpx.AsyncClient, requires_verification
+        self,
+        path,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, _ = test_app_client
         data = {"username": "king.arthur@camelot.bt"}
-        response = await test_app_client.post(path, data=data)
+        response = await client.post(path, data=data)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     async def test_not_existing_user(
-        self, path, test_app_client_factory: httpx.AsyncClient, requires_verification
+        self,
+        path,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, _ = test_app_client
         data = {"username": "lancelot@camelot.bt", "password": "guinevere"}
-        response = await test_app_client.post(path, data=data)
+        response = await client.post(path, data=data)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
 
     async def test_wrong_password(
-        self, path, test_app_client_factory: httpx.AsyncClient, requires_verification
+        self,
+        path,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, _ = test_app_client
         data = {"username": "king.arthur@camelot.bt", "password": "percival"}
-        response = await test_app_client.post(path, data=data)
+        response = await client.post(path, data=data)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
@@ -112,15 +117,12 @@ class TestLogin:
         self,
         path,
         email,
-        test_app_client_factory: httpx.AsyncClient,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
-        requires_verification,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, requires_verification = test_app_client
         data = {"username": email, "password": "guinevere"}
-        response = await test_app_client.post(path, data=data)
+        response = await client.post(path, data=data)
         if requires_verification:
             assert response.status_code == status.HTTP_400_BAD_REQUEST
             data = cast(Dict[str, Any], response.json())
@@ -134,57 +136,50 @@ class TestLogin:
         self,
         path,
         email,
-        test_app_client_factory: httpx.AsyncClient,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         verified_user: UserDB,
-        requires_verification,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, _ = test_app_client
         data = {"username": email, "password": "excalibur"}
-        response = await test_app_client.post(path, data=data)
+        response = await client.post(path, data=data)
         assert response.status_code == status.HTTP_200_OK
         assert response.json() == {"token": str(verified_user.id)}
 
     async def test_inactive_user(
-        self, path, test_app_client_factory: httpx.AsyncClient, requires_verification
+        self,
+        path,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, _ = test_app_client
         data = {"username": "percival@camelot.bt", "password": "angharad"}
-        response = await test_app_client.post(path, data=data)
+        response = await client.post(path, data=data)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
 
 
-@pytest.mark.parametrize("requires_verification", [True, False])
 @pytest.mark.router
 @pytest.mark.parametrize("path", ["/mock/logout", "/mock-bis/logout"])
 @pytest.mark.asyncio
 class TestLogout:
     async def test_missing_token(
-        self, path, test_app_client_factory: httpx.AsyncClient, requires_verification
+        self,
+        path,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.post(path)
+        client, _ = test_app_client
+        response = await client.post(path)
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     async def test_valid_credentials_unverified(
         self,
         mocker,
         path,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.post(
+        client, requires_verification = test_app_client
+        response = await client.post(
             path, headers={"Authorization": f"Bearer {user.id}"}
         )
         if requires_verification:
@@ -196,14 +191,11 @@ class TestLogout:
         self,
         mocker,
         path,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         verified_user: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.post(
+        client, _ = test_app_client
+        response = await client.post(
             path, headers={"Authorization": f"Bearer {verified_user.id}"}
         )
         assert response.status_code == status.HTTP_200_OK

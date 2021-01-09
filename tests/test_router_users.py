@@ -1,4 +1,4 @@
-from typing import Any, AsyncGenerator, Dict, cast
+from typing import Any, AsyncGenerator, Dict, Tuple, cast
 from unittest.mock import MagicMock
 
 import asynctest
@@ -28,12 +28,8 @@ def after_update(request):
 
 
 @pytest.fixture
-@pytest.mark.asyncio
-async def test_app_client_factory(
-    mock_user_db, mock_authentication, after_update, get_param_test_client
-) -> AsyncGenerator[httpx.AsyncClient, None]:
-    async def app_factory(requires_verification):
-
+def app_factory(mock_user_db, mock_authentication, after_update):
+    def _app_factory(requires_verification: bool) -> FastAPI:
         mock_authentication_bis = MockAuthentication(name="mock-bis")
         authenticator = Authenticator(
             [mock_authentication, mock_authentication_bis], mock_user_db
@@ -54,47 +50,49 @@ async def test_app_client_factory(
 
         return app
 
-    async for client in get_param_test_client(app_factory):
-        yield client
+    return _app_factory
 
 
-@pytest.mark.parametrize("requires_verification", [True, False])
+@pytest.fixture(
+    params=[True, False], ids=["required_verification", "not_required_verification"]
+)
+@pytest.mark.asyncio
+async def test_app_client(
+    request, get_test_client, app_factory
+) -> AsyncGenerator[Tuple[httpx.AsyncClient, bool], None]:
+    requires_verification = request.param
+    app = app_factory(requires_verification)
+
+    async for client in get_test_client(app):
+        yield client, requires_verification
+
+
 @pytest.mark.router
 @pytest.mark.asyncio
 class TestMe:
-    async def test_missing_token(
-        self, test_app_client_factory: httpx.AsyncClient, requires_verification
-    ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.get("/me")
+    async def test_missing_token(self, test_app_client: Tuple[httpx.AsyncClient, bool]):
+        client, _ = test_app_client
+        response = await client.get("/me")
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     async def test_inactive_user(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         inactive_user: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.get(
+        client, _ = test_app_client
+        response = await client.get(
             "/me", headers={"Authorization": f"Bearer {inactive_user.id}"}
         )
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     async def test_active_user(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.get(
+        client, requires_verification = test_app_client
+        response = await client.get(
             "/me", headers={"Authorization": f"Bearer {user.id}"}
         )
         if requires_verification:
@@ -107,14 +105,11 @@ class TestMe:
 
     async def test_verified_user(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         verified_user: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.get(
+        client, _ = test_app_client
+        response = await client.get(
             "/me", headers={"Authorization": f"Bearer {verified_user.id}"}
         )
         assert response.status_code == status.HTTP_200_OK
@@ -123,34 +118,27 @@ class TestMe:
         assert data["email"] == verified_user.email
 
 
-@pytest.mark.parametrize("requires_verification", [True, False])
 @pytest.mark.router
 @pytest.mark.asyncio
 class TestUpdateMe:
     async def test_missing_token(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         after_update,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.patch("/me")
+        client, _ = test_app_client
+        response = await client.patch("/me")
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
         assert after_update.called is False
 
     async def test_inactive_user(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         inactive_user: UserDB,
         after_update,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.patch(
+        client, _ = test_app_client
+        response = await client.patch(
             "/me", headers={"Authorization": f"Bearer {inactive_user.id}"}
         )
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
@@ -158,15 +146,12 @@ class TestUpdateMe:
 
     async def test_empty_body(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
         after_update,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.patch(
+        client, requires_verification = test_app_client
+        response = await client.patch(
             "/me", json={}, headers={"Authorization": f"Bearer {user.id}"}
         )
         if requires_verification:
@@ -188,16 +173,13 @@ class TestUpdateMe:
 
     async def test_valid_body(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
         after_update,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, requires_verification = test_app_client
         json = {"email": "king.arthur@tintagel.bt"}
-        response = await test_app_client.patch(
+        response = await client.patch(
             "/me", json=json, headers={"Authorization": f"Bearer {user.id}"}
         )
         if requires_verification:
@@ -219,16 +201,13 @@ class TestUpdateMe:
 
     async def test_valid_body_is_superuser(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
         after_update,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, requires_verification = test_app_client
         json = {"is_superuser": True}
-        response = await test_app_client.patch(
+        response = await client.patch(
             "/me", json=json, headers={"Authorization": f"Bearer {user.id}"}
         )
         if requires_verification:
@@ -250,16 +229,13 @@ class TestUpdateMe:
 
     async def test_valid_body_is_active(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
         after_update,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, requires_verification = test_app_client
         json = {"is_active": False}
-        response = await test_app_client.patch(
+        response = await client.patch(
             "/me", json=json, headers={"Authorization": f"Bearer {user.id}"}
         )
         if requires_verification:
@@ -281,16 +257,13 @@ class TestUpdateMe:
 
     async def test_valid_body_is_verified(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
         after_update,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, requires_verification = test_app_client
         json = {"is_verified": True}
-        response = await test_app_client.patch(
+        response = await client.patch(
             "/me", json=json, headers={"Authorization": f"Bearer {user.id}"}
         )
         if requires_verification:
@@ -314,19 +287,16 @@ class TestUpdateMe:
         self,
         mocker,
         mock_user_db,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
         after_update,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, requires_verification = test_app_client
         mocker.spy(mock_user_db, "update")
         current_hashed_password = user.hashed_password
 
         json = {"password": "merlin"}
-        response = await test_app_client.patch(
+        response = await client.patch(
             "/me", json=json, headers={"Authorization": f"Bearer {user.id}"}
         )
         if requires_verification:
@@ -349,15 +319,12 @@ class TestUpdateMe:
 
     async def test_empty_body_verified_user(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         verified_user: UserDB,
         after_update,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.patch(
+        client, _ = test_app_client
+        response = await client.patch(
             "/me", json={}, headers={"Authorization": f"Bearer {verified_user.id}"}
         )
         assert response.status_code == status.HTTP_200_OK
@@ -375,16 +342,13 @@ class TestUpdateMe:
 
     async def test_valid_body_verified_user(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         verified_user: UserDB,
         after_update,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, _ = test_app_client
         json = {"email": "king.arthur@tintagel.bt"}
-        response = await test_app_client.patch(
+        response = await client.patch(
             "/me", json=json, headers={"Authorization": f"Bearer {verified_user.id}"}
         )
         assert response.status_code == status.HTTP_200_OK
@@ -402,16 +366,13 @@ class TestUpdateMe:
 
     async def test_valid_body_is_superuser_verified_user(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         verified_user: UserDB,
         after_update,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, _ = test_app_client
         json = {"is_superuser": True}
-        response = await test_app_client.patch(
+        response = await client.patch(
             "/me", json=json, headers={"Authorization": f"Bearer {verified_user.id}"}
         )
         assert response.status_code == status.HTTP_200_OK
@@ -429,16 +390,13 @@ class TestUpdateMe:
 
     async def test_valid_body_is_active_verified_user(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         verified_user: UserDB,
         after_update,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, _ = test_app_client
         json = {"is_active": False}
-        response = await test_app_client.patch(
+        response = await client.patch(
             "/me", json=json, headers={"Authorization": f"Bearer {verified_user.id}"}
         )
         assert response.status_code == status.HTTP_200_OK
@@ -456,16 +414,13 @@ class TestUpdateMe:
 
     async def test_valid_body_is_verified_verified_user(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         verified_user: UserDB,
         after_update,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, _ = test_app_client
         json = {"is_verified": False}
-        response = await test_app_client.patch(
+        response = await client.patch(
             "/me", json=json, headers={"Authorization": f"Bearer {verified_user.id}"}
         )
         assert response.status_code == status.HTTP_200_OK
@@ -485,19 +440,16 @@ class TestUpdateMe:
         self,
         mocker,
         mock_user_db,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         verified_user: UserDB,
         after_update,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, _ = test_app_client
         mocker.spy(mock_user_db, "update")
         current_hashed_password = verified_user.hashed_password
 
         json = {"password": "merlin"}
-        response = await test_app_client.patch(
+        response = await client.patch(
             "/me", json=json, headers={"Authorization": f"Bearer {verified_user.id}"}
         )
         assert response.status_code == status.HTTP_200_OK
@@ -515,29 +467,21 @@ class TestUpdateMe:
         assert isinstance(request, Request)
 
 
-@pytest.mark.parametrize("requires_verification", [True, False])
 @pytest.mark.router
 @pytest.mark.asyncio
 class TestGetUser:
-    async def test_missing_token(
-        self, test_app_client_factory: httpx.AsyncClient, requires_verification
-    ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.get("/d35d213e-f3d8-4f08-954a-7e0d1bea286f")
+    async def test_missing_token(self, test_app_client: Tuple[httpx.AsyncClient, bool]):
+        client, _ = test_app_client
+        response = await client.get("/d35d213e-f3d8-4f08-954a-7e0d1bea286f")
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     async def test_regular_user(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.get(
+        client, requires_verification = test_app_client
+        response = await client.get(
             "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
             headers={"Authorization": f"Bearer {user.id}"},
         )
@@ -548,14 +492,11 @@ class TestGetUser:
 
     async def test_verified_user(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         verified_user: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.get(
+        client, _ = test_app_client
+        response = await client.get(
             "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
             headers={"Authorization": f"Bearer {verified_user.id}"},
         )
@@ -563,14 +504,11 @@ class TestGetUser:
 
     async def test_not_existing_user_unverified_superuser(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         superuser: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.get(
+        client, requires_verification = test_app_client
+        response = await client.get(
             "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
             headers={"Authorization": f"Bearer {superuser.id}"},
         )
@@ -581,14 +519,11 @@ class TestGetUser:
 
     async def test_not_existing_user_verified_superuser(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         verified_superuser: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.get(
+        client, _ = test_app_client
+        response = await client.get(
             "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
             headers={"Authorization": f"Bearer {verified_superuser.id}"},
         )
@@ -596,15 +531,12 @@ class TestGetUser:
 
     async def test_superuser(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
         superuser: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.get(
+        client, requires_verification = test_app_client
+        response = await client.get(
             f"/{user.id}", headers={"Authorization": f"Bearer {superuser.id}"}
         )
         if requires_verification:
@@ -618,15 +550,12 @@ class TestGetUser:
 
     async def test_verified_superuser(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
         verified_superuser: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.get(
+        client, _ = test_app_client
+        response = await client.get(
             f"/{user.id}", headers={"Authorization": f"Bearer {verified_superuser.id}"}
         )
         assert response.status_code == status.HTTP_200_OK
@@ -636,29 +565,21 @@ class TestGetUser:
         assert "hashed_password" not in data
 
 
-@pytest.mark.parametrize("requires_verification", [True, False])
 @pytest.mark.router
 @pytest.mark.asyncio
 class TestUpdateUser:
-    async def test_missing_token(
-        self, test_app_client_factory: httpx.AsyncClient, requires_verification
-    ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.patch("/d35d213e-f3d8-4f08-954a-7e0d1bea286f")
+    async def test_missing_token(self, test_app_client: Tuple[httpx.AsyncClient, bool]):
+        client, _ = test_app_client
+        response = await client.patch("/d35d213e-f3d8-4f08-954a-7e0d1bea286f")
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     async def test_regular_user(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.patch(
+        client, requires_verification = test_app_client
+        response = await client.patch(
             "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
             headers={"Authorization": f"Bearer {user.id}"},
         )
@@ -669,14 +590,11 @@ class TestUpdateUser:
 
     async def test_verified_user(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         verified_user: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.patch(
+        client, _ = test_app_client
+        response = await client.patch(
             "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
             headers={"Authorization": f"Bearer {verified_user.id}"},
         )
@@ -684,14 +602,11 @@ class TestUpdateUser:
 
     async def test_not_existing_user_unverified_superuser(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         superuser: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.patch(
+        client, requires_verification = test_app_client
+        response = await client.patch(
             "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
             json={},
             headers={"Authorization": f"Bearer {superuser.id}"},
@@ -703,14 +618,11 @@ class TestUpdateUser:
 
     async def test_not_existing_user_verified_superuser(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         verified_superuser: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.patch(
+        client, _ = test_app_client
+        response = await client.patch(
             "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
             json={},
             headers={"Authorization": f"Bearer {verified_superuser.id}"},
@@ -719,15 +631,12 @@ class TestUpdateUser:
 
     async def test_empty_body_unverified_superuser(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
         superuser: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.patch(
+        client, requires_verification = test_app_client
+        response = await client.patch(
             f"/{user.id}", json={}, headers={"Authorization": f"Bearer {superuser.id}"}
         )
         if requires_verification:
@@ -740,15 +649,12 @@ class TestUpdateUser:
 
     async def test_empty_body_verified_superuser(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
         verified_superuser: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.patch(
+        client, _ = test_app_client
+        response = await client.patch(
             f"/{user.id}",
             json={},
             headers={"Authorization": f"Bearer {verified_superuser.id}"},
@@ -760,16 +666,13 @@ class TestUpdateUser:
 
     async def test_valid_body_unverified_superuser(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
         superuser: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, requires_verification = test_app_client
         json = {"email": "king.arthur@tintagel.bt"}
-        response = await test_app_client.patch(
+        response = await client.patch(
             f"/{user.id}",
             json=json,
             headers={"Authorization": f"Bearer {superuser.id}"},
@@ -784,16 +687,13 @@ class TestUpdateUser:
 
     async def test_valid_body_verified_superuser(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
         verified_superuser: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, _ = test_app_client
         json = {"email": "king.arthur@tintagel.bt"}
-        response = await test_app_client.patch(
+        response = await client.patch(
             f"/{user.id}",
             json=json,
             headers={"Authorization": f"Bearer {verified_superuser.id}"},
@@ -805,16 +705,13 @@ class TestUpdateUser:
 
     async def test_valid_body_is_superuser_unverified_superuser(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
         superuser: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, requires_verification = test_app_client
         json = {"is_superuser": True}
-        response = await test_app_client.patch(
+        response = await client.patch(
             f"/{user.id}",
             json=json,
             headers={"Authorization": f"Bearer {superuser.id}"},
@@ -829,16 +726,13 @@ class TestUpdateUser:
 
     async def test_valid_body_is_superuser_verified_superuser(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
         verified_superuser: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, _ = test_app_client
         json = {"is_superuser": True}
-        response = await test_app_client.patch(
+        response = await client.patch(
             f"/{user.id}",
             json=json,
             headers={"Authorization": f"Bearer {verified_superuser.id}"},
@@ -850,16 +744,13 @@ class TestUpdateUser:
 
     async def test_valid_body_is_active_unverified_superuser(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
         superuser: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, requires_verification = test_app_client
         json = {"is_active": False}
-        response = await test_app_client.patch(
+        response = await client.patch(
             f"/{user.id}",
             json=json,
             headers={"Authorization": f"Bearer {superuser.id}"},
@@ -874,16 +765,13 @@ class TestUpdateUser:
 
     async def test_valid_body_is_active_verified_superuser(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
         verified_superuser: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, _ = test_app_client
         json = {"is_active": False}
-        response = await test_app_client.patch(
+        response = await client.patch(
             f"/{user.id}",
             json=json,
             headers={"Authorization": f"Bearer {verified_superuser.id}"},
@@ -895,16 +783,13 @@ class TestUpdateUser:
 
     async def test_valid_body_is_verified_unverified_superuser(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
         superuser: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, requires_verification = test_app_client
         json = {"is_verified": True}
-        response = await test_app_client.patch(
+        response = await client.patch(
             f"/{user.id}",
             json=json,
             headers={"Authorization": f"Bearer {superuser.id}"},
@@ -919,16 +804,13 @@ class TestUpdateUser:
 
     async def test_valid_body_is_verified_verified_superuser(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
         verified_superuser: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, _ = test_app_client
         json = {"is_verified": True}
-        response = await test_app_client.patch(
+        response = await client.patch(
             f"/{user.id}",
             json=json,
             headers={"Authorization": f"Bearer {verified_superuser.id}"},
@@ -942,19 +824,16 @@ class TestUpdateUser:
         self,
         mocker,
         mock_user_db,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
         superuser: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, requires_verification = test_app_client
         mocker.spy(mock_user_db, "update")
         current_hashed_password = user.hashed_password
 
         json = {"password": "merlin"}
-        response = await test_app_client.patch(
+        response = await client.patch(
             f"/{user.id}",
             json=json,
             headers={"Authorization": f"Bearer {superuser.id}"},
@@ -972,19 +851,16 @@ class TestUpdateUser:
         self,
         mocker,
         mock_user_db,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
         verified_superuser: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, _ = test_app_client
         mocker.spy(mock_user_db, "update")
         current_hashed_password = user.hashed_password
 
         json = {"password": "merlin"}
-        response = await test_app_client.patch(
+        response = await client.patch(
             f"/{user.id}",
             json=json,
             headers={"Authorization": f"Bearer {verified_superuser.id}"},
@@ -996,29 +872,21 @@ class TestUpdateUser:
         assert updated_user.hashed_password != current_hashed_password
 
 
-@pytest.mark.parametrize("requires_verification", [True, False])
 @pytest.mark.router
 @pytest.mark.asyncio
 class TestDeleteUser:
-    async def test_missing_token(
-        self, test_app_client_factory: httpx.AsyncClient, requires_verification
-    ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.delete("/d35d213e-f3d8-4f08-954a-7e0d1bea286f")
+    async def test_missing_token(self, test_app_client: Tuple[httpx.AsyncClient, bool]):
+        client, _ = test_app_client
+        response = await client.delete("/d35d213e-f3d8-4f08-954a-7e0d1bea286f")
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     async def test_regular_user(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.delete(
+        client, requires_verification = test_app_client
+        response = await client.delete(
             "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
             headers={"Authorization": f"Bearer {user.id}"},
         )
@@ -1029,14 +897,11 @@ class TestDeleteUser:
 
     async def test_verified_user(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         verified_user: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.delete(
+        client, _ = test_app_client
+        response = await client.delete(
             "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
             headers={"Authorization": f"Bearer {verified_user.id}"},
         )
@@ -1044,14 +909,11 @@ class TestDeleteUser:
 
     async def test_not_existing_user_unverified_superuser(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         superuser: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.delete(
+        client, requires_verification = test_app_client
+        response = await client.delete(
             "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
             headers={"Authorization": f"Bearer {superuser.id}"},
         )
@@ -1062,14 +924,11 @@ class TestDeleteUser:
 
     async def test_not_existing_user_verified_superuser(
         self,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         verified_superuser: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
-        response = await test_app_client.delete(
+        client, _ = test_app_client
+        response = await client.delete(
             "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
             headers={"Authorization": f"Bearer {verified_superuser.id}"},
         )
@@ -1079,17 +938,14 @@ class TestDeleteUser:
         self,
         mocker,
         mock_user_db,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
         superuser: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, requires_verification = test_app_client
         mocker.spy(mock_user_db, "delete")
 
-        response = await test_app_client.delete(
+        response = await client.delete(
             f"/{user.id}", headers={"Authorization": f"Bearer {superuser.id}"}
         )
         if requires_verification:
@@ -1106,17 +962,14 @@ class TestDeleteUser:
         self,
         mocker,
         mock_user_db,
-        test_app_client_factory: httpx.AsyncClient,
-        requires_verification,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
         verified_superuser: UserDB,
     ):
-        test_app_client = await test_app_client_factory(
-            requires_verification
-        ).__anext__()
+        client, _ = test_app_client
         mocker.spy(mock_user_db, "delete")
 
-        response = await test_app_client.delete(
+        response = await client.delete(
             f"/{user.id}", headers={"Authorization": f"Bearer {verified_superuser.id}"}
         )
         assert response.status_code == status.HTTP_204_NO_CONTENT

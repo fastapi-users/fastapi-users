@@ -2,7 +2,7 @@ from typing import AsyncGenerator
 
 import httpx
 import pytest
-from fastapi import Depends, FastAPI, status
+from fastapi import Depends, FastAPI, Request, status
 
 from fastapi_users import FastAPIUsers
 from tests.conftest import User, UserCreate, UserDB, UserUpdate
@@ -22,7 +22,7 @@ async def test_app_client(
         UserDB,
     )
 
-    def verification_callback():
+    def verification_callback(user: UserDB, token: str, request: Request):
         pass
 
     app = FastAPI()

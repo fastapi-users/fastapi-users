@@ -1,5 +1,5 @@
 import asyncio
-from typing import Any, AsyncGenerator, Callable, List, Optional
+from typing import AsyncGenerator, List, Optional
 
 import httpx
 import pytest
@@ -351,25 +351,6 @@ def get_test_client():
                 yield test_client
 
     return _get_test_client
-
-
-@pytest.fixture
-def get_param_test_client():
-    async def _get_param_test_client(
-        app_fact: Callable[[Any], ASGIApp]
-    ) -> AsyncGenerator[Callable[[Any], httpx.AsyncClient], None]:
-        async def test_client_fact(*args, **kwargs):
-            app = await app_fact(*args, **kwargs)
-
-            async with LifespanManager(app):
-                async with httpx.AsyncClient(
-                    app=app, base_url="http://app.io"
-                ) as test_client:
-                    yield test_client
-
-        yield test_client_fact
-
-    return _get_param_test_client
 
 
 @pytest.fixture
