@@ -1,8 +1,5 @@
 # Verify router
 
-!!! warning
-    This feature is not released yet.
-
 This router provides routes to manage user email verification. Check the [routes usage](../../usage/routes.md) to learn how to use them.
 
 !!! success "👏👏👏"
