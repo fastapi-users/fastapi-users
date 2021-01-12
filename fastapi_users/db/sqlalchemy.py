@@ -197,6 +197,6 @@ class SQLAlchemyUserDatabase(BaseUserDatabase[UD]):
                 self.oauth_accounts.c.user_id == user["id"]
             )
             oauth_accounts = await self.database.fetch_all(query)
-            user_dict["oauth_accounts"] = oauth_accounts
+            user_dict["oauth_accounts"] = [{**a} for a in oauth_accounts]
 
         return self.user_db_model(**user_dict)
