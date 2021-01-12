@@ -8,7 +8,13 @@ class CreateUpdateDictModel(BaseModel):
     def create_update_dict(self):
         return self.dict(
             exclude_unset=True,
-            exclude={"id", "is_superuser", "is_active", "oauth_accounts"},
+            exclude={
+                "id",
+                "is_superuser",
+                "is_active",
+                "is_verified",
+                "oauth_accounts",
+            },
         )
 
     def create_update_dict_superuser(self):
@@ -22,6 +28,7 @@ class BaseUser(CreateUpdateDictModel):
     email: Optional[EmailStr] = None
     is_active: Optional[bool] = True
     is_superuser: Optional[bool] = False
+    is_verified: Optional[bool] = False
 
     @validator("id", pre=True, always=True)
     def default_id(cls, v):
@@ -33,6 +40,7 @@ class BaseUserCreate(CreateUpdateDictModel):
     password: str
     is_active: Optional[bool] = True
     is_superuser: Optional[bool] = False
+    is_verified: Optional[bool] = False
 
 
 class BaseUserUpdate(BaseUser):

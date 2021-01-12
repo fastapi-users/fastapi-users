@@ -33,6 +33,7 @@ This helper class will let you generate useful routers to setup the authenticati
 * [Auth router](./auth.md): Provides `/login` and `/logout` routes for a given [authentication backend](../authentication/index.md).
 * [Register router](./register.md): Provides `/register` routes to allow a user to create a new account.
 * [Reset password router](./reset.md): Provides `/forgot-password` and `/reset-password` routes to allow a user to reset its password.
+* [Verify router](./verify.md): Provides `/request-verify-token` and `/verify` routes to manage user e-mail verification.
 * [Users router](./users.md): Provides routes to manage users.
 * [OAuth router](../oauth.md): Provides routes to perform an OAuth authentication against a service provider (like Google or Facebook).
 

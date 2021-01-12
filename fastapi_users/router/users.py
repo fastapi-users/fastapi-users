@@ -17,12 +17,17 @@ def get_users_router(
     user_db_model: Type[models.BaseUserDB],
     authenticator: Authenticator,
     after_update: Optional[Callable[[models.UD, Dict[str, Any], Request], None]] = None,
+    requires_verification: bool = False,
 ) -> APIRouter:
     """Generate a router with the authentication routes."""
     router = APIRouter()
 
-    get_current_active_user = authenticator.get_current_active_user
-    get_current_superuser = authenticator.get_current_superuser
+    if requires_verification:
+        get_current_active_user = authenticator.get_current_verified_user
+        get_current_superuser = authenticator.get_current_verified_superuser
+    else:
+        get_current_active_user = authenticator.get_current_active_user
+        get_current_superuser = authenticator.get_current_superuser
 
     async def _get_or_404(id: UUID4) -> models.BaseUserDB:
         user = await user_db.get(id)

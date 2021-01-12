@@ -1,8 +1,10 @@
 # Helpers
 
+**FastAPI Users** provides some helper functions to perform some actions programmatically. They are available from your `FastAPIUsers` instance.
+
 ## Create user
 
-**FastAPI Users** provides a helper function to easily create a user programmatically. They are available from your `FastAPIUsers` instance.
+Create a user.
 
 ```py
 regular_user = await fastapi_users.create_user(
@@ -19,4 +21,21 @@ superuser = await fastapi_users.create_user(
         is_superuser=True,
     )
 )
+```
+
+## Verify user
+
+Verify a user.
+
+```py
+verified_user = await fastapi_users.verify_user(non_verified_user)
+assert verified_user.is_verified is True
+```
+
+## Get user
+
+Retrieve a user by e-mail.
+
+```py
+user = await fastapi_users.get_user("king.arthur@camelot.bt")
 ```

@@ -31,3 +31,15 @@ app.include_router(
     tags=["auth"],
 )
 ```
+
+### Optional: user verification
+
+You can require the user to be **verified** (i.e. `is_verified` property set to `True`) to allow login. You have to set the `requires_validation` parameter to `True` on the router instantiation method:
+
+```py
+app.include_router(
+    fastapi_users.get_auth_router(jwt_authentication, requires_verification=True),
+    prefix="/auth/jwt",
+    tags=["auth"],
+)
+```

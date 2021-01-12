@@ -14,6 +14,7 @@ class TortoiseBaseUserModel(models.Model):
     hashed_password = fields.CharField(null=False, max_length=255)
     is_active = fields.BooleanField(default=True, null=False)
     is_superuser = fields.BooleanField(default=False, null=False)
+    is_verified = fields.BooleanField(default=False, null=False)
 
     async def to_dict(self):
         d = {}

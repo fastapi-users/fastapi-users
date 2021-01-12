@@ -30,7 +30,7 @@ Add quickly a registration and authentication system to your [FastAPI](https://f
 ## Features
 
 * [X] Extensible base user model
-* [X] Ready-to-use register, login, forgot and reset password routes
+* [X] Ready-to-use register, login, reset password and verify e-mail routes
 * [X] Ready-to-use OAuth2 flow
 * [X] Dependency callables to inject current user in route
 * [X] Customizable database backend
@@ -72,6 +72,12 @@ Alternatively, you can run `pytest` yourself. The MongoDB unit tests will be ski
 
 ```bash
 pytest
+```
+
+There are quite a few unit tests, so you might run into ulimit issues where there are too many open file descriptors. You may be able to set a new, higher limit temporarily with:
+
+```bash
+ulimit -n 2048
 ```
 
 ### Format the code
