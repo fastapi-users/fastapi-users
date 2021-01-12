@@ -482,6 +482,19 @@
   </li>
 
         
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../../configuration/routers/verify/" class="md-nav__link">
+      Verify router
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -627,6 +640,20 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#verify-user" class="md-nav__link">
+    Verify user
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get-user" class="md-nav__link">
+    Get user
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -751,6 +778,20 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#verify-user" class="md-nav__link">
+    Verify user
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get-user" class="md-nav__link">
+    Get user
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -765,8 +806,9 @@
                 
                 
                 <h1 id="helpers">Helpers<a class="headerlink" href="#helpers" title="Permanent link">&para;</a></h1>
+<p><strong>FastAPI Users</strong> provides some helper functions to perform some actions programmatically. They are available from your <code>FastAPIUsers</code> instance.</p>
 <h2 id="create-user">Create user<a class="headerlink" href="#create-user" title="Permanent link">&para;</a></h2>
-<p><strong>FastAPI Users</strong> provides a helper function to easily create a user programmatically. They are available from your <code>FastAPIUsers</code> instance.</p>
+<p>Create a user.</p>
 <div class="highlight"><pre><span></span><code><span class="n">regular_user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">fastapi_users</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span>
     <span class="n">UserCreate</span><span class="p">(</span>
         <span class="n">email</span><span class="o">=</span><span class="s2">&quot;king.arthur@camelot.bt&quot;</span><span class="p">,</span>
@@ -781,6 +823,15 @@
         <span class="n">is_superuser</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
 <span class="p">)</span>
+</code></pre></div>
+<h2 id="verify-user">Verify user<a class="headerlink" href="#verify-user" title="Permanent link">&para;</a></h2>
+<p>Verify a user.</p>
+<div class="highlight"><pre><span></span><code><span class="n">verified_user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">fastapi_users</span><span class="o">.</span><span class="n">verify_user</span><span class="p">(</span><span class="n">non_verified_user</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">verified_user</span><span class="o">.</span><span class="n">is_verified</span> <span class="ow">is</span> <span class="kc">True</span>
+</code></pre></div>
+<h2 id="get-user">Get user<a class="headerlink" href="#get-user" title="Permanent link">&para;</a></h2>
+<p>Retrieve a user by e-mail.</p>
+<div class="highlight"><pre><span></span><code><span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_user</span><span class="p">(</span><span class="s2">&quot;king.arthur@camelot.bt&quot;</span><span class="p">)</span>
 </code></pre></div>
                 
               

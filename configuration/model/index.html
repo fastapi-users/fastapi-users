@@ -536,6 +536,19 @@
   </li>
 
         
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../routers/verify/" class="md-nav__link">
+      Verify router
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -798,6 +811,7 @@
 <li><code>id</code> (<code>UUID4</code>) – Unique identifier of the user. Default to a <strong>UUID4</strong>.</li>
 <li><code>email</code> (<code>str</code>) – Email of the user. Validated by <a href="https://github.com/JoshData/python-email-validator"><code>email-validator</code></a>.</li>
 <li><code>is_active</code> (<code>bool</code>) – Whether or not the user is active. If not, login and forgot password requests will be denied. Default to <code>True</code>.</li>
+<li><code>is_verified</code> (<code>bool</code>) – Whether or not the user is verified. Optional but helpful with the <a href="../routers/verify/"><code>verify</code> router</a> logic. Default to <code>False</code>.</li>
 <li><code>is_superuser</code> (<code>bool</code>) – Whether or not the user is a superuser. Useful to implement administration logic. Default to <code>False</code>.</li>
 </ul>
 <h2 id="define-your-models">Define your models<a class="headerlink" href="#define-your-models" title="Permanent link">&para;</a></h2>
@@ -827,7 +841,7 @@
 <span class="k">class</span> <span class="nc">UserDB</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserDB</span><span class="p">):</span>
     <span class="k">pass</span>
 </code></pre></div>
-<p>You can of course add you own properties there to fit to your needs!</p>
+<p>You can of course add your own properties there to fit to your needs!</p>
 <h2 id="password-validation">Password validation<a class="headerlink" href="#password-validation" title="Permanent link">&para;</a></h2>
 <p><strong>FastAPI Users</strong> doesn't provide a default password validation, but you can implement it easily with a <a href="https://pydantic-docs.helpmanual.io/usage/validators/">Pydantic validator</a> on the <code>UserCreate</code> class. Here is a simple example to check if the password is at least six characters long:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">models</span>
@@ -842,7 +856,7 @@
         <span class="k">return</span> <span class="n">v</span>
 </code></pre></div>
 <h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
-<p>Depending on your database backend, database configuration will differ a bit.</p>
+<p>Depending on your database backend, the database configuration will differ a bit.</p>
 <p><a href="../databases/sqlalchemy/">I'm using SQLAlchemy</a></p>
 <p><a href="../databases/mongodb/">I'm using MongoDB</a></p>
 <p><a href="../databases/tortoise/">I'm using Tortoise ORM</a></p>

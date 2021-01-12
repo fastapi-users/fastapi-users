@@ -476,6 +476,19 @@
     Setup
   </a>
   
+    <nav class="md-nav" aria-label="Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#optional-user-verification" class="md-nav__link">
+    Optional: user verification
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -520,6 +533,19 @@
   <li class="md-nav__item">
     <a href="../users/" class="md-nav__link">
       Users router
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../verify/" class="md-nav__link">
+      Verify router
     </a>
   </li>
 
@@ -751,6 +777,19 @@
     Setup
   </a>
   
+    <nav class="md-nav" aria-label="Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#optional-user-verification" class="md-nav__link">
+    Optional: user verification
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -790,6 +829,14 @@
 <span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
 <span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
     <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_auth_router</span><span class="p">(</span><span class="n">jwt_authentication</span><span class="p">),</span>
+    <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/auth/jwt&quot;</span><span class="p">,</span>
+    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;auth&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+</code></pre></div>
+<h3 id="optional-user-verification">Optional: user verification<a class="headerlink" href="#optional-user-verification" title="Permanent link">&para;</a></h3>
+<p>You can require the user to be <strong>verified</strong> (i.e. <code>is_verified</code> property set to <code>True</code>) to allow login. You have to set the <code>requires_validation</code> parameter to <code>True</code> on the router instantiation method:</p>
+<div class="highlight"><pre><span></span><code><span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
+    <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_auth_router</span><span class="p">(</span><span class="n">jwt_authentication</span><span class="p">,</span> <span class="n">requires_verification</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
     <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/auth/jwt&quot;</span><span class="p">,</span>
     <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;auth&quot;</span><span class="p">],</span>
 <span class="p">)</span>

@@ -561,6 +561,19 @@
   </li>
 
         
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="configuration/routers/verify/" class="md-nav__link">
+      Verify router
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -869,7 +882,7 @@
 <h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h2>
 <ul class="task-list">
 <li class="task-list-item"><input type="checkbox" disabled checked/> Extensible base user model</li>
-<li class="task-list-item"><input type="checkbox" disabled checked/> Ready-to-use register, login, forgot and reset password routes</li>
+<li class="task-list-item"><input type="checkbox" disabled checked/> Ready-to-use register, login, reset password and verify e-mail routes</li>
 <li class="task-list-item"><input type="checkbox" disabled checked/> Ready-to-use OAuth2 flow</li>
 <li class="task-list-item"><input type="checkbox" disabled checked/> Dependency callables to inject current user in route</li>
 <li class="task-list-item"><input type="checkbox" disabled checked/> Customizable database backend<ul class="task-list">
@@ -900,6 +913,9 @@
 <p>The command will start a MongoDB container for the related unit tests. So you should have <a href="https://www.docker.com/get-started">Docker</a> installed.</p>
 <p>Alternatively, you can run <code>pytest</code> yourself. The MongoDB unit tests will be skipped if no server is available on your local machine:</p>
 <div class="highlight"><pre><span></span><code>pytest
+</code></pre></div>
+<p>There are quite a few unit tests, so you might run into ulimit issues where there are too many open file descriptors. You may be able to set a new, higher limit temporarily with:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">ulimit</span> -n <span class="m">2048</span>
 </code></pre></div>
 <h3 id="format-the-code">Format the code<a class="headerlink" href="#format-the-code" title="Permanent link">&para;</a></h3>
 <p>Execute the following command to apply <code>isort</code> and <code>black</code> formatting:</p>

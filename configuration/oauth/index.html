@@ -484,6 +484,19 @@
   </li>
 
         
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../routers/verify/" class="md-nav__link">
+      Verify router
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -1171,6 +1184,10 @@ Insecure passwords may give attackers full access to your database.</p>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> has forgot their password. Reset token: </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 
+<span class="k">def</span> <span class="nf">after_verification_request</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">UserDB</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Verification requested for user </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">. Verification token: </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
 <span class="n">jwt_authentication</span> <span class="o">=</span> <span class="n">JWTAuthentication</span><span class="p">(</span>
     <span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span> <span class="n">tokenUrl</span><span class="o">=</span><span class="s2">&quot;/auth/jwt/login&quot;</span>
 <span class="p">)</span>
@@ -1193,6 +1210,13 @@ Insecure passwords may give attackers full access to your database.</p>
 <span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
     <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_reset_password_router</span><span class="p">(</span>
         <span class="n">SECRET</span><span class="p">,</span> <span class="n">after_forgot_password</span><span class="o">=</span><span class="n">on_after_forgot_password</span>
+    <span class="p">),</span>
+    <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/auth&quot;</span><span class="p">,</span>
+    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;auth&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
+    <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_verify_router</span><span class="p">(</span>
+        <span class="n">SECRET</span><span class="p">,</span> <span class="n">after_verification_request</span><span class="o">=</span><span class="n">after_verification_request</span>
     <span class="p">),</span>
     <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/auth&quot;</span><span class="p">,</span>
     <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;auth&quot;</span><span class="p">],</span>
@@ -1261,6 +1285,10 @@ Insecure passwords may give attackers full access to your database.</p>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> has forgot their password. Reset token: </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 
+<span class="k">def</span> <span class="nf">after_verification_request</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">UserDB</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Verification requested for user </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">. Verification token: </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
 <span class="n">jwt_authentication</span> <span class="o">=</span> <span class="n">JWTAuthentication</span><span class="p">(</span>
     <span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span> <span class="n">tokenUrl</span><span class="o">=</span><span class="s2">&quot;/auth/jwt/login&quot;</span>
 <span class="p">)</span>
@@ -1283,6 +1311,13 @@ Insecure passwords may give attackers full access to your database.</p>
 <span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
     <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_reset_password_router</span><span class="p">(</span>
         <span class="n">SECRET</span><span class="p">,</span> <span class="n">after_forgot_password</span><span class="o">=</span><span class="n">on_after_forgot_password</span>
+    <span class="p">),</span>
+    <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/auth&quot;</span><span class="p">,</span>
+    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;auth&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
+    <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_verify_router</span><span class="p">(</span>
+        <span class="n">SECRET</span><span class="p">,</span> <span class="n">after_verification_request</span><span class="o">=</span><span class="n">after_verification_request</span>
     <span class="p">),</span>
     <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/auth&quot;</span><span class="p">,</span>
     <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;auth&quot;</span><span class="p">],</span>
@@ -1356,6 +1391,10 @@ Insecure passwords may give attackers full access to your database.</p>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> has forgot their password. Reset token: </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 
+<span class="k">def</span> <span class="nf">after_verification_request</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">UserDB</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Verification requested for user </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">. Verification token: </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
 <span class="n">jwt_authentication</span> <span class="o">=</span> <span class="n">JWTAuthentication</span><span class="p">(</span>
     <span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span> <span class="n">tokenUrl</span><span class="o">=</span><span class="s2">&quot;/auth/jwt/login&quot;</span>
 <span class="p">)</span>
@@ -1377,6 +1416,13 @@ Insecure passwords may give attackers full access to your database.</p>
 <span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
     <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_reset_password_router</span><span class="p">(</span>
         <span class="n">SECRET</span><span class="p">,</span> <span class="n">after_forgot_password</span><span class="o">=</span><span class="n">on_after_forgot_password</span>
+    <span class="p">),</span>
+    <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/auth&quot;</span><span class="p">,</span>
+    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;auth&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
+    <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_verify_router</span><span class="p">(</span>
+        <span class="n">SECRET</span><span class="p">,</span> <span class="n">after_verification_request</span><span class="o">=</span><span class="n">after_verification_request</span>
     <span class="p">),</span>
     <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/auth&quot;</span><span class="p">,</span>
     <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;auth&quot;</span><span class="p">],</span>

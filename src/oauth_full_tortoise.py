@@ -59,6 +59,10 @@ def on_after_forgot_password(user: UserDB, token: str, request: Request):
     print(f"User {user.id} has forgot their password. Reset token: {token}")
 
 
+def after_verification_request(user: UserDB, token: str, request: Request):
+    print(f"Verification requested for user {user.id}. Verification token: {token}")
+
+
 jwt_authentication = JWTAuthentication(
     secret=SECRET, lifetime_seconds=3600, tokenUrl="/auth/jwt/login"
 )
@@ -80,6 +84,13 @@ app.include_router(
 app.include_router(
     fastapi_users.get_reset_password_router(
         SECRET, after_forgot_password=on_after_forgot_password
+    ),
+    prefix="/auth",
+    tags=["auth"],
+)
+app.include_router(
+    fastapi_users.get_verify_router(
+        SECRET, after_verification_request=after_verification_request
     ),
     prefix="/auth",
     tags=["auth"],
