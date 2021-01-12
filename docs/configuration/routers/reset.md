@@ -57,3 +57,27 @@ app.include_router(
     tags=["auth"],
 )
 ```
+
+## After reset password
+
+You can provide a custom function to be called after a successful password reset. It is called with **two arguments**:
+
+* The **user** which has reset their password.
+* The original **`Request` object**.
+
+For example, you may want to **send an e-mail** to the concerned user to warn him that their password has been changed and that they should take action if they think they have been hacked.
+
+You can define it as an `async` or standard method.
+
+Example:
+
+```py
+def on_after_reset_password(user: UserDB, request: Request):
+    print(f"User {user.id} has reset their password.")
+
+app.include_router(
+    fastapi_users.get_reset_password_router("SECRET", after_reset_password=on_after_reset_password),
+    prefix="/auth",
+    tags=["auth"],
+)
+```

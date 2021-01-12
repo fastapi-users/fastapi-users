@@ -18,6 +18,7 @@ def get_reset_password_router(
     reset_password_token_secret: str,
     reset_password_token_lifetime_seconds: int = 3600,
     after_forgot_password: Optional[Callable[[models.UD, str, Request], None]] = None,
+    after_reset_password: Optional[Callable[[models.UD, Request], None]] = None,
 ) -> APIRouter:
     """Generate a router with the reset password routes."""
     router = APIRouter()
@@ -41,7 +42,9 @@ def get_reset_password_router(
         return None
 
     @router.post("/reset-password")
-    async def reset_password(token: str = Body(...), password: str = Body(...)):
+    async def reset_password(
+        request: Request, token: str = Body(...), password: str = Body(...)
+    ):
         try:
             data = jwt.decode(
                 token,
@@ -73,6 +76,8 @@ def get_reset_password_router(
 
             user.hashed_password = get_password_hash(password)
             await user_db.update(user)
+            if after_reset_password:
+                await run_handler(after_reset_password, user, request)
         except jwt.PyJWTError:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,

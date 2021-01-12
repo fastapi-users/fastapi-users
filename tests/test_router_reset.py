@@ -39,13 +39,30 @@ def after_forgot_password(request):
     return request.param()
 
 
+def after_reset_password_sync():
+    return MagicMock(return_value=None)
+
+
+def after_reset_password_async():
+    return asynctest.CoroutineMock(return_value=None)
+
+
+@pytest.fixture(params=[after_reset_password_sync, after_reset_password_async])
+def after_reset_password(request):
+    return request.param()
+
+
 @pytest.fixture
 @pytest.mark.asyncio
 async def test_app_client(
-    mock_user_db, mock_authentication, after_forgot_password, get_test_client
+    mock_user_db,
+    mock_authentication,
+    after_forgot_password,
+    after_reset_password,
+    get_test_client,
 ) -> AsyncGenerator[httpx.AsyncClient, None]:
     reset_router = get_reset_password_router(
-        mock_user_db, SECRET, LIFETIME, after_forgot_password
+        mock_user_db, SECRET, LIFETIME, after_forgot_password, after_reset_password
     )
 
     app = FastAPI()
@@ -109,26 +126,38 @@ class TestForgotPassword:
 @pytest.mark.router
 @pytest.mark.asyncio
 class TestResetPassword:
-    async def test_empty_body(self, test_app_client: httpx.AsyncClient):
+    async def test_empty_body(
+        self, test_app_client: httpx.AsyncClient, after_reset_password
+    ):
         response = await test_app_client.post("/reset-password", json={})
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert after_reset_password.called is False
 
-    async def test_missing_token(self, test_app_client: httpx.AsyncClient):
+    async def test_missing_token(
+        self, test_app_client: httpx.AsyncClient, after_reset_password
+    ):
         json = {"password": "guinevere"}
         response = await test_app_client.post("/reset-password", json=json)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert after_reset_password.called is False
 
-    async def test_missing_password(self, test_app_client: httpx.AsyncClient):
+    async def test_missing_password(
+        self, test_app_client: httpx.AsyncClient, after_reset_password
+    ):
         json = {"token": "foo"}
         response = await test_app_client.post("/reset-password", json=json)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert after_reset_password.called is False
 
-    async def test_invalid_token(self, test_app_client: httpx.AsyncClient):
+    async def test_invalid_token(
+        self, test_app_client: httpx.AsyncClient, after_reset_password
+    ):
         json = {"token": "foo", "password": "guinevere"}
         response = await test_app_client.post("/reset-password", json=json)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.RESET_PASSWORD_BAD_TOKEN
+        assert after_reset_password.called is False
 
     async def test_valid_token_missing_user_id_payload(
         self,
@@ -136,6 +165,7 @@ class TestResetPassword:
         mock_user_db,
         test_app_client: httpx.AsyncClient,
         forgot_password_token,
+        after_reset_password,
     ):
         mocker.spy(mock_user_db, "update")
 
@@ -145,6 +175,7 @@ class TestResetPassword:
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.RESET_PASSWORD_BAD_TOKEN
         assert mock_user_db.update.called is False
+        assert after_reset_password.called is False
 
     async def test_valid_token_invalid_uuid(
         self,
@@ -152,6 +183,7 @@ class TestResetPassword:
         mock_user_db,
         test_app_client: httpx.AsyncClient,
         forgot_password_token,
+        after_reset_password,
     ):
         mocker.spy(mock_user_db, "update")
 
@@ -161,6 +193,7 @@ class TestResetPassword:
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.RESET_PASSWORD_BAD_TOKEN
         assert mock_user_db.update.called is False
+        assert after_reset_password.called is False
 
     async def test_inactive_user(
         self,
@@ -169,6 +202,7 @@ class TestResetPassword:
         test_app_client: httpx.AsyncClient,
         forgot_password_token,
         inactive_user: UserDB,
+        after_reset_password,
     ):
         mocker.spy(mock_user_db, "update")
 
@@ -181,6 +215,7 @@ class TestResetPassword:
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.RESET_PASSWORD_BAD_TOKEN
         assert mock_user_db.update.called is False
+        assert after_reset_password.called is False
 
     async def test_existing_user(
         self,
@@ -189,6 +224,7 @@ class TestResetPassword:
         test_app_client: httpx.AsyncClient,
         forgot_password_token,
         user: UserDB,
+        after_reset_password,
     ):
         mocker.spy(mock_user_db, "update")
         current_hashed_password = user.hashed_password
@@ -200,3 +236,9 @@ class TestResetPassword:
 
         updated_user = mock_user_db.update.call_args[0][0]
         assert updated_user.hashed_password != current_hashed_password
+
+        assert after_reset_password.called is True
+        actual_user = after_reset_password.call_args[0][0]
+        assert actual_user.id == updated_user.id
+        request = after_reset_password.call_args[0][1]
+        assert isinstance(request, Request)
