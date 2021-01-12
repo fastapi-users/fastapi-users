@@ -511,6 +511,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#after-reset-password" class="md-nav__link">
+    After reset password
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -780,6 +787,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#after-reset-password" class="md-nav__link">
+    After reset password
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -837,6 +851,24 @@
 
 <span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
     <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_reset_password_router</span><span class="p">(</span><span class="s2">&quot;SECRET&quot;</span><span class="p">,</span> <span class="n">after_forgot_password</span><span class="o">=</span><span class="n">on_after_forgot_password</span><span class="p">),</span>
+    <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/auth&quot;</span><span class="p">,</span>
+    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;auth&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+</code></pre></div>
+<h2 id="after-reset-password">After reset password<a class="headerlink" href="#after-reset-password" title="Permanent link">&para;</a></h2>
+<p>You can provide a custom function to be called after a successful password reset. It is called with <strong>two arguments</strong>:</p>
+<ul>
+<li>The <strong>user</strong> which has reset their password.</li>
+<li>The original <strong><code>Request</code> object</strong>.</li>
+</ul>
+<p>For example, you may want to <strong>send an e-mail</strong> to the concerned user to warn him that their password has been changed and that they should take action if they think they have been hacked.</p>
+<p>You can define it as an <code>async</code> or standard method.</p>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">on_after_reset_password</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">UserDB</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> has reset their password.&quot;</span><span class="p">)</span>
+
+<span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
+    <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_reset_password_router</span><span class="p">(</span><span class="s2">&quot;SECRET&quot;</span><span class="p">,</span> <span class="n">after_reset_password</span><span class="o">=</span><span class="n">on_after_reset_password</span><span class="p">),</span>
     <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/auth&quot;</span><span class="p">,</span>
     <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;auth&quot;</span><span class="p">],</span>
 <span class="p">)</span>
