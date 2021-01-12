@@ -128,10 +128,14 @@ class FastAPIUsers:
         after_verification: Optional[Callable[[models.UD, Request], None]] = None,
     ) -> APIRouter:
         """
-        Return a router with a register route.
+        Return a router with e-mail verification routes.
 
-        :param after_register: Optional function called
-        after a successful registration.
+        :param verification_token_secret: Secret to encode verification token.
+        :param verification_token_lifetime_seconds: Lifetime verification token.
+        :param after_verification_request: Optional function called after a successful
+        verify request.
+        :param after_verification: Optional function called after a successful
+        verification.
         """
         return get_verify_router(
             self.verify_user,
