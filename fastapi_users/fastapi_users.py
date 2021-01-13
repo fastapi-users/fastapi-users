@@ -41,11 +41,14 @@ class FastAPIUsers:
     :param user_db_model: Pydantic model of a DB representation of a user.
 
     :attribute create_user: Helper function to create a user programmatically.
+    :attribute current_user: Dependency callable getter to inject authenticated user
+    with a specific set of parameters.
     :attribute get_current_user: Dependency callable to inject authenticated user.
     :attribute get_current_active_user: Dependency callable to inject active user.
     :attribute get_current_verified_user: Dependency callable to inject verified user.
     :attribute get_current_superuser: Dependency callable to inject superuser.
-    :attribute get_current_verified_superuser: Dependency callable to inject verified superuser.
+    :attribute get_current_verified_superuser: Dependency callable to inject
+    verified superuser.
     """
 
     db: BaseUserDatabase
@@ -80,6 +83,7 @@ class FastAPIUsers:
         self.verify_user = get_verify_user(db)
         self.get_user = get_get_user(db)
 
+        self.current_user = self.authenticator.current_user
         self.get_current_user = self.authenticator.get_current_user
         self.get_current_active_user = self.authenticator.get_current_active_user
         self.get_current_verified_user = self.authenticator.get_current_verified_user

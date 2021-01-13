@@ -1,7 +1,8 @@
 import re
-from inspect import Parameter, Signature
+from inspect import Parameter, Signature, signature
 from typing import Optional, Sequence
 
+from deprecated import deprecated
 from fastapi import Depends, HTTPException, status
 from makefun import with_signature
 
@@ -47,38 +48,65 @@ class Authenticator:
         self.backends = backends
         self.user_db = user_db
 
-        self.get_current_user = self.get_auth_dependency(required=True)
-        self.get_current_active_user = self.get_auth_dependency(
-            required=True, active=True
+        self.get_current_user = self._deprecated_current_user("get_current_user")
+        self.get_current_active_user = self._deprecated_current_user(
+            "get_current_active_user", active=True
         )
-        self.get_current_verified_user = self.get_auth_dependency(
-            required=True, active=True, verified=True
+        self.get_current_verified_user = self._deprecated_current_user(
+            "get_current_verified_user", active=True, verified=True
         )
-        self.get_current_superuser = self.get_auth_dependency(
-            required=True, active=True, superuser=True
+        self.get_current_superuser = self._deprecated_current_user(
+            "get_current_superuser", active=True, superuser=True
         )
-        self.get_current_verified_superuser = self.get_auth_dependency(
-            required=True, active=True, verified=True, superuser=True
+        self.get_current_verified_superuser = self._deprecated_current_user(
+            "get_current_verified_superuser",
+            active=True,
+            verified=True,
+            superuser=True,
         )
-        self.get_optional_current_user = self.get_auth_dependency()
-        self.get_optional_current_active_user = self.get_auth_dependency(active=True)
-        self.get_optional_current_verified_user = self.get_auth_dependency(
-            active=True, verified=True
+        self.get_optional_current_user = self._deprecated_current_user(
+            "get_optional_current_user", optional=True
         )
-        self.get_optional_current_superuser = self.get_auth_dependency(
-            active=True, superuser=True
+        self.get_optional_current_active_user = self._deprecated_current_user(
+            "get_optional_current_active_user", optional=True, active=True
         )
-        self.get_optional_current_verified_superuser = self.get_auth_dependency(
-            active=True, verified=True, superuser=True
+        self.get_optional_current_verified_user = self._deprecated_current_user(
+            "get_optional_current_verified_user",
+            optional=True,
+            active=True,
+            verified=True,
+        )
+        self.get_optional_current_superuser = self._deprecated_current_user(
+            "get_optional_current_superuser", optional=True, active=True, superuser=True
+        )
+        self.get_optional_current_verified_superuser = self._deprecated_current_user(
+            "get_optional_current_verified_superuser",
+            optional=True,
+            active=True,
+            verified=True,
+            superuser=True,
         )
 
-    def get_auth_dependency(
+    def current_user(
         self,
-        required: bool = False,
+        optional: bool = False,
         active: bool = False,
         verified: bool = False,
         superuser: bool = False,
     ):
+        """
+        Return a dependency callable to retrieve currently authenticated user.
+
+        :param optional: If `true`, `None` is returned if there is no
+        authenticated user or if it doesn't pass the other requirements.
+        Otherwise, an exception is raised. Defaults to `false`.
+        :param active: If `true`, raise an exception if
+        the authenticated user is inactive. Defaults to `false`.
+        :param verified: If `true`, raise an exception if
+        the authenticated user is not verified. Defaults to `false`.
+        :param superuser: If `true`, raise an exception if
+        the authenticated user is not a superuser. Defaults to `false`.
+        """
         # Here comes some blood magic 🧙‍♂️
         # Thank to "makefun", we are able to generate callable
         # with a dynamic number of dependencies at runtime.
@@ -97,22 +125,47 @@ class Authenticator:
             raise DuplicateBackendNamesError()
 
         @with_signature(signature)
-        async def auth_dependency(*args, **kwargs):
+        async def current_user_dependency(*args, **kwargs):
             return await self._authenticate(
                 *args,
-                required=required,
+                optional=optional,
                 active=active,
                 verified=verified,
                 superuser=superuser,
                 **kwargs
             )
 
-        return auth_dependency
+        return current_user_dependency
+
+    def _deprecated_current_user(
+        self,
+        func_name: str,
+        optional: bool = False,
+        active: bool = False,
+        verified: bool = False,
+        superuser: bool = False,
+    ):
+        current_user_dependency = self.current_user(
+            optional, active, verified, superuser
+        )
+
+        @deprecated(
+            version="5.1.0",
+            reason=(
+                "You should call `current_user` with your own set of parameters. "
+                "See: https://frankie567.github.io/fastapi-users/"
+            ),
+        )
+        @with_signature(signature(current_user_dependency), func_name=func_name)
+        async def deprecated_current_user_dependency(*args, **kwargs):
+            return await current_user_dependency(*args, **kwargs)
+
+        return deprecated_current_user_dependency
 
     async def _authenticate(
         self,
         *args,
-        required: bool = False,
+        optional: bool = False,
         active: bool = False,
         verified: bool = False,
         superuser: bool = False,
@@ -136,6 +189,6 @@ class Authenticator:
                 status_code = status.HTTP_403_FORBIDDEN
                 user = None
 
-        if not user and required:
+        if not user and not optional:
             raise HTTPException(status_code=status_code)
         return user
