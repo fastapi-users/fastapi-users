@@ -22,3 +22,12 @@ try:
     )
 except ImportError:  # pragma: no cover
     pass
+
+try:
+    from fastapi_users.db.ormar import (  # noqa: F401
+        OrmarBaseOAuthAccountModel,
+        OrmarBaseUserModel,
+        OrmarUserDatabase,
+    )
+except ImportError:  # pragma: no cover
+    pass

@@ -43,6 +43,9 @@ mongodb = [
 tortoise-orm = [
     "tortoise-orm >=0.16.0,<0.17.0"
 ]
+ormar = [
+    "ormar ==0.8.1"
+]
 oauth = [
     "httpx-oauth >=0.3,<0.4"
 ]
