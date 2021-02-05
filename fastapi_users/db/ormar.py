@@ -6,7 +6,7 @@ from ormar.exceptions import NoMatch
 from pydantic import UUID4
 
 from fastapi_users.db.base import BaseUserDatabase
-from fastapi_users.models import BaseOAuthAccount, UD
+from fastapi_users.models import UD, BaseOAuthAccount
 
 
 class OrmarBaseUserModel(ormar.Model):

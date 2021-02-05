@@ -1,9 +1,9 @@
 from sqlite3 import IntegrityError
 from typing import AsyncGenerator
 
-import pytest
-import ormar
 import databases
+import ormar
+import pytest
 import sqlalchemy
 
 from fastapi_users.db.ormar import (
