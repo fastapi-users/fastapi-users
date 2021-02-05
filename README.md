@@ -37,6 +37,8 @@ Add quickly a registration and authentication system to your [FastAPI](https://f
     * [X] SQLAlchemy async backend included thanks to [encode/databases](https://www.encode.io/databases/)
     * [X] MongoDB async backend included thanks to [mongodb/motor](https://github.com/mongodb/motor)
     * [X] [Tortoise ORM](https://tortoise-orm.readthedocs.io/en/latest/) backend included
+    * [X] [ormar](https://collerek.github.io/ormar/) backend included
+
 * [X] Multiple customizable authentication backends
     * [X] JWT authentication backend included
     * [X] Cookie authentication backend included

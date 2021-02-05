@@ -67,3 +67,5 @@ Depending on your database backend, the database configuration will differ a bit
 [I'm using MongoDB](databases/mongodb.md)
 
 [I'm using Tortoise ORM](databases/tortoise.md)
+
+[I'm using ormar](databases/ormar.md)

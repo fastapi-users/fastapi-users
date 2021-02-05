@@ -20,10 +20,6 @@ pip install fastapi-users[mongodb]
 pip install fastapi-users[tortoise-orm]
 ```
 
----
-
-That's it! Now, let's have a look at our [User model](./configuration/model.md).
-
 ## With ormar support
 
 ```sh

@@ -34,6 +34,7 @@ nav:
       - configuration/databases/sqlalchemy.md
       - configuration/databases/mongodb.md
       - configuration/databases/tortoise.md
+      - configuration/databases/ormar.md
     - Authentication:
       - Introduction: configuration/authentication/index.md
       - configuration/authentication/jwt.md
