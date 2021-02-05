@@ -45,7 +45,7 @@ typing-extensions = ">=3.7.4.3"
 Deprecated=">=1.2.10,<2.0.0"
 
 [requires]
-python_version = "3.8"
+python_version = "3.7"
 
 [pipenv]
 allow_prereleases = true
