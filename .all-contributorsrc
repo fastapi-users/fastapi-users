@@ -157,6 +157,16 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "MariusMez",
+      "name": "Marius Mézerette",
+      "avatar_url": "https://avatars.githubusercontent.com/u/952685?v=4",
+      "profile": "https://www.linkedin.com/in/mariusmezerette/",
+      "contributions": [
+        "bug",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
