@@ -90,6 +90,16 @@
         "bug",
         "code"
       ]
+    },
+    {
+      "login": "SelfhostedPro",
+      "name": "SelfhostedPro",
+      "avatar_url": "https://avatars.githubusercontent.com/u/66331933?v=4",
+      "profile": "https://yacht.sh",
+      "contributions": [
+        "security",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
