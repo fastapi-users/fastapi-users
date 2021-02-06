@@ -18,7 +18,7 @@
 </p>
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-12-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-13-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ---
@@ -69,6 +69,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://yacht.sh"><img src="https://avatars.githubusercontent.com/u/66331933?v=4?s=100" width="100px;" alt=""/><br /><sub><b>SelfhostedPro</b></sub></a><br /><a href="#security-SelfhostedPro" title="Security">🛡️</a> <a href="https://github.com/frankie567/fastapi-users/commits?author=SelfhostedPro" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/oskar-gmerek"><img src="https://avatars.githubusercontent.com/u/53402105?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Oskar Gmerek</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/commits?author=oskar-gmerek" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/mcolladoio"><img src="https://avatars.githubusercontent.com/u/61695048?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Martin Collado</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/issues?q=author%3Amcolladoio" title="Bug reports">🐛</a> <a href="https://github.com/frankie567/fastapi-users/commits?author=mcolladoio" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/nullhack"><img src="https://avatars.githubusercontent.com/u/11466701?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Eric Lopes</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/commits?author=nullhack" title="Documentation">📖</a> <a href="#security-nullhack" title="Security">🛡️</a></td>
   </tr>
 </table>
 
