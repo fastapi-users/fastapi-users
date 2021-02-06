@@ -97,15 +97,16 @@ class Authenticator:
         """
         Return a dependency callable to retrieve currently authenticated user.
 
-        :param optional: If `true`, `None` is returned if there is no
-        authenticated user or if it doesn't pass the other requirements.
-        Otherwise, an exception is raised. Defaults to `false`.
-        :param active: If `true`, raise an exception if
-        the authenticated user is inactive. Defaults to `false`.
-        :param verified: If `true`, raise an exception if
-        the authenticated user is not verified. Defaults to `false`.
-        :param superuser: If `true`, raise an exception if
-        the authenticated user is not a superuser. Defaults to `false`.
+        :param optional: If `True`, `None` is returned if there is no authenticated user
+        or if it doesn't pass the other requirements.
+        Otherwise, throw `401 Unauthorized`. Defaults to `False`.
+        Otherwise, an exception is raised. Defaults to `False`.
+        :param active: If `True`, throw `401 Unauthorized` if
+        the authenticated user is inactive. Defaults to `False`.
+        :param verified: If `True`, throw `401 Unauthorized` if
+        the authenticated user is not verified. Defaults to `False`.
+        :param superuser: If `True`, throw `403 Forbidden` if
+        the authenticated user is not a superuser. Defaults to `False`.
         """
         # Here comes some blood magic 🧙‍♂️
         # Thank to "makefun", we are able to generate callable

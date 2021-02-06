@@ -71,7 +71,7 @@ def get_users_router(
         return updated_user
 
     @router.get(
-        "/{id}",
+        "/{id:uuid}",
         response_model=user_model,
         dependencies=[Depends(get_current_superuser)],
     )
@@ -79,7 +79,7 @@ def get_users_router(
         return await _get_or_404(id)
 
     @router.patch(
-        "/{id}",
+        "/{id:uuid}",
         response_model=user_model,
         dependencies=[Depends(get_current_superuser)],
     )
@@ -95,7 +95,7 @@ def get_users_router(
         return await _update_user(user, updated_user_data, request)
 
     @router.delete(
-        "/{id}",
+        "/{id:uuid}",
         status_code=status.HTTP_204_NO_CONTENT,
         dependencies=[Depends(get_current_superuser)],
     )
