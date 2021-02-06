@@ -129,6 +129,15 @@
         "doc",
         "security"
       ]
+    },
+    {
+      "login": "rnd42",
+      "name": "Beau Breon",
+      "avatar_url": "https://avatars.githubusercontent.com/u/618839?v=4",
+      "profile": "https://github.com/rnd42",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
