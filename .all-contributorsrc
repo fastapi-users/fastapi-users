@@ -109,6 +109,16 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "mcolladoio",
+      "name": "Martin Collado",
+      "avatar_url": "https://avatars.githubusercontent.com/u/61695048?v=4",
+      "profile": "https://github.com/mcolladoio",
+      "contributions": [
+        "bug",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
