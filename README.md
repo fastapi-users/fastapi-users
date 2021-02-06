@@ -18,7 +18,7 @@
 </p>
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-16-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-17-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ---
@@ -75,6 +75,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://github.com/niazangels"><img src="https://avatars.githubusercontent.com/u/2761491?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Niyas Mohammed</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/commits?author=niazangels" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/prostomarkeloff"><img src="https://avatars.githubusercontent.com/u/28061158?v=4?s=100" width="100px;" alt=""/><br /><sub><b>prostomarkeloff</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/commits?author=prostomarkeloff" title="Documentation">📖</a> <a href="https://github.com/frankie567/fastapi-users/commits?author=prostomarkeloff" title="Code">💻</a></td>
+    <td align="center"><a href="https://www.linkedin.com/in/mariusmezerette/"><img src="https://avatars.githubusercontent.com/u/952685?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Marius Mézerette</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/issues?q=author%3AMariusMez" title="Bug reports">🐛</a> <a href="#ideas-MariusMez" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 
