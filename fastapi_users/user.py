@@ -2,7 +2,7 @@ from typing import Awaitable, Type
 
 try:
     from typing import Protocol
-except ImportError:
+except ImportError:  # pragma: no cover
     from typing_extensions import Protocol  # type: ignore
 
 from pydantic import EmailStr
