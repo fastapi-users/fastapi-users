@@ -147,6 +147,16 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "prostomarkeloff",
+      "name": "prostomarkeloff",
+      "avatar_url": "https://avatars.githubusercontent.com/u/28061158?v=4",
+      "profile": "https://github.com/prostomarkeloff",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
