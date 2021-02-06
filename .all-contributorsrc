@@ -13,6 +13,16 @@
       "contributions": [
         "maintenance"
       ]
+    },
+    {
+      "login": "paolodina",
+      "name": "Paolo Dina",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1157401?v=4",
+      "profile": "https://github.com/paolodina",
+      "contributions": [
+        "financial",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
