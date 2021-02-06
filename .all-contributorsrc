@@ -51,6 +51,15 @@
         "bug",
         "code"
       ]
+    },
+    {
+      "login": "satwikkansal",
+      "name": "Satwik Kansal",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10217535?v=4",
+      "profile": "https://devwriters.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
