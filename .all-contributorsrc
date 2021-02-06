@@ -1,0 +1,24 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "frankie567",
+      "name": "François Voron",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1144727?v=4",
+      "profile": "http://francoisvoron.com",
+      "contributions": [
+        "maintenance"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "fastapi-users",
+  "projectOwner": "frankie567",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
