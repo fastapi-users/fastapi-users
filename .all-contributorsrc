@@ -23,6 +23,15 @@
         "financial",
         "code"
       ]
+    },
+    {
+      "login": "slado122",
+      "name": "Dmytro Ohorodnik",
+      "avatar_url": "https://avatars.githubusercontent.com/u/46085159?v=4",
+      "profile": "https://freelancehunt.com/freelancer/slado122.html",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
