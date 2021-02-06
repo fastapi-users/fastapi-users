@@ -15,6 +15,63 @@
       ]
     },
     {
+      "login": "paolodina",
+      "name": "Paolo Dina",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1157401?v=4",
+      "profile": "https://github.com/paolodina",
+      "contributions": [
+        "financial",
+        "code"
+      ]
+    },
+    {
+      "login": "slado122",
+      "name": "Dmytro Ohorodnik",
+      "avatar_url": "https://avatars.githubusercontent.com/u/46085159?v=4",
+      "profile": "https://freelancehunt.com/freelancer/slado122.html",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "MatthewScholefield",
+      "name": "Matthew D. Scholefield",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5875019?v=4",
+      "profile": "http://matthewscholefield.github.io",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "roywes",
+      "name": "roywes",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3861579?v=4",
+      "profile": "https://github.com/roywes",
+      "contributions": [
+        "bug",
+        "code"
+      ]
+    },
+    {
+      "login": "satwikkansal",
+      "name": "Satwik Kansal",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10217535?v=4",
+      "profile": "https://devwriters.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "eddsalkield",
+      "name": "Edd Salkield",
+      "avatar_url": "https://avatars.githubusercontent.com/u/30939717?v=4",
+      "profile": "https://github.com/eddsalkield",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
       "login": "mark-todd",
       "name": "mark-todd",
       "avatar_url": "https://avatars.githubusercontent.com/u/60781787?v=4",

@@ -18,7 +18,7 @@
 </p>
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ---
@@ -56,6 +56,12 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="http://francoisvoron.com"><img src="https://avatars.githubusercontent.com/u/1144727?v=4?s=100" width="100px;" alt=""/><br /><sub><b>François Voron</b></sub></a><br /><a href="#maintenance-frankie567" title="Maintenance">🚧</a></td>
+    <td align="center"><a href="https://github.com/paolodina"><img src="https://avatars.githubusercontent.com/u/1157401?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Paolo Dina</b></sub></a><br /><a href="#financial-paolodina" title="Financial">💵</a> <a href="https://github.com/frankie567/fastapi-users/commits?author=paolodina" title="Code">💻</a></td>
+    <td align="center"><a href="https://freelancehunt.com/freelancer/slado122.html"><img src="https://avatars.githubusercontent.com/u/46085159?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Dmytro Ohorodnik</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/issues?q=author%3Aslado122" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="http://matthewscholefield.github.io"><img src="https://avatars.githubusercontent.com/u/5875019?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Matthew D. Scholefield</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/issues?q=author%3AMatthewScholefield" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://github.com/roywes"><img src="https://avatars.githubusercontent.com/u/3861579?v=4?s=100" width="100px;" alt=""/><br /><sub><b>roywes</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/issues?q=author%3Aroywes" title="Bug reports">🐛</a> <a href="https://github.com/frankie567/fastapi-users/commits?author=roywes" title="Code">💻</a></td>
+    <td align="center"><a href="https://devwriters.com"><img src="https://avatars.githubusercontent.com/u/10217535?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Satwik Kansal</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/commits?author=satwikkansal" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/eddsalkield"><img src="https://avatars.githubusercontent.com/u/30939717?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Edd Salkield</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/commits?author=eddsalkield" title="Code">💻</a> <a href="https://github.com/frankie567/fastapi-users/commits?author=eddsalkield" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/mark-todd"><img src="https://avatars.githubusercontent.com/u/60781787?v=4?s=100" width="100px;" alt=""/><br /><sub><b>mark-todd</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/commits?author=mark-todd" title="Code">💻</a> <a href="https://github.com/frankie567/fastapi-users/commits?author=mark-todd" title="Documentation">📖</a></td>
   </tr>
 </table>
