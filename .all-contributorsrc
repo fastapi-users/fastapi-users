@@ -119,6 +119,16 @@
         "bug",
         "code"
       ]
+    },
+    {
+      "login": "nullhack",
+      "name": "Eric Lopes",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11466701?v=4",
+      "profile": "https://github.com/nullhack",
+      "contributions": [
+        "doc",
+        "security"
+      ]
     }
   ],
   "contributorsPerLine": 7,
