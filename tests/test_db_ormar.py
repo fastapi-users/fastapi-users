@@ -1,3 +1,4 @@
+import uuid
 from sqlite3 import IntegrityError
 from typing import AsyncGenerator
 
@@ -5,6 +6,7 @@ import databases
 import ormar
 import pytest
 import sqlalchemy
+from ormar.exceptions import NoMatch
 
 from fastapi_users.db.ormar import (
     OrmarBaseOAuthAccountModel,
@@ -85,6 +87,13 @@ async def test_queries(ormar_user_db: OrmarUserDatabase[UserDB]):
     # Update
     user_db.is_superuser = True
     await ormar_user_db.update(user_db)
+
+    # Exception when updating a user with a not existing id
+    id_backup = user_db.id
+    user_db.id = uuid.uuid4()
+    with pytest.raises(NoMatch):
+        await ormar_user_db.update(user_db)
+    user_db.id = id_backup
 
     # Get by id
     id_user = await ormar_user_db.get(user.id)
