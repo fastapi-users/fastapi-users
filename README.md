@@ -18,7 +18,7 @@
 </p>
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-19-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-20-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ---
@@ -78,6 +78,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://www.linkedin.com/in/mariusmezerette/"><img src="https://avatars.githubusercontent.com/u/952685?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Marius Mézerette</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/issues?q=author%3AMariusMez" title="Bug reports">🐛</a> <a href="#ideas-MariusMez" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://github.com/grigi"><img src="https://avatars.githubusercontent.com/u/1309160?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Nickolas Grigoriadis</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/issues?q=author%3Agrigi" title="Bug reports">🐛</a></td>
     <td align="center"><a href="https://opendatacoder.me"><img src="https://avatars.githubusercontent.com/u/7386680?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Open Data Coder</b></sub></a><br /><a href="#ideas-p3t3r67x0" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://www.dralshehri.com/"><img src="https://avatars.githubusercontent.com/u/542855?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Mohammed Alshehri</b></sub></a><br /><a href="#ideas-dralshehri" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 
