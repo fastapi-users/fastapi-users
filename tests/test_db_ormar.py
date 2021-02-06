@@ -168,6 +168,7 @@ async def test_queries_oauth(
     assert len(user_db.oauth_accounts) == 2
 
     # Update
+    oauth_to_check_id = user_db.oauth_accounts[0].id
     user_db.oauth_accounts[0].access_token = "NEW_TOKEN"
     await ormar_user_db_oauth.update(user_db)
 
@@ -175,7 +176,11 @@ async def test_queries_oauth(
     id_user = await ormar_user_db_oauth.get(user.id)
     assert id_user is not None
     assert id_user.id == user_db.id
-    assert id_user.oauth_accounts[0].access_token == "NEW_TOKEN"
+    updated_oauth = next(
+        (oauth for oauth in id_user.oauth_accounts if oauth.id == oauth_to_check_id),
+        None,
+    )
+    assert updated_oauth.access_token == "NEW_TOKEN"
 
     # Add new oauth
     id_user.oauth_accounts.append(oauth_account3)
