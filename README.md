@@ -18,7 +18,7 @@
 </p>
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ---
@@ -62,7 +62,10 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/roywes"><img src="https://avatars.githubusercontent.com/u/3861579?v=4?s=100" width="100px;" alt=""/><br /><sub><b>roywes</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/issues?q=author%3Aroywes" title="Bug reports">🐛</a> <a href="https://github.com/frankie567/fastapi-users/commits?author=roywes" title="Code">💻</a></td>
     <td align="center"><a href="https://devwriters.com"><img src="https://avatars.githubusercontent.com/u/10217535?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Satwik Kansal</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/commits?author=satwikkansal" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/eddsalkield"><img src="https://avatars.githubusercontent.com/u/30939717?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Edd Salkield</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/commits?author=eddsalkield" title="Code">💻</a> <a href="https://github.com/frankie567/fastapi-users/commits?author=eddsalkield" title="Documentation">📖</a></td>
+  </tr>
+  <tr>
     <td align="center"><a href="https://github.com/mark-todd"><img src="https://avatars.githubusercontent.com/u/60781787?v=4?s=100" width="100px;" alt=""/><br /><sub><b>mark-todd</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/commits?author=mark-todd" title="Code">💻</a> <a href="https://github.com/frankie567/fastapi-users/commits?author=mark-todd" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/lill74"><img src="https://avatars.githubusercontent.com/u/12353597?v=4?s=100" width="100px;" alt=""/><br /><sub><b>lill74</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/issues?q=author%3Alill74" title="Bug reports">🐛</a> <a href="https://github.com/frankie567/fastapi-users/commits?author=lill74" title="Code">💻</a></td>
   </tr>
 </table>
 
