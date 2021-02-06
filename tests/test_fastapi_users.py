@@ -30,6 +30,10 @@ async def test_app_client(
     app.include_router(fastapi_users.get_users_router(), prefix="/users")
     app.include_router(fastapi_users.get_verify_router("SECRET"))
 
+    @app.delete("/users/me")
+    def custom_users_route():
+        return None
+
     @app.get("/current-user")
     def current_user(user=Depends(fastapi_users.get_current_user)):
         return user
@@ -86,61 +90,35 @@ async def test_app_client(
 
 @pytest.mark.fastapi_users
 @pytest.mark.asyncio
-class TestRoutes:
-    async def test_routes_exist(self, test_app_client: httpx.AsyncClient):
-        response = await test_app_client.post("/register")
-        assert response.status_code not in (
-            status.HTTP_404_NOT_FOUND,
-            status.HTTP_405_METHOD_NOT_ALLOWED,
-        )
+@pytest.mark.parametrize(
+    "path,method",
+    [
+        ("/register", "POST"),
+        ("/request-verify-token", "POST"),
+        ("/verify", "POST"),
+        ("/forgot-password", "POST"),
+        ("/reset-password", "POST"),
+        ("/login", "POST"),
+        ("/logout", "POST"),
+        ("/register", "POST"),
+        ("/users/d35d213e-f3d8-4f08-954a-7e0d1bea286f", "GET"),
+        ("/users/d35d213e-f3d8-4f08-954a-7e0d1bea286f", "PATCH"),
+        ("/users/d35d213e-f3d8-4f08-954a-7e0d1bea286f", "DELETE"),
+    ],
+)
+async def test_route_exists(test_app_client: httpx.AsyncClient, path: str, method: str):
+    response = await test_app_client.request(method, path)
+    assert response.status_code not in (
+        status.HTTP_404_NOT_FOUND,
+        status.HTTP_405_METHOD_NOT_ALLOWED,
+    )
 
-        response = await test_app_client.post("/request-verify-token")
-        assert response.status_code not in (
-            status.HTTP_404_NOT_FOUND,
-            status.HTTP_405_METHOD_NOT_ALLOWED,
-        )
 
-        response = await test_app_client.post("/verify")
-        assert response.status_code not in (
-            status.HTTP_404_NOT_FOUND,
-            status.HTTP_405_METHOD_NOT_ALLOWED,
-        )
-
-        response = await test_app_client.post("/forgot-password")
-        assert response.status_code not in (
-            status.HTTP_404_NOT_FOUND,
-            status.HTTP_405_METHOD_NOT_ALLOWED,
-        )
-
-        response = await test_app_client.post("/reset-password")
-        assert response.status_code not in (
-            status.HTTP_404_NOT_FOUND,
-            status.HTTP_405_METHOD_NOT_ALLOWED,
-        )
-
-        response = await test_app_client.post("/login")
-        assert response.status_code not in (
-            status.HTTP_404_NOT_FOUND,
-            status.HTTP_405_METHOD_NOT_ALLOWED,
-        )
-
-        response = await test_app_client.post("/logout")
-        assert response.status_code not in (
-            status.HTTP_404_NOT_FOUND,
-            status.HTTP_405_METHOD_NOT_ALLOWED,
-        )
-
-        response = await test_app_client.get("/users/aaa")
-        assert response.status_code not in (
-            status.HTTP_404_NOT_FOUND,
-            status.HTTP_405_METHOD_NOT_ALLOWED,
-        )
-
-        response = await test_app_client.patch("/users/aaa")
-        assert response.status_code not in (
-            status.HTTP_404_NOT_FOUND,
-            status.HTTP_405_METHOD_NOT_ALLOWED,
-        )
+@pytest.mark.fastapi_users
+@pytest.mark.asyncio
+async def test_custom_users_route_not_catched(test_app_client: httpx.AsyncClient):
+    response = await test_app_client.request("DELETE", "/users/me")
+    assert response.status_code == status.HTTP_200_OK
 
 
 @pytest.mark.fastapi_users
