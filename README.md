@@ -18,7 +18,7 @@
 </p>
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-14-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-15-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ---
@@ -71,6 +71,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/mcolladoio"><img src="https://avatars.githubusercontent.com/u/61695048?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Martin Collado</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/issues?q=author%3Amcolladoio" title="Bug reports">🐛</a> <a href="https://github.com/frankie567/fastapi-users/commits?author=mcolladoio" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/nullhack"><img src="https://avatars.githubusercontent.com/u/11466701?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Eric Lopes</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/commits?author=nullhack" title="Documentation">📖</a> <a href="#security-nullhack" title="Security">🛡️</a></td>
     <td align="center"><a href="https://github.com/rnd42"><img src="https://avatars.githubusercontent.com/u/618839?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Beau Breon</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/commits?author=rnd42" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/niazangels"><img src="https://avatars.githubusercontent.com/u/2761491?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Niyas Mohammed</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/commits?author=niazangels" title="Documentation">📖</a></td>
   </tr>
 </table>
 
