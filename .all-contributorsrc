@@ -203,6 +203,15 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "collerek",
+      "name": "collerek",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16324238?v=4",
+      "profile": "https://github.com/collerek",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
