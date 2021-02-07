@@ -16,7 +16,7 @@
     
     
       
-        <title>Users router - FastAPI Users</title>
+        <title>Ormar - FastAPI Users</title>
       
     
     
@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#users-router" class="md-skip">
+        <a href="#ormar" class="md-skip">
           Skip to content
         </a>
       
@@ -96,7 +96,7 @@
         <div class="md-header-nav__topic">
           <span class="md-ellipsis">
             
-              Users router
+              Ormar
             
           </span>
         </div>
@@ -266,12 +266,14 @@
             
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-2" type="checkbox" id="nav-3-2" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-2" type="checkbox" id="nav-3-2" checked>
       
       <label class="md-nav__link" for="nav-3-2">
         Databases
@@ -290,7 +292,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../databases/sqlalchemy/" class="md-nav__link">
+      <a href="../sqlalchemy/" class="md-nav__link">
         SQLAlchemy
       </a>
     </li>
@@ -302,7 +304,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../databases/mongodb/" class="md-nav__link">
+      <a href="../mongodb/" class="md-nav__link">
         MongoDB
       </a>
     </li>
@@ -314,7 +316,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../databases/tortoise/" class="md-nav__link">
+      <a href="../tortoise/" class="md-nav__link">
         Tortoise ORM
       </a>
     </li>
@@ -324,11 +326,70 @@
             
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../../databases/ormar/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Ormar
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Ormar
       </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setup-user-table" class="md-nav__link">
+    Setup User table
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-the-database-adapter" class="md-nav__link">
+    Create the database adapter
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    Next steps
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -406,14 +467,12 @@
             
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-4" type="checkbox" id="nav-3-4" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-4" type="checkbox" id="nav-3-4" >
       
       <label class="md-nav__link" for="nav-3-4">
         Routers
@@ -432,7 +491,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../" class="md-nav__link">
+      <a href="../../routers/" class="md-nav__link">
         Introduction
       </a>
     </li>
@@ -444,7 +503,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../auth/" class="md-nav__link">
+      <a href="../../routers/auth/" class="md-nav__link">
         Auth router
       </a>
     </li>
@@ -456,7 +515,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../register/" class="md-nav__link">
+      <a href="../../routers/register/" class="md-nav__link">
         Register routes
       </a>
     </li>
@@ -468,7 +527,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reset/" class="md-nav__link">
+      <a href="../../routers/reset/" class="md-nav__link">
         Reset password router
       </a>
     </li>
@@ -478,69 +537,11 @@
             
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Users router
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../routers/users/" class="md-nav__link">
         Users router
       </a>
-      
-        
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#setup" class="md-nav__link">
-    Setup
-  </a>
-  
-    <nav class="md-nav" aria-label="Setup">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#optional-user-verification" class="md-nav__link">
-    Optional: user verification
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#after-update" class="md-nav__link">
-    After update
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -550,7 +551,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../verify/" class="md-nav__link">
+      <a href="../../routers/verify/" class="md-nav__link">
         Verify router
       </a>
     </li>
@@ -788,28 +789,29 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#setup" class="md-nav__link">
-    Setup
+  <a href="#installation" class="md-nav__link">
+    Installation
   </a>
-  
-    <nav class="md-nav" aria-label="Setup">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#optional-user-verification" class="md-nav__link">
-    Optional: user verification
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#after-update" class="md-nav__link">
-    After update
+  <a href="#setup-user-table" class="md-nav__link">
+    Setup User table
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-the-database-adapter" class="md-nav__link">
+    Create the database adapter
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    Next steps
   </a>
   
 </li>
@@ -827,55 +829,148 @@
               
                 
                 
-                <h1 id="users-router">Users router<a class="headerlink" href="#users-router" title="Permanent link">&para;</a></h1>
-<p>This router provides routes to manage users. Check the <a href="../../../usage/routes/">routes usage</a> to learn how to use them.</p>
-<h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
-<span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">FastAPIUsers</span>
+                <h1 id="ormar">Ormar<a class="headerlink" href="#ormar" title="Permanent link">&para;</a></h1>
+<p><strong>FastAPI Users</strong> provides the necessary tools to work with ormar.</p>
+<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
+<p>Install the database driver that corresponds to your DBMS:</p>
+<div class="highlight"><pre><span></span><code>pip install asyncpg psycopg2
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>pip install aiomysql pymysql
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>pip install aiosqlite
+</code></pre></div>
+<p>For the sake of this tutorial from now on, we'll use a simple SQLite databse.</p>
+<h2 id="setup-user-table">Setup User table<a class="headerlink" href="#setup-user-table" title="Permanent link">&para;</a></h2>
+<p>Let's declare our User ORM model.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">databases</span>
+<span class="kn">import</span> <span class="nn">sqlalchemy</span>
+<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
+<span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">OrmarBaseUserModel</span><span class="p">,</span> <span class="n">OrmarUserDatabase</span>
 
-<span class="n">fastapi_users</span> <span class="o">=</span> <span class="n">FastAPIUsers</span><span class="p">(</span>
-    <span class="n">user_db</span><span class="p">,</span>
-    <span class="n">auth_backends</span><span class="p">,</span>
-    <span class="n">User</span><span class="p">,</span>
-    <span class="n">UserCreate</span><span class="p">,</span>
-    <span class="n">UserUpdate</span><span class="p">,</span>
-    <span class="n">UserDB</span><span class="p">,</span>
-<span class="p">)</span>
 
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUser</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserCreate</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUserCreate</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserUpdate</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserUpdate</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserDB</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserDB</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;sqlite:///test.db&quot;</span>
+<span class="n">metadata</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">MetaData</span><span class="p">()</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">databases</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">)</span>
+
+
+<span class="hll"><span class="k">class</span> <span class="nc">UserModel</span><span class="p">(</span><span class="n">OrmarBaseUserModel</span><span class="p">):</span>
+</span><span class="hll">    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+</span><span class="hll">        <span class="n">tablename</span> <span class="o">=</span> <span class="s2">&quot;users&quot;</span>
+</span><span class="hll">        <span class="n">metadata</span> <span class="o">=</span> <span class="n">metadata</span>
+</span><span class="hll">        <span class="n">database</span> <span class="o">=</span> <span class="n">database</span>
+</span>
+
+<span class="n">engine</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">create_engine</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">)</span>
+<span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+
+
+<span class="n">user_db</span> <span class="o">=</span> <span class="n">OrmarUserDatabase</span><span class="p">(</span><span class="n">UserDB</span><span class="p">,</span> <span class="n">UserModel</span><span class="p">)</span>
 <span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
-<span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
-    <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_users_router</span><span class="p">(),</span>
-    <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/users&quot;</span><span class="p">,</span>
-    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;users&quot;</span><span class="p">],</span>
-<span class="p">)</span>
-</code></pre></div>
-<h3 id="optional-user-verification">Optional: user verification<a class="headerlink" href="#optional-user-verification" title="Permanent link">&para;</a></h3>
-<p>You can require the user to be <strong>verified</strong> (i.e. <code>is_verified</code> property set to <code>True</code>) to access those routes. You have to set the <code>requires_validation</code> parameter to <code>True</code> on the router instantiation method:</p>
-<div class="highlight"><pre><span></span><code><span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
-    <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_users_router</span><span class="p">(</span><span class="n">requires_verification</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
-    <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/users&quot;</span><span class="p">,</span>
-    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;users&quot;</span><span class="p">],</span>
-<span class="p">)</span>
-</code></pre></div>
-<h2 id="after-update">After update<a class="headerlink" href="#after-update" title="Permanent link">&para;</a></h2>
-<p>You can provide a custom function to be called after a successful update user request. It is called with <strong>three arguments</strong>:</p>
-<ul>
-<li>The <strong>user</strong> which was updated.</li>
-<li>The dictionary containing the updated fields.</li>
-<li>The original <strong><code>Request</code> object</strong>.</li>
-</ul>
-<p>It may be useful if you wish for example update your user in a data analytics or customer success platform.</p>
-<p>You can define it as an <code>async</code> or standard method.</p>
-<p>Example:</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">on_after_update</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">UserDB</span><span class="p">,</span> <span class="n">updated_user_data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> has been updated with the following data: </span><span class="si">{</span><span class="n">updated_user_data</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">database</span> <span class="o">=</span> <span class="n">database</span>
 
-<span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
-    <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_users_router</span><span class="p">(</span><span class="n">on_after_update</span><span class="p">),</span>
-    <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/users&quot;</span><span class="p">,</span>
-    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;users&quot;</span><span class="p">],</span>
-<span class="p">)</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span><span class="s2">&quot;startup&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">startup</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">database_</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">database</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">database_</span><span class="o">.</span><span class="n">is_connected</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">database_</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span><span class="s2">&quot;shutdown&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">shutdown</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">database_</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">database</span>
+    <span class="k">if</span> <span class="n">database_</span><span class="o">.</span><span class="n">is_connected</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">database_</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
 </code></pre></div>
+<p>As you can see, <strong>FastAPI Users</strong> provides an abstract model that will
+include base fields for our User table. You can of course add you own fields
+there to fit to your needs!</p>
+<h2 id="create-the-database-adapter">Create the database adapter<a class="headerlink" href="#create-the-database-adapter" title="Permanent link">&para;</a></h2>
+<p>The database adapter of <strong>FastAPI Users</strong> makes the link between your
+database configuration and the users logic. Create it like this.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">databases</span>
+<span class="kn">import</span> <span class="nn">sqlalchemy</span>
+<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
+<span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">OrmarBaseUserModel</span><span class="p">,</span> <span class="n">OrmarUserDatabase</span>
+
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUser</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserCreate</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUserCreate</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserUpdate</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserUpdate</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserDB</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserDB</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;sqlite:///test.db&quot;</span>
+<span class="n">metadata</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">MetaData</span><span class="p">()</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">databases</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">UserModel</span><span class="p">(</span><span class="n">OrmarBaseUserModel</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">tablename</span> <span class="o">=</span> <span class="s2">&quot;users&quot;</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">metadata</span>
+        <span class="n">database</span> <span class="o">=</span> <span class="n">database</span>
+
+
+<span class="n">engine</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">create_engine</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">)</span>
+<span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+
+
+<span class="hll"><span class="n">user_db</span> <span class="o">=</span> <span class="n">OrmarUserDatabase</span><span class="p">(</span><span class="n">UserDB</span><span class="p">,</span> <span class="n">UserModel</span><span class="p">)</span>
+</span><span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
+<span class="n">app</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">database</span> <span class="o">=</span> <span class="n">database</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span><span class="s2">&quot;startup&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">startup</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">database_</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">database</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">database_</span><span class="o">.</span><span class="n">is_connected</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">database_</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span><span class="s2">&quot;shutdown&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">shutdown</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">database_</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">database</span>
+    <span class="k">if</span> <span class="n">database_</span><span class="o">.</span><span class="n">is_connected</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">database_</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+</code></pre></div>
+<p>Notice that we pass a reference to your <a href="../../model/"><code>UserDB</code> model</a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In production, it's strongly recommended to setup a migration system to
+update your SQL schemas. See
+<a href="https://alembic.sqlalchemy.org/en/latest/">Alembic</a>.</p>
+</div>
+<h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<p>We will now configure an <a href="../../authentication/">authentication method</a>.</p>
                 
               
               
@@ -894,7 +989,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../reset/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../tortoise/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -903,19 +998,19 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Reset password router
+                Tortoise ORM
               </div>
             </div>
           </a>
         
         
-          <a href="../verify/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../../authentication/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Verify router
+                Introduction
               </div>
             </div>
             <div class="md-footer-nav__button md-icon">
