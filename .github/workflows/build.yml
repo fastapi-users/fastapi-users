@@ -37,6 +37,7 @@ jobs:
         pipenv run flit build
         pipenv run flit install --python $(which python)
         python test_build.py
+
   release:
     runs-on: ubuntu-latest
     needs: test
