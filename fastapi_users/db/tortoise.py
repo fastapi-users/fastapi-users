@@ -3,6 +3,7 @@ from typing import Optional, Type
 from pydantic import UUID4
 from tortoise import fields, models
 from tortoise.exceptions import DoesNotExist
+from tortoise.queryset import QuerySetSingle
 
 from fastapi_users.db.base import BaseUserDatabase
 from fastapi_users.models import UD
@@ -93,7 +94,7 @@ class TortoiseUserDatabase(BaseUserDatabase[UD]):
 
     async def get_by_oauth_account(self, oauth: str, account_id: str) -> Optional[UD]:
         try:
-            query = self.model.get(
+            query: QuerySetSingle[TortoiseBaseUserModel] = self.model.get(
                 oauth_accounts__oauth_name=oauth, oauth_accounts__account_id=account_id
             ).prefetch_related("oauth_accounts")
 
@@ -132,7 +133,7 @@ class TortoiseUserDatabase(BaseUserDatabase[UD]):
         await model.save()
 
         if oauth_accounts and self.oauth_account_model:
-            await model.oauth_accounts.all().delete()
+            await model.oauth_accounts.all().delete()  # type: ignore
             oauth_account_objects = []
             for oauth_account in oauth_accounts:
                 oauth_account_objects.append(
