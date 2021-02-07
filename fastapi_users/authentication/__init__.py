@@ -154,7 +154,8 @@ class Authenticator:
             version="5.1.0",
             reason=(
                 "You should call `current_user` with your own set of parameters. "
-                "See: https://frankie567.github.io/fastapi-users/"
+                "See: "
+                "https://frankie567.github.io/fastapi-users/usage/dependency-callables/"
             ),
         )
         @with_signature(signature(current_user_dependency), func_name=func_name)
