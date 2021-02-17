@@ -97,6 +97,8 @@ def get_oauth_router(
         account_id, account_email = await oauth_client.get_id_email(
             token["access_token"]
         )
+        if account_email is None:
+            account_email = "@@{}:{}".format(oauth_client.name, account_id)
 
         try:
             state_data = decode_state_token(state, state_secret)

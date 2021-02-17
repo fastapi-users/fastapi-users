@@ -25,7 +25,7 @@ class BaseUser(CreateUpdateDictModel):
     """Base User model."""
 
     id: Optional[UUID4] = None
-    email: Optional[EmailStr] = None
+    email: Optional[str] = None
     is_active: Optional[bool] = True
     is_superuser: Optional[bool] = False
     is_verified: Optional[bool] = False
