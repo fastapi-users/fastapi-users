@@ -13,7 +13,7 @@
 [![PyPI version](https://badge.fury.io/py/fastapi-users.svg)](https://badge.fury.io/py/fastapi-users)
 [![Downloads](https://pepy.tech/badge/fastapi-users)](https://pepy.tech/project/fastapi-users)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-22-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-23-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <p align="center">
     <a href="https://www.buymeacoffee.com/frankie567" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/arial-red.png" alt="Buy Me A Coffee" height="40"></a>
@@ -83,6 +83,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/collerek"><img src="https://avatars.githubusercontent.com/u/16324238?v=4?s=100" width="100px;" alt=""/><br /><sub><b>collerek</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/commits?author=collerek" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/rbracco"><img src="https://avatars.githubusercontent.com/u/47190785?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Robert Bracco</b></sub></a><br /><a href="#financial-rbracco" title="Financial">💵</a></td>
   </tr>
 </table>
 
