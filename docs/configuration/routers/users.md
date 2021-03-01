@@ -27,7 +27,7 @@ app.include_router(
 
 ### Optional: user verification
 
-You can require the user to be **verified** (i.e. `is_verified` property set to `True`) to access those routes. You have to set the `requires_validation` parameter to `True` on the router instantiation method:
+You can require the user to be **verified** (i.e. `is_verified` property set to `True`) to access those routes. You have to set the `requires_verification` parameter to `True` on the router instantiation method:
 
 ```py
 app.include_router(
