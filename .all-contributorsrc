@@ -221,6 +221,15 @@
       "contributions": [
         "financial"
       ]
+    },
+    {
+      "login": "augusto-herrmann",
+      "name": "Augusto Herrmann",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1058414?v=4",
+      "profile": "https://herrmann.tech",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
