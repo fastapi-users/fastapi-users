@@ -850,7 +850,7 @@
 <span class="p">)</span>
 </code></pre></div>
 <h3 id="optional-user-verification">Optional: user verification<a class="headerlink" href="#optional-user-verification" title="Permanent link">&para;</a></h3>
-<p>You can require the user to be <strong>verified</strong> (i.e. <code>is_verified</code> property set to <code>True</code>) to access those routes. You have to set the <code>requires_validation</code> parameter to <code>True</code> on the router instantiation method:</p>
+<p>You can require the user to be <strong>verified</strong> (i.e. <code>is_verified</code> property set to <code>True</code>) to access those routes. You have to set the <code>requires_verification</code> parameter to <code>True</code> on the router instantiation method:</p>
 <div class="highlight"><pre><span></span><code><span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
     <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_users_router</span><span class="p">(</span><span class="n">requires_verification</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
     <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/users&quot;</span><span class="p">,</span>
