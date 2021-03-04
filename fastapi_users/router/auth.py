@@ -15,10 +15,9 @@ def get_auth_router(
 ) -> APIRouter:
     """Generate a router with login/logout routes for an authentication backend."""
     router = APIRouter()
-    if requires_verification:
-        get_current_user = authenticator.get_current_verified_user
-    else:
-        get_current_user = authenticator.get_current_active_user
+    get_current_user = authenticator.current_user(
+        active=True, verified=requires_verification
+    )
 
     @router.post("/login")
     async def login(

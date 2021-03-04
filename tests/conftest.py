@@ -363,18 +363,20 @@ def get_test_auth_client(mock_user_db, get_test_client):
         authenticator = Authenticator(backends, mock_user_db)
 
         @app.get("/test-current-user")
-        def test_current_user(user: UserDB = Depends(authenticator.get_current_user)):
+        def test_current_user(user: UserDB = Depends(authenticator.current_user())):
             return user
 
         @app.get("/test-current-active-user")
         def test_current_active_user(
-            user: UserDB = Depends(authenticator.get_current_active_user),
+            user: UserDB = Depends(authenticator.current_user(active=True)),
         ):
             return user
 
         @app.get("/test-current-superuser")
         def test_current_superuser(
-            user: UserDB = Depends(authenticator.get_current_superuser),
+            user: UserDB = Depends(
+                authenticator.current_user(active=True, superuser=True)
+            ),
         ):
             return user
 

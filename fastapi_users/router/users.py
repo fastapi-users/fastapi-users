@@ -22,12 +22,12 @@ def get_users_router(
     """Generate a router with the authentication routes."""
     router = APIRouter()
 
-    if requires_verification:
-        get_current_active_user = authenticator.get_current_verified_user
-        get_current_superuser = authenticator.get_current_verified_superuser
-    else:
-        get_current_active_user = authenticator.get_current_active_user
-        get_current_superuser = authenticator.get_current_superuser
+    get_current_active_user = authenticator.current_user(
+        active=True, verified=requires_verification
+    )
+    get_current_superuser = authenticator.current_user(
+        active=True, verified=requires_verification, superuser=True
+    )
 
     async def _get_or_404(id: UUID4) -> models.BaseUserDB:
         user = await user_db.get(id)
