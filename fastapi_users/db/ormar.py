@@ -1,4 +1,4 @@
-from typing import cast, Any, List, Optional, Type
+from typing import Any, List, Optional, Type, cast
 
 import ormar
 from ormar.exceptions import NoMatch
