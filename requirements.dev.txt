@@ -1,0 +1,26 @@
+-r requirements.txt
+
+flake8
+pytest
+requests
+isort
+databases
+pytest-asyncio
+flake8-docstrings
+mkdocs
+mkdocs-material
+black
+mypy
+codecov
+pytest-cov
+pytest-mock
+asynctest
+flit
+markdown-include
+pygments
+pymdown-extensions
+bumpversion
+httpx-oauth
+httpx
+asgi_lifespan
+uvicorn

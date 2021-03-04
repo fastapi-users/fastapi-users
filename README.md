@@ -97,18 +97,22 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 
 ## Development
 
-### Setup environement
+### Setup environment
 
-You should have [Pipenv](https://pipenv.readthedocs.io/en/latest/) installed. Then, you can install the dependencies with:
+You should create a virtual environment and activate it:
 
 ```bash
-pipenv install --dev
+python -m venv venv/
 ```
 
-After that, activate the virtual environment:
+```bash
+source venv/bin/activate
+```
+
+And then install the development dependencies:
 
 ```bash
-pipenv shell
+pip install -r requirements.dev.txt
 ```
 
 ### Run unit tests

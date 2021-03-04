@@ -24,18 +24,18 @@ jobs:
         python-version: ${{ matrix.python_version }}
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pipenv
-        pipenv install --python ${{ matrix.python_version }} --dev
+        python -m pip install --upgrade pip
+        pip install -r requirements.dev.txt
     - name: Test with pytest
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       run: |
-        pipenv run pytest --cov=fastapi_users/
-        pipenv run codecov
+        pytest --cov=fastapi_users/
+        codecov
     - name: Build and install it on system host
       run: |
-        pipenv run flit build
-        pipenv run flit install --python $(which python)
+        flit build
+        flit install --python $(which python)
         python test_build.py
 
   release:
@@ -51,11 +51,11 @@ jobs:
         python-version: 3.7
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pipenv
-        pipenv install --dev
+        python -m pip install --upgrade pip
+        pip install -r requirements.dev.txt
     - name: Release on PyPI
       env:
         FLIT_USERNAME: ${{ secrets.FLIT_USERNAME }}
         FLIT_PASSWORD: ${{ secrets.FLIT_PASSWORD }}
       run: |
-        pipenv run flit publish
+        flit publish
