@@ -18,10 +18,10 @@ jobs:
         python-version: 3.7
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pipenv
-        pipenv install --dev
+        python -m pip install --upgrade pip
+        pip install -r requirements.dev.txt
     - name: Build
-      run: pipenv run mkdocs build
+      run: mkdocs build
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v2.5.0
       env:
