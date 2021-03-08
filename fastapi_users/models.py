@@ -49,6 +49,10 @@ class BaseUserUpdate(BaseUser):
 
 class BaseUserDB(BaseUser):
     id: UUID4
+    email: EmailStr
+    is_active: bool
+    is_superuser: bool
+    is_verified: bool
     hashed_password: str
 
     class Config:
