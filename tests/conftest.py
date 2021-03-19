@@ -47,7 +47,7 @@ class UserDBOAuth(UserOAuth, UserDB):
     pass
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def event_loop():
     """Force the pytest-asyncio loop to be the main one."""
     loop = asyncio.get_event_loop()

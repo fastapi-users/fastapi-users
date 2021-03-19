@@ -1,38 +1,42 @@
 from typing import AsyncGenerator
 
-import motor.motor_asyncio
 import pymongo.errors
 import pytest
+from motor.motor_asyncio import AsyncIOMotorClient
 
 from fastapi_users.db.mongodb import MongoDBUserDatabase
 from fastapi_users.password import get_password_hash
 from tests.conftest import UserDB, UserDBOAuth
 
 
+@pytest.fixture(scope="module")
+async def mongodb_client():
+    client = AsyncIOMotorClient(
+        "mongodb://localhost:27017",
+        serverSelectionTimeoutMS=100,
+        uuidRepresentation="standard",
+    )
+
+    try:
+        await client.server_info()
+        yield client
+        client.close()
+    except pymongo.errors.ServerSelectionTimeoutError:
+        pytest.skip("MongoDB not available", allow_module_level=True)
+        return
+
+
 @pytest.fixture
-def get_mongodb_user_db():
+def get_mongodb_user_db(mongodb_client: AsyncIOMotorClient):
     async def _get_mongodb_user_db(
         user_model,
     ) -> AsyncGenerator[MongoDBUserDatabase, None]:
-        client = motor.motor_asyncio.AsyncIOMotorClient(
-            "mongodb://localhost:27017",
-            serverSelectionTimeoutMS=100,
-            uuidRepresentation="standard",
-        )
-
-        try:
-            await client.server_info()
-        except pymongo.errors.ServerSelectionTimeoutError:
-            pytest.skip("MongoDB not available", allow_module_level=True)
-            return
-
-        db = client["test_database"]
+        db = mongodb_client["test_database"]
         collection = db["users"]
 
         yield MongoDBUserDatabase(user_model, collection)
 
-        await collection.drop()
-        client.close()
+        await collection.delete_many({})
 
     return _get_mongodb_user_db
 
