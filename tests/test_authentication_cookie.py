@@ -32,7 +32,7 @@ def token():
         data = {"aud": "fastapi-users:auth"}
         if user_id is not None:
             data["user_id"] = str(user_id)
-        return generate_jwt(data, lifetime, SECRET, JWT_ALGORITHM)
+        return generate_jwt(data, SECRET, lifetime, JWT_ALGORITHM)
 
     return _token
 

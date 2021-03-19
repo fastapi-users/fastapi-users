@@ -19,7 +19,7 @@ def generate_state_token(
     data: Dict[str, str], secret: str, lifetime_seconds: int = 3600
 ) -> str:
     data["aud"] = STATE_TOKEN_AUDIENCE
-    return generate_jwt(data, lifetime_seconds, secret, JWT_ALGORITHM)
+    return generate_jwt(data, secret, lifetime_seconds, JWT_ALGORITHM)
 
 
 def decode_state_token(token: str, secret: str) -> Dict[str, str]:

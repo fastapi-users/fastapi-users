@@ -71,4 +71,4 @@ class JWTAuthentication(BaseAuthentication[str]):
 
     async def _generate_token(self, user: BaseUserDB) -> str:
         data = {"user_id": str(user.id), "aud": self.token_audience}
-        return generate_jwt(data, self.lifetime_seconds, self.secret, JWT_ALGORITHM)
+        return generate_jwt(data, self.secret, self.lifetime_seconds, JWT_ALGORITHM)

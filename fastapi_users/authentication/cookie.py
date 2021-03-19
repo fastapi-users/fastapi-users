@@ -30,7 +30,7 @@ class CookieAuthentication(BaseAuthentication[str]):
     scheme: APIKeyCookie
     token_audience: str = "fastapi-users:auth"
     secret: str
-    lifetime_seconds: int
+    lifetime_seconds: Optional[int]
     cookie_name: str
     cookie_path: str
     cookie_domain: Optional[str]
@@ -41,10 +41,10 @@ class CookieAuthentication(BaseAuthentication[str]):
     def __init__(
         self,
         secret: str,
-        lifetime_seconds: int,
+        lifetime_seconds: Optional[int] = None,
         cookie_name: str = "fastapiusersauth",
         cookie_path: str = "/",
-        cookie_domain: str = None,
+        cookie_domain: Optional[str] = None,
         cookie_secure: bool = True,
         cookie_httponly: bool = True,
         cookie_samesite: str = "lax",
@@ -112,4 +112,4 @@ class CookieAuthentication(BaseAuthentication[str]):
 
     async def _generate_token(self, user: BaseUserDB) -> str:
         data = {"user_id": str(user.id), "aud": self.token_audience}
-        return generate_jwt(data, self.lifetime_seconds, self.secret, JWT_ALGORITHM)
+        return generate_jwt(data, self.secret, self.lifetime_seconds, JWT_ALGORITHM)

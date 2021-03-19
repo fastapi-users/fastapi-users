@@ -25,7 +25,7 @@ def verify_token():
             data["user_id"] = str(user_id)
         if email is not None:
             data["email"] = email
-        return generate_jwt(data, lifetime, SECRET, JWT_ALGORITHM)
+        return generate_jwt(data, SECRET, lifetime, JWT_ALGORITHM)
 
     return _verify_token
 

@@ -33,8 +33,8 @@ def get_reset_password_router(
             token_data = {"user_id": str(user.id), "aud": RESET_PASSWORD_TOKEN_AUDIENCE}
             token = generate_jwt(
                 token_data,
-                reset_password_token_lifetime_seconds,
                 reset_password_token_secret,
+                reset_password_token_lifetime_seconds,
             )
             if after_forgot_password:
                 await run_handler(after_forgot_password, user, token, request)

@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from typing import Optional
 
 import jwt
 
@@ -6,9 +7,13 @@ JWT_ALGORITHM = "HS256"
 
 
 def generate_jwt(
-    data: dict, lifetime_seconds: int, secret: str, algorithm: str = JWT_ALGORITHM
+    data: dict,
+    secret: str,
+    lifetime_seconds: Optional[int] = None,
+    algorithm: str = JWT_ALGORITHM,
 ) -> str:
     payload = data.copy()
-    expire = datetime.utcnow() + timedelta(seconds=lifetime_seconds)
-    payload["exp"] = expire
+    if lifetime_seconds:
+        expire = datetime.utcnow() + timedelta(seconds=lifetime_seconds)
+        payload["exp"] = expire
     return jwt.encode(payload, secret, algorithm=algorithm)

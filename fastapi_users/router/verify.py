@@ -49,8 +49,8 @@ def get_verify_router(
                 }
                 token = generate_jwt(
                     token_data,
-                    verification_token_lifetime_seconds,
                     verification_token_secret,
+                    verification_token_lifetime_seconds,
                 )
 
                 if after_verification_request:
