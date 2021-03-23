@@ -230,6 +230,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "Smithybrewer",
+      "name": "Smithybrewer",
+      "avatar_url": "https://avatars.githubusercontent.com/u/57669591?v=4",
+      "profile": "https://github.com/Smithybrewer",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
