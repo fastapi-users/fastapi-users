@@ -41,10 +41,10 @@ mongodb = [
     "motor >=2.2.0,<3.0.0",
 ]
 tortoise-orm = [
-    "tortoise-orm >=0.16.0,<0.17.0"
+    "tortoise-orm >=0.16.0,<0.18.0"
 ]
 ormar = [
-    "ormar >=0.9.5,<0.10.0"
+    "ormar >=0.9.5,<0.11.0"
 ]
 oauth = [
     "httpx-oauth >=0.3,<0.4"

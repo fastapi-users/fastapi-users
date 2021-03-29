@@ -6,8 +6,8 @@ databases[postgresql, sqlite] >=0.3.0,<0.5
 pyjwt ==2.0.1
 python-multipart ==0.0.5
 motor >=2.2.0,<3.0.0
-tortoise-orm >=0.15.18,<0.17.0
-ormar >=0.9.5,<0.10.0
+tortoise-orm >=0.15.18,<0.18.0
+ormar >=0.9.5,<0.11.0
 makefun >=1.9.2,<1.12
 typing-extensions >=3.7.4.3; python_version < '3.8'
 Deprecated >=1.2.10,<2.0.0
