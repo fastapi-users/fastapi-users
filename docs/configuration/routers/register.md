@@ -34,7 +34,7 @@ app.include_router(
 
 ## After register
 
-You can provide a custom function to be called after a successful registration. It is called with **two argument**: the **user** that has just registered, and the original **`Request` object**.
+You can provide a custom function to be called after a successful registration. It is called with **two arguments**: the **user** that has just registered, and the original **`Request` object**.
 
 Typically, you'll want to **send a welcome e-mail** or add it to your marketing analytics pipeline.
 
