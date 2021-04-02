@@ -45,7 +45,7 @@ You can provide a custom function to be called after a successful update user re
 * The dictionary containing the updated fields.
 * The original **`Request` object**.
 
-It may be useful if you wish for example update your user in a data analytics or customer success platform.
+It may be useful, for example, if you wish to update your user in a data analytics or customer success platform.
 
 You can define it as an `async` or standard method.
 

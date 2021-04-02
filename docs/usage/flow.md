@@ -139,7 +139,7 @@ You can use this token to make authenticated requests as the user `king.arthur@c
 
 #### Response
 
-You'll get a empty response. However, the response will come with a `Set-Cookie` header (that's why we added the `-v` option in `cURL` to see them).
+You'll get an empty response. However, the response will come with a `Set-Cookie` header (that's why we added the `-v` option in `cURL` to see them).
 
 ```
 set-cookie: fastapiusersauth=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiYzYwNjBmMTEtNTM0OS00YTI0LThiNGEtYTJhODc1ZGM1Mzk1IiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTg3ODE4OTQ3fQ.qNA4oPVYhoqrJIk-zvAyEfEVoEnP156G30H_SWEU0sU; HttpOnly; Max-Age=3600; Path=/; Secure
