@@ -11,6 +11,8 @@ from fastapi_users import models
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.password import get_password_hash
 
+import re
+
 
 class UserAlreadyExists(Exception):
     pass
@@ -45,7 +47,8 @@ def get_create_user(
         is_active: bool = None,
         is_verified: bool = None,
     ) -> models.BaseUserDB:
-        existing_user = await user_db.get_by_email(user.email)
+        no_plus_email = re.sub(r"(\+.*)@", "@", user.email)
+        existing_user = await user_db.get_by_email(no_plus_email)
 
         if existing_user is not None:
             raise UserAlreadyExists()

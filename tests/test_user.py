@@ -28,6 +28,14 @@ class TestCreateUser:
         with pytest.raises(UserAlreadyExists):
             await create_user(user)
 
+    @pytest.mark.parametrize(
+        "email", ["king.arthur@camelot.bt", "King.Arthur+fake@camelot.bt"]
+    )
+    async def test_plus_in_email_user(self, email, create_user):
+        user = UserCreate(email=email, password="guinevere")
+        with pytest.raises(UserAlreadyExists):
+            await create_user(user)
+
     @pytest.mark.parametrize("email", ["lancelot@camelot.bt", "Lancelot@camelot.bt"])
     async def test_regular_user(self, email, create_user):
         user = UserCreate(email=email, password="guinevere")
