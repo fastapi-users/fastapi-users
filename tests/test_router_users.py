@@ -7,7 +7,7 @@ import pytest
 from fastapi import FastAPI, Request, status
 
 from fastapi_users.authentication import Authenticator
-from fastapi_users.router import get_users_router
+from fastapi_users.router import ErrorCode, get_users_router
 from tests.conftest import MockAuthentication, User, UserDB, UserUpdate
 
 SECRET = "SECRET"
@@ -143,6 +143,28 @@ class TestUpdateMe:
         )
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
         assert after_update.called is False
+
+    async def test_existing_email(
+        self,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
+        user: UserDB,
+        verified_user: UserDB,
+        after_update,
+    ):
+        client, requires_verification = test_app_client
+        response = await client.patch(
+            "/me",
+            json={"email": verified_user.email},
+            headers={"Authorization": f"Bearer {user.id}"},
+        )
+        if requires_verification:
+            assert response.status_code == status.HTTP_401_UNAUTHORIZED
+            assert after_update.called is False
+        else:
+            assert response.status_code == status.HTTP_400_BAD_REQUEST
+            data = cast(Dict[str, Any], response.json())
+            assert data["detail"] == ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS
+            assert after_update.called is False
 
     async def test_empty_body(
         self,
@@ -684,6 +706,25 @@ class TestUpdateUser:
 
             data = cast(Dict[str, Any], response.json())
             assert data["email"] == "king.arthur@tintagel.bt"
+
+    async def test_existing_email_verified_superuser(
+        self,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
+        user: UserDB,
+        verified_user: UserDB,
+        verified_superuser: UserDB,
+        after_update,
+    ):
+        client, _ = test_app_client
+        response = await client.patch(
+            f"/{user.id}",
+            json={"email": verified_user.email},
+            headers={"Authorization": f"Bearer {verified_superuser.id}"},
+        )
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        data = cast(Dict[str, Any], response.json())
+        assert data["detail"] == ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS
+        assert after_update.called is False
 
     async def test_valid_body_verified_superuser(
         self,

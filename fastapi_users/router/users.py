@@ -7,7 +7,7 @@ from fastapi_users import models
 from fastapi_users.authentication import Authenticator
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.password import get_password_hash
-from fastapi_users.router.common import run_handler
+from fastapi_users.router.common import ErrorCode, run_handler
 
 
 def get_users_router(
@@ -35,6 +35,20 @@ def get_users_router(
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
         return user
 
+    async def _check_unique_email(
+        updated_user: user_update_model,  # type: ignore
+    ) -> None:
+        updated_user = cast(
+            models.BaseUserUpdate, updated_user
+        )  # Prevent mypy complain
+        if updated_user.email:
+            user = await user_db.get_by_email(updated_user.email)
+            if user is not None:
+                raise HTTPException(
+                    status.HTTP_400_BAD_REQUEST,
+                    detail=ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS,
+                )
+
     async def _update_user(
         user: models.BaseUserDB, update_dict: Dict[str, Any], request: Request
     ):
@@ -55,7 +69,11 @@ def get_users_router(
     ):
         return user
 
-    @router.patch("/me", response_model=user_model)
+    @router.patch(
+        "/me",
+        response_model=user_model,
+        dependencies=[Depends(get_current_active_user), Depends(_check_unique_email)],
+    )
     async def update_me(
         request: Request,
         updated_user: user_update_model,  # type: ignore
@@ -81,7 +99,7 @@ def get_users_router(
     @router.patch(
         "/{id:uuid}",
         response_model=user_model,
-        dependencies=[Depends(get_current_superuser)],
+        dependencies=[Depends(get_current_superuser), Depends(_check_unique_email)],
     )
     async def update_user(
         id: UUID4, updated_user: user_update_model, request: Request  # type: ignore
