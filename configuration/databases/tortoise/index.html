@@ -360,6 +360,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#tweak-userdb-model" class="md-nav__link">
+    Tweak UserDB model
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#create-the-database-adapter" class="md-nav__link">
     Create the database adapter
   </a>
@@ -806,6 +813,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#tweak-userdb-model" class="md-nav__link">
+    Tweak UserDB model
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#create-the-database-adapter" class="md-nav__link">
     Create the database adapter
   </a>
@@ -856,7 +870,12 @@
 <span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">models</span>
 <span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">TortoiseBaseUserModel</span><span class="p">,</span> <span class="n">TortoiseUserDatabase</span>
 <span class="kn">from</span> <span class="nn">tortoise.contrib.fastapi</span> <span class="kn">import</span> <span class="n">register_tortoise</span>
+<span class="kn">from</span> <span class="nn">tortoise.contrib.pydantic</span> <span class="kn">import</span> <span class="n">PydanticModel</span>
 
+
+<span class="hll"><span class="k">class</span> <span class="nc">UserModel</span><span class="p">(</span><span class="n">TortoiseBaseUserModel</span><span class="p">):</span>
+</span><span class="hll">    <span class="k">pass</span>
+</span>
 
 <span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUser</span><span class="p">):</span>
     <span class="k">pass</span>
@@ -870,16 +889,13 @@
     <span class="k">pass</span>
 
 
-<span class="k">class</span> <span class="nc">UserDB</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserDB</span><span class="p">):</span>
-    <span class="k">pass</span>
+<span class="k">class</span> <span class="nc">UserDB</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserDB</span><span class="p">,</span> <span class="n">PydanticModel</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+        <span class="n">orm_mode</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">orig_model</span> <span class="o">=</span> <span class="n">UserModel</span>
 
 
 <span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;sqlite://./test.db&quot;</span>
-
-
-<span class="hll"><span class="k">class</span> <span class="nc">UserModel</span><span class="p">(</span><span class="n">TortoiseBaseUserModel</span><span class="p">):</span>
-</span><span class="hll">    <span class="k">pass</span>
-</span>
 
 <span class="n">user_db</span> <span class="o">=</span> <span class="n">TortoiseUserDatabase</span><span class="p">(</span><span class="n">UserDB</span><span class="p">,</span> <span class="n">UserModel</span><span class="p">)</span>
 <span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
@@ -892,12 +908,17 @@
 <span class="p">)</span>
 </code></pre></div>
 <p>As you can see, <strong>FastAPI Users</strong> provides an abstract model that will include base fields for our User table. You can of course add you own fields there to fit to your needs!</p>
-<h2 id="create-the-database-adapter">Create the database adapter<a class="headerlink" href="#create-the-database-adapter" title="Permanent link">&para;</a></h2>
-<p>The database adapter of <strong>FastAPI Users</strong> makes the link between your database configuration and the users logic. Create it like this.</p>
+<h2 id="tweak-userdb-model">Tweak <code>UserDB</code> model<a class="headerlink" href="#tweak-userdb-model" title="Permanent link">&para;</a></h2>
+<p>In order to make the Pydantic model and the Tortoise ORM model working well together, you'll have to add a mixin and some configuration options to your <code>UserDB</code> model. Tortoise ORM provides <a href="https://tortoise-orm.readthedocs.io/en/latest/contrib/pydantic.html">utilities to ease the integration with Pydantic</a> and we'll use them here.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
 <span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">models</span>
 <span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">TortoiseBaseUserModel</span><span class="p">,</span> <span class="n">TortoiseUserDatabase</span>
 <span class="kn">from</span> <span class="nn">tortoise.contrib.fastapi</span> <span class="kn">import</span> <span class="n">register_tortoise</span>
+<span class="hll"><span class="kn">from</span> <span class="nn">tortoise.contrib.pydantic</span> <span class="kn">import</span> <span class="n">PydanticModel</span>
+</span>
+
+<span class="k">class</span> <span class="nc">UserModel</span><span class="p">(</span><span class="n">TortoiseBaseUserModel</span><span class="p">):</span>
+    <span class="k">pass</span>
 
 
 <span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUser</span><span class="p">):</span>
@@ -912,16 +933,57 @@
     <span class="k">pass</span>
 
 
-<span class="k">class</span> <span class="nc">UserDB</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserDB</span><span class="p">):</span>
-    <span class="k">pass</span>
-
+<span class="hll"><span class="k">class</span> <span class="nc">UserDB</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserDB</span><span class="p">,</span> <span class="n">PydanticModel</span><span class="p">):</span>
+</span><span class="hll">    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+</span><span class="hll">        <span class="n">orm_mode</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span class="hll">        <span class="n">orig_model</span> <span class="o">=</span> <span class="n">UserModel</span>
+</span>
 
 <span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;sqlite://./test.db&quot;</span>
+
+<span class="n">user_db</span> <span class="o">=</span> <span class="n">TortoiseUserDatabase</span><span class="p">(</span><span class="n">UserDB</span><span class="p">,</span> <span class="n">UserModel</span><span class="p">)</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
+
+<span class="n">register_tortoise</span><span class="p">(</span>
+    <span class="n">app</span><span class="p">,</span>
+    <span class="n">db_url</span><span class="o">=</span><span class="n">DATABASE_URL</span><span class="p">,</span>
+    <span class="n">modules</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;models&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;path_to_your_package&quot;</span><span class="p">]},</span>
+    <span class="n">generate_schemas</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>The <code>PydanticModel</code> mixin adds methods used internally by Tortoise ORM to the Pydantic model so that it can easily transform it back to an ORM model. It expects then that you provide the property <code>orig_model</code> which should point to the <strong>User ORM model we defined just above</strong>.</p>
+<h2 id="create-the-database-adapter">Create the database adapter<a class="headerlink" href="#create-the-database-adapter" title="Permanent link">&para;</a></h2>
+<p>The database adapter of <strong>FastAPI Users</strong> makes the link between your database configuration and the users logic. Create it like this.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
+<span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">TortoiseBaseUserModel</span><span class="p">,</span> <span class="n">TortoiseUserDatabase</span>
+<span class="kn">from</span> <span class="nn">tortoise.contrib.fastapi</span> <span class="kn">import</span> <span class="n">register_tortoise</span>
+<span class="kn">from</span> <span class="nn">tortoise.contrib.pydantic</span> <span class="kn">import</span> <span class="n">PydanticModel</span>
 
 
 <span class="k">class</span> <span class="nc">UserModel</span><span class="p">(</span><span class="n">TortoiseBaseUserModel</span><span class="p">):</span>
     <span class="k">pass</span>
 
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUser</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserCreate</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUserCreate</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserUpdate</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserUpdate</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserDB</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserDB</span><span class="p">,</span> <span class="n">PydanticModel</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+        <span class="n">orm_mode</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">orig_model</span> <span class="o">=</span> <span class="n">UserModel</span>
+
+
+<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;sqlite://./test.db&quot;</span>
 
 <span class="hll"><span class="n">user_db</span> <span class="o">=</span> <span class="n">TortoiseUserDatabase</span><span class="p">(</span><span class="n">UserDB</span><span class="p">,</span> <span class="n">UserModel</span><span class="p">)</span>
 </span><span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
@@ -941,6 +1003,11 @@
 <span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">models</span>
 <span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">TortoiseBaseUserModel</span><span class="p">,</span> <span class="n">TortoiseUserDatabase</span>
 <span class="kn">from</span> <span class="nn">tortoise.contrib.fastapi</span> <span class="kn">import</span> <span class="n">register_tortoise</span>
+<span class="kn">from</span> <span class="nn">tortoise.contrib.pydantic</span> <span class="kn">import</span> <span class="n">PydanticModel</span>
+
+
+<span class="k">class</span> <span class="nc">UserModel</span><span class="p">(</span><span class="n">TortoiseBaseUserModel</span><span class="p">):</span>
+    <span class="k">pass</span>
 
 
 <span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUser</span><span class="p">):</span>
@@ -955,16 +1022,13 @@
     <span class="k">pass</span>
 
 
-<span class="k">class</span> <span class="nc">UserDB</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserDB</span><span class="p">):</span>
-    <span class="k">pass</span>
+<span class="k">class</span> <span class="nc">UserDB</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserDB</span><span class="p">,</span> <span class="n">PydanticModel</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+        <span class="n">orm_mode</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">orig_model</span> <span class="o">=</span> <span class="n">UserModel</span>
 
 
 <span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;sqlite://./test.db&quot;</span>
-
-
-<span class="k">class</span> <span class="nc">UserModel</span><span class="p">(</span><span class="n">TortoiseBaseUserModel</span><span class="p">):</span>
-    <span class="k">pass</span>
-
 
 <span class="n">user_db</span> <span class="o">=</span> <span class="n">TortoiseUserDatabase</span><span class="p">(</span><span class="n">UserDB</span><span class="p">,</span> <span class="n">UserModel</span><span class="p">)</span>
 <span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>

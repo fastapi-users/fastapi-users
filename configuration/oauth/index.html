@@ -1345,12 +1345,21 @@ Insecure passwords may give attackers full access to your database.</p>
 <span class="kn">from</span> <span class="nn">httpx_oauth.clients.google</span> <span class="kn">import</span> <span class="n">GoogleOAuth2</span>
 <span class="kn">from</span> <span class="nn">tortoise</span> <span class="kn">import</span> <span class="n">fields</span>
 <span class="kn">from</span> <span class="nn">tortoise.contrib.fastapi</span> <span class="kn">import</span> <span class="n">register_tortoise</span>
+<span class="kn">from</span> <span class="nn">tortoise.contrib.pydantic</span> <span class="kn">import</span> <span class="n">PydanticModel</span>
 
 <span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;sqlite://./test.db&quot;</span>
 <span class="n">SECRET</span> <span class="o">=</span> <span class="s2">&quot;SECRET&quot;</span>
 
 
 <span class="n">google_oauth_client</span> <span class="o">=</span> <span class="n">GoogleOAuth2</span><span class="p">(</span><span class="s2">&quot;CLIENT_ID&quot;</span><span class="p">,</span> <span class="s2">&quot;CLIENT_SECRET&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">UserModel</span><span class="p">(</span><span class="n">TortoiseBaseUserModel</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">OAuthAccountModel</span><span class="p">(</span><span class="n">TortoiseBaseOAuthAccountModel</span><span class="p">):</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ForeignKeyField</span><span class="p">(</span><span class="s2">&quot;models.UserModel&quot;</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s2">&quot;oauth_accounts&quot;</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUser</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseOAuthAccountMixin</span><span class="p">):</span>
@@ -1365,16 +1374,10 @@ Insecure passwords may give attackers full access to your database.</p>
     <span class="k">pass</span>
 
 
-<span class="k">class</span> <span class="nc">UserDB</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserDB</span><span class="p">):</span>
-    <span class="k">pass</span>
-
-
-<span class="k">class</span> <span class="nc">UserModel</span><span class="p">(</span><span class="n">TortoiseBaseUserModel</span><span class="p">):</span>
-    <span class="k">pass</span>
-
-
-<span class="k">class</span> <span class="nc">OAuthAccountModel</span><span class="p">(</span><span class="n">TortoiseBaseOAuthAccountModel</span><span class="p">):</span>
-    <span class="n">user</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ForeignKeyField</span><span class="p">(</span><span class="s2">&quot;models.UserModel&quot;</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s2">&quot;oauth_accounts&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">UserDB</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserDB</span><span class="p">,</span> <span class="n">PydanticModel</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+        <span class="n">orm_mode</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">orig_model</span> <span class="o">=</span> <span class="n">UserModel</span>
 
 
 <span class="n">user_db</span> <span class="o">=</span> <span class="n">TortoiseUserDatabase</span><span class="p">(</span><span class="n">UserDB</span><span class="p">,</span> <span class="n">UserModel</span><span class="p">,</span> <span class="n">OAuthAccountModel</span><span class="p">)</span>
@@ -1382,7 +1385,7 @@ Insecure passwords may give attackers full access to your database.</p>
 <span class="n">register_tortoise</span><span class="p">(</span>
     <span class="n">app</span><span class="p">,</span>
     <span class="n">db_url</span><span class="o">=</span><span class="n">DATABASE_URL</span><span class="p">,</span>
-    <span class="n">modules</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;models&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;path_to_your_package&quot;</span><span class="p">]},</span>
+    <span class="n">modules</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;models&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;oauth_full_tortoise&quot;</span><span class="p">]},</span>
     <span class="n">generate_schemas</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span>
 
