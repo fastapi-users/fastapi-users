@@ -1,7 +1,8 @@
-from typing import Optional, Type
+from typing import Optional, Type, cast
 
 from pydantic import UUID4
 from tortoise import fields, models
+from tortoise.contrib.pydantic import PydanticModel
 from tortoise.exceptions import DoesNotExist
 from tortoise.queryset import QuerySetSingle
 
@@ -16,14 +17,6 @@ class TortoiseBaseUserModel(models.Model):
     is_active = fields.BooleanField(default=True, null=False)
     is_superuser = fields.BooleanField(default=False, null=False)
     is_verified = fields.BooleanField(default=False, null=False)
-
-    async def to_dict(self):
-        d = {}
-        for field in self._meta.db_fields:
-            d[field] = getattr(self, field)
-        for field in self._meta.backward_fk_fields:
-            d[field] = await getattr(self, field).all().values()
-        return d
 
     class Meta:
         abstract = True
@@ -72,9 +65,11 @@ class TortoiseUserDatabase(BaseUserDatabase[UD]):
                 query = query.prefetch_related("oauth_accounts")
 
             user = await query
-            user_dict = await user.to_dict()
+            pydantic_user = await cast(
+                PydanticModel, self.user_db_model
+            ).from_tortoise_orm(user)
 
-            return self.user_db_model(**user_dict)
+            return cast(UD, pydantic_user)
         except DoesNotExist:
             return None
 
@@ -89,8 +84,11 @@ class TortoiseUserDatabase(BaseUserDatabase[UD]):
         if user is None:
             return None
 
-        user_dict = await user.to_dict()
-        return self.user_db_model(**user_dict)
+        pydantic_user = await cast(PydanticModel, self.user_db_model).from_tortoise_orm(
+            user
+        )
+
+        return cast(UD, pydantic_user)
 
     async def get_by_oauth_account(self, oauth: str, account_id: str) -> Optional[UD]:
         try:
@@ -99,9 +97,11 @@ class TortoiseUserDatabase(BaseUserDatabase[UD]):
             ).prefetch_related("oauth_accounts")
 
             user = await query
-            user_dict = await user.to_dict()
+            pydantic_user = await cast(
+                PydanticModel, self.user_db_model
+            ).from_tortoise_orm(user)
 
-            return self.user_db_model(**user_dict)
+            return cast(UD, pydantic_user)
         except DoesNotExist:
             return None
 

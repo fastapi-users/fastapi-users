@@ -9,12 +9,21 @@ from fastapi_users.db import (
 from httpx_oauth.clients.google import GoogleOAuth2
 from tortoise import fields
 from tortoise.contrib.fastapi import register_tortoise
+from tortoise.contrib.pydantic import PydanticModel
 
 DATABASE_URL = "sqlite://./test.db"
 SECRET = "SECRET"
 
 
 google_oauth_client = GoogleOAuth2("CLIENT_ID", "CLIENT_SECRET")
+
+
+class UserModel(TortoiseBaseUserModel):
+    pass
+
+
+class OAuthAccountModel(TortoiseBaseOAuthAccountModel):
+    user = fields.ForeignKeyField("models.UserModel", related_name="oauth_accounts")
 
 
 class User(models.BaseUser, models.BaseOAuthAccountMixin):
@@ -29,16 +38,10 @@ class UserUpdate(User, models.BaseUserUpdate):
     pass
 
 
-class UserDB(User, models.BaseUserDB):
-    pass
-
-
-class UserModel(TortoiseBaseUserModel):
-    pass
-
-
-class OAuthAccountModel(TortoiseBaseOAuthAccountModel):
-    user = fields.ForeignKeyField("models.UserModel", related_name="oauth_accounts")
+class UserDB(User, models.BaseUserDB, PydanticModel):
+    class Config:
+        orm_mode = True
+        orig_model = UserModel
 
 
 user_db = TortoiseUserDatabase(UserDB, UserModel, OAuthAccountModel)
@@ -46,7 +49,7 @@ app = FastAPI()
 register_tortoise(
     app,
     db_url=DATABASE_URL,
-    modules={"models": ["path_to_your_package"]},
+    modules={"models": ["oauth_full_tortoise"]},
     generate_schemas=True,
 )
 
