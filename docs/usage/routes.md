@@ -26,6 +26,15 @@ Login a user against the method named `name`. Check the corresponding [authentic
     }
     ```
 
+!!! fail "`400 Bad Request`"
+    The user is not verified.
+
+    ```json
+    {
+        "detail": "LOGIN_USER_NOT_VERIFIED"
+    }
+    ```
+
 ### `POST /logout`
 
 Logout the authenticated user against the method named `name`. Check the corresponding [authentication method](../configuration/authentication/index.md) to view the success response.
