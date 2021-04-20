@@ -126,10 +126,8 @@ class TestVerifyTokenRequest:
         input_user = verified_user
         json = {"email": input_user.email}
         response = await test_app_client.post("/request-verify-token", json=json)
+        assert response.status_code == status.HTTP_202_ACCEPTED
         assert after_verification_request.called is False
-        assert response.status_code == status.HTTP_400_BAD_REQUEST
-        data = cast(Dict[str, Any], response.json())
-        assert data["detail"] == ErrorCode.VERIFY_USER_ALREADY_VERIFIED
 
     async def test_user_inactive_valid_request(
         self,
