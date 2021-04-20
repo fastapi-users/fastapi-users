@@ -2,6 +2,7 @@ from typing import AsyncGenerator
 
 import pytest
 from tortoise import Tortoise, fields
+from tortoise.contrib.pydantic import PydanticModel
 from tortoise.exceptions import IntegrityError
 
 from fastapi_users.db.tortoise import (
@@ -10,15 +11,28 @@ from fastapi_users.db.tortoise import (
     TortoiseUserDatabase,
 )
 from fastapi_users.password import get_password_hash
-from tests.conftest import UserDB, UserDBOAuth
+from tests.conftest import UserDB as BaseUserDB
+from tests.conftest import UserDBOAuth as BaseUserDBOAuth
 
 
 class User(TortoiseBaseUserModel):
     first_name = fields.CharField(null=True, max_length=255)
 
 
+class UserDB(BaseUserDB, PydanticModel):
+    class Config:
+        orm_mode = True
+        orig_model = User
+
+
 class OAuthAccount(TortoiseBaseOAuthAccountModel):
     user = fields.ForeignKeyField("models.User", related_name="oauth_accounts")
+
+
+class UserDBOAuth(BaseUserDBOAuth, PydanticModel):
+    class Config:
+        orm_mode = True
+        orig_model = OAuthAccount
 
 
 @pytest.fixture
