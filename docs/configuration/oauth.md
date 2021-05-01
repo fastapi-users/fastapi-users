@@ -6,6 +6,10 @@ FastAPI Users provides an optional OAuth2 authentication support. It relies on [
 
 You should install the library with the optional dependencies for OAuth:
 
+!!! warning
+    Note that if you are using **zsh**, you have to quote the argument like this:
+    pip install 'fastapi-users[sqlalchemy,oauth]'
+
 ```sh
 pip install fastapi-users[sqlalchemy,oauth]
 ```

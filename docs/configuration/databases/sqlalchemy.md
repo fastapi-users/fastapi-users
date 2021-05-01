@@ -6,6 +6,10 @@
 
 Install the database driver that corresponds to your DBMS:
 
+!!! warning
+    Note that if you are using **zsh**, you have to quote the argument like this:
+    pip install 'databases[postgresql]'
+
 ```sh
 pip install databases[postgresql]
 ```
