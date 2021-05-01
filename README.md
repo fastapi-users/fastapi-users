@@ -86,6 +86,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/alexferrari88"><img src="https://avatars.githubusercontent.com/u/49028826?v=4?s=100" width="100px;" alt=""/><br /><sub><b>alexferrari88</b></sub></a><br /><a href="#financial-alexferrari88" title="Financial">💵</a></td>
     <td align="center"><a href="https://github.com/sandalwoodbox"><img src="https://avatars.githubusercontent.com/u/80227316?v=4?s=100" width="100px;" alt=""/><br /><sub><b>sandalwoodbox</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/issues?q=author%3Asandalwoodbox" title="Bug reports">🐛</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/vladhoi"><img src="https://avatars.githubusercontent.com/u/33840957?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Vlad Hoi</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/commits?author=vladhoi" title="Documentation">📖</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->
