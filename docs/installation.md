@@ -5,25 +5,25 @@ You can add **FastAPI Users** to your FastAPI project in a few easy steps. First
 ## With SQLAlchemy support
 
 ```sh
-pip install fastapi-users[sqlalchemy]
+pip install 'fastapi-users[sqlalchemy]'
 ```
 
 ## With MongoDB support
 
 ```sh
-pip install fastapi-users[mongodb]
+pip install 'fastapi-users[mongodb]'
 ```
 
 ## With Tortoise ORM support
 
 ```sh
-pip install fastapi-users[tortoise-orm]
+pip install 'fastapi-users[tortoise-orm]'
 ```
 
 ## With ormar support
 
 ```sh
-pip install fastapi-users[ormar]
+pip install 'fastapi-users[ormar]'
 ```
 
 ---

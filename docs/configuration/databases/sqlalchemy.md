@@ -7,15 +7,15 @@
 Install the database driver that corresponds to your DBMS:
 
 ```sh
-pip install databases[postgresql]
+pip install 'databases[postgresql]'
 ```
 
 ```sh
-pip install databases[mysql]
+pip install 'databases[mysql]'
 ```
 
 ```sh
-pip install databases[sqlite]
+pip install 'databases[sqlite]'
 ```
 
 For the sake of this tutorial from now on, we'll use a simple SQLite databse.

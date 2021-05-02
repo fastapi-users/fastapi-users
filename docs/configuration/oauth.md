@@ -7,15 +7,15 @@ FastAPI Users provides an optional OAuth2 authentication support. It relies on [
 You should install the library with the optional dependencies for OAuth:
 
 ```sh
-pip install fastapi-users[sqlalchemy,oauth]
+pip install 'fastapi-users[sqlalchemy,oauth]'
 ```
 
 ```sh
-pip install fastapi-users[mongodb,oauth]
+pip install 'fastapi-users[mongodb,oauth]'
 ```
 
 ```sh
-pip install fastapi-users[tortoise-orm,oauth]
+pip install 'fastapi-users[tortoise-orm,oauth]'
 ```
 
 ## Configuration
