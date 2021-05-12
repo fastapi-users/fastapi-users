@@ -4,8 +4,18 @@ site_description: Ready-to-use and customizable users management for FastAPI
 theme:
   name: 'material'
   palette:
-    primary: 'red'
-    accent: 'red'
+    - scheme: default
+      primary: 'red'
+      accent: 'red'
+      toggle:
+          icon: material/lightbulb
+          name: Switch to dark mode
+    - scheme: slate
+      primary: 'red'
+      accent: 'red'
+      toggle:
+          icon: material/lightbulb-outline
+          name: Switch to light mode
   icon:
     logo: material/account-supervisor
   favicon: 'favicon.png'
