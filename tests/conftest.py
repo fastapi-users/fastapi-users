@@ -1,6 +1,7 @@
 import asyncio
 from typing import AsyncGenerator, List, Optional
 
+import asynctest
 import httpx
 import pytest
 from asgi_lifespan import LifespanManager
@@ -15,6 +16,7 @@ from fastapi_users.authentication import Authenticator, BaseAuthentication
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.models import BaseOAuthAccount, BaseOAuthAccountMixin, BaseUserDB
 from fastapi_users.password import get_password_hash
+from fastapi_users.user import InvalidPasswordException, ValidatePasswordProtocol
 
 guinevere_password_hash = get_password_hash("guinevere")
 angharad_password_hash = get_password_hash("angharad")
@@ -400,3 +402,14 @@ def oauth_client() -> OAuth2:
         ACCESS_TOKEN_ENDPOINT,
         name="service1",
     )
+
+
+@pytest.fixture
+def validate_password() -> ValidatePasswordProtocol:
+    async def _validate_password(
+        password: str, user: Optional[models.UD] = None
+    ) -> None:
+        if len(password) < 3:
+            raise InvalidPasswordException()
+
+    return asynctest.CoroutineMock(wraps=_validate_password)

@@ -56,13 +56,18 @@ def after_reset_password(request):
 @pytest.mark.asyncio
 async def test_app_client(
     mock_user_db,
-    mock_authentication,
     after_forgot_password,
     after_reset_password,
     get_test_client,
+    validate_password,
 ) -> AsyncGenerator[httpx.AsyncClient, None]:
     reset_router = get_reset_password_router(
-        mock_user_db, SECRET, LIFETIME, after_forgot_password, after_reset_password
+        mock_user_db,
+        SECRET,
+        LIFETIME,
+        after_forgot_password,
+        after_reset_password,
+        validate_password,
     )
 
     app = FastAPI()
@@ -214,6 +219,30 @@ class TestResetPassword:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.RESET_PASSWORD_BAD_TOKEN
+        assert mock_user_db.update.called is False
+        assert after_reset_password.called is False
+
+    async def test_invalid_password(
+        self,
+        mocker,
+        mock_user_db,
+        test_app_client: httpx.AsyncClient,
+        forgot_password_token,
+        user: UserDB,
+        after_reset_password,
+        validate_password,
+    ):
+        mocker.spy(mock_user_db, "update")
+
+        json = {
+            "token": forgot_password_token(user.id),
+            "password": "h",
+        }
+        response = await test_app_client.post("/reset-password", json=json)
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        data = cast(Dict[str, Any], response.json())
+        assert data["detail"] == ErrorCode.RESET_PASSWORD_INVALID_PASSWORD
+        validate_password.assert_called_with("h", user)
         assert mock_user_db.update.called is False
         assert after_reset_password.called is False
 

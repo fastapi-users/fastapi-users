@@ -30,7 +30,7 @@ def after_register(request):
 @pytest.fixture
 @pytest.mark.asyncio
 async def test_app_client(
-    mock_user_db, after_register, get_test_client
+    mock_user_db, after_register, get_test_client, validate_password
 ) -> AsyncGenerator[httpx.AsyncClient, None]:
     create_user = get_create_user(mock_user_db, UserDB)
     register_router = get_register_router(
@@ -38,6 +38,7 @@ async def test_app_client(
         User,
         UserCreate,
         after_register,
+        validate_password,
     )
 
     app = FastAPI()
@@ -77,6 +78,17 @@ class TestRegister:
         json = {"email": "king.arthur", "password": "guinevere"}
         response = await test_app_client.post("/register", json=json)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert after_register.called is False
+
+    async def test_invalid_password(
+        self, test_app_client: httpx.AsyncClient, after_register, validate_password
+    ):
+        json = {"email": "king.arthur@camelot.bt", "password": "g"}
+        response = await test_app_client.post("/register", json=json)
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        data = cast(Dict[str, Any], response.json())
+        assert data["detail"] == ErrorCode.REGISTER_INVALID_PASSWORD
+        validate_password.assert_called_with("g")
         assert after_register.called is False
 
     @pytest.mark.parametrize(

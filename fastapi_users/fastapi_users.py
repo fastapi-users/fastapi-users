@@ -15,6 +15,7 @@ from fastapi_users.router import (
 from fastapi_users.user import (
     CreateUserProtocol,
     GetUserProtocol,
+    ValidatePasswordProtocol,
     VerifyUserProtocol,
     get_create_user,
     get_get_user,
@@ -39,6 +40,8 @@ class FastAPIUsers:
     :param user_create_model: Pydantic model for creating a user.
     :param user_update_model: Pydantic model for updating a user.
     :param user_db_model: Pydantic model of a DB representation of a user.
+    :param validate_password: Optional function to validate the password
+    at user registration, user update or password reset.
 
     :attribute create_user: Helper function to create a user programmatically.
     :attribute current_user: Dependency callable getter to inject authenticated user
@@ -56,6 +59,7 @@ class FastAPIUsers:
     create_user: CreateUserProtocol
     verify_user: VerifyUserProtocol
     get_user: GetUserProtocol
+    validate_password: Optional[ValidatePasswordProtocol]
     _user_model: Type[models.BaseUser]
     _user_create_model: Type[models.BaseUserCreate]
     _user_update_model: Type[models.BaseUserUpdate]
@@ -69,6 +73,7 @@ class FastAPIUsers:
         user_create_model: Type[models.BaseUserCreate],
         user_update_model: Type[models.BaseUserUpdate],
         user_db_model: Type[models.BaseUserDB],
+        validate_password: Optional[ValidatePasswordProtocol] = None,
     ):
         self.db = db
         self.authenticator = Authenticator(auth_backends, db)
@@ -82,6 +87,8 @@ class FastAPIUsers:
         self.create_user = get_create_user(db, user_db_model)
         self.verify_user = get_verify_user(db)
         self.get_user = get_get_user(db)
+
+        self.validate_password = validate_password
 
         self.current_user = self.authenticator.current_user
         self.get_current_user = self.authenticator.get_current_user
@@ -120,6 +127,7 @@ class FastAPIUsers:
             self._user_model,
             self._user_create_model,
             after_register,
+            self.validate_password,
         )
 
     def get_verify_router(
@@ -176,6 +184,7 @@ class FastAPIUsers:
             reset_password_token_lifetime_seconds,
             after_forgot_password,
             after_reset_password,
+            self.validate_password,
         )
 
     def get_auth_router(
@@ -185,6 +194,8 @@ class FastAPIUsers:
         Return an auth router for a given authentication backend.
 
         :param backend: The authentication backend instance.
+        :param requires_verification: Whether the authentication
+        require the user to be verified or not.
         """
         return get_auth_router(
             backend,
@@ -232,6 +243,8 @@ class FastAPIUsers:
 
         :param after_update: Optional function called
         after a successful user update.
+        :param requires_verification: Whether the endpoints
+        require the users to be verified or not.
         """
         return get_users_router(
             self.db,
@@ -241,4 +254,5 @@ class FastAPIUsers:
             self.authenticator,
             after_update,
             requires_verification,
+            self.validate_password,
         )

@@ -4,7 +4,12 @@ from fastapi import APIRouter, HTTPException, Request, status
 
 from fastapi_users import models
 from fastapi_users.router.common import ErrorCode, run_handler
-from fastapi_users.user import CreateUserProtocol, UserAlreadyExists
+from fastapi_users.user import (
+    CreateUserProtocol,
+    InvalidPasswordException,
+    UserAlreadyExists,
+    ValidatePasswordProtocol,
+)
 
 
 def get_register_router(
@@ -12,6 +17,7 @@ def get_register_router(
     user_model: Type[models.BaseUser],
     user_create_model: Type[models.BaseUserCreate],
     after_register: Optional[Callable[[models.UD, Request], None]] = None,
+    validate_password: Optional[ValidatePasswordProtocol] = None,
 ) -> APIRouter:
     """Generate a router with the register route."""
     router = APIRouter()
@@ -20,6 +26,15 @@ def get_register_router(
         "/register", response_model=user_model, status_code=status.HTTP_201_CREATED
     )
     async def register(request: Request, user: user_create_model):  # type: ignore
+        if validate_password:
+            try:
+                await validate_password(user.password)
+            except InvalidPasswordException:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=ErrorCode.REGISTER_INVALID_PASSWORD,
+                )
+
         try:
             created_user = await create_user(user, safe=True)
         except UserAlreadyExists:
