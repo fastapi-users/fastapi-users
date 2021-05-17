@@ -28,7 +28,7 @@ def after_update(request):
 
 
 @pytest.fixture
-def app_factory(mock_user_db, mock_authentication, after_update):
+def app_factory(mock_user_db, mock_authentication, after_update, validate_password):
     def _app_factory(requires_verification: bool) -> FastAPI:
         mock_authentication_bis = MockAuthentication(name="mock-bis")
         authenticator = Authenticator(
@@ -43,6 +43,7 @@ def app_factory(mock_user_db, mock_authentication, after_update):
             authenticator,
             after_update,
             requires_verification=requires_verification,
+            validate_password=validate_password,
         )
 
         app = FastAPI()
@@ -164,6 +165,32 @@ class TestUpdateMe:
             assert response.status_code == status.HTTP_400_BAD_REQUEST
             data = cast(Dict[str, Any], response.json())
             assert data["detail"] == ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS
+            assert after_update.called is False
+
+    async def test_invalid_password(
+        self,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
+        user: UserDB,
+        after_update,
+        validate_password,
+    ):
+        client, requires_verification = test_app_client
+        response = await client.patch(
+            "/me",
+            json={"password": "m"},
+            headers={"Authorization": f"Bearer {user.id}"},
+        )
+        if requires_verification:
+            assert response.status_code == status.HTTP_401_UNAUTHORIZED
+            assert after_update.called is False
+        else:
+            assert response.status_code == status.HTTP_400_BAD_REQUEST
+            data = cast(Dict[str, Any], response.json())
+            assert data["detail"] == {
+                "code": ErrorCode.UPDATE_USER_INVALID_PASSWORD,
+                "reason": "Password should be at least 3 characters",
+            }
+            validate_password.assert_called_with("m", user)
             assert after_update.called is False
 
     async def test_empty_body(
@@ -724,6 +751,29 @@ class TestUpdateUser:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS
+        assert after_update.called is False
+
+    async def test_invalid_password_verified_superuser(
+        self,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
+        user: UserDB,
+        verified_superuser: UserDB,
+        after_update,
+        validate_password,
+    ):
+        client, _ = test_app_client
+        response = await client.patch(
+            f"/{user.id}",
+            json={"password": "m"},
+            headers={"Authorization": f"Bearer {verified_superuser.id}"},
+        )
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        data = cast(Dict[str, Any], response.json())
+        assert data["detail"] == {
+            "code": ErrorCode.UPDATE_USER_INVALID_PASSWORD,
+            "reason": "Password should be at least 3 characters",
+        }
+        validate_password.assert_called_with("m", user)
         assert after_update.called is False
 
     async def test_valid_body_verified_superuser(

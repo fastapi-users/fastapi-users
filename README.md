@@ -29,8 +29,9 @@ Add quickly a registration and authentication system to your [FastAPI](https://f
 
 * [X] Extensible base user model
 * [X] Ready-to-use register, login, reset password and verify e-mail routes
-* [X] Ready-to-use OAuth2 flow
+* [X] Ready-to-use social OAuth2 login flow
 * [X] Dependency callables to inject current user in route
+* [X] Pluggable password validation
 * [X] Customizable database backend
     * [X] SQLAlchemy async backend included thanks to [encode/databases](https://www.encode.io/databases/)
     * [X] MongoDB async backend included thanks to [mongodb/motor](https://github.com/mongodb/motor)

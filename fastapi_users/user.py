@@ -1,4 +1,4 @@
-from typing import Awaitable, Type
+from typing import Any, Awaitable, Union, Type
 
 try:
     from typing import Protocol
@@ -12,16 +12,32 @@ from fastapi_users.db import BaseUserDatabase
 from fastapi_users.password import get_password_hash
 
 
-class UserAlreadyExists(Exception):
+class FastAPIUsersException(Exception):
     pass
 
 
-class UserNotExists(Exception):
+class UserAlreadyExists(FastAPIUsersException):
     pass
 
 
-class UserAlreadyVerified(Exception):
+class UserNotExists(FastAPIUsersException):
     pass
+
+
+class UserAlreadyVerified(FastAPIUsersException):
+    pass
+
+
+class InvalidPasswordException(FastAPIUsersException):
+    def __init__(self, reason: Any) -> None:
+        self.reason = reason
+
+
+class ValidatePasswordProtocol(Protocol):  # pragma: no cover
+    def __call__(
+        self, password: str, user: Union[models.BaseUserCreate, models.BaseUserDB]
+    ) -> Awaitable[None]:
+        pass
 
 
 class CreateUserProtocol(Protocol):  # pragma: no cover

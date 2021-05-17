@@ -41,23 +41,6 @@ class UserDB(User, models.BaseUserDB):
 
 You can of course add your own properties there to fit to your needs!
 
-## Password validation
-
-**FastAPI Users** doesn't provide a default password validation, but you can implement it easily with a [Pydantic validator](https://pydantic-docs.helpmanual.io/usage/validators/) on the `UserCreate` class. Here is a simple example to check if the password is at least six characters long:
-
-```py
-from fastapi_users import models
-from pydantic import validator
-
-
-class UserCreate(models.BaseUserCreate):
-    @validator('password')
-    def valid_password(cls, v: str):
-        if len(v) < 6:
-            raise ValueError('Password should be at least 6 characters')
-        return v
-```
-
 ## Next steps
 
 Depending on your database backend, the database configuration will differ a bit.

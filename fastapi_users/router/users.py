@@ -8,6 +8,7 @@ from fastapi_users.authentication import Authenticator
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.password import get_password_hash
 from fastapi_users.router.common import ErrorCode, run_handler
+from fastapi_users.user import InvalidPasswordException, ValidatePasswordProtocol
 
 
 def get_users_router(
@@ -18,6 +19,7 @@ def get_users_router(
     authenticator: Authenticator,
     after_update: Optional[Callable[[models.UD, Dict[str, Any], Request], None]] = None,
     requires_verification: bool = False,
+    validate_password: Optional[ValidatePasswordProtocol] = None,
 ) -> APIRouter:
     """Generate a router with the authentication routes."""
     router = APIRouter()
@@ -54,7 +56,10 @@ def get_users_router(
     ):
         for field in update_dict:
             if field == "password":
-                hashed_password = get_password_hash(update_dict[field])
+                password = update_dict[field]
+                if validate_password:
+                    await validate_password(password, user)
+                hashed_password = get_password_hash(password)
                 user.hashed_password = hashed_password
             else:
                 setattr(user, field, update_dict[field])
@@ -84,9 +89,17 @@ def get_users_router(
             updated_user,
         )  # Prevent mypy complain
         updated_user_data = updated_user.create_update_dict()
-        updated_user = await _update_user(user, updated_user_data, request)
 
-        return updated_user
+        try:
+            return await _update_user(user, updated_user_data, request)
+        except InvalidPasswordException as e:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail={
+                    "code": ErrorCode.UPDATE_USER_INVALID_PASSWORD,
+                    "reason": e.reason,
+                },
+            )
 
     @router.get(
         "/{id:uuid}",
@@ -110,7 +123,17 @@ def get_users_router(
         )  # Prevent mypy complain
         user = await _get_or_404(id)
         updated_user_data = updated_user.create_update_dict_superuser()
-        return await _update_user(user, updated_user_data, request)
+
+        try:
+            return await _update_user(user, updated_user_data, request)
+        except InvalidPasswordException as e:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail={
+                    "code": ErrorCode.UPDATE_USER_INVALID_PASSWORD,
+                    "reason": e.reason,
+                },
+            )
 
     @router.delete(
         "/{id:uuid}",

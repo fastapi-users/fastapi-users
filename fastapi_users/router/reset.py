@@ -8,6 +8,7 @@ from fastapi_users import models
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.password import get_password_hash
 from fastapi_users.router.common import ErrorCode, run_handler
+from fastapi_users.user import InvalidPasswordException, ValidatePasswordProtocol
 from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
 
 RESET_PASSWORD_TOKEN_AUDIENCE = "fastapi-users:reset"
@@ -19,6 +20,7 @@ def get_reset_password_router(
     reset_password_token_lifetime_seconds: int = 3600,
     after_forgot_password: Optional[Callable[[models.UD, str, Request], None]] = None,
     after_reset_password: Optional[Callable[[models.UD, Request], None]] = None,
+    validate_password: Optional[ValidatePasswordProtocol] = None,
 ) -> APIRouter:
     """Generate a router with the reset password routes."""
     router = APIRouter()
@@ -73,6 +75,18 @@ def get_reset_password_router(
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail=ErrorCode.RESET_PASSWORD_BAD_TOKEN,
                 )
+
+            if validate_password:
+                try:
+                    await validate_password(password, user)
+                except InvalidPasswordException as e:
+                    raise HTTPException(
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                        detail={
+                            "code": ErrorCode.RESET_PASSWORD_INVALID_PASSWORD,
+                            "reason": e.reason,
+                        },
+                    )
 
             user.hashed_password = get_password_hash(password)
             await user_db.update(user)
