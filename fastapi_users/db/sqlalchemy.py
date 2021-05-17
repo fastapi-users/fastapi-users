@@ -168,21 +168,23 @@ class SQLAlchemyUserDatabase(BaseUserDatabase[UD]):
             if self.oauth_accounts is None:
                 raise NotSetOAuthAccountTableError()
 
-            query = self.oauth_accounts.delete().where(
+            delete_query = self.oauth_accounts.delete().where(
                 self.oauth_accounts.c.user_id == user.id
             )
-            await self.database.execute(query)
+            await self.database.execute(delete_query)
 
             oauth_accounts_values = []
             oauth_accounts = user_dict.pop("oauth_accounts")
             for oauth_account in oauth_accounts:
                 oauth_accounts_values.append({"user_id": user.id, **oauth_account})
 
-            query = self.oauth_accounts.insert()
-            await self.database.execute_many(query, oauth_accounts_values)
+            insert_query = self.oauth_accounts.insert()
+            await self.database.execute_many(insert_query, oauth_accounts_values)
 
-        query = self.users.update().where(self.users.c.id == user.id).values(user_dict)
-        await self.database.execute(query)
+        update_query = (
+            self.users.update().where(self.users.c.id == user.id).values(user_dict)
+        )
+        await self.database.execute(update_query)
         return user
 
     async def delete(self, user: UD) -> None:

@@ -27,7 +27,7 @@ try:
 
     from fastapi_users.router import get_oauth_router
 except ModuleNotFoundError:  # pragma: no cover
-    BaseOAuth2 = Type
+    BaseOAuth2 = Type  # type: ignore
 
 
 class FastAPIUsers:

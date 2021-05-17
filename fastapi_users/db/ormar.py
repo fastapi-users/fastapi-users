@@ -93,7 +93,7 @@ class OrmarUserDatabase(BaseUserDatabase[UD]):
         self, model: OrmarBaseUserModel, oauth_accounts: List[BaseOAuthAccount]
     ):
         if self.oauth_account_model:
-            oauth_accounts_db: List[ormar.Model] = [
+            oauth_accounts_db = [
                 self.oauth_account_model(user=model, **oacc.dict())
                 for oacc in oauth_accounts
             ]
