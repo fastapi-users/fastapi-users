@@ -56,7 +56,8 @@ nav:
       - configuration/routers/reset.md
       - configuration/routers/users.md
       - configuration/routers/verify.md
-    - configuration/full_example.md
+    - configuration/password-validation.md
+    - configuration/full-example.md
     - configuration/oauth.md
   - Usage:
     - usage/flow.md
