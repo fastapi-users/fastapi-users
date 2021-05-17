@@ -1,4 +1,4 @@
-from typing import Any, Awaitable, Optional, Type
+from typing import Any, Awaitable, Union, Type
 
 try:
     from typing import Protocol
@@ -35,7 +35,7 @@ class InvalidPasswordException(FastAPIUsersException):
 
 class ValidatePasswordProtocol(Protocol):  # pragma: no cover
     def __call__(
-        self, password: str, user: Optional[models.BaseUserDB] = None
+        self, password: str, user: Union[models.BaseUserCreate, models.BaseUserDB]
     ) -> Awaitable[None]:
         pass
 

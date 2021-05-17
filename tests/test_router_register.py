@@ -91,7 +91,9 @@ class TestRegister:
             "code": ErrorCode.REGISTER_INVALID_PASSWORD,
             "reason": "Password should be at least 3 characters",
         }
-        validate_password.assert_called_with("g")
+        validate_password.assert_called_with(
+            "g", UserCreate(email="king.arthur@camelot.bt", password="g")
+        )
         assert after_register.called is False
 
     @pytest.mark.parametrize(
