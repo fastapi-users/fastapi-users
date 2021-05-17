@@ -11,12 +11,16 @@ SECRET = "SECRET"
 
 auth_backends = []
 
-jwt_authentication = JWTAuthentication(secret=SECRET, lifetime_seconds=3600)
+jwt_authentication = JWTAuthentication(secret=SECRET, lifetime_seconds=3600, tokenUrl="auth/jwt/login")
 
 auth_backends.append(jwt_authentication)
 ```
 
-As you can see, instantiation is quite simple. You just have to define a constant `SECRET` which is used to encode the token and the lifetime of token (in seconds).
+As you can see, instantiation is quite simple. You have to define three arguments:
+
+* A constant `SECRET` which is used to encode the token.
+* The lifetime of the token in seconds.
+* The exact path of your login endpoint. It'll allow the interactive documentation to automatically discover it and get a working *Authorize* button. It's worth to note that this path should be **relative**, not absolute. You can read more details about this in the [FastAPI documentation](https://fastapi.tiangolo.com/tutorial/security/first-steps/#fastapis-oauth2passwordbearer).
 
 !!! tip
     You can also optionally define the `name`. It's useful in the case you wish to have several backends of the same class. Each backend should have a unique name. **Defaults to `jwt`**.
