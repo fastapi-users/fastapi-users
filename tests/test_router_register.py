@@ -87,7 +87,10 @@ class TestRegister:
         response = await test_app_client.post("/register", json=json)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
-        assert data["detail"] == ErrorCode.REGISTER_INVALID_PASSWORD
+        assert data["detail"] == {
+            "code": ErrorCode.REGISTER_INVALID_PASSWORD,
+            "reason": "Password should be at least 3 characters",
+        }
         validate_password.assert_called_with("g")
         assert after_register.called is False
 

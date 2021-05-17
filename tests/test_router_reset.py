@@ -241,7 +241,10 @@ class TestResetPassword:
         response = await test_app_client.post("/reset-password", json=json)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
-        assert data["detail"] == ErrorCode.RESET_PASSWORD_INVALID_PASSWORD
+        assert data["detail"] == {
+            "code": ErrorCode.RESET_PASSWORD_INVALID_PASSWORD,
+            "reason": "Password should be at least 3 characters",
+        }
         validate_password.assert_called_with("h", user)
         assert mock_user_db.update.called is False
         assert after_reset_password.called is False

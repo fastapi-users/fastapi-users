@@ -79,10 +79,13 @@ def get_reset_password_router(
             if validate_password:
                 try:
                     await validate_password(password, user)
-                except InvalidPasswordException:
+                except InvalidPasswordException as e:
                     raise HTTPException(
                         status_code=status.HTTP_400_BAD_REQUEST,
-                        detail=ErrorCode.RESET_PASSWORD_INVALID_PASSWORD,
+                        detail={
+                            "code": ErrorCode.RESET_PASSWORD_INVALID_PASSWORD,
+                            "reason": e.reason,
+                        },
                     )
 
             user.hashed_password = get_password_hash(password)

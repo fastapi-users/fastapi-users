@@ -92,10 +92,13 @@ def get_users_router(
 
         try:
             return await _update_user(user, updated_user_data, request)
-        except InvalidPasswordException:
+        except InvalidPasswordException as e:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=ErrorCode.UPDATE_USER_INVALID_PASSWORD,
+                detail={
+                    "code": ErrorCode.UPDATE_USER_INVALID_PASSWORD,
+                    "reason": e.reason,
+                },
             )
 
     @router.get(
@@ -123,10 +126,13 @@ def get_users_router(
 
         try:
             return await _update_user(user, updated_user_data, request)
-        except InvalidPasswordException:
+        except InvalidPasswordException as e:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=ErrorCode.UPDATE_USER_INVALID_PASSWORD,
+                detail={
+                    "code": ErrorCode.UPDATE_USER_INVALID_PASSWORD,
+                    "reason": e.reason,
+                },
             )
 
     @router.delete(

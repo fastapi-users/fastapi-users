@@ -1,4 +1,4 @@
-from typing import Callable, Optional, Type
+from typing import Callable, Optional, Type, cast
 
 from fastapi import APIRouter, HTTPException, Request, status
 
@@ -26,13 +26,17 @@ def get_register_router(
         "/register", response_model=user_model, status_code=status.HTTP_201_CREATED
     )
     async def register(request: Request, user: user_create_model):  # type: ignore
+        user = cast(models.BaseUserCreate, user)  # Prevent mypy complain
         if validate_password:
             try:
                 await validate_password(user.password)
-            except InvalidPasswordException:
+            except InvalidPasswordException as e:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=ErrorCode.REGISTER_INVALID_PASSWORD,
+                    detail={
+                        "code": ErrorCode.REGISTER_INVALID_PASSWORD,
+                        "reason": e.reason,
+                    },
                 )
 
         try:

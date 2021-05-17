@@ -186,7 +186,10 @@ class TestUpdateMe:
         else:
             assert response.status_code == status.HTTP_400_BAD_REQUEST
             data = cast(Dict[str, Any], response.json())
-            assert data["detail"] == ErrorCode.UPDATE_USER_INVALID_PASSWORD
+            assert data["detail"] == {
+                "code": ErrorCode.UPDATE_USER_INVALID_PASSWORD,
+                "reason": "Password should be at least 3 characters",
+            }
             validate_password.assert_called_with("m", user)
             assert after_update.called is False
 
@@ -766,7 +769,10 @@ class TestUpdateUser:
         )
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
-        assert data["detail"] == ErrorCode.UPDATE_USER_INVALID_PASSWORD
+        assert data["detail"] == {
+            "code": ErrorCode.UPDATE_USER_INVALID_PASSWORD,
+            "reason": "Password should be at least 3 characters",
+        }
         validate_password.assert_called_with("m", user)
         assert after_update.called is False
 

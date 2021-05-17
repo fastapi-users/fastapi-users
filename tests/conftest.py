@@ -410,6 +410,8 @@ def validate_password() -> ValidatePasswordProtocol:
         password: str, user: Optional[models.UD] = None
     ) -> None:
         if len(password) < 3:
-            raise InvalidPasswordException()
+            raise InvalidPasswordException(
+                reason="Password should be at least 3 characters"
+            )
 
     return asynctest.CoroutineMock(wraps=_validate_password)

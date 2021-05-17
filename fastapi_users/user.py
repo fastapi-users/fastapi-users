@@ -1,4 +1,4 @@
-from typing import Any, Awaitable, Type
+from typing import Any, Awaitable, Optional, Type
 
 try:
     from typing import Protocol
@@ -29,12 +29,14 @@ class UserAlreadyVerified(FastAPIUsersException):
 
 
 class InvalidPasswordException(FastAPIUsersException):
-    def __init__(self, detail: Any = None) -> None:
-        self.detail = detail
+    def __init__(self, reason: Any) -> None:
+        self.reason = reason
 
 
 class ValidatePasswordProtocol(Protocol):  # pragma: no cover
-    def __call__(self, password: str, user: models.BaseUserDB) -> Awaitable[None]:
+    def __call__(
+        self, password: str, user: Optional[models.BaseUserDB] = None
+    ) -> Awaitable[None]:
         pass
 
 
