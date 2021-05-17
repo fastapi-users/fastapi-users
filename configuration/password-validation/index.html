@@ -11,19 +11,19 @@
       
       
       
-      <link rel="icon" href="../../../favicon.png">
+      <link rel="icon" href="../../favicon.png">
       <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.4">
     
     
       
-        <title>JWT - FastAPI Users</title>
+        <title>Password validation - FastAPI Users</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.bde7dde4.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.bde7dde4.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ef6f36e2.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ef6f36e2.min.css">
         
       
     
@@ -55,7 +55,7 @@
     <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="red">
   
     
-    <script>function __prefix(e){return new URL("../../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
     
       <script>var palette=__get("__palette");if(null!==palette&&"object"==typeof palette.color)for(var key in palette.color)document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
     
@@ -65,7 +65,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#jwt" class="md-skip">
+        <a href="#password-validation" class="md-skip">
           Skip to content
         </a>
       
@@ -76,7 +76,7 @@
     
       <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../../.." title="FastAPI Users" class="md-header__button md-logo" aria-label="FastAPI Users" data-md-component="logo">
+    <a href="../.." title="FastAPI Users" class="md-header__button md-logo" aria-label="FastAPI Users" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.5 12A2.5 2.5 0 0 0 19 9.5 2.5 2.5 0 0 0 16.5 7 2.5 2.5 0 0 0 14 9.5a2.5 2.5 0 0 0 2.5 2.5M9 11a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m7.5 3c-1.83 0-5.5.92-5.5 2.75V19h11v-2.25c0-1.83-3.67-2.75-5.5-2.75M9 13c-2.33 0-7 1.17-7 3.5V19h7v-2.25c0-.85.33-2.34 2.37-3.47C10.5 13.1 9.66 13 9 13z"/></svg>
@@ -95,7 +95,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              JWT
+              Password validation
             
           </span>
         </div>
@@ -191,7 +191,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="FastAPI Users" class="md-nav__button md-logo" aria-label="FastAPI Users" data-md-component="logo">
+    <a href="../.." title="FastAPI Users" class="md-nav__button md-logo" aria-label="FastAPI Users" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.5 12A2.5 2.5 0 0 0 19 9.5 2.5 2.5 0 0 0 16.5 7 2.5 2.5 0 0 0 14 9.5a2.5 2.5 0 0 0 2.5 2.5M9 11a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m7.5 3c-1.83 0-5.5.92-5.5 2.75V19h11v-2.25c0-1.83-3.67-2.75-5.5-2.75M9 13c-2.33 0-7 1.17-7 3.5V19h7v-2.25c0-.85.33-2.34 2.37-3.47C10.5 13.1 9.66 13 9 13z"/></svg>
@@ -223,7 +223,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../.." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         About
       </a>
     </li>
@@ -238,7 +238,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../installation/" class="md-nav__link">
+      <a href="../../installation/" class="md-nav__link">
         Installation
       </a>
     </li>
@@ -276,7 +276,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../model/" class="md-nav__link">
+      <a href="../model/" class="md-nav__link">
         User model
       </a>
     </li>
@@ -309,7 +309,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../databases/sqlalchemy/" class="md-nav__link">
+      <a href="../databases/sqlalchemy/" class="md-nav__link">
         SQLAlchemy
       </a>
     </li>
@@ -321,7 +321,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../databases/mongodb/" class="md-nav__link">
+      <a href="../databases/mongodb/" class="md-nav__link">
         MongoDB
       </a>
     </li>
@@ -333,7 +333,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../databases/tortoise/" class="md-nav__link">
+      <a href="../databases/tortoise/" class="md-nav__link">
         Tortoise ORM
       </a>
     </li>
@@ -345,7 +345,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../databases/ormar/" class="md-nav__link">
+      <a href="../databases/ormar/" class="md-nav__link">
         Ormar
       </a>
     </li>
@@ -361,14 +361,12 @@
             
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3" type="checkbox" id="__nav_3_3" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3" type="checkbox" id="__nav_3_3" >
       
       <label class="md-nav__link" for="__nav_3_3">
         Authentication
@@ -386,7 +384,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../" class="md-nav__link">
+      <a href="../authentication/" class="md-nav__link">
         Introduction
       </a>
     </li>
@@ -396,86 +394,11 @@
             
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          JWT
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../authentication/jwt/" class="md-nav__link">
         JWT
       </a>
-      
-        
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#configuration" class="md-nav__link">
-    Configuration
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#login" class="md-nav__link">
-    Login
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#logout" class="md-nav__link">
-    Logout
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#authentication" class="md-nav__link">
-    Authentication
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#tip-refresh" class="md-nav__link">
-    Tip: Refresh
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    Next steps
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -485,7 +408,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../cookie/" class="md-nav__link">
+      <a href="../authentication/cookie/" class="md-nav__link">
         Cookie
       </a>
     </li>
@@ -524,7 +447,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../routers/" class="md-nav__link">
+      <a href="../routers/" class="md-nav__link">
         Introduction
       </a>
     </li>
@@ -536,7 +459,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../routers/auth/" class="md-nav__link">
+      <a href="../routers/auth/" class="md-nav__link">
         Auth router
       </a>
     </li>
@@ -548,7 +471,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../routers/register/" class="md-nav__link">
+      <a href="../routers/register/" class="md-nav__link">
         Register routes
       </a>
     </li>
@@ -560,7 +483,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../routers/reset/" class="md-nav__link">
+      <a href="../routers/reset/" class="md-nav__link">
         Reset password router
       </a>
     </li>
@@ -572,7 +495,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../routers/users/" class="md-nav__link">
+      <a href="../routers/users/" class="md-nav__link">
         Users router
       </a>
     </li>
@@ -584,7 +507,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../routers/verify/" class="md-nav__link">
+      <a href="../routers/verify/" class="md-nav__link">
         Verify router
       </a>
     </li>
@@ -600,11 +523,58 @@
             
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../../password-validation/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Password validation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Password validation
       </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    Configuration
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -614,7 +584,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../full-example/" class="md-nav__link">
+      <a href="../full-example/" class="md-nav__link">
         Full example
       </a>
     </li>
@@ -626,7 +596,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../oauth/" class="md-nav__link">
+      <a href="../oauth/" class="md-nav__link">
         OAuth2
       </a>
     </li>
@@ -668,7 +638,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../usage/flow/" class="md-nav__link">
+      <a href="../../usage/flow/" class="md-nav__link">
         Flow
       </a>
     </li>
@@ -680,7 +650,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../usage/routes/" class="md-nav__link">
+      <a href="../../usage/routes/" class="md-nav__link">
         Routes
       </a>
     </li>
@@ -692,7 +662,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../usage/dependency-callables/" class="md-nav__link">
+      <a href="../../usage/dependency-callables/" class="md-nav__link">
         Dependency callables
       </a>
     </li>
@@ -704,7 +674,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../usage/helpers/" class="md-nav__link">
+      <a href="../../usage/helpers/" class="md-nav__link">
         Helpers
       </a>
     </li>
@@ -746,7 +716,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../migration/08_to_1x/" class="md-nav__link">
+      <a href="../../migration/08_to_1x/" class="md-nav__link">
         0.8.x ➡️ 1.x.x
       </a>
     </li>
@@ -758,7 +728,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../migration/1x_to_2x/" class="md-nav__link">
+      <a href="../../migration/1x_to_2x/" class="md-nav__link">
         1.x.x ➡️ 2.x.x
       </a>
     </li>
@@ -770,7 +740,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../migration/2x_to_3x/" class="md-nav__link">
+      <a href="../../migration/2x_to_3x/" class="md-nav__link">
         2.x.x ➡️ 3.x.x
       </a>
     </li>
@@ -782,7 +752,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../migration/3x_to_4x/" class="md-nav__link">
+      <a href="../../migration/3x_to_4x/" class="md-nav__link">
         3.x.x ➡️ 4.x.x
       </a>
     </li>
@@ -794,7 +764,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../migration/4x_to_5x/" class="md-nav__link">
+      <a href="../../migration/4x_to_5x/" class="md-nav__link">
         4.x.x ➡️ 5.x.x
       </a>
     </li>
@@ -840,36 +810,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#login" class="md-nav__link">
-    Login
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#logout" class="md-nav__link">
-    Logout
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#authentication" class="md-nav__link">
-    Authentication
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#tip-refresh" class="md-nav__link">
-    Tip: Refresh
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    Next steps
+  <a href="#example" class="md-nav__link">
+    Example
   </a>
   
 </li>
@@ -887,60 +829,49 @@
               
                 
                 
-                <h1 id="jwt">JWT<a class="headerlink" href="#jwt" title="Permanent link">&para;</a></h1>
-<p>JSON Web Token (JWT) is an internet standard for creating access tokens based on JSON.</p>
+                <h1 id="password-validation">Password validation<a class="headerlink" href="#password-validation" title="Permanent link">&para;</a></h1>
+<p>FastAPI Users <strong>doesn't have any password validation logic by default</strong>. However, there is an argument on the <code>FastAPIUsers</code> class so that you can provide your own password validation function.</p>
+<p>It'll be applied on each routes that need to validate the input password:</p>
+<ul>
+<li>At registration (<a href="../../usage/routes/#post-register"><code>/register</code></a>)</li>
+<li>At password reset (<a href="../../usage/routes/#post-reset-password"><code>/reset-password</code></a>)</li>
+<li>At profile update (<a href="../../usage/routes/#patch-me"><code>/me</code></a> and <a href="../../usage/routes/#patch-user_id"><code>/{user_id}</code></a>)</li>
+</ul>
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi_users.authentication</span> <span class="kn">import</span> <span class="n">JWTAuthentication</span>
+<p>The FastAPIUsers class accepts an optional keyword argument <code>validate_password</code>. It expects an async function which accepts in argument:</p>
+<ul>
+<li><code>password</code> (<code>str</code>): the password to validate.</li>
+<li><code>user</code> (<code>Union[UserRegister, User]</code>): user model which we are currently validating the password. Useful if you want to check that the password doesn't contain the name or the birthdate of the user for example.</li>
+</ul>
+<p>This function should return <code>None</code> if the password is valid or raise <code>InvalidPasswordException</code> if not. This exception expects an argument <code>reason</code> telling why the password is invalid. It'll be part of the error response.</p>
+<h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">FastAPIUsers</span><span class="p">,</span> <span class="n">InvalidPasswordException</span>
 
-<span class="n">SECRET</span> <span class="o">=</span> <span class="s2">&quot;SECRET&quot;</span>
 
-<span class="n">auth_backends</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">validate_password</span><span class="p">(</span>
+    <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">UserRegister</span><span class="p">,</span> <span class="n">User</span><span class="p">]],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">password</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">InvalidPasswordException</span><span class="p">(</span>
+            <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;Password should be at least 8 characters&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="ow">in</span> <span class="n">password</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">InvalidPasswordException</span><span class="p">(</span>
+            <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;Password should not contain e-mail&quot;</span>
+        <span class="p">)</span>
 
-<span class="n">jwt_authentication</span> <span class="o">=</span> <span class="n">JWTAuthentication</span><span class="p">(</span><span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span>
 
-<span class="n">auth_backends</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">jwt_authentication</span><span class="p">)</span>
-</code></pre></div>
-<p>As you can see, instantiation is quite simple. You just have to define a constant <code>SECRET</code> which is used to encode the token and the lifetime of token (in seconds).</p>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>You can also optionally define the <code>name</code>. It's useful in the case you wish to have several backends of the same class. Each backend should have a unique name. <strong>Defaults to <code>jwt</code></strong>.</p>
-<div class="highlight"><pre><span></span><code><span class="n">jwt_authentication</span> <span class="o">=</span> <span class="n">JWTAuthentication</span><span class="p">(</span>
-    <span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span>
-    <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;my-jwt&quot;</span><span class="p">,</span>
+<span class="n">fastapi_users</span> <span class="o">=</span> <span class="n">FastAPIUsers</span><span class="p">(</span>
+    <span class="n">user_db</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">jwt_authentication</span><span class="p">],</span>
+    <span class="n">User</span><span class="p">,</span>
+    <span class="n">UserCreate</span><span class="p">,</span>
+    <span class="n">UserUpdate</span><span class="p">,</span>
+    <span class="n">UserDB</span><span class="p">,</span>
+    <span class="n">validate_password</span><span class="o">=</span><span class="n">validate_password</span>
 <span class="p">)</span>
 </code></pre></div>
-</div>
-<h2 id="login">Login<a class="headerlink" href="#login" title="Permanent link">&para;</a></h2>
-<p>This method will return a JWT token upon successful login:</p>
-<div class="admonition success">
-<p class="admonition-title"><code>200 OK</code></p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">&quot;access_token&quot;</span><span class="p">:</span> <span class="s2">&quot;eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiOTIyMWZmYzktNjQwZi00MzcyLTg2ZDMtY2U2NDJjYmE1NjAzIiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTcxNTA0MTkzfQ.M10bjOe45I5Ncu_uXvOmVV8QxnL-nZfcH96U90JaocI&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;token_type&quot;</span><span class="p">:</span> <span class="s2">&quot;bearer&quot;</span>
-<span class="p">}</span>
-</code></pre></div>
-</div>
-<blockquote>
-<p>Check documentation about <a href="../../../usage/routes/#post-loginname">login route</a>.</p>
-</blockquote>
-<h2 id="logout">Logout<a class="headerlink" href="#logout" title="Permanent link">&para;</a></h2>
-<p>This backend does not provide a logout method (a JWT is valid until it expires).</p>
-<h2 id="authentication">Authentication<a class="headerlink" href="#authentication" title="Permanent link">&para;</a></h2>
-<p>This method expects that you provide a <code>Bearer</code> authentication with a valid JWT.</p>
-<div class="highlight"><pre><span></span><code>curl http://localhost:9000/protected-route -H<span class="s1">&#39;Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiOTIyMWZmYzktNjQwZi00MzcyLTg2ZDMtY2U2NDJjYmE1NjAzIiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTcxNTA0MTkzfQ.M10bjOe45I5Ncu_uXvOmVV8QxnL-nZfcH96U90JaocI&#39;</span>
-</code></pre></div>
-<h2 id="tip-refresh">Tip: Refresh<a class="headerlink" href="#tip-refresh" title="Permanent link">&para;</a></h2>
-<p>The default implementation <strong>does not</strong> provide a mechanism to refresh the JWT. However, you can implement it quite easily like this:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">Response</span>
-
-
-<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/auth/jwt/refresh&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">refresh_jwt</span><span class="p">(</span><span class="n">response</span><span class="p">:</span> <span class="n">Response</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_current_active_user</span><span class="p">)):</span>
-    <span class="k">return</span> <span class="k">await</span> <span class="n">jwt_authentication</span><span class="o">.</span><span class="n">get_login_response</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
-</code></pre></div>
-<h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
-<p>We will now configure the main <strong>FastAPI Users</strong> object that will expose the <a href="../../routers/">routers</a>.</p>
                 
               
               
@@ -959,7 +890,7 @@
   
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
-        <a href="../" class="md-footer__link md-footer__link--prev" rel="prev">
+        <a href="../routers/verify/" class="md-footer__link md-footer__link--prev" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -968,19 +899,19 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              Introduction
+              Verify router
             </div>
           </div>
         </a>
       
       
-        <a href="../cookie/" class="md-footer__link md-footer__link--next" rel="next">
+        <a href="../full-example/" class="md-footer__link md-footer__link--next" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Cookie
+              Full example
             </div>
           </div>
           <div class="md-footer__button md-icon">
@@ -1009,10 +940,10 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../../assets/javascripts/workers/search.4fa0e4ee.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../assets/javascripts/workers/search.4fa0e4ee.min.js", "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.1d3bfcf1.min.js"></script>
+      <script src="../../assets/javascripts/bundle.1d3bfcf1.min.js"></script>
       
     
   </body>

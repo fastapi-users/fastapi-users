@@ -523,7 +523,19 @@
   
   
     <li class="md-nav__item">
-      <a href="../../configuration/full_example/" class="md-nav__link">
+      <a href="../../configuration/password-validation/" class="md-nav__link">
+        Password validation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/full-example/" class="md-nav__link">
         Full example
       </a>
     </li>
@@ -1217,6 +1229,17 @@
 <span class="p">}</span>
 </code></pre></div>
 </div>
+<div class="admonition fail">
+<p class="admonition-title"><code>400 Bad Request</code></p>
+<p><a href="../../configuration/password-validation/">Password validation</a> failed.</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+    <span class="nt">&quot;detail&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;code&quot;</span><span class="p">:</span> <span class="s2">&quot;RESET_PASSWORD_INVALID_PASSWORD&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;reason&quot;</span><span class="p">:</span> <span class="s2">&quot;Password should be at least 3 characters&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
 <h2 id="reset-password-router">Reset password router<a class="headerlink" href="#reset-password-router" title="Permanent link">&para;</a></h2>
 <h3 id="post-forgot-password"><code>POST /forgot-password</code><a class="headerlink" href="#post-forgot-password" title="Permanent link">&para;</a></h3>
 <p>Request a reset password procedure. Will generate a temporary token and call the <code>after_forgot_password</code> <a href="../../configuration/routers/reset/#after-forgot-password">handler</a> if the user exists.</p>
@@ -1252,6 +1275,17 @@
 <p>Bad or expired token.</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
     <span class="nt">&quot;detail&quot;</span><span class="p">:</span> <span class="s2">&quot;RESET_PASSWORD_BAD_TOKEN&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>400 Bad Request</code></p>
+<p><a href="../../configuration/password-validation/">Password validation</a> failed.</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+    <span class="nt">&quot;detail&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;code&quot;</span><span class="p">:</span> <span class="s2">&quot;REGISTER_INVALID_PASSWORD&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;reason&quot;</span><span class="p">:</span> <span class="s2">&quot;Password should be at least 3 characters&quot;</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
 </div>
@@ -1402,6 +1436,17 @@
 <p class="admonition-title"><code>401 Unauthorized</code></p>
 <p>Missing token or inactive user.</p>
 </div>
+<div class="admonition fail">
+<p class="admonition-title"><code>400 Bad Request</code></p>
+<p><a href="../../configuration/password-validation/">Password validation</a> failed.</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+    <span class="nt">&quot;detail&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;code&quot;</span><span class="p">:</span> <span class="s2">&quot;UPDATE_USER_INVALID_PASSWORD&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;reason&quot;</span><span class="p">:</span> <span class="s2">&quot;Password should be at least 3 characters&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
 <h3 id="get-user_id"><code>GET /{user_id}</code><a class="headerlink" href="#get-user_id" title="Permanent link">&para;</a></h3>
 <p>Return the user with id <code>user_id</code>.</p>
 <div class="admonition success">
@@ -1459,6 +1504,17 @@
 <div class="admonition fail">
 <p class="admonition-title"><code>404 Not found</code></p>
 <p>The user does not exist.</p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>400 Bad Request</code></p>
+<p><a href="../../configuration/password-validation/">Password validation</a> failed.</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+    <span class="nt">&quot;detail&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;code&quot;</span><span class="p">:</span> <span class="s2">&quot;UPDATE_USER_INVALID_PASSWORD&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;reason&quot;</span><span class="p">:</span> <span class="s2">&quot;Password should be at least 3 characters&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
 </div>
 <h3 id="delete-user_id"><code>DELETE /{user_id}</code><a class="headerlink" href="#delete-user_id" title="Permanent link">&para;</a></h3>
 <p>Delete the user with id <code>user_id</code>.</p>

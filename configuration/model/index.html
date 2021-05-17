@@ -316,13 +316,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#password-validation" class="md-nav__link">
-    Password validation
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     Next steps
   </a>
@@ -579,7 +572,19 @@
   
   
     <li class="md-nav__item">
-      <a href="../full_example/" class="md-nav__link">
+      <a href="../password-validation/" class="md-nav__link">
+        Password validation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../full-example/" class="md-nav__link">
         Full example
       </a>
     </li>
@@ -805,13 +810,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#password-validation" class="md-nav__link">
-    Password validation
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     Next steps
   </a>
@@ -868,19 +866,6 @@
     <span class="k">pass</span>
 </code></pre></div>
 <p>You can of course add your own properties there to fit to your needs!</p>
-<h2 id="password-validation">Password validation<a class="headerlink" href="#password-validation" title="Permanent link">&para;</a></h2>
-<p><strong>FastAPI Users</strong> doesn't provide a default password validation, but you can implement it easily with a <a href="https://pydantic-docs.helpmanual.io/usage/validators/">Pydantic validator</a> on the <code>UserCreate</code> class. Here is a simple example to check if the password is at least six characters long:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">models</span>
-<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">validator</span>
-
-
-<span class="k">class</span> <span class="nc">UserCreate</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUserCreate</span><span class="p">):</span>
-    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;password&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">valid_password</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Password should be at least 6 characters&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">v</span>
-</code></pre></div>
 <h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <p>Depending on your database backend, the database configuration will differ a bit.</p>
 <p><a href="../databases/sqlalchemy/">I'm using SQLAlchemy</a></p>
