@@ -16,22 +16,20 @@ jwt_authentication = JWTAuthentication(secret=SECRET, lifetime_seconds=3600, tok
 auth_backends.append(jwt_authentication)
 ```
 
-As you can see, instantiation is quite simple. You have to define three arguments:
+As you can see, instantiation is quite simple. It accepts four arguments:
 
-* A constant `SECRET` which is used to encode the token.
-* The lifetime of the token in seconds.
-* The exact path of your login endpoint. It'll allow the interactive documentation to automatically discover it and get a working *Authorize* button. It's worth to note that this path should be **relative**, not absolute. You can read more details about this in the [FastAPI documentation](https://fastapi.tiangolo.com/tutorial/security/first-steps/#fastapis-oauth2passwordbearer).
+* `secret` (`str`): `A constant `SECRET` which is used to encode the token.
+* `lifetime_seconds` (`int`): The lifetime of the token in seconds.
+* `tokenUrl` (`Optional[str]`): The exact path of your login endpoint. It'll allow the interactive documentation to automatically discover it and get a working *Authorize* button. In most cases, you'll probably need a **relative** path, not absolute. You can read more details about this in the [FastAPI documentation](https://fastapi.tiangolo.com/tutorial/security/first-steps/#fastapis-oauth2passwordbearer). Defaults to `login`.
+* `name`(`Optional[str]`): Name of the backend. It's useful in the case you wish to have several backends of the same class. Each backend should have a unique name. **Defaults to `jwt`**.
 
-!!! tip
-    You can also optionally define the `name`. It's useful in the case you wish to have several backends of the same class. Each backend should have a unique name. **Defaults to `jwt`**.
-
-    ```py
-    jwt_authentication = JWTAuthentication(
-        secret=SECRET,
-        lifetime_seconds=3600,
-        name="my-jwt",
-    )
-    ```
+```py
+jwt_authentication = JWTAuthentication(
+    secret=SECRET,
+    lifetime_seconds=3600,
+    name="my-jwt",
+)
+```
 
 ## Login
 
