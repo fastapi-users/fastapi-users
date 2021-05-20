@@ -69,7 +69,7 @@ def after_verification_request(user: UserDB, token: str, request: Request):
 
 
 jwt_authentication = JWTAuthentication(
-    secret=SECRET, lifetime_seconds=3600, tokenUrl="/auth/jwt/login"
+    secret=SECRET, lifetime_seconds=3600, tokenUrl="auth/jwt/login"
 )
 
 app = FastAPI()

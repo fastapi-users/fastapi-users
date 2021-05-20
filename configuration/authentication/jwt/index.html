@@ -12,7 +12,7 @@
       
       
       <link rel="icon" href="../../../favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.4">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.5">
     
     
       
@@ -896,21 +896,23 @@
 
 <span class="n">auth_backends</span> <span class="o">=</span> <span class="p">[]</span>
 
-<span class="n">jwt_authentication</span> <span class="o">=</span> <span class="n">JWTAuthentication</span><span class="p">(</span><span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span>
+<span class="n">jwt_authentication</span> <span class="o">=</span> <span class="n">JWTAuthentication</span><span class="p">(</span><span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span> <span class="n">tokenUrl</span><span class="o">=</span><span class="s2">&quot;auth/jwt/login&quot;</span><span class="p">)</span>
 
 <span class="n">auth_backends</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">jwt_authentication</span><span class="p">)</span>
 </code></pre></div>
-<p>As you can see, instantiation is quite simple. You just have to define a constant <code>SECRET</code> which is used to encode the token and the lifetime of token (in seconds).</p>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>You can also optionally define the <code>name</code>. It's useful in the case you wish to have several backends of the same class. Each backend should have a unique name. <strong>Defaults to <code>jwt</code></strong>.</p>
+<p>As you can see, instantiation is quite simple. It accepts the following arguments:</p>
+<ul>
+<li><code>secret</code> (<code>str</code>): A constant secret which is used to encode the token. <strong>Use a strong passphrase and keep it secure.</strong></li>
+<li><code>lifetime_seconds</code> (<code>int</code>): The lifetime of the token in seconds.</li>
+<li><code>tokenUrl</code> (<code>Optional[str]</code>): The exact path of your login endpoint. It'll allow the interactive documentation to automatically discover it and get a working <em>Authorize</em> button. In most cases, you'll probably need a <strong>relative</strong> path, not absolute. You can read more details about this in the <a href="https://fastapi.tiangolo.com/tutorial/security/first-steps/#fastapis-oauth2passwordbearer">FastAPI documentation</a>. Defaults to <code>auth/jwt/login</code>.</li>
+<li><code>name</code> (<code>Optional[str]</code>): Name of the backend. It's useful in the case you wish to have several backends of the same class. Each backend should have a unique name. Defaults to <code>jwt</code>.</li>
+</ul>
 <div class="highlight"><pre><span></span><code><span class="n">jwt_authentication</span> <span class="o">=</span> <span class="n">JWTAuthentication</span><span class="p">(</span>
     <span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span>
     <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span>
     <span class="n">name</span><span class="o">=</span><span class="s2">&quot;my-jwt&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div>
-</div>
 <h2 id="login">Login<a class="headerlink" href="#login" title="Permanent link">&para;</a></h2>
 <p>This method will return a JWT token upon successful login:</p>
 <div class="admonition success">
@@ -1009,10 +1011,10 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../../assets/javascripts/workers/search.4fa0e4ee.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../../assets/javascripts/workers/search.d351de03.min.js", "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.1d3bfcf1.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.a1609d9a.min.js"></script>
       
     
   </body>

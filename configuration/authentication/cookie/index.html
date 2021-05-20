@@ -12,7 +12,7 @@
       
       
       <link rel="icon" href="../../../favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.4">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.5">
     
     
       
@@ -886,26 +886,24 @@
 
 <span class="n">auth_backends</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cookie_authentication</span><span class="p">)</span>
 </code></pre></div>
-<p>As you can see, instantiation is quite simple. You just have to define a constant <code>SECRET</code> which is used to encode the token and the lifetime of the cookie (in seconds).</p>
-<p>You can also define the parameters for the generated cookie:</p>
+<p>As you can see, instantiation is quite simple. It accepts the following arguments:</p>
 <ul>
+<li><code>secret</code> (<code>str</code>): A constant secret which is used to encode the cookie. <strong>Use a strong passphrase and keep it secure.</strong></li>
+<li><code>lifetime_seconds</code> (<code>int</code>): The lifetime of the cookie in seconds.</li>
 <li><code>cookie_name</code> (<code>fastapiusersauth</code>): Name of the cookie.</li>
 <li><code>cookie_path</code> (<code>/</code>): Cookie path.</li>
 <li><code>cookie_domain</code> (<code>None</code>): Cookie domain.</li>
 <li><code>cookie_secure</code> (<code>True</code>): Whether to only send the cookie to the server via SSL request.</li>
 <li><code>cookie_httponly</code> (<code>True</code>): Whether to prevent access to the cookie via JavaScript.</li>
-<li><code>cookie_samesite</code> (<code>lax</code>): A string that specifies the samesite strategy for the cookie. Valid values are 'lax', 'strict' and 'none'. Defaults to 'lax'. </li>
+<li><code>cookie_samesite</code> (<code>lax</code>): A string that specifies the samesite strategy for the cookie. Valid values are <code>lax</code>, <code>strict</code> and <code>none</code>. Defaults to <code>lax</code>.</li>
+<li><code>name</code> (<code>Optional[str]</code>): Name of the backend. It's useful in the case you wish to have several backends of the same class. Each backend should have a unique name. Defaults to <code>cookie</code>.</li>
 </ul>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>You can also optionally define the <code>name</code>. It's useful in the case you wish to have several backends of the same class. Each backend should have a unique name. <strong>Defaults to <code>cookie</code></strong>.</p>
 <div class="highlight"><pre><span></span><code><span class="n">cookie_authentication</span> <span class="o">=</span> <span class="n">CookieAuthentication</span><span class="p">(</span>
     <span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span>
     <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span>
     <span class="n">name</span><span class="o">=</span><span class="s2">&quot;my-cookie&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div>
-</div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>The value of the cookie is actually a JWT. This authentication backend shares most of its logic with the <a href="../jwt/">JWT</a> one.</p>
@@ -998,10 +996,10 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../../assets/javascripts/workers/search.4fa0e4ee.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../../assets/javascripts/workers/search.d351de03.min.js", "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.1d3bfcf1.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.a1609d9a.min.js"></script>
       
     
   </body>
