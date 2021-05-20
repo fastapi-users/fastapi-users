@@ -16,27 +16,25 @@ cookie_authentication = CookieAuthentication(secret=SECRET, lifetime_seconds=360
 auth_backends.append(cookie_authentication)
 ```
 
-As you can see, instantiation is quite simple. You just have to define a constant `SECRET` which is used to encode the token and the lifetime of the cookie (in seconds).
+As you can see, instantiation is quite simple. It accepts the following arguments:
 
-You can also define the parameters for the generated cookie:
-
+* `secret` (`str`): A constant secret which is used to encode the cookie. **Use a strong passphrase and keep it secure.**
+* `lifetime_seconds` (`int`): The lifetime of the cookie in seconds.
 * `cookie_name` (`fastapiusersauth`): Name of the cookie.
 * `cookie_path` (`/`): Cookie path.
 * `cookie_domain` (`None`): Cookie domain.
 * `cookie_secure` (`True`): Whether to only send the cookie to the server via SSL request.
 * `cookie_httponly` (`True`): Whether to prevent access to the cookie via JavaScript.
-* `cookie_samesite` (`lax`): A string that specifies the samesite strategy for the cookie. Valid values are 'lax', 'strict' and 'none'. Defaults to 'lax'. 
+* `cookie_samesite` (`lax`): A string that specifies the samesite strategy for the cookie. Valid values are `lax`, `strict` and `none`. Defaults to `lax`.
+* `name` (`Optional[str]`): Name of the backend. It's useful in the case you wish to have several backends of the same class. Each backend should have a unique name. Defaults to `cookie`.
 
-!!! tip
-    You can also optionally define the `name`. It's useful in the case you wish to have several backends of the same class. Each backend should have a unique name. **Defaults to `cookie`**.
-
-    ```py
-    cookie_authentication = CookieAuthentication(
-        secret=SECRET,
-        lifetime_seconds=3600,
-        name="my-cookie",
-    )
-    ```
+```py
+cookie_authentication = CookieAuthentication(
+    secret=SECRET,
+    lifetime_seconds=3600,
+    name="my-cookie",
+)
+```
 
 !!! tip
     The value of the cookie is actually a JWT. This authentication backend shares most of its logic with the [JWT](./jwt.md) one.
