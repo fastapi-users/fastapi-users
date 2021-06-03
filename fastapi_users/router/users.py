@@ -20,9 +20,10 @@ def get_users_router(
     after_update: Optional[Callable[[models.UD, Dict[str, Any], Request], None]] = None,
     requires_verification: bool = False,
     validate_password: Optional[ValidatePasswordProtocol] = None,
+    router_class: APIRouter = APIRouter,
 ) -> APIRouter:
     """Generate a router with the authentication routes."""
-    router = APIRouter()
+    router = router_class()
 
     get_current_active_user = authenticator.current_user(
         active=True, verified=requires_verification

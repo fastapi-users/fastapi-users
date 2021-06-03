@@ -18,9 +18,10 @@ def get_register_router(
     user_create_model: Type[models.BaseUserCreate],
     after_register: Optional[Callable[[models.UD, Request], None]] = None,
     validate_password: Optional[ValidatePasswordProtocol] = None,
+    router_class: APIRouter = APIRouter,
 ) -> APIRouter:
     """Generate a router with the register route."""
-    router = APIRouter()
+    router = router_class()
 
     @router.post(
         "/register", response_model=user_model, status_code=status.HTTP_201_CREATED

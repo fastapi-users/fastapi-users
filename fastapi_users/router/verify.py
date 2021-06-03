@@ -27,8 +27,9 @@ def get_verify_router(
         Callable[[models.UD, str, Request], None]
     ] = None,
     after_verification: Optional[Callable[[models.UD, Request], None]] = None,
-):
-    router = APIRouter()
+    router_class: APIRouter = APIRouter,
+) -> APIRouter:
+    router = router_class()
 
     @router.post("/request-verify-token", status_code=status.HTTP_202_ACCEPTED)
     async def request_verify_token(

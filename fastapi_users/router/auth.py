@@ -12,9 +12,10 @@ def get_auth_router(
     user_db: BaseUserDatabase[models.BaseUserDB],
     authenticator: Authenticator,
     requires_verification: bool = False,
+    router_class: APIRouter = APIRouter,
 ) -> APIRouter:
     """Generate a router with login/logout routes for an authentication backend."""
-    router = APIRouter()
+    router = router_class()
     get_current_user = authenticator.current_user(
         active=True, verified=requires_verification
     )

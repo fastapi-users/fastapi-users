@@ -21,9 +21,10 @@ def get_reset_password_router(
     after_forgot_password: Optional[Callable[[models.UD, str, Request], None]] = None,
     after_reset_password: Optional[Callable[[models.UD, Request], None]] = None,
     validate_password: Optional[ValidatePasswordProtocol] = None,
+    router_class: APIRouter = APIRouter,
 ) -> APIRouter:
     """Generate a router with the reset password routes."""
-    router = APIRouter()
+    router = router_class()
 
     @router.post("/forgot-password", status_code=status.HTTP_202_ACCEPTED)
     async def forgot_password(

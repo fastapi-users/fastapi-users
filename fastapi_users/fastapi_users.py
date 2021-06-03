@@ -74,6 +74,7 @@ class FastAPIUsers:
         user_update_model: Type[models.BaseUserUpdate],
         user_db_model: Type[models.BaseUserDB],
         validate_password: Optional[ValidatePasswordProtocol] = None,
+        router_class: APIRouter = APIRouter,
     ):
         self.db = db
         self.authenticator = Authenticator(auth_backends, db)
@@ -111,6 +112,7 @@ class FastAPIUsers:
         self.get_optional_current_verified_superuser = (
             self.authenticator.get_optional_current_verified_superuser
         )
+        self.router_class = router_class
 
     def get_register_router(
         self,
@@ -128,6 +130,7 @@ class FastAPIUsers:
             self._user_create_model,
             after_register,
             self.validate_password,
+            self.router_class,
         )
 
     def get_verify_router(
@@ -157,6 +160,7 @@ class FastAPIUsers:
             verification_token_lifetime_seconds,
             after_verification_request,
             after_verification,
+            self.router_class,
         )
 
     def get_reset_password_router(
@@ -185,6 +189,7 @@ class FastAPIUsers:
             after_forgot_password,
             after_reset_password,
             self.validate_password,
+            self.router_class,
         )
 
     def get_auth_router(
@@ -202,6 +207,7 @@ class FastAPIUsers:
             self.db,
             self.authenticator,
             requires_verification,
+            self.router_class,
         )
 
     def get_oauth_router(
@@ -229,6 +235,7 @@ class FastAPIUsers:
             state_secret,
             redirect_url,
             after_register,
+            self.router_class,
         )
 
     def get_users_router(
@@ -255,4 +262,5 @@ class FastAPIUsers:
             after_update,
             requires_verification,
             self.validate_password,
+            self.router_class,
         )
