@@ -13,7 +13,7 @@ from fastapi_users.authentication import JWTAuthentication
 
 SECRET = "SECRET"
 
-jwt_authentication = JWTAuthentication(secret=SECRET, lifetime_seconds=3600))
+jwt_authentication = JWTAuthentication(secret=SECRET, lifetime_seconds=3600)
 
 fastapi_users = FastAPIUsers(
     user_db,
