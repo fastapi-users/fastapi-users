@@ -18,8 +18,10 @@ class GUID(TypeDecorator):  # pragma: no cover
     Uses PostgreSQL's UUID type, otherwise uses
     CHAR(36), storing as regular strings.
     """
+    class UUIDChar(CHAR):
+        python_type = UUID4
 
-    impl = CHAR
+    impl = UUIDChar
 
     def load_dialect_impl(self, dialect):
         if dialect.name == "postgresql":
