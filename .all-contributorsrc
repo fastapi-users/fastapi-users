@@ -276,6 +276,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "jnu",
+      "name": "Joe Nudell",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1069899?v=4",
+      "profile": "https://github.com/jnu",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
