@@ -89,6 +89,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/vladhoi"><img src="https://avatars.githubusercontent.com/u/33840957?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Vlad Hoi</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/commits?author=vladhoi" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/jnu"><img src="https://avatars.githubusercontent.com/u/1069899?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Joe Nudell</b></sub></a><br /><a href="https://github.com/frankie567/fastapi-users/issues?q=author%3Ajnu" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 
