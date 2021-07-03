@@ -1,6 +1,6 @@
 from typing import Any, Callable, Dict, Optional, Type, cast
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status, Response
 from pydantic import UUID4
 
 from fastapi_users import models
@@ -138,6 +138,7 @@ def get_users_router(
     @router.delete(
         "/{id:uuid}",
         status_code=status.HTTP_204_NO_CONTENT,
+        response_class=Response,
         dependencies=[Depends(get_current_superuser)],
     )
     async def delete_user(id: UUID4):
