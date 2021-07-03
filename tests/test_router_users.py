@@ -1043,7 +1043,7 @@ class TestDeleteUser:
             assert response.status_code == status.HTTP_401_UNAUTHORIZED
         else:
             assert response.status_code == status.HTTP_204_NO_CONTENT
-            assert response.json() is None
+            assert response.content == b""
             assert mock_user_db.delete.called is True
 
             deleted_user = mock_user_db.delete.call_args[0][0]
@@ -1064,7 +1064,7 @@ class TestDeleteUser:
             f"/{user.id}", headers={"Authorization": f"Bearer {verified_superuser.id}"}
         )
         assert response.status_code == status.HTTP_204_NO_CONTENT
-        assert response.json() is None
+        assert response.content == b""
         assert mock_user_db.delete.called is True
 
         deleted_user = mock_user_db.delete.call_args[0][0]
