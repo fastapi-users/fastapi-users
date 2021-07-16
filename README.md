@@ -12,8 +12,12 @@
 [![codecov](https://codecov.io/gh/frankie567/fastapi-users/branch/master/graph/badge.svg)](https://codecov.io/gh/frankie567/fastapi-users)
 [![PyPI version](https://badge.fury.io/py/fastapi-users.svg)](https://badge.fury.io/py/fastapi-users)
 [![Downloads](https://pepy.tech/badge/fastapi-users)](https://pepy.tech/project/fastapi-users)
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-26-orange.svg?style=flat-square)](#contributors-)
-[![GitHub Sponsors](https://img.shields.io/github/sponsors/frankie567?style=social)](https://github.com/sponsors/frankie567)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
+<p align="center">
+    <a href="https://www.buymeacoffee.com/frankie567" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/arial-red.png" alt="Buy Me A Coffee" height="40"></a>
+</p>
 
 ---
 
