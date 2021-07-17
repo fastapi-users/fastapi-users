@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any, Optional, List
 
 import jwt
 from fastapi import Response
@@ -22,7 +22,7 @@ class JWTAuthentication(BaseAuthentication[str]):
     """
 
     scheme: OAuth2PasswordBearer
-    token_audience: str = "fastapi-users:auth"
+    token_audience: List[str] = ["fastapi-users:auth"]
     secret: str
     lifetime_seconds: int
 
@@ -32,10 +32,12 @@ class JWTAuthentication(BaseAuthentication[str]):
         lifetime_seconds: int,
         tokenUrl: str = "auth/jwt/login",
         name: str = "jwt",
+        token_audience: List[str] = ["fastapi-users:auth"]
     ):
         super().__init__(name, logout=False)
         self.scheme = OAuth2PasswordBearer(tokenUrl, auto_error=False)
         self.secret = secret
+        self.token_audience = token_audience
         self.lifetime_seconds = lifetime_seconds
 
     async def __call__(
