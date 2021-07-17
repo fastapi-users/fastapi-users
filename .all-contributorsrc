@@ -285,6 +285,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "cosmosquark",
+      "name": "Ben",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1540682?v=4",
+      "profile": "https://github.com/cosmosquark",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
