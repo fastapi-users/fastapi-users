@@ -1,4 +1,4 @@
-fastapi >=0.65.2,<0.67.0
+fastapi >=0.65.2,<0.68.0
 passlib[bcrypt] ==1.7.4
 email-validator >=1.1.2,<1.2
 sqlalchemy >=1.3.23,<1.4
