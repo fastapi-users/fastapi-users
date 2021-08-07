@@ -89,6 +89,7 @@ def inactive_user_oauth(oauth_account3) -> UserDBOAuth:
         hashed_password=angharad_password_hash,
         is_active=False,
         oauth_accounts=[oauth_account3],
+        username="percival"
     )
 
 
@@ -99,6 +100,7 @@ def verified_user() -> UserDB:
         hashed_password=excalibur_password_hash,
         is_active=True,
         is_verified=True,
+        username="lake"
     )
 
 
@@ -109,6 +111,7 @@ def verified_user_oauth(oauth_account4) -> UserDBOAuth:
         hashed_password=excalibur_password_hash,
         is_active=False,
         oauth_accounts=[oauth_account4],
+        username="lake"
     )
 
 
@@ -118,6 +121,7 @@ def superuser() -> UserDB:
         email="merlin@camelot.bt",
         hashed_password=viviane_password_hash,
         is_superuser=True,
+        username="merlin"
     )
 
 
@@ -128,6 +132,7 @@ def superuser_oauth() -> UserDBOAuth:
         hashed_password=viviane_password_hash,
         is_superuser=True,
         oauth_accounts=[],
+        username="merlin"
     )
 
 
@@ -138,6 +143,7 @@ def verified_superuser() -> UserDB:
         hashed_password=viviane_password_hash,
         is_superuser=True,
         is_verified=True,
+        username="merlin_real"
     )
 
 
@@ -149,6 +155,7 @@ def verified_superuser_oauth() -> UserDBOAuth:
         is_superuser=True,
         is_verified=True,
         oauth_accounts=[],
+        username="merlin_real"
     )
 
 
@@ -160,6 +167,7 @@ def oauth_account1() -> BaseOAuthAccount:
         expires_at=1579000751,
         account_id="user_oauth1",
         account_email="king.arthur@camelot.bt",
+        username="king"
     )
 
 
@@ -171,6 +179,7 @@ def oauth_account2() -> BaseOAuthAccount:
         expires_at=1579000751,
         account_id="user_oauth2",
         account_email="king.arthur@camelot.bt",
+        username="king"
     )
 
 
@@ -182,6 +191,7 @@ def oauth_account3() -> BaseOAuthAccount:
         expires_at=1579000751,
         account_id="inactive_user_oauth1",
         account_email="percival@camelot.bt",
+        username="percival"
     )
 
 
@@ -193,6 +203,7 @@ def oauth_account4() -> BaseOAuthAccount:
         expires_at=1579000751,
         account_id="verified_user_oauth1",
         account_email="lake.lady@camelot.bt",
+        username="lake"
     )
 
 
@@ -204,6 +215,7 @@ def oauth_account5() -> BaseOAuthAccount:
         expires_at=1579000751,
         account_id="verified_superuser_oauth1",
         account_email="the.real.merlin@camelot.bt",
+        username="merlin_real"
     )
 
 

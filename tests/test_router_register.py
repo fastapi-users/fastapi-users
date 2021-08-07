@@ -75,7 +75,7 @@ class TestRegister:
     async def test_wrong_email(
         self, test_app_client: httpx.AsyncClient, after_register
     ):
-        json = {"email": "king.arthur", "password": "guinevere"}
+        json = {"email": "king.arthur", "password": "guinevere", "username": "king"}
         response = await test_app_client.post("/register", json=json)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
         assert after_register.called is False
@@ -83,7 +83,7 @@ class TestRegister:
     async def test_invalid_password(
         self, test_app_client: httpx.AsyncClient, after_register, validate_password
     ):
-        json = {"email": "king.arthur@camelot.bt", "password": "g"}
+        json = {"email": "king.arthur@camelot.bt", "password": "g", "username": "king"}
         response = await test_app_client.post("/register", json=json)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
@@ -92,7 +92,7 @@ class TestRegister:
             "reason": "Password should be at least 3 characters",
         }
         validate_password.assert_called_with(
-            "g", UserCreate(email="king.arthur@camelot.bt", password="g")
+            "g", UserCreate(email="king.arthur@camelot.bt", password="g", username="king")
         )
         assert after_register.called is False
 
@@ -102,7 +102,7 @@ class TestRegister:
     async def test_existing_user(
         self, email, test_app_client: httpx.AsyncClient, after_register
     ):
-        json = {"email": email, "password": "guinevere"}
+        json = {"email": email, "password": "guinevere", "username": "king"}
         response = await test_app_client.post("/register", json=json)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
@@ -113,7 +113,7 @@ class TestRegister:
     async def test_valid_body(
         self, email, test_app_client: httpx.AsyncClient, after_register
     ):
-        json = {"email": email, "password": "guinevere"}
+        json = {"email": email, "password": "guinevere", "username": "lancelot"}
         response = await test_app_client.post("/register", json=json)
         assert response.status_code == status.HTTP_201_CREATED
         assert after_register.called is True
@@ -136,6 +136,7 @@ class TestRegister:
             "email": "lancelot@camelot.bt",
             "password": "guinevere",
             "is_superuser": True,
+            "username": "lancelot",
         }
         response = await test_app_client.post("/register", json=json)
         assert response.status_code == status.HTTP_201_CREATED
@@ -151,6 +152,7 @@ class TestRegister:
             "email": "lancelot@camelot.bt",
             "password": "guinevere",
             "is_active": False,
+            "username": "lancelot",
         }
         response = await test_app_client.post("/register", json=json)
         assert response.status_code == status.HTTP_201_CREATED

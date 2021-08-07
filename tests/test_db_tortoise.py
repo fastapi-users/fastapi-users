@@ -17,6 +17,7 @@ from tests.conftest import UserDBOAuth as BaseUserDBOAuth
 
 class User(TortoiseBaseUserModel):
     first_name = fields.CharField(null=True, max_length=255)
+    username = fields.CharField(null=True, max_length=255)  # TODO is for test here
 
 
 class UserDB(BaseUserDB, PydanticModel):
@@ -71,6 +72,7 @@ async def test_queries(tortoise_user_db: TortoiseUserDatabase[UserDB]):
     user = UserDB(
         email="lancelot@camelot.bt",
         hashed_password=get_password_hash("guinevere"),
+        username="lancelot"
     )
 
     # Create
@@ -79,6 +81,7 @@ async def test_queries(tortoise_user_db: TortoiseUserDatabase[UserDB]):
     assert user_db.is_active is True
     assert user_db.is_superuser is False
     assert user_db.email == user.email
+    assert user_db.username is not None
 
     # Update
     user_db.is_superuser = True
@@ -127,6 +130,7 @@ async def test_queries_custom_fields(tortoise_user_db: TortoiseUserDatabase[User
         email="lancelot@camelot.bt",
         hashed_password=get_password_hash("guinevere"),
         first_name="Lancelot",
+        username="lancelot",
     )
     await tortoise_user_db.create(user)
 
@@ -147,6 +151,7 @@ async def test_queries_oauth(
         email="lancelot@camelot.bt",
         hashed_password=get_password_hash("guinevere"),
         oauth_accounts=[oauth_account1, oauth_account2],
+        username="lancelot"
     )
 
     # Create

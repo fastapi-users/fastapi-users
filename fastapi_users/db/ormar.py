@@ -19,6 +19,7 @@ class OrmarBaseUserModel(ormar.Model):
     is_active = ormar.Boolean(default=True, nullable=False)
     is_superuser = ormar.Boolean(default=False, nullable=False)
     is_verified = ormar.Boolean(default=False, nullable=False)
+    username = ormar.String(index=True, unique=True, nullable=False, max_length=255)  # TODO Unsure about "index=True"
 
 
 class OrmarBaseOAuthAccountModel(ormar.Model):
@@ -62,6 +63,9 @@ class OrmarUserDatabase(BaseUserDatabase[UD]):
 
     async def get_by_email(self, email: str) -> Optional[UD]:
         return await self._get_user(email__iexact=email)
+
+    async def get_by_username(self, username: str) -> Optional[UD]:
+        return await self._get_user(username=username)
 
     async def get_by_oauth_account(self, oauth: str, account_id: str) -> Optional[UD]:
         return await self._get_user(

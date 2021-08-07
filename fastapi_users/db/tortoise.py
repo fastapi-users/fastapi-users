@@ -17,6 +17,7 @@ class TortoiseBaseUserModel(models.Model):
     is_active = fields.BooleanField(default=True, null=False)
     is_superuser = fields.BooleanField(default=False, null=False)
     is_verified = fields.BooleanField(default=False, null=False)
+    username = fields.CharField(index=True, unique=True, null=False, max_length=255)  # TODO Unsure about "index=True"
 
     class Meta:
         abstract = True
@@ -30,6 +31,8 @@ class TortoiseBaseOAuthAccountModel(models.Model):
     refresh_token = fields.CharField(null=True, max_length=255)
     account_id = fields.CharField(index=True, null=False, max_length=255)
     account_email = fields.CharField(null=False, max_length=255)
+    username = fields.CharField(index=True, unique=True, null=False, max_length=255)  # TODO Unsure about "index=True"
+    # TODO username in OAuth?
 
     class Meta:
         abstract = True

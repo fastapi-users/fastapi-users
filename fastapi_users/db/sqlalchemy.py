@@ -60,6 +60,7 @@ class SQLAlchemyBaseUserTable:
     is_active = Column(Boolean, default=True, nullable=False)
     is_superuser = Column(Boolean, default=False, nullable=False)
     is_verified = Column(Boolean, default=False, nullable=False)
+    username = Column(index=True, unique=True, nullable=False)  # TODO Unsure about "index=True"
 
 
 class SQLAlchemyBaseOAuthAccountTable:
@@ -74,6 +75,7 @@ class SQLAlchemyBaseOAuthAccountTable:
     refresh_token = Column(String(length=1024), nullable=True)
     account_id = Column(String(length=320), index=True, nullable=False)
     account_email = Column(String(length=320), nullable=False)
+
 
     @declared_attr
     def user_id(cls):

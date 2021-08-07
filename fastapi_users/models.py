@@ -29,6 +29,7 @@ class BaseUser(CreateUpdateDictModel):
     is_active: Optional[bool] = True
     is_superuser: Optional[bool] = False
     is_verified: Optional[bool] = False
+    username: Optional[str] = None
 
     @validator("id", pre=True, always=True)
     def default_id(cls, v):
@@ -41,6 +42,7 @@ class BaseUserCreate(CreateUpdateDictModel):
     is_active: Optional[bool] = True
     is_superuser: Optional[bool] = False
     is_verified: Optional[bool] = False
+    username: str
 
 
 class BaseUserUpdate(BaseUser):
@@ -54,6 +56,7 @@ class BaseUserDB(BaseUser):
     is_superuser: bool
     is_verified: bool
     hashed_password: str
+    username: str
 
     class Config:
         orm_mode = True
