@@ -6,8 +6,8 @@
 - [ ] Add Queries
     - [ ] SQLAlchemy
     - [ ] Tortoise
-    - [ ] Ormar
-    - [ ] MongoDB
+    - [x] Ormar
+    - [x] MongoDB
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/frankie567/fastapi-users/master/logo.svg?sanitize=true" alt="FastAPI Users">

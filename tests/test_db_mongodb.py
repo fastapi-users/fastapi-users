@@ -83,6 +83,11 @@ async def test_queries(mongodb_user_db: MongoDBUserDatabase[UserDB]):
     assert email_user is not None
     assert email_user.id == user_db.id
 
+    # Get by username
+    username_user = await mongodb_user_db.get_by_username(user.username)
+    assert username_user is not None
+    assert username_user.id == user_db.id
+
     # Get by uppercased email
     email_user = await mongodb_user_db.get_by_email("Lancelot@camelot.bt")
     assert email_user is not None
