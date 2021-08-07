@@ -179,7 +179,7 @@ def oauth_account2() -> BaseOAuthAccount:
         expires_at=1579000751,
         account_id="user_oauth2",
         account_email="king.arthur@camelot.bt",
-        username="king"
+        username="king.arthur"
     )
 
 

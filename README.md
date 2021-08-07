@@ -1,7 +1,7 @@
 # FastAPI Users
 # TODO
-- [ ] Fix SQLAlchemy
-- [ ] Fix Tortoise
+- [x] Fix SQLAlchemy
+- [x] Fix Tortoise
 - [ ] Fix OAuth
 - [ ] Add Queries
     - [ ] SQLAlchemy

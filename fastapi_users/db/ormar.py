@@ -34,6 +34,7 @@ class OrmarBaseOAuthAccountModel(ormar.Model):
     refresh_token = ormar.String(nullable=True, max_length=255)
     account_id = ormar.String(index=True, nullable=False, max_length=255)
     account_email = ormar.String(nullable=False, max_length=255)
+    username = ormar.String(index=True, unique=True, nullable=False, max_length=255)  # TODO Unsure about "index=True"
 
 
 class OrmarUserDatabase(BaseUserDatabase[UD]):

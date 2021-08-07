@@ -73,6 +73,7 @@ async def test_queries(sqlalchemy_user_db: SQLAlchemyUserDatabase[UserDB]):
     user = UserDB(
         email="lancelot@camelot.bt",
         hashed_password=get_password_hash("guinevere"),
+        username="lancelot"
     )
 
     # Create
@@ -124,6 +125,7 @@ async def test_queries(sqlalchemy_user_db: SQLAlchemyUserDatabase[UserDB]):
     user_oauth = UserDBOAuth(
         email="lancelot@camelot.bt",
         hashed_password=get_password_hash("guinevere"),
+        username="lancelot"
     )
     with pytest.raises(NotSetOAuthAccountTableError):
         await sqlalchemy_user_db.create(user_oauth)
@@ -145,6 +147,7 @@ async def test_queries_custom_fields(
         email="lancelot@camelot.bt",
         hashed_password=get_password_hash("guinevere"),
         first_name="Lancelot",
+        username="lancelot"
     )
     await sqlalchemy_user_db.create(user)
 
@@ -165,6 +168,7 @@ async def test_queries_oauth(
         email="lancelot@camelot.bt",
         hashed_password=get_password_hash("guinevere"),
         oauth_accounts=[oauth_account1, oauth_account2],
+        username="lancelot"
     )
 
     # Create
