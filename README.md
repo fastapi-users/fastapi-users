@@ -1,4 +1,13 @@
 # FastAPI Users
+# TODO
+- [ ] Fix SQLAlchemy
+- [ ] Fix Tortoise
+- [ ] Fix OAuth
+- [ ] Add Queries
+    - [ ] SQLAlchemy
+    - [ ] Tortoise
+    - [ ] Ormar
+    - [ ] MongoDB
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/frankie567/fastapi-users/master/logo.svg?sanitize=true" alt="FastAPI Users">
