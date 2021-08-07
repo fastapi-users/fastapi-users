@@ -9,6 +9,11 @@
     - [x] Ormar
     - [x] MongoDB
 
+## Before submitting
+- [ ] Code-formatting
+- [ ] Docs
+- [ ] Reverting the changes in the README
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/frankie567/fastapi-users/master/logo.svg?sanitize=true" alt="FastAPI Users">
 </p>
