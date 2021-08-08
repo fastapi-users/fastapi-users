@@ -56,6 +56,7 @@ class BaseUserDB(BaseUser):
     is_superuser: bool
     is_verified: bool
     hashed_password: str
+    username: str
 
     class Config:
         orm_mode = True
