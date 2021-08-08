@@ -49,10 +49,10 @@ def get_register_router(
                 detail=ErrorCode.REGISTER_USER_ALREADY_EXISTS,
             )
         """
+        created_user = await create_user(user, safe=True)
         try:
             created_user = await create_user(user, safe=True)
         except Exception as e:
-            print(e)  # TODO REMOVE THIS
             if e == UserAlreadyExists:
                 print(ErrorCode.REGISTER_USER_ALREADY_EXISTS)  # TODO REMOVE THIS
                 raise HTTPException(
