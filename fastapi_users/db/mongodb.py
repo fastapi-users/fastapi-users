@@ -29,6 +29,7 @@ class MongoDBUserDatabase(BaseUserDatabase[UD]):
         self.collection = collection
         self.collection.create_index("id", unique=True)
         self.collection.create_index("email", unique=True)
+        self.collection.create_index("username", unique=True)
 
         if email_collation:
             self.email_collation = email_collation  # pragma: no cover

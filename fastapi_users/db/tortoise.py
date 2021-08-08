@@ -17,7 +17,7 @@ class TortoiseBaseUserModel(models.Model):
     is_active = fields.BooleanField(default=True, null=False)
     is_superuser = fields.BooleanField(default=False, null=False)
     is_verified = fields.BooleanField(default=False, null=False)
-    username = fields.CharField(index=True, null=False, max_length=255)  # TODO Unsure about "index=True"
+    username = fields.CharField(index=True, null=False, max_length=255, unique=True)  # TODO Unsure about "index=True"
 
     class Meta:
         abstract = True
