@@ -75,7 +75,6 @@ class SQLAlchemyBaseOAuthAccountTable:
     refresh_token = Column(String(length=1024), nullable=True)
     account_id = Column(String(length=320), index=True, nullable=False)
     account_email = Column(String(length=320), nullable=False)
-    username = Column(String(length=320), nullable=False)  # TODO Unsure about "index=True"
     # TODO username at OAuth?
 
 
@@ -130,6 +129,11 @@ class SQLAlchemyUserDatabase(BaseUserDatabase[UD]):
         query = self.users.select().where(
             func.lower(self.users.c.email) == func.lower(email)
         )
+        user = await self.database.fetch_one(query)
+        return await self._make_user(user) if user else None
+
+    async def get_by_username(self, username: str) -> Optional[UD]:
+        query = self.users.select().where(self.users.c.username == username)
         user = await self.database.fetch_one(query)
         return await self._make_user(user) if user else None
 

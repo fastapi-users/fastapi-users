@@ -113,6 +113,7 @@ async def test_queries(ormar_user_db: OrmarUserDatabase[UserDB]):
     assert email_user is not None
     assert email_user.id == user_db.id
 
+    # Get by username
     username_user = await ormar_user_db.get_by_username(str(user.username))
     assert username_user is not None
     assert username_user.id == user_db.id
@@ -166,7 +167,6 @@ async def test_queries_oauth(
         email="lancelot@camelot.bt",
         hashed_password=get_password_hash("guinevere"),
         oauth_accounts=[oauth_account1, oauth_account2],
-        username="king"
     )
 
     # Create

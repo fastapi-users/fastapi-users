@@ -155,7 +155,6 @@ def verified_superuser_oauth() -> UserDBOAuth:
         is_superuser=True,
         is_verified=True,
         oauth_accounts=[],
-        username="merlin_real"
     )
 
 
@@ -167,7 +166,6 @@ def oauth_account1() -> BaseOAuthAccount:
         expires_at=1579000751,
         account_id="user_oauth1",
         account_email="king.arthur@camelot.bt",
-        username="king"
     )
 
 
@@ -179,7 +177,6 @@ def oauth_account2() -> BaseOAuthAccount:
         expires_at=1579000751,
         account_id="user_oauth2",
         account_email="king.arthur@camelot.bt",
-        username="king.arthur"
     )
 
 
@@ -191,7 +188,6 @@ def oauth_account3() -> BaseOAuthAccount:
         expires_at=1579000751,
         account_id="inactive_user_oauth1",
         account_email="percival@camelot.bt",
-        username="percival"
     )
 
 
@@ -203,7 +199,6 @@ def oauth_account4() -> BaseOAuthAccount:
         expires_at=1579000751,
         account_id="verified_user_oauth1",
         account_email="lake.lady@camelot.bt",
-        username="lake"
     )
 
 
@@ -215,7 +210,6 @@ def oauth_account5() -> BaseOAuthAccount:
         expires_at=1579000751,
         account_id="verified_superuser_oauth1",
         account_email="the.real.merlin@camelot.bt",
-        username="merlin_real"
     )
 
 

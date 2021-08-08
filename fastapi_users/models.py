@@ -56,7 +56,6 @@ class BaseUserDB(BaseUser):
     is_superuser: bool
     is_verified: bool
     hashed_password: str
-    username: str
 
     class Config:
         orm_mode = True
@@ -75,7 +74,6 @@ class BaseOAuthAccount(BaseModel):
     refresh_token: Optional[str] = None
     account_id: str
     account_email: str
-    username: Optional[str] = None
 
     @validator("id", pre=True, always=True)
     def default_id(cls, v):

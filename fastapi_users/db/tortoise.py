@@ -31,8 +31,7 @@ class TortoiseBaseOAuthAccountModel(models.Model):
     refresh_token = fields.CharField(null=True, max_length=255)
     account_id = fields.CharField(index=True, null=False, max_length=255)
     account_email = fields.CharField(null=False, max_length=255)
-    username = fields.CharField(index=True, null=False, max_length=255)  # TODO Unsure about "index=True"
-    # TODO username in OAuth?
+
 
     class Meta:
         abstract = True
@@ -78,6 +77,23 @@ class TortoiseUserDatabase(BaseUserDatabase[UD]):
 
     async def get_by_email(self, email: str) -> Optional[UD]:
         query = self.model.filter(email__iexact=email).first()
+
+        if self.oauth_account_model is not None:
+            query = query.prefetch_related("oauth_accounts")
+
+        user = await query
+
+        if user is None:
+            return None
+
+        pydantic_user = await cast(PydanticModel, self.user_db_model).from_tortoise_orm(
+            user
+        )
+
+        return cast(UD, pydantic_user)
+
+    async def get_by_username(self, username: str) -> Optional[UD]:
+        query = self.model.filter(username__iexact=username).first()
 
         if self.oauth_account_model is not None:
             query = query.prefetch_related("oauth_accounts")

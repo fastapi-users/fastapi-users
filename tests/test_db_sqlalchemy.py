@@ -103,6 +103,11 @@ async def test_queries(sqlalchemy_user_db: SQLAlchemyUserDatabase[UserDB]):
     assert email_user is not None
     assert email_user.id == user_db.id
 
+    # Get by username
+    username_user = await sqlalchemy_user_db.get_by_username(user.username)
+    assert username_user is not None
+    assert username_user.id == user_db.id
+
     # Exception when inserting existing email
     with pytest.raises(sqlite3.IntegrityError):
         await sqlalchemy_user_db.create(user)

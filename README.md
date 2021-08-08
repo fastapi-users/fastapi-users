@@ -3,11 +3,23 @@
 - [x] Fix SQLAlchemy
 - [x] Fix Tortoise
 - [ ] Fix OAuth
+  - [x] For SQLAlchemy
+    - [ ] Tested
+  - [x] For Tortoise
+    - [ ] Tested
+  - [x] For MongoDB
+    - [ ] Tested
+  - [x] For Ormar
+    - [ ] Tested
 - [ ] Add Queries
     - [ ] SQLAlchemy
+      - [ ] Tested
     - [ ] Tortoise
+      - [ ] Tested
     - [x] Ormar
+      - [ ] Tested
     - [x] MongoDB
+        - [ ] Tested
 
 ## Before submitting
 - [ ] Code-formatting
