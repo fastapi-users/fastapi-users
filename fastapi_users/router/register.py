@@ -68,6 +68,8 @@ def get_register_router(
             else:
                 #raise e
                 pass
+            return None
+
         print(created_user)
 
         if after_register:
