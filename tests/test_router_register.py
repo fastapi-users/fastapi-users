@@ -87,6 +87,7 @@ class TestRegister:
         response = await test_app_client.post("/register", json=json)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
+        print(data)  # TODO REMOVE THIS
         assert data["detail"] == {
             "code": ErrorCode.REGISTER_INVALID_PASSWORD,
             "reason": "Password should be at least 3 characters",
@@ -99,6 +100,7 @@ class TestRegister:
     @pytest.mark.parametrize(
         "email", ["king.arthur@camelot.bt", "King.Arthur@camelot.bt"]
     )
+
     async def test_existing_user(
         self, email, test_app_client: httpx.AsyncClient, after_register
     ):
@@ -107,6 +109,25 @@ class TestRegister:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.REGISTER_USER_ALREADY_EXISTS
+        assert after_register.called is False
+
+    @pytest.mark.parametrize(
+        "email", ["king.arthur@camelot.bt", "king.arthur@camelot.iu"]
+    )
+    @pytest.mark.parametrize(
+        "FirstRun", [True, False]
+    )
+    async def test_existing_username(
+        self, email, test_app_client: httpx.AsyncClient, after_register, FirstRun
+    ):
+        json = {"email": email, "password": "guinevere", "username": "king"}
+        response = await test_app_client.post("/register", json=json)
+        if FirstRun:
+            assert response.status_code == status.HTTP_201_CREATED
+        else:
+            assert response.status_code == status.HTTP_400_BAD_REQUEST
+            data = cast(Dict[str, Any], response.json())
+            assert data["detail"] == ErrorCode.REGISTER_USERNAME_ALREADY_EXISTS
         assert after_register.called is False
 
     @pytest.mark.parametrize("email", ["lancelot@camelot.bt", "Lancelot@camelot.bt"])

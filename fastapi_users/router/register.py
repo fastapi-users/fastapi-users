@@ -1,3 +1,4 @@
+import sqlite3
 from typing import Callable, Optional, Type, cast
 
 from fastapi import APIRouter, HTTPException, Request, status
@@ -39,6 +40,7 @@ def get_register_router(
                     },
                 )
 
+        """
         try:
             created_user = await create_user(user, safe=True)
         except UserAlreadyExists:
@@ -46,6 +48,27 @@ def get_register_router(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=ErrorCode.REGISTER_USER_ALREADY_EXISTS,
             )
+        """
+        try:
+            created_user = await create_user(user, safe=True)
+        except Exception as e:
+            print(e)  # TODO REMOVE THIS
+            if e == UserAlreadyExists:
+                print(ErrorCode.REGISTER_USER_ALREADY_EXISTS)  # TODO REMOVE THIS
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=ErrorCode.REGISTER_USER_ALREADY_EXISTS,
+                )
+            elif e == sqlite3.IntegrityError:
+                print(ErrorCode.REGISTER_USERNAME_ALREADY_EXISTS)  # TODO REMOVE THIS
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=ErrorCode.REGISTER_USERNAME_ALREADY_EXISTS,
+                )
+            else:
+                #raise e
+                pass
+        print(created_user)
 
         if after_register:
             await run_handler(after_register, created_user, request)

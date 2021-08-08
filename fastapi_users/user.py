@@ -63,6 +63,7 @@ def get_create_user(
     ) -> models.BaseUserDB:
         existing_user = await user_db.get_by_email(user.email)
 
+        print(existing_user)  # TODO REMOVE THIS
         if existing_user is not None:
             raise UserAlreadyExists()
 
