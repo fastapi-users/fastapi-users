@@ -25,7 +25,7 @@ from fastapi_users import FastAPIUsers, InvalidPasswordException
 
 async def validate_password(
     password: str,
-    user: Union[UserRegister, User]],
+    user: Union[UserCreate, User],
 ) -> None:
     if len(password) < 8:
         raise InvalidPasswordException(
