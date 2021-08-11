@@ -32,4 +32,4 @@ Here is a full working example with JWT authentication to help get you started.
 
 ## What now?
 
-You're ready to go! Be sure to check the [Usage](../usage/routes.md) section to understand how yo work with **FastAPI Users**.
+You're ready to go! Be sure to check the [Usage](../usage/routes.md) section to understand how to work with **FastAPI Users**.
