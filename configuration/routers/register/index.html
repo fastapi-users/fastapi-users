@@ -11,19 +11,19 @@
       
       
       
-      <link rel="icon" href="/favicon.png">
+      <link rel="icon" href="../../../favicon.png">
       <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.4">
     
     
       
-        <title>FastAPI Users</title>
+        <title>Register routes - FastAPI Users</title>
       
     
     
-      <link rel="stylesheet" href="/assets/stylesheets/main.f7f47774.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.f7f47774.min.css">
       
         
-        <link rel="stylesheet" href="/assets/stylesheets/palette.3f5d1f46.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.3f5d1f46.min.css">
         
       
     
@@ -57,7 +57,7 @@
     <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="red">
   
     
-    <script>function __prefix(e){return new URL("/",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    <script>function __prefix(e){return new URL("../../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
     
       <script>var palette=__get("__palette");if(null!==palette&&"object"==typeof palette.color)for(var key in palette.color)document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
     
@@ -66,6 +66,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#register-routes" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -73,7 +78,7 @@
     
       <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="/." title="FastAPI Users" class="md-header__button md-logo" aria-label="FastAPI Users" data-md-component="logo">
+    <a href="../../.." title="FastAPI Users" class="md-header__button md-logo" aria-label="FastAPI Users" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.5 12A2.5 2.5 0 0 0 19 9.5 2.5 2.5 0 0 0 16.5 7 2.5 2.5 0 0 0 14 9.5a2.5 2.5 0 0 0 2.5 2.5M9 11a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m7.5 3c-1.83 0-5.5.92-5.5 2.75V19h11v-2.25c0-1.83-3.67-2.75-5.5-2.75M9 13c-2.33 0-7 1.17-7 3.5V19h7v-2.25c0-.85.33-2.34 2.37-3.47C10.5 13.1 9.66 13 9 13z"/></svg>
@@ -92,7 +97,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              
+              Register routes
             
           </span>
         </div>
@@ -192,7 +197,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="/." title="FastAPI Users" class="md-nav__button md-logo" aria-label="FastAPI Users" data-md-component="logo">
+    <a href="../../.." title="FastAPI Users" class="md-nav__button md-logo" aria-label="FastAPI Users" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.5 12A2.5 2.5 0 0 0 19 9.5 2.5 2.5 0 0 0 16.5 7 2.5 2.5 0 0 0 14 9.5a2.5 2.5 0 0 0 2.5 2.5M9 11a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m7.5 3c-1.83 0-5.5.92-5.5 2.75V19h11v-2.25c0-1.83-3.67-2.75-5.5-2.75M9 13c-2.33 0-7 1.17-7 3.5V19h7v-2.25c0-.85.33-2.34 2.37-3.47C10.5 13.1 9.66 13 9 13z"/></svg>
@@ -224,7 +229,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         About
       </a>
     </li>
@@ -239,7 +244,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/installation/" class="md-nav__link">
+      <a href="../../../installation/" class="md-nav__link">
         Installation
       </a>
     </li>
@@ -252,12 +257,14 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
       
       <label class="md-nav__link" for="__nav_3">
         Configuration
@@ -275,7 +282,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/configuration/model/" class="md-nav__link">
+      <a href="../../model/" class="md-nav__link">
         User model
       </a>
     </li>
@@ -308,7 +315,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/configuration/databases/sqlalchemy/" class="md-nav__link">
+      <a href="../../databases/sqlalchemy/" class="md-nav__link">
         SQLAlchemy
       </a>
     </li>
@@ -320,7 +327,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/configuration/databases/mongodb/" class="md-nav__link">
+      <a href="../../databases/mongodb/" class="md-nav__link">
         MongoDB
       </a>
     </li>
@@ -332,7 +339,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/configuration/databases/tortoise/" class="md-nav__link">
+      <a href="../../databases/tortoise/" class="md-nav__link">
         Tortoise ORM
       </a>
     </li>
@@ -344,7 +351,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/configuration/databases/ormar/" class="md-nav__link">
+      <a href="../../databases/ormar/" class="md-nav__link">
         Ormar
       </a>
     </li>
@@ -383,7 +390,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/configuration/authentication/" class="md-nav__link">
+      <a href="../../authentication/" class="md-nav__link">
         Introduction
       </a>
     </li>
@@ -395,7 +402,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/configuration/authentication/jwt/" class="md-nav__link">
+      <a href="../../authentication/jwt/" class="md-nav__link">
         JWT
       </a>
     </li>
@@ -407,7 +414,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/configuration/authentication/cookie/" class="md-nav__link">
+      <a href="../../authentication/cookie/" class="md-nav__link">
         Cookie
       </a>
     </li>
@@ -423,12 +430,14 @@
             
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4" type="checkbox" id="__nav_3_4" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4" type="checkbox" id="__nav_3_4" checked>
       
       <label class="md-nav__link" for="__nav_3_4">
         Routers
@@ -446,7 +455,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/configuration/routers/" class="md-nav__link">
+      <a href="../" class="md-nav__link">
         Introduction
       </a>
     </li>
@@ -458,7 +467,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/configuration/routers/auth/" class="md-nav__link">
+      <a href="../auth/" class="md-nav__link">
         Auth router
       </a>
     </li>
@@ -468,11 +477,58 @@
             
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="/configuration/routers/register/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Register routes
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Register routes
       </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#setup" class="md-nav__link">
+    Setup
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#after-register" class="md-nav__link">
+    After register
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -482,7 +538,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/configuration/routers/reset/" class="md-nav__link">
+      <a href="../reset/" class="md-nav__link">
         Reset password router
       </a>
     </li>
@@ -494,7 +550,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/configuration/routers/users/" class="md-nav__link">
+      <a href="../users/" class="md-nav__link">
         Users router
       </a>
     </li>
@@ -506,7 +562,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/configuration/routers/verify/" class="md-nav__link">
+      <a href="../verify/" class="md-nav__link">
         Verify router
       </a>
     </li>
@@ -524,7 +580,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/configuration/password-validation/" class="md-nav__link">
+      <a href="../../password-validation/" class="md-nav__link">
         Password validation
       </a>
     </li>
@@ -536,7 +592,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/configuration/full-example/" class="md-nav__link">
+      <a href="../../full-example/" class="md-nav__link">
         Full example
       </a>
     </li>
@@ -548,7 +604,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/configuration/oauth/" class="md-nav__link">
+      <a href="../../oauth/" class="md-nav__link">
         OAuth2
       </a>
     </li>
@@ -590,7 +646,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/usage/flow/" class="md-nav__link">
+      <a href="../../../usage/flow/" class="md-nav__link">
         Flow
       </a>
     </li>
@@ -602,7 +658,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/usage/routes/" class="md-nav__link">
+      <a href="../../../usage/routes/" class="md-nav__link">
         Routes
       </a>
     </li>
@@ -614,7 +670,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/usage/dependency-callables/" class="md-nav__link">
+      <a href="../../../usage/dependency-callables/" class="md-nav__link">
         Dependency callables
       </a>
     </li>
@@ -626,7 +682,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/usage/helpers/" class="md-nav__link">
+      <a href="../../../usage/helpers/" class="md-nav__link">
         Helpers
       </a>
     </li>
@@ -668,7 +724,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/migration/08_to_1x/" class="md-nav__link">
+      <a href="../../../migration/08_to_1x/" class="md-nav__link">
         0.8.x ➡️ 1.x.x
       </a>
     </li>
@@ -680,7 +736,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/migration/1x_to_2x/" class="md-nav__link">
+      <a href="../../../migration/1x_to_2x/" class="md-nav__link">
         1.x.x ➡️ 2.x.x
       </a>
     </li>
@@ -692,7 +748,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/migration/2x_to_3x/" class="md-nav__link">
+      <a href="../../../migration/2x_to_3x/" class="md-nav__link">
         2.x.x ➡️ 3.x.x
       </a>
     </li>
@@ -704,7 +760,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/migration/3x_to_4x/" class="md-nav__link">
+      <a href="../../../migration/3x_to_4x/" class="md-nav__link">
         3.x.x ➡️ 4.x.x
       </a>
     </li>
@@ -716,7 +772,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/migration/4x_to_5x/" class="md-nav__link">
+      <a href="../../../migration/4x_to_5x/" class="md-nav__link">
         4.x.x ➡️ 5.x.x
       </a>
     </li>
@@ -736,11 +792,98 @@
               </div>
             
             
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#setup" class="md-nav__link">
+    Setup
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#after-register" class="md-nav__link">
+    After register
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
           <div class="md-content" data-md-component="content">
             <article class="md-content__inner md-typeset">
               
-  <h1>404 - Not found</h1>
+                
+                
+                <h1 id="register-routes">Register routes<a class="headerlink" href="#register-routes" title="Permanent link">&para;</a></h1>
+<p>The register router will generate a <code>/register</code> route to allow a user to create a new account.</p>
+<p>Check the <a href="../../../usage/routes/">routes usage</a> to learn how to use them.</p>
+<h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
+<span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">FastAPIUsers</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.authentication</span> <span class="kn">import</span> <span class="n">JWTAuthentication</span>
+
+<span class="n">SECRET</span> <span class="o">=</span> <span class="s2">&quot;SECRET&quot;</span>
+
+<span class="n">jwt_authentication</span> <span class="o">=</span> <span class="n">JWTAuthentication</span><span class="p">(</span><span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span>
+
+<span class="n">fastapi_users</span> <span class="o">=</span> <span class="n">FastAPIUsers</span><span class="p">(</span>
+    <span class="n">user_db</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">jwt_authentication</span><span class="p">],</span>
+    <span class="n">User</span><span class="p">,</span>
+    <span class="n">UserCreate</span><span class="p">,</span>
+    <span class="n">UserUpdate</span><span class="p">,</span>
+    <span class="n">UserDB</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
+<span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
+    <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_register_router</span><span class="p">(),</span>
+    <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/auth&quot;</span><span class="p">,</span>
+    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;auth&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+</code></pre></div>
+<h2 id="after-register">After register<a class="headerlink" href="#after-register" title="Permanent link">&para;</a></h2>
+<p>You can provide a custom function to be called after a successful registration. It is called with <strong>two arguments</strong>: the <strong>user</strong> that has just registered, and the original <strong><code>Request</code> object</strong>.</p>
+<p>Typically, you'll want to <strong>send a welcome e-mail</strong> or add it to your marketing analytics pipeline.</p>
+<p>You can define it as an <code>async</code> or standard method.</p>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">on_after_register</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">UserDB</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> has registered.&quot;</span><span class="p">)</span>
+
+<span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
+    <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_register_router</span><span class="p">(</span><span class="n">on_after_register</span><span class="p">),</span>
+    <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/auth&quot;</span><span class="p">,</span>
+    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;auth&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+</code></pre></div>
+                
+              
+              
+                
+
 
               
             </article>
@@ -751,6 +894,41 @@
       
         
 <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../auth/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Auth router" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Auth router
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../reset/" class="md-footer__link md-footer__link--next" aria-label="Next: Reset password router" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Reset password router
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -771,10 +949,10 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "/", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "/assets/javascripts/workers/search.709b4209.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.709b4209.min.js", "version": null}</script>
     
     
-      <script src="/assets/javascripts/bundle.febc23d1.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.febc23d1.min.js"></script>
       
     
   </body>
