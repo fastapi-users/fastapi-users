@@ -1089,13 +1089,19 @@
 <h3 id="setup-the-database-adapter">Setup the database adapter<a class="headerlink" href="#setup-the-database-adapter" title="Permanent link">&para;</a></h3>
 <h4 id="sqlalchemy">SQLAlchemy<a class="headerlink" href="#sqlalchemy" title="Permanent link">&para;</a></h4>
 <p>You'll need to define the table for storing the OAuth account model. We provide a base one for this:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi_users.db.sqlalchemy</span> <span class="kn">import</span> <span class="n">SQLAlchemyBaseOAuthAccountTable</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">SQLAlchemyBaseOAuthAccountTable</span>
 
 <span class="k">class</span> <span class="nc">OAuthAccount</span><span class="p">(</span><span class="n">SQLAlchemyBaseOAuthAccountTable</span><span class="p">,</span> <span class="n">Base</span><span class="p">):</span>
     <span class="k">pass</span>
 </code></pre></div>
-<p>Then, you should declare it on the database adapter:</p>
-<div class="highlight"><pre><span></span><code><span class="n">user_db</span> <span class="o">=</span> <span class="n">SQLAlchemyUserDatabase</span><span class="p">(</span><span class="n">UserDB</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">User</span><span class="o">.</span><span class="n">__table__</span><span class="p">,</span> <span class="n">OAuthAccount</span><span class="o">.</span><span class="n">__table__</span><span class="p">)</span>
+<p>Similarly, define the table for storing the User model:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">SQLAlchemyBaseUserTable</span>
+
+<span class="k">class</span> <span class="nc">UserTable</span><span class="p">(</span><span class="n">Base</span><span class="p">,</span> <span class="n">SQLAlchemyBaseUserTable</span><span class="p">):</span>
+    <span class="k">pass</span>
+</code></pre></div>
+<p>Then, you should declare them on the database adapter:</p>
+<div class="highlight"><pre><span></span><code><span class="n">user_db</span> <span class="o">=</span> <span class="n">SQLAlchemyUserDatabase</span><span class="p">(</span><span class="n">UserDB</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">UserTable</span><span class="o">.</span><span class="n">__table__</span><span class="p">,</span> <span class="n">OAuthAccount</span><span class="o">.</span><span class="n">__table__</span><span class="p">)</span>
 </code></pre></div>
 <h4 id="mongodb">MongoDB<a class="headerlink" href="#mongodb" title="Permanent link">&para;</a></h4>
 <p>Nothing to do, the <a href="../databases/mongodb/">basic configuration</a> is enough.</p>
