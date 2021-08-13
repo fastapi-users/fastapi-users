@@ -71,16 +71,25 @@ Notice that we inherit from the `BaseOAuthAccountMixin`, which adds a `List` of 
 You'll need to define the table for storing the OAuth account model. We provide a base one for this:
 
 ```py
-from fastapi_users.db.sqlalchemy import SQLAlchemyBaseOAuthAccountTable
+from fastapi_users.db import SQLAlchemyBaseOAuthAccountTable
 
 class OAuthAccount(SQLAlchemyBaseOAuthAccountTable, Base):
     pass
 ```
 
-Then, you should declare it on the database adapter:
+Similarly, define the table for storing the User model:
 
 ```py
-user_db = SQLAlchemyUserDatabase(UserDB, database, User.__table__, OAuthAccount.__table__)
+from fastapi_users.db import SQLAlchemyBaseUserTable
+
+class UserTable(Base, SQLAlchemyBaseUserTable):
+    pass
+```
+
+Then, you should declare them on the database adapter:
+
+```py
+user_db = SQLAlchemyUserDatabase(UserDB, database, UserTable.__table__, OAuthAccount.__table__)
 ```
 
 #### MongoDB
