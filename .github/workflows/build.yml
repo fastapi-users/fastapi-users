@@ -35,7 +35,7 @@ jobs:
     - name: Build and install it on system host
       run: |
         flit build
-        flit install --python $(which python)
+        flit install --deps none --python $(which python)
         python test_build.py
 
   release:
