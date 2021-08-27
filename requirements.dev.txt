@@ -4,7 +4,6 @@ flake8
 pytest
 requests
 isort
-databases
 pytest-asyncio
 flake8-docstrings
 mkdocs
@@ -24,4 +23,3 @@ httpx-oauth
 httpx
 asgi_lifespan
 uvicorn
-sqlalchemy-stubs
