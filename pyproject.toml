@@ -7,7 +7,7 @@ module = "fastapi_users"
 dist-name = "fastapi-users"
 author = "François Voron"
 author-email = "fvoron@gmail.com"
-home-page = "https://github.com/frankie567/fastapi-users"
+home-page = "https://github.com/fastapi-users/fastapi-users"
 classifiers = [
     "License :: OSI Approved :: MIT License",
     "Development Status :: 5 - Production/Stable",
@@ -51,4 +51,4 @@ oauth = [
 ]
 
 [tool.flit.metadata.urls]
-Documentation = "https://frankie567.github.io/fastapi-users/"
+Documentation = "https://fastapi-users.github.io/fastapi-users/"
