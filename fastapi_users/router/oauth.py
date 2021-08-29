@@ -1,4 +1,4 @@
-from typing import Callable, Dict, List, Optional, Type, cast
+from typing import Callable, Dict, List, Optional, Type
 
 import jwt
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
@@ -151,8 +151,6 @@ def get_oauth_router(
         # Authenticate
         for backend in authenticator.backends:
             if backend.name == state_data["authentication_backend"]:
-                return await backend.get_login_response(
-                    cast(models.BaseUserDB, user), response
-                )
+                return await backend.get_login_response(user, response)
 
     return router
