@@ -1,6 +1,6 @@
 from typing import Any, Callable, Dict, Optional, Type, cast
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status, Response
+from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from pydantic import UUID4
 
 from fastapi_users import models

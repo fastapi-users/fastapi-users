@@ -1,4 +1,4 @@
-from typing import Any, Awaitable, Union, Type
+from typing import Any, Awaitable, Type, Union
 
 try:
     from typing import Protocol
