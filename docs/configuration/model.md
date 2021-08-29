@@ -31,7 +31,7 @@ class UserCreate(models.BaseUserCreate):
     pass
 
 
-class UserUpdate(User, models.BaseUserUpdate):
+class UserUpdate(models.BaseUserUpdate):
     pass
 
 
@@ -39,7 +39,34 @@ class UserDB(User, models.BaseUserDB):
     pass
 ```
 
-You can of course add your own properties there to fit to your needs!
+### Adding your own fields
+
+You can of course add your own properties there to fit to your needs. In the example below, we add a required string property, `first_name`, and an optional date property, `birthdate`.
+
+```py
+import datetime
+
+from fastapi_users import models
+
+
+class User(models.BaseUser):
+    first_name: str
+    birthdate: Optional[datetime.date]
+
+
+class UserCreate(models.BaseUserCreate):
+    first_name: str
+    birthdate: Optional[datetime.date]
+
+
+class UserUpdate(models.BaseUserUpdate):
+    first_name: Optional[str]
+    birthdate: Optional[datetime.date]
+
+
+class UserDB(User, models.BaseUserDB):
+    pass
+```
 
 ## Next steps
 

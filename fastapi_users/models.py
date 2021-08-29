@@ -1,7 +1,7 @@
 import uuid
 from typing import List, Optional, TypeVar
 
-from pydantic import Field, UUID4, BaseModel, EmailStr
+from pydantic import UUID4, BaseModel, EmailStr, Field
 
 
 class CreateUpdateDictModel(BaseModel):
@@ -25,10 +25,10 @@ class BaseUser(CreateUpdateDictModel):
     """Base User model."""
 
     id: UUID4 = Field(default_factory=uuid.uuid4)
-    email: Optional[EmailStr] = None
-    is_active: Optional[bool] = True
-    is_superuser: Optional[bool] = False
-    is_verified: Optional[bool] = False
+    email: EmailStr
+    is_active: bool = True
+    is_superuser: bool = False
+    is_verified: bool = False
 
 
 class BaseUserCreate(CreateUpdateDictModel):
@@ -39,15 +39,15 @@ class BaseUserCreate(CreateUpdateDictModel):
     is_verified: Optional[bool] = False
 
 
-class BaseUserUpdate(BaseUser):
+class BaseUserUpdate(CreateUpdateDictModel):
     password: Optional[str]
+    email: Optional[EmailStr]
+    is_active: Optional[bool]
+    is_superuser: Optional[bool]
+    is_verified: Optional[bool]
 
 
 class BaseUserDB(BaseUser):
-    email: EmailStr
-    is_active: bool
-    is_superuser: bool
-    is_verified: bool
     hashed_password: str
 
     class Config:
