@@ -97,7 +97,7 @@ class TestMe:
             "/me", headers={"Authorization": f"Bearer {user.id}"}
         )
         if requires_verification:
-            assert response.status_code == status.HTTP_401_UNAUTHORIZED
+            assert response.status_code == status.HTTP_403_FORBIDDEN
         else:
             assert response.status_code == status.HTTP_200_OK
             data = cast(Dict[str, Any], response.json())
@@ -159,7 +159,7 @@ class TestUpdateMe:
             headers={"Authorization": f"Bearer {user.id}"},
         )
         if requires_verification:
-            assert response.status_code == status.HTTP_401_UNAUTHORIZED
+            assert response.status_code == status.HTTP_403_FORBIDDEN
             assert after_update.called is False
         else:
             assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -181,7 +181,7 @@ class TestUpdateMe:
             headers={"Authorization": f"Bearer {user.id}"},
         )
         if requires_verification:
-            assert response.status_code == status.HTTP_401_UNAUTHORIZED
+            assert response.status_code == status.HTTP_403_FORBIDDEN
             assert after_update.called is False
         else:
             assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -204,7 +204,7 @@ class TestUpdateMe:
             "/me", json={}, headers={"Authorization": f"Bearer {user.id}"}
         )
         if requires_verification:
-            assert response.status_code == status.HTTP_401_UNAUTHORIZED
+            assert response.status_code == status.HTTP_403_FORBIDDEN
             assert after_update.called is False
         else:
             assert response.status_code == status.HTTP_200_OK
@@ -232,7 +232,7 @@ class TestUpdateMe:
             "/me", json=json, headers={"Authorization": f"Bearer {user.id}"}
         )
         if requires_verification:
-            assert response.status_code == status.HTTP_401_UNAUTHORIZED
+            assert response.status_code == status.HTTP_403_FORBIDDEN
             assert after_update.called is False
         else:
             assert response.status_code == status.HTTP_200_OK
@@ -260,7 +260,7 @@ class TestUpdateMe:
             "/me", json=json, headers={"Authorization": f"Bearer {user.id}"}
         )
         if requires_verification:
-            assert response.status_code == status.HTTP_401_UNAUTHORIZED
+            assert response.status_code == status.HTTP_403_FORBIDDEN
             assert after_update.called is False
         else:
             assert response.status_code == status.HTTP_200_OK
@@ -288,7 +288,7 @@ class TestUpdateMe:
             "/me", json=json, headers={"Authorization": f"Bearer {user.id}"}
         )
         if requires_verification:
-            assert response.status_code == status.HTTP_401_UNAUTHORIZED
+            assert response.status_code == status.HTTP_403_FORBIDDEN
             assert after_update.called is False
         else:
             assert response.status_code == status.HTTP_200_OK
@@ -316,7 +316,7 @@ class TestUpdateMe:
             "/me", json=json, headers={"Authorization": f"Bearer {user.id}"}
         )
         if requires_verification:
-            assert response.status_code == status.HTTP_401_UNAUTHORIZED
+            assert response.status_code == status.HTTP_403_FORBIDDEN
             assert after_update.called is False
         else:
             assert response.status_code == status.HTTP_200_OK
@@ -349,7 +349,7 @@ class TestUpdateMe:
             "/me", json=json, headers={"Authorization": f"Bearer {user.id}"}
         )
         if requires_verification:
-            assert response.status_code == status.HTTP_401_UNAUTHORIZED
+            assert response.status_code == status.HTTP_403_FORBIDDEN
             assert after_update.called is False
         else:
             assert response.status_code == status.HTTP_200_OK
@@ -535,8 +535,6 @@ class TestGetUser:
             headers={"Authorization": f"Bearer {user.id}"},
         )
         if requires_verification:
-            assert response.status_code == status.HTTP_401_UNAUTHORIZED
-        else:
             assert response.status_code == status.HTTP_403_FORBIDDEN
 
     async def test_verified_user(
@@ -562,7 +560,7 @@ class TestGetUser:
             headers={"Authorization": f"Bearer {superuser.id}"},
         )
         if requires_verification:
-            assert response.status_code == status.HTTP_401_UNAUTHORIZED
+            assert response.status_code == status.HTTP_403_FORBIDDEN
         else:
             assert response.status_code == status.HTTP_404_NOT_FOUND
 
@@ -589,7 +587,7 @@ class TestGetUser:
             f"/{user.id}", headers={"Authorization": f"Bearer {superuser.id}"}
         )
         if requires_verification:
-            assert response.status_code == status.HTTP_401_UNAUTHORIZED
+            assert response.status_code == status.HTTP_403_FORBIDDEN
         else:
             assert response.status_code == status.HTTP_200_OK
 
@@ -633,8 +631,6 @@ class TestUpdateUser:
             headers={"Authorization": f"Bearer {user.id}"},
         )
         if requires_verification:
-            assert response.status_code == status.HTTP_401_UNAUTHORIZED
-        else:
             assert response.status_code == status.HTTP_403_FORBIDDEN
 
     async def test_verified_user(
@@ -661,7 +657,7 @@ class TestUpdateUser:
             headers={"Authorization": f"Bearer {superuser.id}"},
         )
         if requires_verification:
-            assert response.status_code == status.HTTP_401_UNAUTHORIZED
+            assert response.status_code == status.HTTP_403_FORBIDDEN
         else:
             assert response.status_code == status.HTTP_404_NOT_FOUND
 
@@ -689,7 +685,7 @@ class TestUpdateUser:
             f"/{user.id}", json={}, headers={"Authorization": f"Bearer {superuser.id}"}
         )
         if requires_verification:
-            assert response.status_code == status.HTTP_401_UNAUTHORIZED
+            assert response.status_code == status.HTTP_403_FORBIDDEN
         else:
             assert response.status_code == status.HTTP_200_OK
 
@@ -727,7 +723,7 @@ class TestUpdateUser:
             headers={"Authorization": f"Bearer {superuser.id}"},
         )
         if requires_verification:
-            assert response.status_code == status.HTTP_401_UNAUTHORIZED
+            assert response.status_code == status.HTTP_403_FORBIDDEN
         else:
             assert response.status_code == status.HTTP_200_OK
 
@@ -808,7 +804,7 @@ class TestUpdateUser:
             headers={"Authorization": f"Bearer {superuser.id}"},
         )
         if requires_verification:
-            assert response.status_code == status.HTTP_401_UNAUTHORIZED
+            assert response.status_code == status.HTTP_403_FORBIDDEN
         else:
             assert response.status_code == status.HTTP_200_OK
 
@@ -847,7 +843,7 @@ class TestUpdateUser:
             headers={"Authorization": f"Bearer {superuser.id}"},
         )
         if requires_verification:
-            assert response.status_code == status.HTTP_401_UNAUTHORIZED
+            assert response.status_code == status.HTTP_403_FORBIDDEN
         else:
             assert response.status_code == status.HTTP_200_OK
 
@@ -886,7 +882,7 @@ class TestUpdateUser:
             headers={"Authorization": f"Bearer {superuser.id}"},
         )
         if requires_verification:
-            assert response.status_code == status.HTTP_401_UNAUTHORIZED
+            assert response.status_code == status.HTTP_403_FORBIDDEN
         else:
             assert response.status_code == status.HTTP_200_OK
 
@@ -930,7 +926,7 @@ class TestUpdateUser:
             headers={"Authorization": f"Bearer {superuser.id}"},
         )
         if requires_verification:
-            assert response.status_code == status.HTTP_401_UNAUTHORIZED
+            assert response.status_code == status.HTTP_403_FORBIDDEN
         else:
             assert response.status_code == status.HTTP_200_OK
             assert mock_user_db.update.called is True
@@ -982,8 +978,6 @@ class TestDeleteUser:
             headers={"Authorization": f"Bearer {user.id}"},
         )
         if requires_verification:
-            assert response.status_code == status.HTTP_401_UNAUTHORIZED
-        else:
             assert response.status_code == status.HTTP_403_FORBIDDEN
 
     async def test_verified_user(
@@ -1009,7 +1003,7 @@ class TestDeleteUser:
             headers={"Authorization": f"Bearer {superuser.id}"},
         )
         if requires_verification:
-            assert response.status_code == status.HTTP_401_UNAUTHORIZED
+            assert response.status_code == status.HTTP_403_FORBIDDEN
         else:
             assert response.status_code == status.HTTP_404_NOT_FOUND
 
@@ -1040,7 +1034,7 @@ class TestDeleteUser:
             f"/{user.id}", headers={"Authorization": f"Bearer {superuser.id}"}
         )
         if requires_verification:
-            assert response.status_code == status.HTTP_401_UNAUTHORIZED
+            assert response.status_code == status.HTTP_403_FORBIDDEN
         else:
             assert response.status_code == status.HTTP_204_NO_CONTENT
             assert response.content == b""

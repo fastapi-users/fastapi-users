@@ -191,7 +191,7 @@ class TestGetCurrentVerifiedUser:
             "/current-verified-user",
             headers={"Authorization": f"Bearer {user.id}"},
         )
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
     async def test_valid_token_verified_user(
         self, test_app_client: httpx.AsyncClient, verified_user: UserDB
@@ -253,7 +253,7 @@ class TestGetCurrentVerifiedSuperuser:
             "/current-verified-superuser",
             headers={"Authorization": f"Bearer {user.id}"},
         )
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
     async def test_valid_token_verified_user(
         self, test_app_client: httpx.AsyncClient, verified_user: UserDB
@@ -271,7 +271,7 @@ class TestGetCurrentVerifiedSuperuser:
             "/current-verified-superuser",
             headers={"Authorization": f"Bearer {superuser.id}"},
         )
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
     async def test_valid_token_verified_superuser(
         self, test_app_client: httpx.AsyncClient, verified_superuser: UserDB

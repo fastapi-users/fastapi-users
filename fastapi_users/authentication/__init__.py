@@ -185,6 +185,7 @@ class Authenticator:
         if user:
             status_code = status.HTTP_403_FORBIDDEN
             if active and not user.is_active:
+                status_code = status.HTTP_401_UNAUTHORIZED
                 user = None
             elif verified and not user.is_verified:
                 user = None

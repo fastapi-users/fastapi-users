@@ -183,7 +183,7 @@ class TestLogout:
             path, headers={"Authorization": f"Bearer {user.id}"}
         )
         if requires_verification:
-            assert response.status_code == status.HTTP_401_UNAUTHORIZED
+            assert response.status_code == status.HTTP_403_FORBIDDEN
         else:
             assert response.status_code == status.HTTP_200_OK
 
