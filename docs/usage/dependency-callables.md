@@ -11,7 +11,7 @@ Return a dependency callable to retrieve currently authenticated user, passing t
 
 * `optional`: If `True`, `None` is returned if there is no authenticated user or if it doesn't pass the other requirements. Otherwise, throw `401 Unauthorized`. Defaults to `False`.
 * `active`: If `True`, throw `401 Unauthorized` if the authenticated user is inactive. Defaults to `False`.
-* `verified`: If `True`, throw `401 Unauthorized` if the authenticated user is not verified. Defaults to `False`.
+* `verified`: If `True`, throw `403 Forbidden` if the authenticated user is not verified. Defaults to `False`.
 * `superuser`: If `True`, throw `403 Forbidden` if the authenticated user is not a superuser. Defaults to `False`.
 
 ### Examples
@@ -88,7 +88,7 @@ def protected_route(user: User = Depends(fastapi_users.get_current_active_user))
 
 ### `get_current_verified_user`
 
-Get the current active and verified user. Will throw a `401 Unauthorized` if missing or wrong credentials or if the user is not active and verified.
+Get the current active and verified user. Will throw a `401 Unauthorized` if missing or wrong credentials or if the user is not active. Will throw a `403 Forbidden` if the user is unverified.
 
 ```py
 @app.get("/protected-route")
