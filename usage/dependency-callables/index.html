@@ -1120,7 +1120,7 @@
 <ul>
 <li><code>optional</code>: If <code>True</code>, <code>None</code> is returned if there is no authenticated user or if it doesn't pass the other requirements. Otherwise, throw <code>401 Unauthorized</code>. Defaults to <code>False</code>.</li>
 <li><code>active</code>: If <code>True</code>, throw <code>401 Unauthorized</code> if the authenticated user is inactive. Defaults to <code>False</code>.</li>
-<li><code>verified</code>: If <code>True</code>, throw <code>401 Unauthorized</code> if the authenticated user is not verified. Defaults to <code>False</code>.</li>
+<li><code>verified</code>: If <code>True</code>, throw <code>403 Forbidden</code> if the authenticated user is not verified. Defaults to <code>False</code>.</li>
 <li><code>superuser</code>: If <code>True</code>, throw <code>403 Forbidden</code> if the authenticated user is not a superuser. Defaults to <code>False</code>.</li>
 </ul>
 <h3 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h3>
@@ -1171,7 +1171,7 @@
     <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">&quot;</span>
 </code></pre></div>
 <h3 id="get_current_verified_user"><code>get_current_verified_user</code><a class="headerlink" href="#get_current_verified_user" title="Permanent link">&para;</a></h3>
-<p>Get the current active and verified user. Will throw a <code>401 Unauthorized</code> if missing or wrong credentials or if the user is not active and verified.</p>
+<p>Get the current active and verified user. Will throw a <code>401 Unauthorized</code> if missing or wrong credentials or if the user is not active. Will throw a <code>403 Forbidden</code> if the user is unverified.</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/protected-route&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">protected_route</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_current_verified_user</span><span class="p">)):</span>
     <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">&quot;</span>
