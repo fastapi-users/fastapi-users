@@ -312,11 +312,20 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "daanbeverdam",
+      "name": "Daan Beverdam",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13944585?v=4",
+      "profile": "https://www.daanbeverdam.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
   "projectName": "fastapi-users",
-  "projectOwner": "frankie567",
+  "projectOwner": "fastapi-users",
   "repoType": "github",
   "repoHost": "https://github.com",
   "skipCi": true
