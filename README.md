@@ -64,7 +64,7 @@ This book covers the following exciting features:
 * Integrate common Python data science libraries in a web backend
 * Deploy a performant and reliable web backend for a data science application
 
-If you feel this book is for you, get your [copy](https://www.amazon.com/dp/1801079218) today!
+If you feel this book is for you, get your [copy](https://amzn.to/3kTvgjG) today!
 
 ## Contributors and sponsors ✨☕️
 
