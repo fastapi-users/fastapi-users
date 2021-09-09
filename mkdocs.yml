@@ -62,7 +62,7 @@ nav:
   - Usage:
     - usage/flow.md
     - usage/routes.md
-    - usage/dependency-callables.md
+    - usage/current-user.md
     - usage/helpers.md
   - Migration:
     - migration/08_to_1x.md
