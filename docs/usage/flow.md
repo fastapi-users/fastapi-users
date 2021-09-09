@@ -193,7 +193,7 @@ You'll get a JSON response looking like this:
 ```
 
 !!! tip
-    If you use one of the [dependency callable](./dependency-callables.md) to protect one of your own endpoint, you'll have to authenticate exactly in the same way.
+    If you use one of the [dependency callable](./current-user.md) to protect one of your own endpoint, you'll have to authenticate exactly in the same way.
 
 ## 4. Update my profile
 
