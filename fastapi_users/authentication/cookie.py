@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any, List, Optional
 
 import jwt
 from fastapi import Response
@@ -7,8 +7,8 @@ from pydantic import UUID4
 
 from fastapi_users.authentication import BaseAuthentication
 from fastapi_users.db.base import BaseUserDatabase
+from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.models import BaseUserDB
-from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
 
 
 class CookieAuthentication(BaseAuthentication[str]):
@@ -25,11 +25,12 @@ class CookieAuthentication(BaseAuthentication[str]):
     :param cookie_secure: Whether to only send the cookie to the server via SSL request.
     :param cookie_httponly: Whether to prevent access to the cookie via JavaScript.
     :param name: Name of the backend. It will be used to name the login route.
+    :param token_audience: List of valid audiences for the JWT.
     """
 
     scheme: APIKeyCookie
-    token_audience: str = "fastapi-users:auth"
-    secret: str
+    token_audience: List[str]
+    secret: SecretType
     lifetime_seconds: Optional[int]
     cookie_name: str
     cookie_path: str
@@ -40,7 +41,7 @@ class CookieAuthentication(BaseAuthentication[str]):
 
     def __init__(
         self,
-        secret: str,
+        secret: SecretType,
         lifetime_seconds: Optional[int] = None,
         cookie_name: str = "fastapiusersauth",
         cookie_path: str = "/",
@@ -49,6 +50,7 @@ class CookieAuthentication(BaseAuthentication[str]):
         cookie_httponly: bool = True,
         cookie_samesite: str = "lax",
         name: str = "cookie",
+        token_audience: List[str] = ["fastapi-users:auth"],
     ):
         super().__init__(name, logout=True)
         self.secret = secret
@@ -59,6 +61,7 @@ class CookieAuthentication(BaseAuthentication[str]):
         self.cookie_secure = cookie_secure
         self.cookie_httponly = cookie_httponly
         self.cookie_samesite = cookie_samesite
+        self.token_audience = token_audience
         self.scheme = APIKeyCookie(name=self.cookie_name, auto_error=False)
 
     async def __call__(
@@ -70,12 +73,7 @@ class CookieAuthentication(BaseAuthentication[str]):
             return None
 
         try:
-            data = jwt.decode(
-                credentials,
-                self.secret,
-                audience=self.token_audience,
-                algorithms=[JWT_ALGORITHM],
-            )
+            data = decode_jwt(credentials, self.secret, self.token_audience)
             user_id = data.get("user_id")
             if user_id is None:
                 return None
@@ -112,4 +110,4 @@ class CookieAuthentication(BaseAuthentication[str]):
 
     async def _generate_token(self, user: BaseUserDB) -> str:
         data = {"user_id": str(user.id), "aud": self.token_audience}
-        return generate_jwt(data, self.secret, self.lifetime_seconds, JWT_ALGORITHM)
+        return generate_jwt(data, self.secret, self.lifetime_seconds)

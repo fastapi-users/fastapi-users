@@ -11,7 +11,12 @@ from tests.conftest import User, UserCreate, UserDB, UserUpdate
 @pytest.fixture
 @pytest.mark.asyncio
 async def test_app_client(
-    mock_user_db, mock_authentication, oauth_client, get_test_client, validate_password
+    secret,
+    mock_user_db,
+    mock_authentication,
+    oauth_client,
+    get_test_client,
+    validate_password,
 ) -> AsyncGenerator[httpx.AsyncClient, None]:
     fastapi_users = FastAPIUsers(
         mock_user_db,
@@ -25,11 +30,11 @@ async def test_app_client(
 
     app = FastAPI()
     app.include_router(fastapi_users.get_register_router())
-    app.include_router(fastapi_users.get_reset_password_router("SECRET"))
+    app.include_router(fastapi_users.get_reset_password_router(secret))
     app.include_router(fastapi_users.get_auth_router(mock_authentication))
-    app.include_router(fastapi_users.get_oauth_router(oauth_client, "SECRET"))
+    app.include_router(fastapi_users.get_oauth_router(oauth_client, secret))
     app.include_router(fastapi_users.get_users_router(), prefix="/users")
-    app.include_router(fastapi_users.get_verify_router("SECRET"))
+    app.include_router(fastapi_users.get_verify_router(secret))
 
     @app.delete("/users/me")
     def custom_users_route():

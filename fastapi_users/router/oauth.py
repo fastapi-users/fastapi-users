@@ -8,27 +8,18 @@ from httpx_oauth.oauth2 import BaseOAuth2
 from fastapi_users import models
 from fastapi_users.authentication import Authenticator
 from fastapi_users.db import BaseUserDatabase
+from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.password import generate_password, get_password_hash
 from fastapi_users.router.common import ErrorCode, run_handler
-from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
 
 STATE_TOKEN_AUDIENCE = "fastapi-users:oauth-state"
 
 
 def generate_state_token(
-    data: Dict[str, str], secret: str, lifetime_seconds: int = 3600
+    data: Dict[str, str], secret: SecretType, lifetime_seconds: int = 3600
 ) -> str:
     data["aud"] = STATE_TOKEN_AUDIENCE
-    return generate_jwt(data, secret, lifetime_seconds, JWT_ALGORITHM)
-
-
-def decode_state_token(token: str, secret: str) -> Dict[str, str]:
-    return jwt.decode(
-        token,
-        secret,
-        audience=STATE_TOKEN_AUDIENCE,
-        algorithms=[JWT_ALGORITHM],
-    )
+    return generate_jwt(data, secret, lifetime_seconds)
 
 
 def get_oauth_router(
@@ -36,7 +27,7 @@ def get_oauth_router(
     user_db: BaseUserDatabase[models.BaseUserDB],
     user_db_model: Type[models.BaseUserDB],
     authenticator: Authenticator,
-    state_secret: str,
+    state_secret: SecretType,
     redirect_url: str = None,
     after_register: Optional[Callable[[models.UD, Request], None]] = None,
 ) -> APIRouter:
@@ -99,7 +90,7 @@ def get_oauth_router(
         )
 
         try:
-            state_data = decode_state_token(state, state_secret)
+            state_data = decode_jwt(state, state_secret, [STATE_TOKEN_AUDIENCE])
         except jwt.DecodeError:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
 

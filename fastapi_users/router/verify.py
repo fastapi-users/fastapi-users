@@ -5,6 +5,7 @@ from fastapi import APIRouter, Body, HTTPException, Request, status
 from pydantic import UUID4, EmailStr
 
 from fastapi_users import models
+from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.router.common import ErrorCode, run_handler
 from fastapi_users.user import (
     GetUserProtocol,
@@ -12,7 +13,6 @@ from fastapi_users.user import (
     UserNotExists,
     VerifyUserProtocol,
 )
-from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
 
 VERIFY_USER_TOKEN_AUDIENCE = "fastapi-users:verify"
 
@@ -21,7 +21,7 @@ def get_verify_router(
     verify_user: VerifyUserProtocol,
     get_user: GetUserProtocol,
     user_model: Type[models.BaseUser],
-    verification_token_secret: str,
+    verification_token_secret: SecretType,
     verification_token_lifetime_seconds: int = 3600,
     after_verification_request: Optional[
         Callable[[models.UD, str, Request], None]
@@ -58,11 +58,8 @@ def get_verify_router(
     @router.post("/verify", response_model=user_model)
     async def verify(request: Request, token: str = Body(..., embed=True)):
         try:
-            data = jwt.decode(
-                token,
-                verification_token_secret,
-                audience=VERIFY_USER_TOKEN_AUDIENCE,
-                algorithms=[JWT_ALGORITHM],
+            data = decode_jwt(
+                token, verification_token_secret, [VERIFY_USER_TOKEN_AUDIENCE]
             )
         except jwt.exceptions.ExpiredSignatureError:
             raise HTTPException(

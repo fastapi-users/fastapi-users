@@ -10,9 +10,6 @@ from fastapi_users.authentication import Authenticator
 from fastapi_users.router import ErrorCode, get_users_router
 from tests.conftest import MockAuthentication, User, UserDB, UserUpdate
 
-SECRET = "SECRET"
-LIFETIME = 3600
-
 
 def after_update_sync():
     return MagicMock(return_value=None)

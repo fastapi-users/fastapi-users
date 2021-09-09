@@ -29,8 +29,8 @@ app.include_router(
 
 Parameters:
 
-* `reset_password_token_secret`: Secret to encode reset password token.
-* `reset_password_token_lifetime_seconds`: Lifetime of reset password token. **Defaults to 3600**.
+* `reset_password_token_secret` (`Union[str, pydantic.SecretStr]`): Secret to encode reset password token.
+* `reset_password_token_lifetime_seconds` (`int`): Lifetime of reset password token. **Defaults to 3600**.
 * `after_forgot_password`: Optional function called after a successful forgot password request. See below.
 
 ## After forgot password

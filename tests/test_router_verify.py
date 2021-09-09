@@ -6,26 +6,24 @@ import httpx
 import pytest
 from fastapi import FastAPI, status
 
+from fastapi_users.jwt import generate_jwt
 from fastapi_users.router import ErrorCode, get_verify_router
 from fastapi_users.user import get_get_user, get_verify_user
-from fastapi_users.utils import generate_jwt
 from tests.conftest import User, UserDB
 
-SECRET = "SECRET"
 LIFETIME = 3600
 VERIFY_USER_TOKEN_AUDIENCE = "fastapi-users:verify"
-JWT_ALGORITHM = "HS256"
 
 
 @pytest.fixture
-def verify_token():
+def verify_token(secret):
     def _verify_token(user_id=None, email=None, lifetime=LIFETIME):
         data = {"aud": VERIFY_USER_TOKEN_AUDIENCE}
         if user_id is not None:
             data["user_id"] = str(user_id)
         if email is not None:
             data["email"] = email
-        return generate_jwt(data, SECRET, lifetime, JWT_ALGORITHM)
+        return generate_jwt(data, secret, lifetime)
 
     return _verify_token
 
@@ -61,6 +59,7 @@ def after_verification_request(request):
 @pytest.fixture
 @pytest.mark.asyncio
 async def test_app_client(
+    secret,
     mock_user_db,
     after_verification_request,
     after_verification,
@@ -72,7 +71,7 @@ async def test_app_client(
         verify_user,
         get_user,
         User,
-        SECRET,
+        secret,
         LIFETIME,
         after_verification_request,
         after_verification,

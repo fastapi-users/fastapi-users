@@ -3,25 +3,23 @@ from unittest.mock import MagicMock
 
 import asynctest
 import httpx
-import jwt
 import pytest
 from fastapi import FastAPI, Request, status
 
+from fastapi_users.jwt import decode_jwt, generate_jwt
 from fastapi_users.router import ErrorCode, get_reset_password_router
-from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
 from tests.conftest import UserDB
 
-SECRET = "SECRET"
 LIFETIME = 3600
 
 
 @pytest.fixture
-def forgot_password_token():
+def forgot_password_token(secret):
     def _forgot_password_token(user_id=None, lifetime=LIFETIME):
         data = {"aud": "fastapi-users:reset"}
         if user_id is not None:
             data["user_id"] = str(user_id)
-        return generate_jwt(data, SECRET, lifetime, JWT_ALGORITHM)
+        return generate_jwt(data, secret, lifetime)
 
     return _forgot_password_token
 
@@ -55,6 +53,7 @@ def after_reset_password(request):
 @pytest.fixture
 @pytest.mark.asyncio
 async def test_app_client(
+    secret,
     mock_user_db,
     after_forgot_password,
     after_reset_password,
@@ -63,7 +62,7 @@ async def test_app_client(
 ) -> AsyncGenerator[httpx.AsyncClient, None]:
     reset_router = get_reset_password_router(
         mock_user_db,
-        SECRET,
+        secret,
         LIFETIME,
         after_forgot_password,
         after_reset_password,
@@ -107,7 +106,12 @@ class TestForgotPassword:
         "email", ["king.arthur@camelot.bt", "King.Arthur@camelot.bt"]
     )
     async def test_existing_user(
-        self, email, test_app_client: httpx.AsyncClient, after_forgot_password, user
+        self,
+        secret,
+        email,
+        test_app_client: httpx.AsyncClient,
+        after_forgot_password,
+        user,
     ):
         json = {"email": email}
         response = await test_app_client.post("/forgot-password", json=json)
@@ -117,11 +121,11 @@ class TestForgotPassword:
         actual_user = after_forgot_password.call_args[0][0]
         assert actual_user.id == user.id
         actual_token = after_forgot_password.call_args[0][1]
-        decoded_token = jwt.decode(
+
+        decoded_token = decode_jwt(
             actual_token,
-            SECRET,
-            audience="fastapi-users:reset",
-            algorithms=[JWT_ALGORITHM],
+            secret,
+            audience=["fastapi-users:reset"],
         )
         assert decoded_token["user_id"] == str(user.id)
         request = after_forgot_password.call_args[0][2]

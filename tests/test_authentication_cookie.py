@@ -1,90 +1,101 @@
 import re
 
-import jwt
 import pytest
 from fastapi import Response
 
 from fastapi_users.authentication.cookie import CookieAuthentication
-from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
+from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 
-SECRET = "SECRET"
 LIFETIME = 3600
 COOKIE_NAME = "COOKIE_NAME"
 
-cookie_authentication = CookieAuthentication(SECRET, LIFETIME, COOKIE_NAME)
-cookie_authentication_path = CookieAuthentication(
-    SECRET, LIFETIME, COOKIE_NAME, cookie_path="/arthur"
+
+@pytest.fixture(
+    params=[
+        ("/", None, True, True),
+        ("/arthur", None, True, True),
+        ("/", "camelot.bt", True, True),
+        ("/", None, False, True),
+        ("/", None, True, False),
+    ]
 )
-cookie_authentication_domain = CookieAuthentication(
-    SECRET, LIFETIME, COOKIE_NAME, cookie_domain="camelot.bt"
-)
-cookie_authentication_secure = CookieAuthentication(
-    SECRET, LIFETIME, COOKIE_NAME, cookie_secure=False
-)
-cookie_authentication_httponly = CookieAuthentication(
-    SECRET, LIFETIME, COOKIE_NAME, cookie_httponly=False
-)
+def cookie_authentication(secret: SecretType, request):
+    path, domain, secure, httponly = request.param
+    return CookieAuthentication(
+        secret,
+        lifetime_seconds=LIFETIME,
+        cookie_name=COOKIE_NAME,
+        cookie_path=path,
+        cookie_domain=domain,
+        cookie_secure=secure,
+        cookie_httponly=httponly,
+    )
 
 
 @pytest.fixture
-def token():
+def token(secret):
     def _token(user_id=None, lifetime=LIFETIME):
         data = {"aud": "fastapi-users:auth"}
         if user_id is not None:
             data["user_id"] = str(user_id)
-        return generate_jwt(data, SECRET, lifetime, JWT_ALGORITHM)
+        return generate_jwt(data, secret, lifetime)
 
     return _token
 
 
 @pytest.mark.authentication
-def test_default_name():
+def test_default_name(cookie_authentication: CookieAuthentication):
     assert cookie_authentication.name == "cookie"
 
 
 @pytest.mark.authentication
 class TestAuthenticate:
     @pytest.mark.asyncio
-    async def test_missing_token(self, mock_user_db):
+    async def test_missing_token(
+        self, mock_user_db, cookie_authentication: CookieAuthentication
+    ):
         authenticated_user = await cookie_authentication(None, mock_user_db)
         assert authenticated_user is None
 
     @pytest.mark.asyncio
-    async def test_invalid_token(self, mock_user_db):
+    async def test_invalid_token(
+        self, mock_user_db, cookie_authentication: CookieAuthentication
+    ):
         authenticated_user = await cookie_authentication("foo", mock_user_db)
         assert authenticated_user is None
 
     @pytest.mark.asyncio
-    async def test_valid_token_missing_user_payload(self, mock_user_db, token):
+    async def test_valid_token_missing_user_payload(
+        self, mock_user_db, token, cookie_authentication: CookieAuthentication
+    ):
         authenticated_user = await cookie_authentication(token(), mock_user_db)
         assert authenticated_user is None
 
     @pytest.mark.asyncio
-    async def test_valid_token_invalid_uuid(self, mock_user_db, token):
+    async def test_valid_token_invalid_uuid(
+        self, mock_user_db, token, cookie_authentication: CookieAuthentication
+    ):
         authenticated_user = await cookie_authentication(token("foo"), mock_user_db)
         assert authenticated_user is None
 
     @pytest.mark.asyncio
-    async def test_valid_token(self, mock_user_db, token, user):
+    async def test_valid_token(
+        self, mock_user_db, token, user, cookie_authentication: CookieAuthentication
+    ):
         authenticated_user = await cookie_authentication(token(user.id), mock_user_db)
+        assert authenticated_user is not None
         assert authenticated_user.id == user.id
 
 
 @pytest.mark.authentication
 @pytest.mark.asyncio
-@pytest.mark.parametrize(
-    "cookie_authentication,path,domain,secure,httponly",
-    [
-        (cookie_authentication, "/", None, True, True),
-        (cookie_authentication_path, "/arthur", None, True, True),
-        (cookie_authentication_domain, "/", "camelot.bt", True, True),
-        (cookie_authentication_secure, "/", None, False, True),
-        (cookie_authentication_httponly, "/", None, True, False),
-    ],
-)
-async def test_get_login_response(
-    user, cookie_authentication, path, domain, secure, httponly
-):
+async def test_get_login_response(user, cookie_authentication: CookieAuthentication):
+    secret = cookie_authentication.secret
+    path = cookie_authentication.cookie_path
+    domain = cookie_authentication.cookie_domain
+    secure = cookie_authentication.cookie_secure
+    httponly = cookie_authentication.cookie_httponly
+
     response = Response()
     login_response = await cookie_authentication.get_login_response(user, response)
 
@@ -116,20 +127,19 @@ async def test_get_login_response(
         assert "HttpOnly" not in cookie
 
     cookie_name_value = re.match(r"^(\w+)=([^;]+);", cookie)
+    assert cookie_name_value is not None
 
     cookie_name = cookie_name_value[1]
     assert cookie_name == COOKIE_NAME
 
     cookie_value = cookie_name_value[2]
-    decoded = jwt.decode(
-        cookie_value, SECRET, audience="fastapi-users:auth", algorithms=[JWT_ALGORITHM]
-    )
+    decoded = decode_jwt(cookie_value, secret, audience=["fastapi-users:auth"])
     assert decoded["user_id"] == str(user.id)
 
 
 @pytest.mark.authentication
 @pytest.mark.asyncio
-async def test_get_logout_response(user):
+async def test_get_logout_response(user, cookie_authentication: CookieAuthentication):
     response = Response()
     logout_response = await cookie_authentication.get_logout_response(user, response)
 

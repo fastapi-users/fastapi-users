@@ -10,9 +10,6 @@ from fastapi_users.router import ErrorCode, get_register_router
 from fastapi_users.user import get_create_user
 from tests.conftest import User, UserCreate, UserDB
 
-SECRET = "SECRET"
-LIFETIME = 3600
-
 
 def after_register_sync():
     return MagicMock(return_value=None)

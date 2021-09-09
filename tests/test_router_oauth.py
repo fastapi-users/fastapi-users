@@ -11,8 +11,6 @@ from fastapi_users.router.common import ErrorCode
 from fastapi_users.router.oauth import generate_state_token, get_oauth_router
 from tests.conftest import MockAuthentication, UserDB
 
-SECRET = "SECRET"
-
 
 def after_register_sync():
     return MagicMock(return_value=None)
@@ -29,6 +27,7 @@ def after_register(request):
 
 @pytest.fixture
 def get_test_app_client(
+    secret,
     mock_user_db_oauth,
     mock_authentication,
     oauth_client,
@@ -48,7 +47,7 @@ def get_test_app_client(
             mock_user_db_oauth,
             UserDB,
             authenticator,
-            SECRET,
+            secret,
             redirect_url,
             after_register,
         )

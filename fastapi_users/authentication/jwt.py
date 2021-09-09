@@ -7,8 +7,8 @@ from pydantic import UUID4
 
 from fastapi_users.authentication.base import BaseAuthentication
 from fastapi_users.db.base import BaseUserDatabase
+from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.models import BaseUserDB
-from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
 
 
 class JWTAuthentication(BaseAuthentication[str]):
@@ -19,11 +19,12 @@ class JWTAuthentication(BaseAuthentication[str]):
     :param lifetime_seconds: Lifetime duration of the JWT in seconds.
     :param tokenUrl: Path where to get a token.
     :param name: Name of the backend. It will be used to name the login route.
+    :param token_audience: List of valid audiences for the JWT.
     """
 
     scheme: OAuth2PasswordBearer
-    token_audience: List[str] = ["fastapi-users:auth"]
-    secret: str
+    token_audience: List[str]
+    secret: SecretType
     lifetime_seconds: int
 
     def __init__(
@@ -49,12 +50,7 @@ class JWTAuthentication(BaseAuthentication[str]):
             return None
 
         try:
-            data = jwt.decode(
-                credentials,
-                self.secret,
-                audience=self.token_audience,
-                algorithms=[JWT_ALGORITHM],
-            )
+            data = decode_jwt(credentials, self.secret, self.token_audience)
             user_id = data.get("user_id")
             if user_id is None:
                 return None
@@ -73,4 +69,4 @@ class JWTAuthentication(BaseAuthentication[str]):
 
     async def _generate_token(self, user: BaseUserDB) -> str:
         data = {"user_id": str(user.id), "aud": self.token_audience}
-        return generate_jwt(data, self.secret, self.lifetime_seconds, JWT_ALGORITHM)
+        return generate_jwt(data, self.secret, self.lifetime_seconds)

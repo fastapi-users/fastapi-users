@@ -18,7 +18,7 @@ auth_backends.append(cookie_authentication)
 
 As you can see, instantiation is quite simple. It accepts the following arguments:
 
-* `secret` (`str`): A constant secret which is used to encode the cookie. **Use a strong passphrase and keep it secure.**
+* `secret` (`Union[str, pydantic.SecretStr]`): A constant secret which is used to encode the cookie. **Use a strong passphrase and keep it secure.**
 * `lifetime_seconds` (`int`): The lifetime of the cookie in seconds.
 * `cookie_name` (`fastapiusersauth`): Name of the cookie.
 * `cookie_path` (`/`): Cookie path.

@@ -30,8 +30,8 @@ app.include_router(
 
 Parameters:
 
-* `verification_token_secret`: Secret to encode verify token.
-* `verification_token_lifetime_seconds`: Lifetime of verify token. **Defaults to 3600**.
+* `verification_token_secret` (`Union[str, pydantic.SecretStr]`): Secret to encode verify token.
+* `verification_token_lifetime_seconds` (`int`): Lifetime of verify token. **Defaults to 3600**.
 * `after_verification_request`: Optional function called after a successful verify request. See below.
 * `after_verification`: Optional function called after a successful verification. See below.
 

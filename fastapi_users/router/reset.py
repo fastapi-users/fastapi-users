@@ -6,17 +6,17 @@ from pydantic import UUID4, EmailStr
 
 from fastapi_users import models
 from fastapi_users.db import BaseUserDatabase
+from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.password import get_password_hash
 from fastapi_users.router.common import ErrorCode, run_handler
 from fastapi_users.user import InvalidPasswordException, ValidatePasswordProtocol
-from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
 
 RESET_PASSWORD_TOKEN_AUDIENCE = "fastapi-users:reset"
 
 
 def get_reset_password_router(
     user_db: BaseUserDatabase[models.BaseUserDB],
-    reset_password_token_secret: str,
+    reset_password_token_secret: SecretType,
     reset_password_token_lifetime_seconds: int = 3600,
     after_forgot_password: Optional[Callable[[models.UD, str, Request], None]] = None,
     after_reset_password: Optional[Callable[[models.UD, Request], None]] = None,
@@ -48,11 +48,8 @@ def get_reset_password_router(
         request: Request, token: str = Body(...), password: str = Body(...)
     ):
         try:
-            data = jwt.decode(
-                token,
-                reset_password_token_secret,
-                audience=RESET_PASSWORD_TOKEN_AUDIENCE,
-                algorithms=[JWT_ALGORITHM],
+            data = decode_jwt(
+                token, reset_password_token_secret, [RESET_PASSWORD_TOKEN_AUDIENCE]
             )
             user_id = data.get("user_id")
             if user_id is None:

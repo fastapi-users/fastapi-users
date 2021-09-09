@@ -1,27 +1,25 @@
-import jwt
 import pytest
 from fastapi import Response
 
 from fastapi_users.authentication.jwt import JWTAuthentication
-from fastapi_users.utils import JWT_ALGORITHM, generate_jwt
+from fastapi_users.jwt import decode_jwt, generate_jwt
 
-SECRET = "SECRET"
 LIFETIME = 3600
 TOKEN_URL = "/login"
 
 
 @pytest.fixture
-def jwt_authentication():
-    return JWTAuthentication(SECRET, LIFETIME, TOKEN_URL)
+def jwt_authentication(secret):
+    return JWTAuthentication(secret, LIFETIME, TOKEN_URL)
 
 
 @pytest.fixture
-def token():
+def token(secret):
     def _token(user_id=None, lifetime=LIFETIME):
         data = {"aud": "fastapi-users:auth"}
         if user_id is not None:
             data["user_id"] = str(user_id)
-        return generate_jwt(data, SECRET, lifetime, JWT_ALGORITHM)
+        return generate_jwt(data, secret, lifetime)
 
     return _token
 
@@ -72,8 +70,8 @@ async def test_get_login_response(jwt_authentication, user):
     assert login_response["token_type"] == "bearer"
 
     token = login_response["access_token"]
-    decoded = jwt.decode(
-        token, SECRET, audience="fastapi-users:auth", algorithms=[JWT_ALGORITHM]
+    decoded = decode_jwt(
+        token, jwt_authentication.secret, audience=["fastapi-users:auth"]
     )
     assert decoded["user_id"] == str(user.id)
 

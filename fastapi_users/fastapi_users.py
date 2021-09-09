@@ -5,6 +5,7 @@ from fastapi import APIRouter, Request
 from fastapi_users import models
 from fastapi_users.authentication import Authenticator, BaseAuthentication
 from fastapi_users.db import BaseUserDatabase
+from fastapi_users.jwt import SecretType
 from fastapi_users.router import (
     get_auth_router,
     get_register_router,
@@ -132,7 +133,7 @@ class FastAPIUsers:
 
     def get_verify_router(
         self,
-        verification_token_secret: str,
+        verification_token_secret: SecretType,
         verification_token_lifetime_seconds: int = 3600,
         after_verification_request: Optional[
             Callable[[models.UD, str, Request], None]
@@ -161,7 +162,7 @@ class FastAPIUsers:
 
     def get_reset_password_router(
         self,
-        reset_password_token_secret: str,
+        reset_password_token_secret: SecretType,
         reset_password_token_lifetime_seconds: int = 3600,
         after_forgot_password: Optional[
             Callable[[models.UD, str, Request], None]
@@ -207,7 +208,7 @@ class FastAPIUsers:
     def get_oauth_router(
         self,
         oauth_client: BaseOAuth2,
-        state_secret: str,
+        state_secret: SecretType,
         redirect_url: str = None,
         after_register: Optional[Callable[[models.UD, Request], None]] = None,
     ) -> APIRouter:

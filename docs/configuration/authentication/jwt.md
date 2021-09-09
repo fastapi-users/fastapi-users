@@ -18,7 +18,7 @@ auth_backends.append(jwt_authentication)
 
 As you can see, instantiation is quite simple. It accepts the following arguments:
 
-* `secret` (`str`): A constant secret which is used to encode the token. **Use a strong passphrase and keep it secure.**
+* `secret` (`Union[str, pydantic.SecretStr]`): A constant secret which is used to encode the token. **Use a strong passphrase and keep it secure.**
 * `lifetime_seconds` (`int`): The lifetime of the token in seconds.
 * `tokenUrl` (`Optional[str]`): The exact path of your login endpoint. It'll allow the interactive documentation to automatically discover it and get a working *Authorize* button. In most cases, you'll probably need a **relative** path, not absolute. You can read more details about this in the [FastAPI documentation](https://fastapi.tiangolo.com/tutorial/security/first-steps/#fastapis-oauth2passwordbearer). Defaults to `auth/jwt/login`.
 * `name` (`Optional[str]`): Name of the backend. It's useful in the case you wish to have several backends of the same class. Each backend should have a unique name. Defaults to `jwt`.

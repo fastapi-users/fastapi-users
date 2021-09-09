@@ -8,12 +8,13 @@ from asgi_lifespan import LifespanManager
 from fastapi import Depends, FastAPI, Response
 from fastapi.security import OAuth2PasswordBearer
 from httpx_oauth.oauth2 import OAuth2
-from pydantic import UUID4
+from pydantic import UUID4, SecretStr
 from starlette.applications import ASGIApp
 
 from fastapi_users import models
 from fastapi_users.authentication import Authenticator, BaseAuthentication
 from fastapi_users.db import BaseUserDatabase
+from fastapi_users.jwt import SecretType
 from fastapi_users.models import BaseOAuthAccount, BaseOAuthAccountMixin, BaseUserDB
 from fastapi_users.password import get_password_hash
 from fastapi_users.user import InvalidPasswordException, ValidatePasswordProtocol
@@ -54,6 +55,11 @@ def event_loop():
     """Force the pytest-asyncio loop to be the main one."""
     loop = asyncio.get_event_loop()
     yield loop
+
+
+@pytest.fixture(params=["SECRET", SecretStr("SECRET")])
+def secret(request) -> SecretType:
+    return request.param
 
 
 @pytest.fixture
