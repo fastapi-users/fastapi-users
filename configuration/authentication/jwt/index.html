@@ -908,7 +908,7 @@
 </code></pre></div>
 <p>As you can see, instantiation is quite simple. It accepts the following arguments:</p>
 <ul>
-<li><code>secret</code> (<code>str</code>): A constant secret which is used to encode the token. <strong>Use a strong passphrase and keep it secure.</strong></li>
+<li><code>secret</code> (<code>Union[str, pydantic.SecretStr]</code>): A constant secret which is used to encode the token. <strong>Use a strong passphrase and keep it secure.</strong></li>
 <li><code>lifetime_seconds</code> (<code>int</code>): The lifetime of the token in seconds.</li>
 <li><code>tokenUrl</code> (<code>Optional[str]</code>): The exact path of your login endpoint. It'll allow the interactive documentation to automatically discover it and get a working <em>Authorize</em> button. In most cases, you'll probably need a <strong>relative</strong> path, not absolute. You can read more details about this in the <a href="https://fastapi.tiangolo.com/tutorial/security/first-steps/#fastapis-oauth2passwordbearer">FastAPI documentation</a>. Defaults to <code>auth/jwt/login</code>.</li>
 <li><code>name</code> (<code>Optional[str]</code>): Name of the backend. It's useful in the case you wish to have several backends of the same class. Each backend should have a unique name. Defaults to <code>jwt</code>.</li>

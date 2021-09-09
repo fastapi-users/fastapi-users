@@ -894,7 +894,7 @@
 </code></pre></div>
 <p>As you can see, instantiation is quite simple. It accepts the following arguments:</p>
 <ul>
-<li><code>secret</code> (<code>str</code>): A constant secret which is used to encode the cookie. <strong>Use a strong passphrase and keep it secure.</strong></li>
+<li><code>secret</code> (<code>Union[str, pydantic.SecretStr]</code>): A constant secret which is used to encode the cookie. <strong>Use a strong passphrase and keep it secure.</strong></li>
 <li><code>lifetime_seconds</code> (<code>int</code>): The lifetime of the cookie in seconds.</li>
 <li><code>cookie_name</code> (<code>fastapiusersauth</code>): Name of the cookie.</li>
 <li><code>cookie_path</code> (<code>/</code>): Cookie path.</li>

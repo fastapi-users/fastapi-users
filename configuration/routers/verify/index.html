@@ -879,8 +879,8 @@
 </code></pre></div>
 <p>Parameters:</p>
 <ul>
-<li><code>verification_token_secret</code>: Secret to encode verify token.</li>
-<li><code>verification_token_lifetime_seconds</code>: Lifetime of verify token. <strong>Defaults to 3600</strong>.</li>
+<li><code>verification_token_secret</code> (<code>Union[str, pydantic.SecretStr]</code>): Secret to encode verify token.</li>
+<li><code>verification_token_lifetime_seconds</code> (<code>int</code>): Lifetime of verify token. <strong>Defaults to 3600</strong>.</li>
 <li><code>after_verification_request</code>: Optional function called after a successful verify request. See below.</li>
 <li><code>after_verification</code>: Optional function called after a successful verification. See below.</li>
 </ul>

@@ -876,8 +876,8 @@
 </code></pre></div>
 <p>Parameters:</p>
 <ul>
-<li><code>reset_password_token_secret</code>: Secret to encode reset password token.</li>
-<li><code>reset_password_token_lifetime_seconds</code>: Lifetime of reset password token. <strong>Defaults to 3600</strong>.</li>
+<li><code>reset_password_token_secret</code> (<code>Union[str, pydantic.SecretStr]</code>): Secret to encode reset password token.</li>
+<li><code>reset_password_token_lifetime_seconds</code> (<code>int</code>): Lifetime of reset password token. <strong>Defaults to 3600</strong>.</li>
 <li><code>after_forgot_password</code>: Optional function called after a successful forgot password request. See below.</li>
 </ul>
 <h2 id="after-forgot-password">After forgot password<a class="headerlink" href="#after-forgot-password" title="Permanent link">&para;</a></h2>
