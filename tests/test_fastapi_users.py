@@ -41,52 +41,62 @@ async def test_app_client(
         return None
 
     @app.get("/current-user")
-    def current_user(user=Depends(fastapi_users.get_current_user)):
+    def current_user(user=Depends(fastapi_users.current_user())):
         return user
 
     @app.get("/current-active-user")
-    def current_active_user(user=Depends(fastapi_users.get_current_active_user)):
+    def current_active_user(user=Depends(fastapi_users.current_user(active=True))):
         return user
 
     @app.get("/current-verified-user")
-    def current_verified_user(user=Depends(fastapi_users.get_current_verified_user)):
+    def current_verified_user(user=Depends(fastapi_users.current_user(verified=True))):
         return user
 
     @app.get("/current-superuser")
-    def current_superuser(user=Depends(fastapi_users.get_current_superuser)):
+    def current_superuser(
+        user=Depends(fastapi_users.current_user(active=True, superuser=True))
+    ):
         return user
 
     @app.get("/current-verified-superuser")
     def current_verified_superuser(
-        user=Depends(fastapi_users.get_current_verified_superuser),
+        user=Depends(
+            fastapi_users.current_user(active=True, verified=True, superuser=True)
+        ),
     ):
         return user
 
     @app.get("/optional-current-user")
-    def optional_current_user(user=Depends(fastapi_users.get_optional_current_user)):
+    def optional_current_user(user=Depends(fastapi_users.current_user(optional=True))):
         return user
 
     @app.get("/optional-current-active-user")
     def optional_current_active_user(
-        user=Depends(fastapi_users.get_optional_current_active_user),
+        user=Depends(fastapi_users.current_user(optional=True, active=True)),
     ):
         return user
 
     @app.get("/optional-current-verified-user")
     def optional_current_verified_user(
-        user=Depends(fastapi_users.get_optional_current_verified_user),
+        user=Depends(fastapi_users.current_user(optional=True, verified=True)),
     ):
         return user
 
     @app.get("/optional-current-superuser")
     def optional_current_superuser(
-        user=Depends(fastapi_users.get_optional_current_superuser),
+        user=Depends(
+            fastapi_users.current_user(optional=True, active=True, superuser=True)
+        ),
     ):
         return user
 
     @app.get("/optional-current-verified-superuser")
     def optional_current_verified_superuser(
-        user=Depends(fastapi_users.get_optional_current_verified_superuser),
+        user=Depends(
+            fastapi_users.current_user(
+                optional=True, active=True, verified=True, superuser=True
+            )
+        ),
     ):
         return user
 

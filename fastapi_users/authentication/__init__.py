@@ -1,8 +1,7 @@
 import re
-from inspect import Parameter, Signature, signature
+from inspect import Parameter, Signature
 from typing import Optional, Sequence
 
-from deprecated import deprecated
 from fastapi import Depends, HTTPException, status
 from makefun import with_signature
 
@@ -47,45 +46,6 @@ class Authenticator:
     ):
         self.backends = backends
         self.user_db = user_db
-
-        self.get_current_user = self._deprecated_current_user("get_current_user")
-        self.get_current_active_user = self._deprecated_current_user(
-            "get_current_active_user", active=True
-        )
-        self.get_current_verified_user = self._deprecated_current_user(
-            "get_current_verified_user", active=True, verified=True
-        )
-        self.get_current_superuser = self._deprecated_current_user(
-            "get_current_superuser", active=True, superuser=True
-        )
-        self.get_current_verified_superuser = self._deprecated_current_user(
-            "get_current_verified_superuser",
-            active=True,
-            verified=True,
-            superuser=True,
-        )
-        self.get_optional_current_user = self._deprecated_current_user(
-            "get_optional_current_user", optional=True
-        )
-        self.get_optional_current_active_user = self._deprecated_current_user(
-            "get_optional_current_active_user", optional=True, active=True
-        )
-        self.get_optional_current_verified_user = self._deprecated_current_user(
-            "get_optional_current_verified_user",
-            optional=True,
-            active=True,
-            verified=True,
-        )
-        self.get_optional_current_superuser = self._deprecated_current_user(
-            "get_optional_current_superuser", optional=True, active=True, superuser=True
-        )
-        self.get_optional_current_verified_superuser = self._deprecated_current_user(
-            "get_optional_current_verified_superuser",
-            optional=True,
-            active=True,
-            verified=True,
-            superuser=True,
-        )
 
     def current_user(
         self,
@@ -137,32 +97,6 @@ class Authenticator:
             )
 
         return current_user_dependency
-
-    def _deprecated_current_user(
-        self,
-        func_name: str,
-        optional: bool = False,
-        active: bool = False,
-        verified: bool = False,
-        superuser: bool = False,
-    ):
-        current_user_dependency = self.current_user(
-            optional, active, verified, superuser
-        )
-
-        @deprecated(
-            version="5.1.0",
-            reason=(
-                "You should call `current_user` with your own set of parameters. "
-                "See: "
-                "https://fastapi-users.github.io/fastapi-users/usage/dependency-callables/"
-            ),
-        )
-        @with_signature(signature(current_user_dependency), func_name=func_name)
-        async def deprecated_current_user_dependency(*args, **kwargs):
-            return await current_user_dependency(*args, **kwargs)
-
-        return deprecated_current_user_dependency
 
     async def _authenticate(
         self,

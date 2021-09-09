@@ -47,12 +47,6 @@ class FastAPIUsers:
     :attribute create_user: Helper function to create a user programmatically.
     :attribute current_user: Dependency callable getter to inject authenticated user
     with a specific set of parameters.
-    :attribute get_current_user: Dependency callable to inject authenticated user.
-    :attribute get_current_active_user: Dependency callable to inject active user.
-    :attribute get_current_verified_user: Dependency callable to inject verified user.
-    :attribute get_current_superuser: Dependency callable to inject superuser.
-    :attribute get_current_verified_superuser: Dependency callable to inject
-    verified superuser.
     """
 
     db: BaseUserDatabase
@@ -92,26 +86,6 @@ class FastAPIUsers:
         self.validate_password = validate_password
 
         self.current_user = self.authenticator.current_user
-        self.get_current_user = self.authenticator.get_current_user
-        self.get_current_active_user = self.authenticator.get_current_active_user
-        self.get_current_verified_user = self.authenticator.get_current_verified_user
-        self.get_current_superuser = self.authenticator.get_current_superuser
-        self.get_current_verified_superuser = (
-            self.authenticator.get_current_verified_superuser
-        )
-        self.get_optional_current_user = self.authenticator.get_optional_current_user
-        self.get_optional_current_active_user = (
-            self.authenticator.get_optional_current_active_user
-        )
-        self.get_optional_current_verified_user = (
-            self.authenticator.get_optional_current_verified_user
-        )
-        self.get_optional_current_superuser = (
-            self.authenticator.get_optional_current_superuser
-        )
-        self.get_optional_current_verified_superuser = (
-            self.authenticator.get_optional_current_verified_superuser
-        )
 
     def get_register_router(
         self,
