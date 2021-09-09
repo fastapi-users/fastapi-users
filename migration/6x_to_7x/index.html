@@ -792,6 +792,7 @@
 <ul>
 <li>The deprecated dependencies to retrieve current user have been removed. Use the <code>current_user</code> factory instead. [<a href="https://fastapi-users.github.io/fastapi-users/usage/current-user/">Documentation</a>]</li>
 <li>When trying to authenticate a not verified user, a <strong>status code 403</strong> is raised instead of status code 401. Thanks @daanbeverdam 🎉 [<a href="https://fastapi-users.github.io/fastapi-users/usage/current-user/#current_user">Documentation</a>]</li>
+<li>Your <code>UserUpdate</code> model shouldn't inherit from the base <code>User</code> class. If you have custom fields, you should repeat them in this model. [<a href="https://fastapi-users.github.io/fastapi-users/configuration/model/#define-your-models">Documentation</a>]</li>
 </ul>
 <hr />
 <ul>
