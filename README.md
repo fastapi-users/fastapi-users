@@ -13,7 +13,7 @@
 [![PyPI version](https://badge.fury.io/py/fastapi-users.svg)](https://badge.fury.io/py/fastapi-users)
 [![Downloads](https://pepy.tech/badge/fastapi-users)](https://pepy.tech/project/fastapi-users)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-34-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-35-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <p align="center">
     <a href="https://www.buymeacoffee.com/fastapi-users"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=frankie567&button_colour=FF5F5F&font_colour=ffffff&font_family=Lato&outline_colour=000000&coffee_colour=FFDD00"></a>
@@ -117,6 +117,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/BoYanZh"><img src="https://avatars.githubusercontent.com/u/32470225?v=4?s=100" width="100px;" alt=""/><br /><sub><b>BoYanZh</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=BoYanZh" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/davidbrochart"><img src="https://avatars.githubusercontent.com/u/4711805?v=4?s=100" width="100px;" alt=""/><br /><sub><b>David Brochart</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=davidbrochart" title="Documentation">📖</a></td>
     <td align="center"><a href="https://www.daanbeverdam.com"><img src="https://avatars.githubusercontent.com/u/13944585?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Daan Beverdam</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=daanbeverdam" title="Code">💻</a></td>
+    <td align="center"><a href="http://sralab.com"><img src="https://avatars.githubusercontent.com/u/1815?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Stéphane Raimbault</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=stephane" title="Tests">⚠️</a> <a href="https://github.com/fastapi-users/fastapi-users/issues?q=author%3Astephane" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 
