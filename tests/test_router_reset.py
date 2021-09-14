@@ -204,6 +204,27 @@ class TestResetPassword:
         assert mock_user_db.update.called is False
         assert after_reset_password.called is False
 
+    async def test_valid_token_not_existing_user(
+        self,
+        mocker,
+        mock_user_db,
+        test_app_client: httpx.AsyncClient,
+        forgot_password_token,
+        after_reset_password,
+    ):
+        mocker.spy(mock_user_db, "update")
+
+        json = {
+            "token": forgot_password_token("d35d213e-f3d8-4f08-954a-7e0d1bea286f"),
+            "password": "holygrail",
+        }
+        response = await test_app_client.post("/reset-password", json=json)
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        data = cast(Dict[str, Any], response.json())
+        assert data["detail"] == ErrorCode.RESET_PASSWORD_BAD_TOKEN
+        assert mock_user_db.update.called is False
+        assert after_reset_password.called is False
+
     async def test_inactive_user(
         self,
         mocker,
