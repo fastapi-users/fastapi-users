@@ -274,22 +274,6 @@ def mock_user_db(
 
 
 @pytest.fixture
-def get_mock_user_db(mock_user_db):
-    def _get_mock_user_db():
-        yield mock_user_db
-
-    return _get_mock_user_db
-
-
-@pytest.fixture
-def get_user_manager(get_mock_user_db, validate_password):
-    def _get_user_manager(user_db=Depends(get_mock_user_db)):
-        yield UserManager(UserDB, user_db, validate_password)
-
-    return _get_user_manager
-
-
-@pytest.fixture
 def mock_user_db_oauth(
     user_oauth,
     verified_user_oauth,
@@ -356,11 +340,32 @@ def mock_user_db_oauth(
 
 
 @pytest.fixture
+def get_mock_user_db(mock_user_db):
+    def _get_mock_user_db():
+        yield mock_user_db
+
+    return _get_mock_user_db
+
+
+@pytest.fixture
 def get_mock_user_db_oauth(mock_user_db_oauth):
     def _get_mock_user_db_oauth():
         yield mock_user_db_oauth
 
     return _get_mock_user_db_oauth
+
+
+@pytest.fixture
+def user_manager(mock_user_db, validate_password):
+    return UserManager(UserDB, mock_user_db, validate_password)
+
+
+@pytest.fixture
+def get_user_manager(get_mock_user_db, validate_password):
+    def _get_user_manager(user_db=Depends(get_mock_user_db)):
+        yield UserManager(UserDB, user_db, validate_password)
+
+    return _get_user_manager
 
 
 @pytest.fixture
