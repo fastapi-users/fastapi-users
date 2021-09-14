@@ -9,7 +9,7 @@ from fastapi_users import models
 from fastapi_users.authentication.base import BaseAuthentication  # noqa: F401
 from fastapi_users.authentication.cookie import CookieAuthentication  # noqa: F401
 from fastapi_users.authentication.jwt import JWTAuthentication  # noqa: F401
-from fastapi_users.manager import UserManager, UserManagerDependency
+from fastapi_users.manager import BaseUserManager, UserManagerDependency
 
 INVALID_CHARS_PATTERN = re.compile(r"[^0-9a-zA-Z_]")
 INVALID_LEADING_CHARS_PATTERN = re.compile(r"^[^a-zA-Z_]+")
@@ -108,7 +108,7 @@ class Authenticator:
     async def _authenticate(
         self,
         *args,
-        user_manager: UserManager[models.UC, models.UD],
+        user_manager: BaseUserManager[models.UC, models.UD],
         optional: bool = False,
         active: bool = False,
         verified: bool = False,

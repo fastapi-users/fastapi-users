@@ -8,7 +8,7 @@ from fastapi_users import models
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.manager import (
     InvalidPasswordException,
-    UserManager,
+    BaseUserManager,
     UserManagerDependency,
     UserNotExists,
 )
@@ -32,7 +32,7 @@ def get_reset_password_router(
     async def forgot_password(
         request: Request,
         email: EmailStr = Body(..., embed=True),
-        user_manager: UserManager[models.UC, models.UD] = Depends(get_user_manager),
+        user_manager: BaseUserManager[models.UC, models.UD] = Depends(get_user_manager),
     ):
         try:
             user = await user_manager.get_by_email(email)
@@ -56,7 +56,7 @@ def get_reset_password_router(
         request: Request,
         token: str = Body(...),
         password: str = Body(...),
-        user_manager: UserManager[models.UC, models.UD] = Depends(get_user_manager),
+        user_manager: BaseUserManager[models.UC, models.UD] = Depends(get_user_manager),
     ):
         try:
             data = decode_jwt(

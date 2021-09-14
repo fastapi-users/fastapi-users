@@ -8,7 +8,7 @@ from fastapi_users import models
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.manager import (
     UserAlreadyVerified,
-    UserManager,
+    BaseUserManager,
     UserManagerDependency,
     UserNotExists,
 )
@@ -33,7 +33,7 @@ def get_verify_router(
     async def request_verify_token(
         request: Request,
         email: EmailStr = Body(..., embed=True),
-        user_manager: UserManager[models.UC, models.UD] = Depends(get_user_manager),
+        user_manager: BaseUserManager[models.UC, models.UD] = Depends(get_user_manager),
     ):
         try:
             user = await user_manager.get_by_email(email)
@@ -60,7 +60,7 @@ def get_verify_router(
     async def verify(
         request: Request,
         token: str = Body(..., embed=True),
-        user_manager: UserManager[models.UC, models.UD] = Depends(get_user_manager),
+        user_manager: BaseUserManager[models.UC, models.UD] = Depends(get_user_manager),
     ):
         try:
             data = decode_jwt(

@@ -12,13 +12,13 @@ from tests.conftest import User, UserCreate, UserDB, UserUpdate
 @pytest.mark.asyncio
 async def test_app_client(
     secret,
-    get_mock_user_db,
+    get_user_manager,
     mock_authentication,
     oauth_client,
     get_test_client,
 ) -> AsyncGenerator[httpx.AsyncClient, None]:
     fastapi_users = FastAPIUsers[User, UserCreate, UserUpdate, UserDB](
-        get_mock_user_db,
+        get_user_manager,
         [mock_authentication],
         User,
         UserCreate,

@@ -1,13 +1,11 @@
 from typing import Any, Callable, Dict, Generic, Optional, Sequence, Type
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Request
 
 from fastapi_users import models
 from fastapi_users.authentication import Authenticator, BaseAuthentication
-from fastapi_users.db import BaseUserDatabase
-from fastapi_users.db.base import UserDatabaseDependency
 from fastapi_users.jwt import SecretType
-from fastapi_users.manager import UserManager, ValidatePasswordProtocol
+from fastapi_users.manager import UserManagerDependency
 from fastapi_users.router import (
     get_auth_router,
     get_register_router,
@@ -28,21 +26,19 @@ class FastAPIUsers(Generic[models.U, models.UC, models.UU, models.UD]):
     """
     Main object that ties together the component for users authentication.
 
-    :param get_db: Dependency callable returning a database adapter instance.
+    :param get_user_manager: Dependency callable getter to inject the
+    user manager class instance.
     :param auth_backends: List of authentication backends.
     :param user_model: Pydantic model of a user.
     :param user_create_model: Pydantic model for creating a user.
     :param user_update_model: Pydantic model for updating a user.
     :param user_db_model: Pydantic model of a DB representation of a user.
 
-    :attribute get_user_manager: Dependency callable getter to inject the
-    user manager class instance.
     :attribute current_user: Dependency callable getter to inject authenticated user
     with a specific set of parameters.
     """
 
     authenticator: Authenticator
-    validate_password: Optional[ValidatePasswordProtocol]
     _user_model: Type[models.U]
     _user_create_model: Type[models.UC]
     _user_update_model: Type[models.UU]
@@ -50,18 +46,13 @@ class FastAPIUsers(Generic[models.U, models.UC, models.UU, models.UD]):
 
     def __init__(
         self,
-        get_db: UserDatabaseDependency[models.UD],
+        get_user_manager: UserManagerDependency[models.UC, models.UD],
         auth_backends: Sequence[BaseAuthentication],
         user_model: Type[models.U],
         user_create_model: Type[models.UC],
         user_update_model: Type[models.UU],
         user_db_model: Type[models.UD],
     ):
-        def get_user_manager(
-            user_db: BaseUserDatabase[models.UD] = Depends(get_db),
-        ):
-            return UserManager(user_db_model, user_db)
-
         self.authenticator = Authenticator(auth_backends, get_user_manager)
 
         self._user_model = user_model

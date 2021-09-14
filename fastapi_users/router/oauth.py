@@ -8,7 +8,7 @@ from httpx_oauth.oauth2 import BaseOAuth2
 from fastapi_users import models
 from fastapi_users.authentication import Authenticator
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
-from fastapi_users.manager import UserManager, UserManagerDependency, UserNotExists
+from fastapi_users.manager import BaseUserManager, UserManagerDependency, UserNotExists
 from fastapi_users.password import generate_password, get_password_hash
 from fastapi_users.router.common import ErrorCode, run_handler
 
@@ -83,7 +83,7 @@ def get_oauth_router(
         request: Request,
         response: Response,
         access_token_state=Depends(oauth2_authorize_callback),
-        user_manager: UserManager[models.UC, models.UD] = Depends(get_user_manager),
+        user_manager: BaseUserManager[models.UC, models.UD] = Depends(get_user_manager),
     ):
         token, state = access_token_state
         account_id, account_email = await oauth_client.get_id_email(

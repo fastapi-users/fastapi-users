@@ -15,7 +15,7 @@ from fastapi_users.authentication import Authenticator, BaseAuthentication
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.jwt import SecretType
 from fastapi_users.manager import InvalidPasswordException
-from fastapi_users.manager import UserManager as BaseUserManager
+from fastapi_users.manager import BaseUserManager
 from fastapi_users.manager import UserNotExists
 from fastapi_users.models import BaseOAuthAccount, BaseOAuthAccountMixin
 from fastapi_users.password import get_password_hash

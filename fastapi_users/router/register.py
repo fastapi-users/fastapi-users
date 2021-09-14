@@ -6,7 +6,7 @@ from fastapi_users import models
 from fastapi_users.manager import (
     InvalidPasswordException,
     UserAlreadyExists,
-    UserManager,
+    BaseUserManager,
     UserManagerDependency,
 )
 from fastapi_users.router.common import ErrorCode, run_handler
@@ -27,7 +27,7 @@ def get_register_router(
     async def register(
         request: Request,
         user: user_create_model,  # type: ignore
-        user_manager: UserManager[models.UC, models.UD] = Depends(get_user_manager),
+        user_manager: BaseUserManager[models.UC, models.UD] = Depends(get_user_manager),
     ):
         try:
             created_user = await user_manager.create(user, safe=True)

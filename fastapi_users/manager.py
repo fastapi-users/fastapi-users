@@ -1,11 +1,6 @@
-from typing import Any, Awaitable, Callable, Dict, Generic, Optional, Type, Union
+from typing import Any, Callable, Dict, Generic, Optional, Type, Union
 
 from pydantic.types import UUID4
-
-try:
-    from typing import Protocol
-except ImportError:  # pragma: no cover
-    from typing_extensions import Protocol  # type: ignore
 
 from fastapi.security import OAuth2PasswordRequestForm
 
@@ -35,14 +30,7 @@ class InvalidPasswordException(FastAPIUsersException):
         self.reason = reason
 
 
-class ValidatePasswordProtocol(Protocol):  # pragma: no cover
-    def __call__(
-        self, password: str, user: Union[models.UC, models.UD]
-    ) -> Awaitable[None]:
-        pass
-
-
-class UserManager(Generic[models.UC, models.UD]):
+class BaseUserManager(Generic[models.UC, models.UD]):
 
     user_db_model: Type[models.UD]
     user_db: BaseUserDatabase[models.UD]
@@ -115,7 +103,7 @@ class UserManager(Generic[models.UC, models.UD]):
     async def validate_password(
         self, password: str, user: Union[models.UC, models.UD]
     ) -> None:
-        return
+        return  # pragma: no cover
 
     async def authenticate(
         self, credentials: OAuth2PasswordRequestForm
@@ -164,4 +152,4 @@ class UserManager(Generic[models.UC, models.UD]):
         return updated_user
 
 
-UserManagerDependency = Callable[..., UserManager[models.UC, models.UD]]
+UserManagerDependency = Callable[..., BaseUserManager[models.UC, models.UD]]

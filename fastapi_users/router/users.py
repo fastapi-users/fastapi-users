@@ -8,7 +8,7 @@ from fastapi_users.authentication import Authenticator
 from fastapi_users.manager import (
     InvalidPasswordException,
     UserAlreadyExists,
-    UserManager,
+    BaseUserManager,
     UserManagerDependency,
     UserNotExists,
 )
@@ -36,7 +36,7 @@ def get_users_router(
 
     async def get_user_or_404(
         id: UUID4,
-        user_manager: UserManager[models.UC, models.UD] = Depends(get_user_manager),
+        user_manager: BaseUserManager[models.UC, models.UD] = Depends(get_user_manager),
     ) -> models.UD:
         try:
             return await user_manager.get(id)
@@ -58,7 +58,7 @@ def get_users_router(
         request: Request,
         user_update: user_update_model,  # type: ignore
         user: user_db_model = Depends(get_current_active_user),  # type: ignore
-        user_manager: UserManager[models.UC, models.UD] = Depends(get_user_manager),
+        user_manager: BaseUserManager[models.UC, models.UD] = Depends(get_user_manager),
     ):
         try:
             updated_user = await user_manager.update(user_update, user, safe=True)
@@ -101,7 +101,7 @@ def get_users_router(
         user_update: user_update_model,  # type: ignore
         request: Request,
         user=Depends(get_user_or_404),
-        user_manager: UserManager[models.UC, models.UD] = Depends(get_user_manager),
+        user_manager: BaseUserManager[models.UC, models.UD] = Depends(get_user_manager),
     ):
         try:
             updated_user = await user_manager.update(user_update, user, safe=False)
@@ -135,7 +135,7 @@ def get_users_router(
     )
     async def delete_user(
         user=Depends(get_user_or_404),
-        user_manager: UserManager[models.UC, models.UD] = Depends(get_user_manager),
+        user_manager: BaseUserManager[models.UC, models.UD] = Depends(get_user_manager),
     ):
         await user_manager.delete(user)
         return None

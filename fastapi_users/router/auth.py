@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 from fastapi_users import models
 from fastapi_users.authentication import Authenticator, BaseAuthentication
-from fastapi_users.manager import UserManager, UserManagerDependency
+from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from fastapi_users.router.common import ErrorCode
 
 
@@ -23,7 +23,7 @@ def get_auth_router(
     async def login(
         response: Response,
         credentials: OAuth2PasswordRequestForm = Depends(),
-        user_manager: UserManager[models.UC, models.UD] = Depends(get_user_manager),
+        user_manager: BaseUserManager[models.UC, models.UD] = Depends(get_user_manager),
     ):
         user = await user_manager.authenticate(credentials)
 

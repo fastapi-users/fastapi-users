@@ -8,7 +8,7 @@ from pydantic import UUID4
 from fastapi_users import models
 from fastapi_users.authentication import BaseAuthentication
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
-from fastapi_users.manager import UserManager, UserNotExists
+from fastapi_users.manager import BaseUserManager, UserNotExists
 
 
 class CookieAuthentication(
@@ -69,7 +69,7 @@ class CookieAuthentication(
     async def __call__(
         self,
         credentials: Optional[str],
-        user_manager: UserManager[models.UC, models.UD],
+        user_manager: BaseUserManager[models.UC, models.UD],
     ) -> Optional[models.UD]:
         if credentials is None:
             return None
