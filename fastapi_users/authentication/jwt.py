@@ -5,10 +5,10 @@ from fastapi import Response
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import UUID4
 
+from fastapi_users import models
 from fastapi_users.authentication.base import BaseAuthentication
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.manager import UserManager, UserNotExists
-from fastapi_users.models import BaseUserDB
 
 
 class JWTAuthentication(BaseAuthentication[str]):
@@ -44,8 +44,8 @@ class JWTAuthentication(BaseAuthentication[str]):
     async def __call__(
         self,
         credentials: Optional[str],
-        user_manager: UserManager,
-    ) -> Optional[BaseUserDB]:
+        user_manager: UserManager[models.UD],
+    ) -> Optional[models.UD]:
         if credentials is None:
             return None
 
@@ -65,10 +65,10 @@ class JWTAuthentication(BaseAuthentication[str]):
         except UserNotExists:
             return None
 
-    async def get_login_response(self, user: BaseUserDB, response: Response) -> Any:
+    async def get_login_response(self, user: models.UD, response: Response) -> Any:
         token = await self._generate_token(user)
         return {"access_token": token, "token_type": "bearer"}
 
-    async def _generate_token(self, user: BaseUserDB) -> str:
+    async def _generate_token(self, user: models.UD) -> str:
         data = {"user_id": str(user.id), "aud": self.token_audience}
         return generate_jwt(data, self.secret, self.lifetime_seconds)

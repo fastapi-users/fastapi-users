@@ -37,7 +37,7 @@ class InvalidPasswordException(FastAPIUsersException):
 
 class ValidatePasswordProtocol(Protocol):  # pragma: no cover
     def __call__(
-        self, password: str, user: Union[models.BaseUserCreate, models.BaseUserDB]
+        self, password: str, user: Union[models.UC, models.UD]
     ) -> Awaitable[None]:
         pass
 
@@ -82,9 +82,7 @@ class UserManager(Generic[models.UD]):
 
         return user
 
-    async def create(
-        self, user: models.BaseUserCreate, safe: bool = False
-    ) -> models.UD:
+    async def create(self, user: models.UC, safe: bool = False) -> models.UD:
         if self.validate_password:
             await self.validate_password(user.password, user)
 
@@ -107,7 +105,7 @@ class UserManager(Generic[models.UD]):
         return await self.user_db.update(user)
 
     async def update(
-        self, updated_user: models.BaseUserUpdate, user: models.UD, safe: bool = False
+        self, updated_user: models.UU, user: models.UD, safe: bool = False
     ) -> models.UD:
         if safe:
             updated_user_data = updated_user.create_update_dict()

@@ -5,11 +5,11 @@ from typing import Optional, Sequence
 from fastapi import Depends, HTTPException, status
 from makefun import with_signature
 
+from fastapi_users import models
 from fastapi_users.authentication.base import BaseAuthentication  # noqa: F401
 from fastapi_users.authentication.cookie import CookieAuthentication  # noqa: F401
 from fastapi_users.authentication.jwt import JWTAuthentication  # noqa: F401
 from fastapi_users.manager import UserManager, UserManagerDependency
-from fastapi_users.models import BaseUserDB
 
 INVALID_CHARS_PATTERN = re.compile(r"[^0-9a-zA-Z_]")
 INVALID_LEADING_CHARS_PATTERN = re.compile(r"^[^a-zA-Z_]+")
@@ -43,7 +43,7 @@ class Authenticator:
     def __init__(
         self,
         backends: Sequence[BaseAuthentication],
-        get_user_manager: UserManagerDependency,
+        get_user_manager: UserManagerDependency[models.UD],
     ):
         self.backends = backends
         self.get_user_manager = get_user_manager
@@ -108,14 +108,14 @@ class Authenticator:
     async def _authenticate(
         self,
         *args,
-        user_manager: UserManager,
+        user_manager: UserManager[models.UD],
         optional: bool = False,
         active: bool = False,
         verified: bool = False,
         superuser: bool = False,
         **kwargs
-    ) -> Optional[BaseUserDB]:
-        user: Optional[BaseUserDB] = None
+    ) -> Optional[models.UD]:
+        user: Optional[models.UD] = None
         for backend in self.backends:
             token: str = kwargs[name_to_variable_name(backend.name)]
             if token:

@@ -4,9 +4,9 @@ import pytest
 from fastapi import Request, status
 from fastapi.security.base import SecurityBase
 
+from fastapi_users import models
 from fastapi_users.authentication import BaseAuthentication, DuplicateBackendNamesError
 from fastapi_users.manager import UserManager
-from fastapi_users.models import BaseUserDB
 
 
 class MockSecurityScheme(SecurityBase):
@@ -20,20 +20,20 @@ class BackendNone(BaseAuthentication[str]):
         self.scheme = MockSecurityScheme()
 
     async def __call__(
-        self, credentials: Optional[str], user_manager: UserManager
-    ) -> Optional[BaseUserDB]:
+        self, credentials: Optional[str], user_manager: UserManager[models.UD]
+    ) -> Optional[models.UD]:
         return None
 
 
 class BackendUser(BaseAuthentication[str]):
-    def __init__(self, user: BaseUserDB, name="user"):
+    def __init__(self, user: models.UD, name="user"):
         super().__init__(name, logout=False)
         self.scheme = MockSecurityScheme()
         self.user = user
 
     async def __call__(
-        self, credentials: Optional[str], user_manager: UserManager
-    ) -> Optional[BaseUserDB]:
+        self, credentials: Optional[str], user_manager: UserManager[models.UD]
+    ) -> Optional[models.UD]:
         return self.user
 
 

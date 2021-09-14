@@ -5,10 +5,10 @@ from fastapi import Response
 from fastapi.security import APIKeyCookie
 from pydantic import UUID4
 
+from fastapi_users import models
 from fastapi_users.authentication import BaseAuthentication
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.manager import UserManager, UserNotExists
-from fastapi_users.models import BaseUserDB
 
 
 class CookieAuthentication(BaseAuthentication[str]):
@@ -67,8 +67,8 @@ class CookieAuthentication(BaseAuthentication[str]):
     async def __call__(
         self,
         credentials: Optional[str],
-        user_manager: UserManager,
-    ) -> Optional[BaseUserDB]:
+        user_manager: UserManager[models.UD],
+    ) -> Optional[models.UD]:
         if credentials is None:
             return None
 
@@ -88,7 +88,7 @@ class CookieAuthentication(BaseAuthentication[str]):
         except UserNotExists:
             return None
 
-    async def get_login_response(self, user: BaseUserDB, response: Response) -> Any:
+    async def get_login_response(self, user: models.UD, response: Response) -> Any:
         token = await self._generate_token(user)
         response.set_cookie(
             self.cookie_name,
@@ -105,11 +105,11 @@ class CookieAuthentication(BaseAuthentication[str]):
         # so that FastAPI can terminate it properly
         return None
 
-    async def get_logout_response(self, user: BaseUserDB, response: Response) -> Any:
+    async def get_logout_response(self, user: models.UD, response: Response) -> Any:
         response.delete_cookie(
             self.cookie_name, path=self.cookie_path, domain=self.cookie_domain
         )
 
-    async def _generate_token(self, user: BaseUserDB) -> str:
+    async def _generate_token(self, user: models.UD) -> str:
         data = {"user_id": str(user.id), "aud": self.token_audience}
         return generate_jwt(data, self.secret, self.lifetime_seconds)

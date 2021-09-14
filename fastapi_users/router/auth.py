@@ -9,7 +9,7 @@ from fastapi_users.router.common import ErrorCode
 
 def get_auth_router(
     backend: BaseAuthentication,
-    get_user_manager: UserManagerDependency[models.BaseUserDB],
+    get_user_manager: UserManagerDependency[models.UD],
     authenticator: Authenticator,
     requires_verification: bool = False,
 ) -> APIRouter:
@@ -23,7 +23,7 @@ def get_auth_router(
     async def login(
         response: Response,
         credentials: OAuth2PasswordRequestForm = Depends(),
-        user_manager: UserManager[models.BaseUserDB] = Depends(get_user_manager),
+        user_manager: UserManager[models.UD] = Depends(get_user_manager),
     ):
         user = await user_manager.authenticate(credentials)
 

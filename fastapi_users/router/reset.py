@@ -20,7 +20,7 @@ RESET_PASSWORD_TOKEN_AUDIENCE = "fastapi-users:reset"
 
 
 def get_reset_password_router(
-    get_user_manager: UserManagerDependency[models.BaseUserDB],
+    get_user_manager: UserManagerDependency[models.UD],
     reset_password_token_secret: SecretType,
     reset_password_token_lifetime_seconds: int = 3600,
     after_forgot_password: Optional[Callable[[models.UD, str, Request], None]] = None,

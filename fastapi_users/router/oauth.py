@@ -24,8 +24,8 @@ def generate_state_token(
 
 def get_oauth_router(
     oauth_client: BaseOAuth2,
-    get_user_manager: UserManagerDependency[models.BaseUserDB],
-    user_db_model: Type[models.BaseUserDB],
+    get_user_manager: UserManagerDependency[models.UD],
+    user_db_model: Type[models.UD],
     authenticator: Authenticator,
     state_secret: SecretType,
     redirect_url: str = None,
@@ -83,7 +83,7 @@ def get_oauth_router(
         request: Request,
         response: Response,
         access_token_state=Depends(oauth2_authorize_callback),
-        user_manager: UserManager[models.BaseUserDB] = Depends(get_user_manager),
+        user_manager: UserManager[models.UD] = Depends(get_user_manager),
     ):
         token, state = access_token_state
         account_id, account_email = await oauth_client.get_id_email(

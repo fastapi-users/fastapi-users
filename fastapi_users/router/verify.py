@@ -19,7 +19,7 @@ VERIFY_USER_TOKEN_AUDIENCE = "fastapi-users:verify"
 
 def get_verify_router(
     get_user_manager: UserManagerDependency[models.UD],
-    user_model: Type[models.BaseUser],
+    user_model: Type[models.U],
     verification_token_secret: SecretType,
     verification_token_lifetime_seconds: int = 3600,
     after_verification_request: Optional[

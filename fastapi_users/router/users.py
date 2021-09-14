@@ -17,9 +17,9 @@ from fastapi_users.router.common import ErrorCode, run_handler
 
 def get_users_router(
     get_user_manager: UserManagerDependency[models.UD],
-    user_model: Type[models.BaseUser],
-    user_update_model: Type[models.BaseUserUpdate],
-    user_db_model: Type[models.BaseUserDB],
+    user_model: Type[models.U],
+    user_update_model: Type[models.UU],
+    user_db_model: Type[models.UD],
     authenticator: Authenticator,
     after_update: Optional[Callable[[models.UD, Dict[str, Any], Request], None]] = None,
     requires_verification: bool = False,
@@ -36,7 +36,7 @@ def get_users_router(
 
     async def get_user_or_404(
         id: UUID4, user_manager: UserManager[models.UD] = Depends(get_user_manager)
-    ) -> models.BaseUserDB:
+    ) -> models.UD:
         try:
             return await user_manager.get(id)
         except UserNotExists:

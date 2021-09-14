@@ -1,4 +1,4 @@
-from typing import Any, Callable, Dict, Optional, Sequence, Type
+from typing import Any, Callable, Dict, Generic, Optional, Sequence, Type
 
 from fastapi import APIRouter, Depends, Request
 
@@ -24,7 +24,7 @@ except ModuleNotFoundError:  # pragma: no cover
     BaseOAuth2 = Type  # type: ignore
 
 
-class FastAPIUsers:
+class FastAPIUsers(Generic[models.U, models.UC, models.UU, models.UD]):
     """
     Main object that ties together the component for users authentication.
 
@@ -45,19 +45,19 @@ class FastAPIUsers:
 
     authenticator: Authenticator
     validate_password: Optional[ValidatePasswordProtocol]
-    _user_model: Type[models.BaseUser]
-    _user_create_model: Type[models.BaseUserCreate]
-    _user_update_model: Type[models.BaseUserUpdate]
-    _user_db_model: Type[models.BaseUserDB]
+    _user_model: Type[models.U]
+    _user_create_model: Type[models.UC]
+    _user_update_model: Type[models.UU]
+    _user_db_model: Type[models.UD]
 
     def __init__(
         self,
-        get_db: UserDatabaseDependency,
+        get_db: UserDatabaseDependency[models.UD],
         auth_backends: Sequence[BaseAuthentication],
-        user_model: Type[models.BaseUser],
-        user_create_model: Type[models.BaseUserCreate],
-        user_update_model: Type[models.BaseUserUpdate],
-        user_db_model: Type[models.BaseUserDB],
+        user_model: Type[models.U],
+        user_create_model: Type[models.UC],
+        user_update_model: Type[models.UU],
+        user_db_model: Type[models.UD],
         validate_password: Optional[ValidatePasswordProtocol] = None,
     ):
         def get_user_manager(
