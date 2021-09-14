@@ -54,14 +54,14 @@ def after_reset_password(request):
 @pytest.mark.asyncio
 async def test_app_client(
     secret,
-    mock_user_db,
+    get_user_manager,
     after_forgot_password,
     after_reset_password,
     get_test_client,
     validate_password,
 ) -> AsyncGenerator[httpx.AsyncClient, None]:
     reset_router = get_reset_password_router(
-        mock_user_db,
+        get_user_manager,
         secret,
         LIFETIME,
         after_forgot_password,

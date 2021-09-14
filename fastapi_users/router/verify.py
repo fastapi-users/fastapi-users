@@ -1,25 +1,24 @@
-from typing import Callable, Optional, Type, cast
+from typing import Callable, Optional, Type
 
 import jwt
-from fastapi import APIRouter, Body, HTTPException, Request, status
+from fastapi import APIRouter, Body, Depends, HTTPException, Request, status
 from pydantic import UUID4, EmailStr
 
 from fastapi_users import models
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
-from fastapi_users.router.common import ErrorCode, run_handler
-from fastapi_users.user import (
-    GetUserProtocol,
+from fastapi_users.manager import (
     UserAlreadyVerified,
+    UserManager,
+    UserManagerDependency,
     UserNotExists,
-    VerifyUserProtocol,
 )
+from fastapi_users.router.common import ErrorCode, run_handler
 
 VERIFY_USER_TOKEN_AUDIENCE = "fastapi-users:verify"
 
 
 def get_verify_router(
-    verify_user: VerifyUserProtocol,
-    get_user: GetUserProtocol,
+    get_user_manager: UserManagerDependency[models.UD],
     user_model: Type[models.BaseUser],
     verification_token_secret: SecretType,
     verification_token_lifetime_seconds: int = 3600,
@@ -32,10 +31,12 @@ def get_verify_router(
 
     @router.post("/request-verify-token", status_code=status.HTTP_202_ACCEPTED)
     async def request_verify_token(
-        request: Request, email: EmailStr = Body(..., embed=True)
+        request: Request,
+        email: EmailStr = Body(..., embed=True),
+        user_manager: UserManager[models.UD] = Depends(get_user_manager),
     ):
         try:
-            user = await get_user(email)
+            user = await user_manager.get_by_email(email)
             if not user.is_verified and user.is_active:
                 token_data = {
                     "user_id": str(user.id),
@@ -56,7 +57,11 @@ def get_verify_router(
         return None
 
     @router.post("/verify", response_model=user_model)
-    async def verify(request: Request, token: str = Body(..., embed=True)):
+    async def verify(
+        request: Request,
+        token: str = Body(..., embed=True),
+        user_manager: UserManager[models.UD] = Depends(get_user_manager),
+    ):
         try:
             data = decode_jwt(
                 token, verification_token_secret, [VERIFY_USER_TOKEN_AUDIENCE]
@@ -72,17 +77,17 @@ def get_verify_router(
                 detail=ErrorCode.VERIFY_USER_BAD_TOKEN,
             )
 
-        user_id = data.get("user_id")
-        email = cast(EmailStr, data.get("email"))
-
-        if user_id is None:
+        try:
+            user_id = data["user_id"]
+            email = data["email"]
+        except KeyError:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=ErrorCode.VERIFY_USER_BAD_TOKEN,
             )
 
         try:
-            user_check = await get_user(email)
+            user_check = await user_manager.get_by_email(email)
         except UserNotExists:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -104,7 +109,7 @@ def get_verify_router(
             )
 
         try:
-            user = await verify_user(user_check)
+            user = await user_manager.verify(user_check)
         except UserAlreadyVerified:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,

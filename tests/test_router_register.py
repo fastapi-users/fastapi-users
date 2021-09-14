@@ -7,8 +7,7 @@ import pytest
 from fastapi import FastAPI, Request, status
 
 from fastapi_users.router import ErrorCode, get_register_router
-from fastapi_users.user import get_create_user
-from tests.conftest import User, UserCreate, UserDB
+from tests.conftest import User, UserCreate
 
 
 def after_register_sync():
@@ -27,15 +26,13 @@ def after_register(request):
 @pytest.fixture
 @pytest.mark.asyncio
 async def test_app_client(
-    mock_user_db, after_register, get_test_client, validate_password
+    get_user_manager, after_register, get_test_client
 ) -> AsyncGenerator[httpx.AsyncClient, None]:
-    create_user = get_create_user(mock_user_db, UserDB)
     register_router = get_register_router(
-        create_user,
+        get_user_manager,
         User,
         UserCreate,
         after_register,
-        validate_password,
     )
 
     app = FastAPI()

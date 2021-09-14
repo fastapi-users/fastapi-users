@@ -7,8 +7,8 @@ from httpx_oauth.oauth2 import BaseOAuth2
 
 from fastapi_users import models
 from fastapi_users.authentication import Authenticator
-from fastapi_users.db import BaseUserDatabase
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
+from fastapi_users.manager import UserManager, UserManagerDependency, UserNotExists
 from fastapi_users.password import generate_password, get_password_hash
 from fastapi_users.router.common import ErrorCode, run_handler
 
@@ -24,7 +24,7 @@ def generate_state_token(
 
 def get_oauth_router(
     oauth_client: BaseOAuth2,
-    user_db: BaseUserDatabase[models.BaseUserDB],
+    get_user_manager: UserManagerDependency[models.BaseUserDB],
     user_db_model: Type[models.BaseUserDB],
     authenticator: Authenticator,
     state_secret: SecretType,
@@ -83,6 +83,7 @@ def get_oauth_router(
         request: Request,
         response: Response,
         access_token_state=Depends(oauth2_authorize_callback),
+        user_manager: UserManager[models.BaseUserDB] = Depends(get_user_manager),
     ):
         token, state = access_token_state
         account_id, account_email = await oauth_client.get_id_email(
@@ -94,8 +95,6 @@ def get_oauth_router(
         except jwt.DecodeError:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
 
-        user = await user_db.get_by_oauth_account(oauth_client.name, account_id)
-
         new_oauth_account = models.BaseOAuthAccount(
             oauth_name=oauth_client.name,
             access_token=token["access_token"],
@@ -105,13 +104,17 @@ def get_oauth_router(
             account_email=account_email,
         )
 
-        if not user:
-            user = await user_db.get_by_email(account_email)
-            if user:
+        try:
+            user = await user_manager.get_by_oauth_account(
+                oauth_client.name, account_id
+            )
+        except UserNotExists:
+            try:
                 # Link account
+                user = await user_manager.get_by_email(account_email)
                 user.oauth_accounts.append(new_oauth_account)  # type: ignore
-                await user_db.update(user)
-            else:
+                await user_manager.user_db.update(user)
+            except UserNotExists:
                 # Create account
                 password = generate_password()
                 user = user_db_model(
@@ -119,7 +122,7 @@ def get_oauth_router(
                     hashed_password=get_password_hash(password),
                     oauth_accounts=[new_oauth_account],
                 )
-                await user_db.create(user)
+                await user_manager.user_db.create(user)
                 if after_register:
                     await run_handler(after_register, user, request)
         else:
@@ -131,7 +134,7 @@ def get_oauth_router(
                 else:
                     updated_oauth_accounts.append(oauth_account)
             user.oauth_accounts = updated_oauth_accounts  # type: ignore
-            await user_db.update(user)
+            await user_manager.user_db.update(user)
 
         if not user.is_active:
             raise HTTPException(

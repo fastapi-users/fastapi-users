@@ -8,7 +8,6 @@ from fastapi import FastAPI, status
 
 from fastapi_users.jwt import generate_jwt
 from fastapi_users.router import ErrorCode, get_verify_router
-from fastapi_users.user import get_get_user, get_verify_user
 from tests.conftest import User, UserDB
 
 LIFETIME = 3600
@@ -60,16 +59,13 @@ def after_verification_request(request):
 @pytest.mark.asyncio
 async def test_app_client(
     secret,
-    mock_user_db,
+    get_user_manager,
     after_verification_request,
     after_verification,
     get_test_client,
 ) -> AsyncGenerator[httpx.AsyncClient, None]:
-    verify_user = get_verify_user(mock_user_db)
-    get_user = get_get_user(mock_user_db)
     verify_router = get_verify_router(
-        verify_user,
-        get_user,
+        get_user_manager,
         User,
         secret,
         LIFETIME,

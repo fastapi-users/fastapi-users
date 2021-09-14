@@ -1,21 +1,26 @@
 from typing import Callable, Optional
 
 import jwt
-from fastapi import APIRouter, Body, HTTPException, Request, status
+from fastapi import APIRouter, Body, Depends, HTTPException, Request, status
 from pydantic import UUID4, EmailStr
 
 from fastapi_users import models
-from fastapi_users.db import BaseUserDatabase
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
+from fastapi_users.manager import (
+    InvalidPasswordException,
+    UserManager,
+    UserManagerDependency,
+    UserNotExists,
+    ValidatePasswordProtocol,
+)
 from fastapi_users.password import get_password_hash
 from fastapi_users.router.common import ErrorCode, run_handler
-from fastapi_users.user import InvalidPasswordException, ValidatePasswordProtocol
 
 RESET_PASSWORD_TOKEN_AUDIENCE = "fastapi-users:reset"
 
 
 def get_reset_password_router(
-    user_db: BaseUserDatabase[models.BaseUserDB],
+    get_user_manager: UserManagerDependency[models.BaseUserDB],
     reset_password_token_secret: SecretType,
     reset_password_token_lifetime_seconds: int = 3600,
     after_forgot_password: Optional[Callable[[models.UD, str, Request], None]] = None,
@@ -27,11 +32,16 @@ def get_reset_password_router(
 
     @router.post("/forgot-password", status_code=status.HTTP_202_ACCEPTED)
     async def forgot_password(
-        request: Request, email: EmailStr = Body(..., embed=True)
+        request: Request,
+        email: EmailStr = Body(..., embed=True),
+        user_manager: UserManager[models.UD] = Depends(get_user_manager),
     ):
-        user = await user_db.get_by_email(email)
+        try:
+            user = await user_manager.get_by_email(email)
+        except UserNotExists:
+            return None
 
-        if user is not None and user.is_active:
+        if user.is_active:
             token_data = {"user_id": str(user.id), "aud": RESET_PASSWORD_TOKEN_AUDIENCE}
             token = generate_jwt(
                 token_data,
@@ -45,7 +55,10 @@ def get_reset_password_router(
 
     @router.post("/reset-password")
     async def reset_password(
-        request: Request, token: str = Body(...), password: str = Body(...)
+        request: Request,
+        token: str = Body(...),
+        password: str = Body(...),
+        user_manager: UserManager[models.UD] = Depends(get_user_manager),
     ):
         try:
             data = decode_jwt(
@@ -66,8 +79,15 @@ def get_reset_password_router(
                     detail=ErrorCode.RESET_PASSWORD_BAD_TOKEN,
                 )
 
-            user = await user_db.get(user_uiid)
-            if user is None or not user.is_active:
+            try:
+                user = await user_manager.get(user_uiid)
+            except UserNotExists:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=ErrorCode.RESET_PASSWORD_BAD_TOKEN,
+                )
+
+            if not user.is_active:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail=ErrorCode.RESET_PASSWORD_BAD_TOKEN,
@@ -86,7 +106,7 @@ def get_reset_password_router(
                     )
 
             user.hashed_password = get_password_hash(password)
-            await user_db.update(user)
+            await user_manager.user_db.update(user)
             if after_reset_password:
                 await run_handler(after_reset_password, user, request)
         except jwt.PyJWTError:

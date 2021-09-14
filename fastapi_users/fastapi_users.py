@@ -1,26 +1,19 @@
 from typing import Any, Callable, Dict, Optional, Sequence, Type
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Depends, Request
 
 from fastapi_users import models
 from fastapi_users.authentication import Authenticator, BaseAuthentication
 from fastapi_users.db import BaseUserDatabase
+from fastapi_users.db.base import UserDatabaseDependency
 from fastapi_users.jwt import SecretType
+from fastapi_users.manager import UserManager, ValidatePasswordProtocol
 from fastapi_users.router import (
     get_auth_router,
     get_register_router,
     get_reset_password_router,
     get_users_router,
     get_verify_router,
-)
-from fastapi_users.user import (
-    CreateUserProtocol,
-    GetUserProtocol,
-    ValidatePasswordProtocol,
-    VerifyUserProtocol,
-    get_create_user,
-    get_get_user,
-    get_verify_user,
 )
 
 try:
@@ -35,7 +28,7 @@ class FastAPIUsers:
     """
     Main object that ties together the component for users authentication.
 
-    :param db: Database adapter instance.
+    :param get_db: Dependency callable returning a database adapter instance.
     :param auth_backends: List of authentication backends.
     :param user_model: Pydantic model of a user.
     :param user_create_model: Pydantic model for creating a user.
@@ -44,16 +37,13 @@ class FastAPIUsers:
     :param validate_password: Optional function to validate the password
     at user registration, user update or password reset.
 
-    :attribute create_user: Helper function to create a user programmatically.
+    :attribute get_user_manager: Dependency callable getter to inject the
+    user manager class instance.
     :attribute current_user: Dependency callable getter to inject authenticated user
     with a specific set of parameters.
     """
 
-    db: BaseUserDatabase
     authenticator: Authenticator
-    create_user: CreateUserProtocol
-    verify_user: VerifyUserProtocol
-    get_user: GetUserProtocol
     validate_password: Optional[ValidatePasswordProtocol]
     _user_model: Type[models.BaseUser]
     _user_create_model: Type[models.BaseUserCreate]
@@ -62,7 +52,7 @@ class FastAPIUsers:
 
     def __init__(
         self,
-        db: BaseUserDatabase,
+        get_db: UserDatabaseDependency,
         auth_backends: Sequence[BaseAuthentication],
         user_model: Type[models.BaseUser],
         user_create_model: Type[models.BaseUserCreate],
@@ -70,8 +60,12 @@ class FastAPIUsers:
         user_db_model: Type[models.BaseUserDB],
         validate_password: Optional[ValidatePasswordProtocol] = None,
     ):
-        self.db = db
-        self.authenticator = Authenticator(auth_backends, db)
+        def get_user_manager(
+            user_db: BaseUserDatabase[models.UD] = Depends(get_db),
+        ):
+            return UserManager(user_db_model, user_db, validate_password)
+
+        self.authenticator = Authenticator(auth_backends, get_user_manager)
 
         self._user_model = user_model
         self._user_db_model = user_db_model
@@ -79,12 +73,9 @@ class FastAPIUsers:
         self._user_update_model = user_update_model
         self._user_db_model = user_db_model
 
-        self.create_user = get_create_user(db, user_db_model)
-        self.verify_user = get_verify_user(db)
-        self.get_user = get_get_user(db)
-
         self.validate_password = validate_password
 
+        self.get_user_manager = get_user_manager
         self.current_user = self.authenticator.current_user
 
     def get_register_router(
@@ -98,11 +89,10 @@ class FastAPIUsers:
         after a successful registration.
         """
         return get_register_router(
-            self.create_user,
+            self.get_user_manager,
             self._user_model,
             self._user_create_model,
             after_register,
-            self.validate_password,
         )
 
     def get_verify_router(
@@ -125,8 +115,7 @@ class FastAPIUsers:
         verification.
         """
         return get_verify_router(
-            self.verify_user,
-            self.get_user,
+            self.get_user_manager,
             self._user_model,
             verification_token_secret,
             verification_token_lifetime_seconds,
@@ -154,12 +143,11 @@ class FastAPIUsers:
         password reset.
         """
         return get_reset_password_router(
-            self.db,
+            self.get_user_manager,
             reset_password_token_secret,
             reset_password_token_lifetime_seconds,
             after_forgot_password,
             after_reset_password,
-            self.validate_password,
         )
 
     def get_auth_router(
@@ -174,7 +162,7 @@ class FastAPIUsers:
         """
         return get_auth_router(
             backend,
-            self.db,
+            self.get_user_manager,
             self.authenticator,
             requires_verification,
         )
@@ -198,7 +186,7 @@ class FastAPIUsers:
         """
         return get_oauth_router(
             oauth_client,
-            self.db,
+            self.get_user_manager,
             self._user_db_model,
             self.authenticator,
             state_secret,
@@ -222,12 +210,11 @@ class FastAPIUsers:
         require the users to be verified or not.
         """
         return get_users_router(
-            self.db,
+            self.get_user_manager,
             self._user_model,
             self._user_update_model,
             self._user_db_model,
             self.authenticator,
             after_update,
             requires_verification,
-            self.validate_password,
         )

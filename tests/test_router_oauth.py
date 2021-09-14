@@ -28,7 +28,7 @@ def after_register(request):
 @pytest.fixture
 def get_test_app_client(
     secret,
-    mock_user_db_oauth,
+    get_user_manager_oauth,
     mock_authentication,
     oauth_client,
     after_register,
@@ -39,12 +39,12 @@ def get_test_app_client(
     ) -> AsyncGenerator[httpx.AsyncClient, None]:
         mock_authentication_bis = MockAuthentication(name="mock-bis")
         authenticator = Authenticator(
-            [mock_authentication, mock_authentication_bis], mock_user_db_oauth
+            [mock_authentication, mock_authentication_bis], get_user_manager_oauth
         )
 
         oauth_router = get_oauth_router(
             oauth_client,
-            mock_user_db_oauth,
+            get_user_manager_oauth,
             UserDB,
             authenticator,
             secret,

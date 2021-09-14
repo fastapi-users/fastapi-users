@@ -6,8 +6,8 @@ from fastapi.security import APIKeyCookie
 from pydantic import UUID4
 
 from fastapi_users.authentication import BaseAuthentication
-from fastapi_users.db.base import BaseUserDatabase
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
+from fastapi_users.manager import UserManager, UserNotExists
 from fastapi_users.models import BaseUserDB
 
 
@@ -67,7 +67,7 @@ class CookieAuthentication(BaseAuthentication[str]):
     async def __call__(
         self,
         credentials: Optional[str],
-        user_db: BaseUserDatabase,
+        user_manager: UserManager,
     ) -> Optional[BaseUserDB]:
         if credentials is None:
             return None
@@ -82,8 +82,10 @@ class CookieAuthentication(BaseAuthentication[str]):
 
         try:
             user_uiid = UUID4(user_id)
-            return await user_db.get(user_uiid)
+            return await user_manager.get(user_uiid)
         except ValueError:
+            return None
+        except UserNotExists:
             return None
 
     async def get_login_response(self, user: BaseUserDB, response: Response) -> Any:

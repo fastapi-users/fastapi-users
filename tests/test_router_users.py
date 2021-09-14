@@ -25,22 +25,21 @@ def after_update(request):
 
 
 @pytest.fixture
-def app_factory(mock_user_db, mock_authentication, after_update, validate_password):
+def app_factory(get_user_manager, mock_authentication, after_update, validate_password):
     def _app_factory(requires_verification: bool) -> FastAPI:
         mock_authentication_bis = MockAuthentication(name="mock-bis")
         authenticator = Authenticator(
-            [mock_authentication, mock_authentication_bis], mock_user_db
+            [mock_authentication, mock_authentication_bis], get_user_manager
         )
 
         user_router = get_users_router(
-            mock_user_db,
+            get_user_manager,
             User,
             UserUpdate,
             UserDB,
             authenticator,
             after_update,
             requires_verification=requires_verification,
-            validate_password=validate_password,
         )
 
         app = FastAPI()
