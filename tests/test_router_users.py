@@ -25,7 +25,7 @@ def after_update(request):
 
 
 @pytest.fixture
-def app_factory(get_user_manager, mock_authentication, after_update, validate_password):
+def app_factory(get_user_manager, mock_authentication, after_update):
     def _app_factory(requires_verification: bool) -> FastAPI:
         mock_authentication_bis = MockAuthentication(name="mock-bis")
         authenticator = Authenticator(
@@ -168,7 +168,6 @@ class TestUpdateMe:
         test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
         after_update,
-        validate_password,
     ):
         client, requires_verification = test_app_client
         response = await client.patch(
@@ -186,7 +185,6 @@ class TestUpdateMe:
                 "code": ErrorCode.UPDATE_USER_INVALID_PASSWORD,
                 "reason": "Password should be at least 3 characters",
             }
-            validate_password.assert_called_with("m", user)
             assert after_update.called is False
 
     async def test_empty_body(
@@ -751,7 +749,6 @@ class TestUpdateUser:
         user: UserDB,
         verified_superuser: UserDB,
         after_update,
-        validate_password,
     ):
         client, _ = test_app_client
         response = await client.patch(
@@ -765,7 +762,6 @@ class TestUpdateUser:
             "code": ErrorCode.UPDATE_USER_INVALID_PASSWORD,
             "reason": "Password should be at least 3 characters",
         }
-        validate_password.assert_called_with("m", user)
         assert after_update.called is False
 
     async def test_valid_body_verified_superuser(

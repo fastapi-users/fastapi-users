@@ -18,7 +18,7 @@ VERIFY_USER_TOKEN_AUDIENCE = "fastapi-users:verify"
 
 
 def get_verify_router(
-    get_user_manager: UserManagerDependency[models.UD],
+    get_user_manager: UserManagerDependency[models.UC, models.UD],
     user_model: Type[models.U],
     verification_token_secret: SecretType,
     verification_token_lifetime_seconds: int = 3600,
@@ -33,7 +33,7 @@ def get_verify_router(
     async def request_verify_token(
         request: Request,
         email: EmailStr = Body(..., embed=True),
-        user_manager: UserManager[models.UD] = Depends(get_user_manager),
+        user_manager: UserManager[models.UC, models.UD] = Depends(get_user_manager),
     ):
         try:
             user = await user_manager.get_by_email(email)
@@ -60,7 +60,7 @@ def get_verify_router(
     async def verify(
         request: Request,
         token: str = Body(..., embed=True),
-        user_manager: UserManager[models.UD] = Depends(get_user_manager),
+        user_manager: UserManager[models.UC, models.UD] = Depends(get_user_manager),
     ):
         try:
             data = decode_jwt(

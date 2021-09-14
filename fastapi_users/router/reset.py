@@ -11,7 +11,6 @@ from fastapi_users.manager import (
     UserManager,
     UserManagerDependency,
     UserNotExists,
-    ValidatePasswordProtocol,
 )
 from fastapi_users.password import get_password_hash
 from fastapi_users.router.common import ErrorCode, run_handler
@@ -20,12 +19,11 @@ RESET_PASSWORD_TOKEN_AUDIENCE = "fastapi-users:reset"
 
 
 def get_reset_password_router(
-    get_user_manager: UserManagerDependency[models.UD],
+    get_user_manager: UserManagerDependency[models.UC, models.UD],
     reset_password_token_secret: SecretType,
     reset_password_token_lifetime_seconds: int = 3600,
     after_forgot_password: Optional[Callable[[models.UD, str, Request], None]] = None,
     after_reset_password: Optional[Callable[[models.UD, Request], None]] = None,
-    validate_password: Optional[ValidatePasswordProtocol] = None,
 ) -> APIRouter:
     """Generate a router with the reset password routes."""
     router = APIRouter()
@@ -34,7 +32,7 @@ def get_reset_password_router(
     async def forgot_password(
         request: Request,
         email: EmailStr = Body(..., embed=True),
-        user_manager: UserManager[models.UD] = Depends(get_user_manager),
+        user_manager: UserManager[models.UC, models.UD] = Depends(get_user_manager),
     ):
         try:
             user = await user_manager.get_by_email(email)
@@ -58,7 +56,7 @@ def get_reset_password_router(
         request: Request,
         token: str = Body(...),
         password: str = Body(...),
-        user_manager: UserManager[models.UD] = Depends(get_user_manager),
+        user_manager: UserManager[models.UC, models.UD] = Depends(get_user_manager),
     ):
         try:
             data = decode_jwt(
@@ -93,17 +91,16 @@ def get_reset_password_router(
                     detail=ErrorCode.RESET_PASSWORD_BAD_TOKEN,
                 )
 
-            if validate_password:
-                try:
-                    await validate_password(password, user)
-                except InvalidPasswordException as e:
-                    raise HTTPException(
-                        status_code=status.HTTP_400_BAD_REQUEST,
-                        detail={
-                            "code": ErrorCode.RESET_PASSWORD_INVALID_PASSWORD,
-                            "reason": e.reason,
-                        },
-                    )
+            try:
+                await user_manager.validate_password(password, user)
+            except InvalidPasswordException as e:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail={
+                        "code": ErrorCode.RESET_PASSWORD_INVALID_PASSWORD,
+                        "reason": e.reason,
+                    },
+                )
 
             user.hashed_password = get_password_hash(password)
             await user_manager.user_db.update(user)

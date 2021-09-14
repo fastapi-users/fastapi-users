@@ -42,21 +42,18 @@ class ValidatePasswordProtocol(Protocol):  # pragma: no cover
         pass
 
 
-class UserManager(Generic[models.UD]):
+class UserManager(Generic[models.UC, models.UD]):
 
     user_db_model: Type[models.UD]
     user_db: BaseUserDatabase[models.UD]
-    validate_password: Optional[ValidatePasswordProtocol]
 
     def __init__(
         self,
         user_db_model: Type[models.UD],
         user_db: BaseUserDatabase[models.UD],
-        validate_password: Optional[ValidatePasswordProtocol] = None,
     ):
         self.user_db_model = user_db_model
         self.user_db = user_db
-        self.validate_password = validate_password
 
     async def get(self, id: UUID4) -> models.UD:
         user = await self.user_db.get(id)
@@ -83,8 +80,7 @@ class UserManager(Generic[models.UD]):
         return user
 
     async def create(self, user: models.UC, safe: bool = False) -> models.UD:
-        if self.validate_password:
-            await self.validate_password(user.password, user)
+        await self.validate_password(user.password, user)
 
         existing_user = await self.user_db.get_by_email(user.email)
         if existing_user is not None:
@@ -115,6 +111,11 @@ class UserManager(Generic[models.UD]):
 
     async def delete(self, user: models.UD) -> None:
         await self.user_db.delete(user)
+
+    async def validate_password(
+        self, password: str, user: Union[models.UC, models.UD]
+    ) -> None:
+        return
 
     async def authenticate(
         self, credentials: OAuth2PasswordRequestForm
@@ -154,8 +155,7 @@ class UserManager(Generic[models.UD]):
                     user.email = update_dict[field]
             elif field == "password":
                 password = update_dict[field]
-                if self.validate_password:
-                    await self.validate_password(password, user)
+                await self.validate_password(password, user)
                 hashed_password = get_password_hash(password)
                 user.hashed_password = hashed_password
             else:
@@ -164,4 +164,4 @@ class UserManager(Generic[models.UD]):
         return updated_user
 
 
-UserManagerDependency = Callable[..., UserManager[models.UD]]
+UserManagerDependency = Callable[..., UserManager[models.UC, models.UD]]

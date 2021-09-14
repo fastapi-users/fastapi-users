@@ -75,7 +75,7 @@ class TestRegister:
         assert after_register.called is False
 
     async def test_invalid_password(
-        self, test_app_client: httpx.AsyncClient, after_register, validate_password
+        self, test_app_client: httpx.AsyncClient, after_register
     ):
         json = {"email": "king.arthur@camelot.bt", "password": "g"}
         response = await test_app_client.post("/register", json=json)
@@ -85,9 +85,6 @@ class TestRegister:
             "code": ErrorCode.REGISTER_INVALID_PASSWORD,
             "reason": "Password should be at least 3 characters",
         }
-        validate_password.assert_called_with(
-            "g", UserCreate(email="king.arthur@camelot.bt", password="g")
-        )
         assert after_register.called is False
 
     @pytest.mark.parametrize(

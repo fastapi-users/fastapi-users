@@ -16,7 +16,7 @@ from fastapi_users.router.common import ErrorCode, run_handler
 
 
 def get_users_router(
-    get_user_manager: UserManagerDependency[models.UD],
+    get_user_manager: UserManagerDependency[models.UC, models.UD],
     user_model: Type[models.U],
     user_update_model: Type[models.UU],
     user_db_model: Type[models.UD],
@@ -35,7 +35,8 @@ def get_users_router(
     )
 
     async def get_user_or_404(
-        id: UUID4, user_manager: UserManager[models.UD] = Depends(get_user_manager)
+        id: UUID4,
+        user_manager: UserManager[models.UC, models.UD] = Depends(get_user_manager),
     ) -> models.UD:
         try:
             return await user_manager.get(id)
@@ -57,7 +58,7 @@ def get_users_router(
         request: Request,
         user_update: user_update_model,  # type: ignore
         user: user_db_model = Depends(get_current_active_user),  # type: ignore
-        user_manager: UserManager[models.UD] = Depends(get_user_manager),
+        user_manager: UserManager[models.UC, models.UD] = Depends(get_user_manager),
     ):
         try:
             updated_user = await user_manager.update(user_update, user, safe=True)
@@ -100,7 +101,7 @@ def get_users_router(
         user_update: user_update_model,  # type: ignore
         request: Request,
         user=Depends(get_user_or_404),
-        user_manager: UserManager[models.UD] = Depends(get_user_manager),
+        user_manager: UserManager[models.UC, models.UD] = Depends(get_user_manager),
     ):
         try:
             updated_user = await user_manager.update(user_update, user, safe=False)
@@ -134,7 +135,7 @@ def get_users_router(
     )
     async def delete_user(
         user=Depends(get_user_or_404),
-        user_manager: UserManager[models.UD] = Depends(get_user_manager),
+        user_manager: UserManager[models.UC, models.UD] = Depends(get_user_manager),
     ):
         await user_manager.delete(user)
         return None

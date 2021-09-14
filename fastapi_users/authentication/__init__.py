@@ -43,7 +43,7 @@ class Authenticator:
     def __init__(
         self,
         backends: Sequence[BaseAuthentication],
-        get_user_manager: UserManagerDependency[models.UD],
+        get_user_manager: UserManagerDependency[models.UC, models.UD],
     ):
         self.backends = backends
         self.get_user_manager = get_user_manager
@@ -108,7 +108,7 @@ class Authenticator:
     async def _authenticate(
         self,
         *args,
-        user_manager: UserManager[models.UD],
+        user_manager: UserManager[models.UC, models.UD],
         optional: bool = False,
         active: bool = False,
         verified: bool = False,

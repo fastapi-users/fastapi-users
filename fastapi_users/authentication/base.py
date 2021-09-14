@@ -9,7 +9,7 @@ from fastapi_users.manager import UserManager
 T = TypeVar("T")
 
 
-class BaseAuthentication(Generic[T]):
+class BaseAuthentication(Generic[T, models.UC, models.UD]):
     """
     Base authentication backend.
 
@@ -28,7 +28,7 @@ class BaseAuthentication(Generic[T]):
         self.logout = logout
 
     async def __call__(
-        self, credentials: Optional[T], user_manager: UserManager[models.UD]
+        self, credentials: Optional[T], user_manager: UserManager[models.UC, models.UD]
     ) -> Optional[models.UD]:
         raise NotImplementedError()
 

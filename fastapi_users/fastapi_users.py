@@ -34,8 +34,6 @@ class FastAPIUsers(Generic[models.U, models.UC, models.UU, models.UD]):
     :param user_create_model: Pydantic model for creating a user.
     :param user_update_model: Pydantic model for updating a user.
     :param user_db_model: Pydantic model of a DB representation of a user.
-    :param validate_password: Optional function to validate the password
-    at user registration, user update or password reset.
 
     :attribute get_user_manager: Dependency callable getter to inject the
     user manager class instance.
@@ -58,12 +56,11 @@ class FastAPIUsers(Generic[models.U, models.UC, models.UU, models.UD]):
         user_create_model: Type[models.UC],
         user_update_model: Type[models.UU],
         user_db_model: Type[models.UD],
-        validate_password: Optional[ValidatePasswordProtocol] = None,
     ):
         def get_user_manager(
             user_db: BaseUserDatabase[models.UD] = Depends(get_db),
         ):
-            return UserManager(user_db_model, user_db, validate_password)
+            return UserManager(user_db_model, user_db)
 
         self.authenticator = Authenticator(auth_backends, get_user_manager)
 
@@ -72,8 +69,6 @@ class FastAPIUsers(Generic[models.U, models.UC, models.UU, models.UD]):
         self._user_create_model = user_create_model
         self._user_update_model = user_update_model
         self._user_db_model = user_db_model
-
-        self.validate_password = validate_password
 
         self.get_user_manager = get_user_manager
         self.current_user = self.authenticator.current_user

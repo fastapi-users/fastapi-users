@@ -58,7 +58,6 @@ async def test_app_client(
     after_forgot_password,
     after_reset_password,
     get_test_client,
-    validate_password,
 ) -> AsyncGenerator[httpx.AsyncClient, None]:
     reset_router = get_reset_password_router(
         get_user_manager,
@@ -66,7 +65,6 @@ async def test_app_client(
         LIFETIME,
         after_forgot_password,
         after_reset_password,
-        validate_password,
     )
 
     app = FastAPI()
@@ -255,7 +253,6 @@ class TestResetPassword:
         forgot_password_token,
         user: UserDB,
         after_reset_password,
-        validate_password,
     ):
         mocker.spy(mock_user_db, "update")
 
@@ -270,7 +267,6 @@ class TestResetPassword:
             "code": ErrorCode.RESET_PASSWORD_INVALID_PASSWORD,
             "reason": "Password should be at least 3 characters",
         }
-        validate_password.assert_called_with("h", user)
         assert mock_user_db.update.called is False
         assert after_reset_password.called is False
 

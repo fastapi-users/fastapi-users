@@ -1,4 +1,4 @@
-from typing import Any, List, Optional
+from typing import Any, Generic, List, Optional
 
 import jwt
 from fastapi import Response
@@ -11,7 +11,9 @@ from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.manager import UserManager, UserNotExists
 
 
-class CookieAuthentication(BaseAuthentication[str]):
+class CookieAuthentication(
+    Generic[models.UC, models.UD], BaseAuthentication[str, models.UC, models.UD]
+):
     """
     Authentication backend using a cookie.
 
@@ -67,7 +69,7 @@ class CookieAuthentication(BaseAuthentication[str]):
     async def __call__(
         self,
         credentials: Optional[str],
-        user_manager: UserManager[models.UD],
+        user_manager: UserManager[models.UC, models.UD],
     ) -> Optional[models.UD]:
         if credentials is None:
             return None

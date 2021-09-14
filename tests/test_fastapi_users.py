@@ -16,7 +16,6 @@ async def test_app_client(
     mock_authentication,
     oauth_client,
     get_test_client,
-    validate_password,
 ) -> AsyncGenerator[httpx.AsyncClient, None]:
     fastapi_users = FastAPIUsers[User, UserCreate, UserUpdate, UserDB](
         get_mock_user_db,
@@ -25,7 +24,6 @@ async def test_app_client(
         UserCreate,
         UserUpdate,
         UserDB,
-        validate_password,
     )
 
     app = FastAPI()

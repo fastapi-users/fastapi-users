@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Generic, Optional
 
 import pytest
 from fastapi import Request, status
@@ -14,25 +14,33 @@ class MockSecurityScheme(SecurityBase):
         return "mock"
 
 
-class BackendNone(BaseAuthentication[str]):
+class BackendNone(
+    Generic[models.UC, models.UD], BaseAuthentication[str, models.UC, models.UD]
+):
     def __init__(self, name="none"):
         super().__init__(name, logout=False)
         self.scheme = MockSecurityScheme()
 
     async def __call__(
-        self, credentials: Optional[str], user_manager: UserManager[models.UD]
+        self,
+        credentials: Optional[str],
+        user_manager: UserManager[models.UC, models.UD],
     ) -> Optional[models.UD]:
         return None
 
 
-class BackendUser(BaseAuthentication[str]):
+class BackendUser(
+    Generic[models.UC, models.UD], BaseAuthentication[str, models.UC, models.UD]
+):
     def __init__(self, user: models.UD, name="user"):
         super().__init__(name, logout=False)
         self.scheme = MockSecurityScheme()
         self.user = user
 
     async def __call__(
-        self, credentials: Optional[str], user_manager: UserManager[models.UD]
+        self,
+        credentials: Optional[str],
+        user_manager: UserManager[models.UC, models.UD],
     ) -> Optional[models.UD]:
         return self.user
 
