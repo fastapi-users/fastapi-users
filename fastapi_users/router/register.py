@@ -1,22 +1,21 @@
-from typing import Callable, Optional, Type
+from typing import Type
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 
 from fastapi_users import models
 from fastapi_users.manager import (
+    BaseUserManager,
     InvalidPasswordException,
     UserAlreadyExists,
-    BaseUserManager,
     UserManagerDependency,
 )
-from fastapi_users.router.common import ErrorCode, run_handler
+from fastapi_users.router.common import ErrorCode
 
 
 def get_register_router(
     get_user_manager: UserManagerDependency[models.UC, models.UD],
     user_model: Type[models.U],
     user_create_model: Type[models.UC],
-    after_register: Optional[Callable[[models.UD, Request], None]] = None,
 ) -> APIRouter:
     """Generate a router with the register route."""
     router = APIRouter()
@@ -30,7 +29,7 @@ def get_register_router(
         user_manager: BaseUserManager[models.UC, models.UD] = Depends(get_user_manager),
     ):
         try:
-            created_user = await user_manager.create(user, safe=True)
+            created_user = await user_manager.create(user, safe=True, request=request)
         except UserAlreadyExists:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -44,9 +43,6 @@ def get_register_router(
                     "reason": e.reason,
                 },
             )
-
-        if after_register:
-            await run_handler(after_register, created_user, request)
 
         return created_user
 

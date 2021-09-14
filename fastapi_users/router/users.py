@@ -6,9 +6,9 @@ from pydantic import UUID4
 from fastapi_users import models
 from fastapi_users.authentication import Authenticator
 from fastapi_users.manager import (
+    BaseUserManager,
     InvalidPasswordException,
     UserAlreadyExists,
-    BaseUserManager,
     UserManagerDependency,
     UserNotExists,
 )

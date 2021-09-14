@@ -1,8 +1,8 @@
 from typing import Any, Callable, Dict, Generic, Optional, Type, Union
 
-from pydantic.types import UUID4
-
+from fastapi import Request
 from fastapi.security import OAuth2PasswordRequestForm
+from pydantic.types import UUID4
 
 from fastapi_users import models, password
 from fastapi_users.db import BaseUserDatabase
@@ -67,7 +67,9 @@ class BaseUserManager(Generic[models.UC, models.UD]):
 
         return user
 
-    async def create(self, user: models.UC, safe: bool = False) -> models.UD:
+    async def create(
+        self, user: models.UC, safe: bool = False, request: Optional[Request] = None
+    ) -> models.UD:
         await self.validate_password(user.password, user)
 
         existing_user = await self.user_db.get_by_email(user.email)
@@ -79,7 +81,12 @@ class BaseUserManager(Generic[models.UC, models.UD]):
             user.create_update_dict() if safe else user.create_update_dict_superuser()
         )
         db_user = self.user_db_model(**user_dict, hashed_password=hashed_password)
-        return await self.user_db.create(db_user)
+
+        created_user = await self.user_db.create(db_user)
+
+        await self.on_after_register(created_user, request)
+
+        return created_user
 
     async def verify(self, user: models.UD) -> models.UD:
         if user.is_verified:
@@ -102,6 +109,11 @@ class BaseUserManager(Generic[models.UC, models.UD]):
 
     async def validate_password(
         self, password: str, user: Union[models.UC, models.UD]
+    ) -> None:
+        return  # pragma: no cover
+
+    async def on_after_register(
+        self, user: models.UD, request: Optional[Request] = None
     ) -> None:
         return  # pragma: no cover
 

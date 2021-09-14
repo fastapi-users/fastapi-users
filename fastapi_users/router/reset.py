@@ -7,8 +7,8 @@ from pydantic import UUID4, EmailStr
 from fastapi_users import models
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.manager import (
-    InvalidPasswordException,
     BaseUserManager,
+    InvalidPasswordException,
     UserManagerDependency,
     UserNotExists,
 )

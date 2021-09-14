@@ -1,22 +1,26 @@
 import asyncio
 from typing import AsyncGenerator, List, Optional, Union
+from unittest.mock import MagicMock
 
 import httpx
 import pytest
 from asgi_lifespan import LifespanManager
-from fastapi import Depends, FastAPI, Response
+from fastapi import Depends, FastAPI, Request, Response
 from fastapi.security import OAuth2PasswordBearer
 from httpx_oauth.oauth2 import OAuth2
 from pydantic import UUID4, SecretStr
+from pytest_mock import MockerFixture
 from starlette.applications import ASGIApp
 
 from fastapi_users import models
 from fastapi_users.authentication import Authenticator, BaseAuthentication
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.jwt import SecretType
-from fastapi_users.manager import InvalidPasswordException
-from fastapi_users.manager import BaseUserManager
-from fastapi_users.manager import UserNotExists
+from fastapi_users.manager import (
+    BaseUserManager,
+    InvalidPasswordException,
+    UserNotExists,
+)
 from fastapi_users.models import BaseOAuthAccount, BaseOAuthAccountMixin
 from fastapi_users.password import get_password_hash
 
@@ -59,6 +63,15 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
             raise InvalidPasswordException(
                 reason="Password should be at least 3 characters"
             )
+
+    async def on_after_register(
+        self, user: UserDB, request: Optional[Request] = None
+    ) -> None:
+        return
+
+
+class UserManagerMock(UserManager):
+    on_after_register: MagicMock
 
 
 @pytest.fixture(scope="session")
@@ -351,8 +364,10 @@ def get_mock_user_db_oauth(mock_user_db_oauth):
 
 
 @pytest.fixture
-def user_manager(mock_user_db):
-    return UserManager(UserDB, mock_user_db)
+def user_manager(mocker: MockerFixture, mock_user_db):
+    user_manager = UserManager(UserDB, mock_user_db)
+    mocker.spy(user_manager, "on_after_register")
+    return user_manager
 
 
 @pytest.fixture

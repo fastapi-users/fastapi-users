@@ -64,21 +64,12 @@ class FastAPIUsers(Generic[models.U, models.UC, models.UU, models.UD]):
         self.get_user_manager = get_user_manager
         self.current_user = self.authenticator.current_user
 
-    def get_register_router(
-        self,
-        after_register: Optional[Callable[[models.UD, Request], None]] = None,
-    ) -> APIRouter:
-        """
-        Return a router with a register route.
-
-        :param after_register: Optional function called
-        after a successful registration.
-        """
+    def get_register_router(self) -> APIRouter:
+        """Return a router with a register route."""
         return get_register_router(
             self.get_user_manager,
             self._user_model,
             self._user_create_model,
-            after_register,
         )
 
     def get_verify_router(
