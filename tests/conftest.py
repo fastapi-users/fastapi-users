@@ -363,7 +363,7 @@ def user_manager(mock_user_db, validate_password):
 @pytest.fixture
 def get_user_manager(get_mock_user_db, validate_password):
     def _get_user_manager(user_db=Depends(get_mock_user_db)):
-        yield UserManager(UserDB, user_db, validate_password)
+        return UserManager(UserDB, user_db, validate_password)
 
     return _get_user_manager
 
@@ -371,7 +371,7 @@ def get_user_manager(get_mock_user_db, validate_password):
 @pytest.fixture
 def get_user_manager_oauth(get_mock_user_db_oauth, validate_password):
     def _get_user_manager_oauth(user_db=Depends(get_mock_user_db_oauth)):
-        yield UserManager(UserDBOAuth, user_db, validate_password)
+        return UserManager(UserDBOAuth, user_db, validate_password)
 
     return _get_user_manager_oauth
 

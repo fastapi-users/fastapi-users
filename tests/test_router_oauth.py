@@ -293,7 +293,6 @@ class TestCallback:
 
     async def test_inactive_user(
         self,
-        mock_user_db_oauth,
         test_app_client: httpx.AsyncClient,
         access_token,
         oauth_client,
@@ -325,7 +324,6 @@ class TestCallback:
 
     async def test_redirect_url_router(
         self,
-        mock_user_db_oauth,
         test_app_client_redirect_url: httpx.AsyncClient,
         access_token,
         oauth_client,
