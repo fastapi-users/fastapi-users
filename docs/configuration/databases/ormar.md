@@ -18,7 +18,7 @@ pip install aiomysql pymysql
 pip install aiosqlite
 ```
 
-For the sake of this tutorial from now on, we'll use a simple SQLite databse.
+For the sake of this tutorial from now on, we'll use a simple SQLite database.
 
 ## Setup User table
 
