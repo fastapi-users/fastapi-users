@@ -13,7 +13,6 @@ mypy
 codecov
 pytest-cov
 pytest-mock
-asynctest
 flit
 markdown-include
 pygments
