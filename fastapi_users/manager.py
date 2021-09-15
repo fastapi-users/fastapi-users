@@ -353,8 +353,7 @@ class BaseUserManager(Generic[models.UC, models.UD]):
                 user.hashed_password = hashed_password
             else:
                 setattr(user, field, update_dict[field])
-        updated_user = await self.user_db.update(user)
-        return updated_user
+        return await self.user_db.update(user)
 
 
 UserManagerDependency = Callable[..., BaseUserManager[models.UC, models.UD]]

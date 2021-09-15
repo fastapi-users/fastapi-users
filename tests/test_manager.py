@@ -2,6 +2,7 @@ from typing import Callable, cast
 
 import pytest
 from fastapi.security import OAuth2PasswordRequestForm
+from pydantic import UUID4
 from pytest_mock import MockerFixture
 
 from fastapi_users import models
@@ -56,6 +57,47 @@ def create_oauth2_password_request_form() -> Callable[
         return OAuth2PasswordRequestForm(username=username, password=password, scope="")
 
     return _create_oauth2_password_request_form
+
+
+@pytest.mark.asyncio
+@pytest.mark.manager
+class TestGet:
+    async def test_not_existing_user(self, user_manager: UserManagerMock):
+        with pytest.raises(UserNotExists):
+            await user_manager.get(UUID4("d35d213e-f3d8-4f08-954a-7e0d1bea286f"))
+
+    async def test_existing_user(self, user_manager: UserManagerMock, user: UserDB):
+        retrieved_user = await user_manager.get(user.id)
+        assert retrieved_user.id == user.id
+
+
+@pytest.mark.asyncio
+@pytest.mark.manager
+class TestGetByEmail:
+    async def test_not_existing_user(self, user_manager: UserManagerMock):
+        with pytest.raises(UserNotExists):
+            await user_manager.get_by_email("lancelot@camelot.bt")
+
+    async def test_existing_user(self, user_manager: UserManagerMock, user: UserDB):
+        retrieved_user = await user_manager.get_by_email(user.email)
+        assert retrieved_user.id == user.id
+
+
+@pytest.mark.asyncio
+@pytest.mark.manager
+class TestGetByOAuthAccount:
+    async def test_not_existing_user(self, user_manager_oauth: UserManagerMock):
+        with pytest.raises(UserNotExists):
+            await user_manager_oauth.get_by_oauth_account("service1", "foo")
+
+    async def test_existing_user(
+        self, user_manager_oauth: UserManagerMock, user_oauth: UserDBOAuth
+    ):
+        oauth_account = user_oauth.oauth_accounts[0]
+        retrieved_user = await user_manager_oauth.get_by_oauth_account(
+            oauth_account.oauth_name, oauth_account.account_id
+        )
+        assert retrieved_user.id == user_oauth.id
 
 
 @pytest.mark.asyncio
@@ -399,6 +441,42 @@ class TestUpdateUser:
         assert updated_user.is_superuser is True
 
         assert user_manager.on_after_update.called is True
+
+    async def test_password_update_invalid(
+        self, user: UserDB, user_manager: UserManagerMock
+    ):
+        user_update = UserUpdate(password="h")
+        with pytest.raises(InvalidPasswordException):
+            await user_manager.update(user_update, user, safe=True)
+
+        assert user_manager.on_after_update.called is False
+
+    async def test_password_update_valid(
+        self, user: UserDB, user_manager: UserManagerMock
+    ):
+        old_hashed_password = user.hashed_password
+        user_update = UserUpdate(password="holygrail")
+        updated_user = await user_manager.update(user_update, user, safe=True)
+
+        assert updated_user.hashed_password != old_hashed_password
+
+        assert user_manager.on_after_update.called is True
+
+    async def test_email_update_already_existing(
+        self, user: UserDB, superuser: UserDB, user_manager: UserManagerMock
+    ):
+        user_update = UserUpdate(email=superuser.email)
+        with pytest.raises(UserAlreadyExists):
+            await user_manager.update(user_update, user, safe=True)
+
+        assert user_manager.on_after_update.called is False
+
+
+@pytest.mark.asyncio
+@pytest.mark.manager
+class TestDelete:
+    async def test_delete(self, user: UserDB, user_manager: UserManagerMock):
+        await user_manager.delete(user)
 
 
 @pytest.mark.asyncio
