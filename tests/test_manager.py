@@ -22,7 +22,7 @@ def forgot_password_token(user_manager: UserManagerMock):
     def _forgot_password_token(
         user_id=None, lifetime=user_manager.reset_password_token_lifetime_seconds
     ):
-        data = {"aud": "fastapi-users:reset"}
+        data = {"aud": user_manager.reset_password_token_audience}
         if user_id is not None:
             data["user_id"] = str(user_id)
         return generate_jwt(data, user_manager.reset_password_token_secret, lifetime)
