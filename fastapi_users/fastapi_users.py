@@ -1,4 +1,4 @@
-from typing import Any, Callable, Dict, Generic, Optional, Sequence, Type
+from typing import Callable, Generic, Optional, Sequence, Type
 
 from fastapi import APIRouter, Request
 
@@ -150,16 +150,11 @@ class FastAPIUsers(Generic[models.U, models.UC, models.UU, models.UD]):
 
     def get_users_router(
         self,
-        after_update: Optional[
-            Callable[[models.UD, Dict[str, Any], Request], None]
-        ] = None,
         requires_verification: bool = False,
     ) -> APIRouter:
         """
         Return a router with routes to manage users.
 
-        :param after_update: Optional function called
-        after a successful user update.
         :param requires_verification: Whether the endpoints
         require the users to be verified or not.
         """
@@ -169,6 +164,5 @@ class FastAPIUsers(Generic[models.U, models.UC, models.UU, models.UD]):
             self._user_update_model,
             self._user_db_model,
             self.authenticator,
-            after_update,
             requires_verification,
         )

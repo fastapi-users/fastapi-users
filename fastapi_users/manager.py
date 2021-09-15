@@ -159,13 +159,19 @@ class BaseUserManager(Generic[models.UC, models.UD]):
         return await self.user_db.update(user)
 
     async def update(
-        self, updated_user: models.UU, user: models.UD, safe: bool = False
+        self,
+        user_update: models.UU,
+        user: models.UD,
+        safe: bool = False,
+        request: Optional[Request] = None,
     ) -> models.UD:
         if safe:
-            updated_user_data = updated_user.create_update_dict()
+            updated_user_data = user_update.create_update_dict()
         else:
-            updated_user_data = updated_user.create_update_dict_superuser()
-        return await self._update(user, updated_user_data)
+            updated_user_data = user_update.create_update_dict_superuser()
+        updated_user = await self._update(user, updated_user_data)
+        await self.on_after_update(updated_user, updated_user_data, request)
+        return updated_user
 
     async def delete(self, user: models.UD) -> None:
         await self.user_db.delete(user)
@@ -177,6 +183,14 @@ class BaseUserManager(Generic[models.UC, models.UD]):
 
     async def on_after_register(
         self, user: models.UD, request: Optional[Request] = None
+    ) -> None:
+        return  # pragma: no cover
+
+    async def on_after_update(
+        self,
+        user: models.UD,
+        update_dict: Dict[str, Any],
+        request: Optional[Request] = None,
     ) -> None:
         return  # pragma: no cover
 

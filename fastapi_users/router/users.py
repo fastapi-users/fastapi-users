@@ -1,4 +1,4 @@
-from typing import Any, Callable, Dict, Optional, Type
+from typing import Type
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from pydantic import UUID4
@@ -12,7 +12,7 @@ from fastapi_users.manager import (
     UserManagerDependency,
     UserNotExists,
 )
-from fastapi_users.router.common import ErrorCode, run_handler
+from fastapi_users.router.common import ErrorCode
 
 
 def get_users_router(
@@ -21,7 +21,6 @@ def get_users_router(
     user_update_model: Type[models.UU],
     user_db_model: Type[models.UD],
     authenticator: Authenticator,
-    after_update: Optional[Callable[[models.UD, Dict[str, Any], Request], None]] = None,
     requires_verification: bool = False,
 ) -> APIRouter:
     """Generate a router with the authentication routes."""
@@ -61,15 +60,9 @@ def get_users_router(
         user_manager: BaseUserManager[models.UC, models.UD] = Depends(get_user_manager),
     ):
         try:
-            updated_user = await user_manager.update(user_update, user, safe=True)
-            if after_update:
-                await run_handler(
-                    after_update,
-                    updated_user,
-                    user_update.create_update_dict(),  # type: ignore
-                    request,
-                )
-            return updated_user
+            return await user_manager.update(
+                user_update, user, safe=True, request=request
+            )
         except InvalidPasswordException as e:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -104,15 +97,9 @@ def get_users_router(
         user_manager: BaseUserManager[models.UC, models.UD] = Depends(get_user_manager),
     ):
         try:
-            updated_user = await user_manager.update(user_update, user, safe=False)
-            if after_update:
-                await run_handler(
-                    after_update,
-                    updated_user,
-                    user_update.create_update_dict_superuser(),  # type: ignore
-                    request,
-                )
-            return updated_user
+            return await user_manager.update(
+                user_update, user, safe=False, request=request
+            )
         except InvalidPasswordException as e:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,

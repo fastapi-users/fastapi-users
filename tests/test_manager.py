@@ -13,7 +13,7 @@ from fastapi_users.manager import (
     UserInactive,
     UserNotExists,
 )
-from tests.conftest import UserCreate, UserDB, UserManagerMock
+from tests.conftest import UserCreate, UserDB, UserManagerMock, UserUpdate
 
 
 @pytest.fixture
@@ -83,6 +83,27 @@ class TestCreateUser:
         assert created_user.is_active is result
 
         assert user_manager.on_after_register.called is True
+
+
+@pytest.mark.asyncio
+class TestUpdateUser:
+    async def test_safe_update(self, user: UserDB, user_manager: UserManagerMock):
+        user_update = UserUpdate(first_name="Arthur", is_superuser=True)
+        updated_user = await user_manager.update(user_update, user, safe=True)
+
+        assert updated_user.first_name == "Arthur"
+        assert updated_user.is_superuser is False
+
+        assert user_manager.on_after_update.called is True
+
+    async def test_unsafe_update(self, user: UserDB, user_manager: UserManagerMock):
+        user_update = UserUpdate(first_name="Arthur", is_superuser=True)
+        updated_user = await user_manager.update(user_update, user, safe=False)
+
+        assert updated_user.first_name == "Arthur"
+        assert updated_user.is_superuser is True
+
+        assert user_manager.on_after_update.called is True
 
 
 @pytest.mark.asyncio
