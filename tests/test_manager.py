@@ -59,6 +59,7 @@ def create_oauth2_password_request_form() -> Callable[
 
 
 @pytest.mark.asyncio
+@pytest.mark.manager
 class TestCreateUser:
     @pytest.mark.parametrize(
         "email", ["king.arthur@camelot.bt", "King.Arthur@camelot.bt"]
@@ -105,6 +106,7 @@ class TestCreateUser:
 
 
 @pytest.mark.asyncio
+@pytest.mark.manager
 class TestOAuthCallback:
     async def test_existing_user_with_oauth(
         self, user_manager_oauth: UserManagerMock, user_oauth: UserDBOAuth
@@ -160,6 +162,7 @@ class TestOAuthCallback:
 
 
 @pytest.mark.asyncio
+@pytest.mark.manager
 class TestRequestVerifyUser:
     async def test_user_inactive(
         self, user_manager: UserManagerMock, inactive_user: UserDB
@@ -193,6 +196,7 @@ class TestRequestVerifyUser:
 
 
 @pytest.mark.asyncio
+@pytest.mark.manager
 class TestVerifyUser:
     async def test_invalid_token(self, user_manager: UserManagerMock):
         with pytest.raises(InvalidVerifyToken):
@@ -271,6 +275,7 @@ class TestVerifyUser:
 
 
 @pytest.mark.asyncio
+@pytest.mark.manager
 class TestForgotPassword:
     async def test_user_inactive(
         self, user_manager: UserManagerMock, inactive_user: UserDB
@@ -296,6 +301,7 @@ class TestForgotPassword:
 
 
 @pytest.mark.asyncio
+@pytest.mark.manager
 class TestResetPassword:
     async def test_invalid_token(self, user_manager: UserManagerMock):
         with pytest.raises(InvalidResetPasswordToken):
@@ -374,6 +380,7 @@ class TestResetPassword:
 
 
 @pytest.mark.asyncio
+@pytest.mark.manager
 class TestUpdateUser:
     async def test_safe_update(self, user: UserDB, user_manager: UserManagerMock):
         user_update = UserUpdate(first_name="Arthur", is_superuser=True)
@@ -395,6 +402,7 @@ class TestUpdateUser:
 
 
 @pytest.mark.asyncio
+@pytest.mark.manager
 class TestAuthenticate:
     async def test_unknown_user(
         self,
