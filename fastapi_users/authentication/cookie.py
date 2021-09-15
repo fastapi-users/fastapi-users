@@ -26,6 +26,7 @@ class CookieAuthentication(
     :param cookie_domain: Cookie domain.
     :param cookie_secure: Whether to only send the cookie to the server via SSL request.
     :param cookie_httponly: Whether to prevent access to the cookie via JavaScript.
+    :param cookie_samesite: Set the SameSite policy of the cookie.
     :param name: Name of the backend. It will be used to name the login route.
     :param token_audience: List of valid audiences for the JWT.
     """

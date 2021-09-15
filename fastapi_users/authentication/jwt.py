@@ -31,7 +31,7 @@ class JWTAuthentication(
 
     def __init__(
         self,
-        secret: str,
+        secret: SecretType,
         lifetime_seconds: int,
         tokenUrl: str = "auth/jwt/login",
         name: str = "jwt",
