@@ -5,12 +5,11 @@ from unittest.mock import MagicMock
 import httpx
 import pytest
 from asgi_lifespan import LifespanManager
-from fastapi import Depends, FastAPI, Request, Response
+from fastapi import Depends, FastAPI, Response
 from fastapi.security import OAuth2PasswordBearer
 from httpx_oauth.oauth2 import OAuth2
 from pydantic import UUID4, SecretStr
 from pytest_mock import MockerFixture
-from starlette.applications import ASGIApp
 
 from fastapi_users import models
 from fastapi_users.authentication import Authenticator, BaseAuthentication
@@ -56,6 +55,8 @@ class UserDBOAuth(UserOAuth, UserDB):
 
 
 class UserManager(BaseUserManager[UserCreate, UserDB]):
+    reset_password_token_secret = "SECRET"
+
     async def validate_password(
         self, password: str, user: Union[UserCreate, UserDB]
     ) -> None:
@@ -64,14 +65,25 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
                 reason="Password should be at least 3 characters"
             )
 
-    async def on_after_register(
-        self, user: UserDB, request: Optional[Request] = None
-    ) -> None:
-        return
+    def mock_method(self, name: str):
+        mock = MagicMock()
+
+        future: asyncio.Future = asyncio.Future()
+        future.set_result(None)
+        mock.return_value = future
+        mock.side_effect = None
+
+        setattr(self, name, mock)
 
 
 class UserManagerMock(UserManager):
+    get_by_email: MagicMock
+    forgot_password: MagicMock
+    reset_password: MagicMock
     on_after_register: MagicMock
+    on_after_forgot_password: MagicMock
+    on_after_reset_password: MagicMock
+    _update: MagicMock
 
 
 @pytest.fixture(scope="session")
@@ -366,14 +378,20 @@ def get_mock_user_db_oauth(mock_user_db_oauth):
 @pytest.fixture
 def user_manager(mocker: MockerFixture, mock_user_db):
     user_manager = UserManager(UserDB, mock_user_db)
+    mocker.spy(user_manager, "get_by_email")
+    mocker.spy(user_manager, "forgot_password")
+    mocker.spy(user_manager, "reset_password")
     mocker.spy(user_manager, "on_after_register")
+    mocker.spy(user_manager, "on_after_forgot_password")
+    mocker.spy(user_manager, "on_after_reset_password")
+    mocker.spy(user_manager, "_update")
     return user_manager
 
 
 @pytest.fixture
-def get_user_manager(get_mock_user_db):
-    def _get_user_manager(user_db=Depends(get_mock_user_db)):
-        return UserManager(UserDB, user_db)
+def get_user_manager(user_manager):
+    def _get_user_manager():
+        return user_manager
 
     return _get_user_manager
 
@@ -416,7 +434,7 @@ def mock_authentication():
 
 @pytest.fixture
 def get_test_client():
-    async def _get_test_client(app: ASGIApp) -> AsyncGenerator[httpx.AsyncClient, None]:
+    async def _get_test_client(app: FastAPI) -> AsyncGenerator[httpx.AsyncClient, None]:
         async with LifespanManager(app):
             async with httpx.AsyncClient(
                 app=app, base_url="http://app.io"

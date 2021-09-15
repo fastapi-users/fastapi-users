@@ -100,32 +100,9 @@ class FastAPIUsers(Generic[models.U, models.UC, models.UU, models.UD]):
             after_verification,
         )
 
-    def get_reset_password_router(
-        self,
-        reset_password_token_secret: SecretType,
-        reset_password_token_lifetime_seconds: int = 3600,
-        after_forgot_password: Optional[
-            Callable[[models.UD, str, Request], None]
-        ] = None,
-        after_reset_password: Optional[Callable[[models.UD, Request], None]] = None,
-    ) -> APIRouter:
-        """
-        Return a reset password process router.
-
-        :param reset_password_token_secret: Secret to encode reset password token.
-        :param reset_password_token_lifetime_seconds: Lifetime of reset password token.
-        :param after_forgot_password: Optional function called after a successful
-        forgot password request.
-        :param after_reset_password: Optional function called after a successful
-        password reset.
-        """
-        return get_reset_password_router(
-            self.get_user_manager,
-            reset_password_token_secret,
-            reset_password_token_lifetime_seconds,
-            after_forgot_password,
-            after_reset_password,
-        )
+    def get_reset_password_router(self) -> APIRouter:
+        """Return a reset password process router."""
+        return get_reset_password_router(self.get_user_manager)
 
     def get_auth_router(
         self, backend: BaseAuthentication, requires_verification: bool = False
