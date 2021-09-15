@@ -11,6 +11,7 @@ from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.password import generate_password, get_password_hash
 
 RESET_PASSWORD_TOKEN_AUDIENCE = "fastapi-users:reset"
+VERIFY_USER_TOKEN_AUDIENCE = "fastapi-users:verify"
 
 
 class FastAPIUsersException(Exception):
@@ -33,6 +34,10 @@ class UserAlreadyVerified(FastAPIUsersException):
     pass
 
 
+class InvalidVerifyToken(FastAPIUsersException):
+    pass
+
+
 class InvalidResetPasswordToken(FastAPIUsersException):
     pass
 
@@ -50,6 +55,10 @@ class BaseUserManager(Generic[models.UC, models.UD]):
     reset_password_token_secret: SecretType
     reset_password_token_lifetime_seconds: int = 3600
     reset_password_token_audience: str = RESET_PASSWORD_TOKEN_AUDIENCE
+
+    verification_token_secret: SecretType
+    verification_token_lifetime_seconds: int = 3600
+    verification_token_audience: str = VERIFY_USER_TOKEN_AUDIENCE
 
     def __init__(
         self,
@@ -140,6 +149,64 @@ class BaseUserManager(Generic[models.UC, models.UD]):
 
         return user
 
+    async def request_verify(
+        self, user: models.UD, request: Optional[Request] = None
+    ) -> None:
+        if not user.is_active:
+            raise UserInactive()
+        if user.is_verified:
+            raise UserAlreadyVerified()
+
+        token_data = {
+            "user_id": str(user.id),
+            "email": user.email,
+            "aud": self.verification_token_audience,
+        }
+        token = generate_jwt(
+            token_data,
+            self.verification_token_secret,
+            self.verification_token_lifetime_seconds,
+        )
+        await self.on_after_request_verify(user, token, request)
+
+    async def verify(self, token: str, request: Optional[Request] = None) -> models.UD:
+        try:
+            data = decode_jwt(
+                token,
+                self.verification_token_secret,
+                [self.verification_token_audience],
+            )
+        except jwt.PyJWTError:
+            raise InvalidVerifyToken()
+
+        try:
+            user_id = data["user_id"]
+            email = data["email"]
+        except KeyError:
+            raise InvalidVerifyToken()
+
+        try:
+            user = await self.get_by_email(email)
+        except UserNotExists:
+            raise InvalidVerifyToken()
+
+        try:
+            user_uuid = UUID4(user_id)
+        except ValueError:
+            raise InvalidVerifyToken()
+
+        if user_uuid != user.id:
+            raise InvalidVerifyToken()
+
+        if user.is_verified:
+            raise UserAlreadyVerified()
+
+        verified_user = await self._update(user, {"is_verified": True})
+
+        await self.on_after_verify(verified_user, request)
+
+        return verified_user
+
     async def forgot_password(
         self, user: models.UD, request: Optional[Request] = None
     ) -> None:
@@ -187,13 +254,6 @@ class BaseUserManager(Generic[models.UC, models.UD]):
 
         return updated_user
 
-    async def verify(self, user: models.UD) -> models.UD:
-        if user.is_verified:
-            raise UserAlreadyVerified()
-
-        user.is_verified = True
-        return await self.user_db.update(user)
-
     async def update(
         self,
         user_update: models.UU,
@@ -227,6 +287,16 @@ class BaseUserManager(Generic[models.UC, models.UD]):
         user: models.UD,
         update_dict: Dict[str, Any],
         request: Optional[Request] = None,
+    ) -> None:
+        return  # pragma: no cover
+
+    async def on_after_request_verify(
+        self, user: models.UD, token: str, request: Optional[Request] = None
+    ) -> None:
+        return  # pragma: no cover
+
+    async def on_after_verify(
+        self, user: models.UD, request: Optional[Request] = None
     ) -> None:
         return  # pragma: no cover
 

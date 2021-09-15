@@ -9,12 +9,30 @@ from fastapi_users.jwt import decode_jwt, generate_jwt
 from fastapi_users.manager import (
     InvalidPasswordException,
     InvalidResetPasswordToken,
+    InvalidVerifyToken,
     UserAlreadyExists,
     UserAlreadyVerified,
     UserInactive,
     UserNotExists,
 )
 from tests.conftest import UserCreate, UserDB, UserDBOAuth, UserManagerMock, UserUpdate
+
+
+@pytest.fixture
+def verify_token(user_manager: UserManagerMock):
+    def _verify_token(
+        user_id=None,
+        email=None,
+        lifetime=user_manager.verification_token_lifetime_seconds,
+    ):
+        data = {"aud": user_manager.verification_token_audience}
+        if user_id is not None:
+            data["user_id"] = str(user_id)
+        if email is not None:
+            data["email"] = email
+        return generate_jwt(data, user_manager.verification_token_secret, lifetime)
+
+    return _verify_token
 
 
 @pytest.fixture
@@ -142,37 +160,114 @@ class TestOAuthCallback:
 
 
 @pytest.mark.asyncio
-class TestUpdateUser:
-    async def test_safe_update(self, user: UserDB, user_manager: UserManagerMock):
-        user_update = UserUpdate(first_name="Arthur", is_superuser=True)
-        updated_user = await user_manager.update(user_update, user, safe=True)
+class TestRequestVerifyUser:
+    async def test_user_inactive(
+        self, user_manager: UserManagerMock, inactive_user: UserDB
+    ):
+        with pytest.raises(UserInactive):
+            await user_manager.request_verify(inactive_user)
 
-        assert updated_user.first_name == "Arthur"
-        assert updated_user.is_superuser is False
+    async def test_user_verified(
+        self, user_manager: UserManagerMock, verified_user: UserDB
+    ):
+        with pytest.raises(UserAlreadyVerified):
+            await user_manager.request_verify(verified_user)
 
-        assert user_manager.on_after_update.called is True
+    async def test_user_active_not_verified(
+        self, user_manager: UserManagerMock, user: UserDB
+    ):
+        await user_manager.request_verify(user)
+        assert user_manager.on_after_request_verify.called is True
 
-    async def test_unsafe_update(self, user: UserDB, user_manager: UserManagerMock):
-        user_update = UserUpdate(first_name="Arthur", is_superuser=True)
-        updated_user = await user_manager.update(user_update, user, safe=False)
+        actual_user = user_manager.on_after_request_verify.call_args[0][0]
+        actual_token = user_manager.on_after_request_verify.call_args[0][1]
 
-        assert updated_user.first_name == "Arthur"
-        assert updated_user.is_superuser is True
-
-        assert user_manager.on_after_update.called is True
+        assert actual_user.id == user.id
+        decoded_token = decode_jwt(
+            actual_token,
+            user_manager.verification_token_secret,
+            audience=[user_manager.verification_token_audience],
+        )
+        assert decoded_token["user_id"] == str(user.id)
+        assert decoded_token["email"] == str(user.email)
 
 
 @pytest.mark.asyncio
 class TestVerifyUser:
-    async def test_already_verified_user(
-        self, user_manager: UserManagerMock, verified_user: UserDB
+    async def test_invalid_token(self, user_manager: UserManagerMock):
+        with pytest.raises(InvalidVerifyToken):
+            await user_manager.verify("foo")
+
+    async def test_token_expired(
+        self, user_manager: UserManagerMock, user: UserDB, verify_token
+    ):
+        with pytest.raises(InvalidVerifyToken):
+            token = verify_token(user_id=user.id, email=user.email, lifetime=-1)
+            await user_manager.verify(token)
+
+    async def test_missing_user_id(
+        self, user_manager: UserManagerMock, user: UserDB, verify_token
+    ):
+        with pytest.raises(InvalidVerifyToken):
+            token = verify_token(email=user.email)
+            await user_manager.verify(token)
+
+    async def test_missing_user_email(
+        self, user_manager: UserManagerMock, user: UserDB, verify_token
+    ):
+        with pytest.raises(InvalidVerifyToken):
+            token = verify_token(user_id=user.id)
+            await user_manager.verify(token)
+
+    async def test_invalid_user_id(
+        self, user_manager: UserManagerMock, user: UserDB, verify_token
+    ):
+        with pytest.raises(InvalidVerifyToken):
+            token = verify_token(user_id="foo", email=user.email)
+            await user_manager.verify(token)
+
+    async def test_invalid_email(
+        self, user_manager: UserManagerMock, user: UserDB, verify_token
+    ):
+        with pytest.raises(InvalidVerifyToken):
+            token = verify_token(user_id=user.id, email="foo")
+            await user_manager.verify(token)
+
+    async def test_email_id_mismatch(
+        self,
+        user_manager: UserManagerMock,
+        user: UserDB,
+        inactive_user: UserDB,
+        verify_token,
+    ):
+        with pytest.raises(InvalidVerifyToken):
+            token = verify_token(user_id=user.id, email=inactive_user.email)
+            await user_manager.verify(token)
+
+    async def test_verified_user(
+        self, user_manager: UserManagerMock, verified_user: UserDB, verify_token
     ):
         with pytest.raises(UserAlreadyVerified):
-            await user_manager.verify(verified_user)
+            token = verify_token(user_id=verified_user.id, email=verified_user.email)
+            await user_manager.verify(token)
 
-    async def test_non_verified_user(self, user_manager: UserManagerMock, user: UserDB):
-        user = await user_manager.verify(user)
-        assert user.is_verified
+    async def test_inactive_user(
+        self, user_manager: UserManagerMock, inactive_user: UserDB, verify_token
+    ):
+        token = verify_token(user_id=inactive_user.id, email=inactive_user.email)
+        verified_user = await user_manager.verify(token)
+
+        assert verified_user.is_verified is True
+        assert verified_user.is_active is False
+
+    async def test_active_user(
+        self, user_manager: UserManagerMock, user: UserDB, verify_token
+    ):
+        token = verify_token(user_id=user.id, email=user.email)
+        verified_user = await user_manager.verify(token)
+
+        assert verified_user.is_verified is True
+        assert verified_user.is_active is True
 
 
 @pytest.mark.asyncio
@@ -205,6 +300,16 @@ class TestResetPassword:
     async def test_invalid_token(self, user_manager: UserManagerMock):
         with pytest.raises(InvalidResetPasswordToken):
             await user_manager.reset_password("foo", "guinevere")
+        assert user_manager._update.called is False
+        assert user_manager.on_after_reset_password.called is False
+
+    async def test_token_expired(
+        self, user_manager: UserManagerMock, user: UserDB, forgot_password_token
+    ):
+        with pytest.raises(InvalidResetPasswordToken):
+            await user_manager.reset_password(
+                forgot_password_token(user.id, lifetime=-1), "guinevere"
+            )
         assert user_manager._update.called is False
         assert user_manager.on_after_reset_password.called is False
 
@@ -266,6 +371,27 @@ class TestResetPassword:
         assert user_manager.on_after_reset_password.called is True
         actual_user = user_manager.on_after_reset_password.call_args[0][0]
         assert actual_user.id == user.id
+
+
+@pytest.mark.asyncio
+class TestUpdateUser:
+    async def test_safe_update(self, user: UserDB, user_manager: UserManagerMock):
+        user_update = UserUpdate(first_name="Arthur", is_superuser=True)
+        updated_user = await user_manager.update(user_update, user, safe=True)
+
+        assert updated_user.first_name == "Arthur"
+        assert updated_user.is_superuser is False
+
+        assert user_manager.on_after_update.called is True
+
+    async def test_unsafe_update(self, user: UserDB, user_manager: UserManagerMock):
+        user_update = UserUpdate(first_name="Arthur", is_superuser=True)
+        updated_user = await user_manager.update(user_update, user, safe=False)
+
+        assert updated_user.first_name == "Arthur"
+        assert updated_user.is_superuser is True
+
+        assert user_manager.on_after_update.called is True
 
 
 @pytest.mark.asyncio

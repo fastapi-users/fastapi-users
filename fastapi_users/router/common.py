@@ -1,7 +1,3 @@
-import asyncio
-from typing import Callable
-
-
 class ErrorCode:
     REGISTER_INVALID_PASSWORD = "REGISTER_INVALID_PASSWORD"
     REGISTER_USER_ALREADY_EXISTS = "REGISTER_USER_ALREADY_EXISTS"
@@ -11,13 +7,5 @@ class ErrorCode:
     RESET_PASSWORD_INVALID_PASSWORD = "RESET_PASSWORD_INVALID_PASSWORD"
     VERIFY_USER_BAD_TOKEN = "VERIFY_USER_BAD_TOKEN"
     VERIFY_USER_ALREADY_VERIFIED = "VERIFY_USER_ALREADY_VERIFIED"
-    VERIFY_USER_TOKEN_EXPIRED = "VERIFY_USER_TOKEN_EXPIRED"
     UPDATE_USER_EMAIL_ALREADY_EXISTS = "UPDATE_USER_EMAIL_ALREADY_EXISTS"
     UPDATE_USER_INVALID_PASSWORD = "UPDATE_USER_INVALID_PASSWORD"
-
-
-async def run_handler(handler: Callable, *args, **kwargs):
-    if asyncio.iscoroutinefunction(handler):
-        await handler(*args, **kwargs)
-    else:
-        handler(*args, **kwargs)

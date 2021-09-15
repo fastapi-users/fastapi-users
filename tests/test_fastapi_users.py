@@ -32,7 +32,7 @@ async def test_app_client(
     app.include_router(fastapi_users.get_auth_router(mock_authentication))
     app.include_router(fastapi_users.get_oauth_router(oauth_client, secret))
     app.include_router(fastapi_users.get_users_router(), prefix="/users")
-    app.include_router(fastapi_users.get_verify_router(secret))
+    app.include_router(fastapi_users.get_verify_router())
 
     @app.delete("/users/me")
     def custom_users_route():

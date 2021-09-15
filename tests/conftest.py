@@ -56,6 +56,7 @@ class UserDBOAuth(UserOAuth, UserDB):
 
 class UserManager(BaseUserManager[UserCreate, UserDB]):
     reset_password_token_secret = "SECRET"
+    verification_token_secret = "SECRET"
 
     async def validate_password(
         self, password: str, user: Union[UserCreate, UserDB]
@@ -68,12 +69,16 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
 
 class UserManagerMock(UserManager):
     get_by_email: MagicMock
+    request_verify: MagicMock
+    verify: MagicMock
     forgot_password: MagicMock
     reset_password: MagicMock
     on_after_register: MagicMock
-    on_after_update: MagicMock
+    on_after_request_verify: MagicMock
+    on_after_verify: MagicMock
     on_after_forgot_password: MagicMock
     on_after_reset_password: MagicMock
+    on_after_update: MagicMock
     _update: MagicMock
 
 
@@ -379,12 +384,16 @@ def make_user_manager(mocker: MockerFixture):
     def _make_user_manager(user_db_model, mock_user_db):
         user_manager = UserManager(user_db_model, mock_user_db)
         mocker.spy(user_manager, "get_by_email")
+        mocker.spy(user_manager, "request_verify")
+        mocker.spy(user_manager, "verify")
         mocker.spy(user_manager, "forgot_password")
         mocker.spy(user_manager, "reset_password")
         mocker.spy(user_manager, "on_after_register")
-        mocker.spy(user_manager, "on_after_update")
+        mocker.spy(user_manager, "on_after_request_verify")
+        mocker.spy(user_manager, "on_after_verify")
         mocker.spy(user_manager, "on_after_forgot_password")
         mocker.spy(user_manager, "on_after_reset_password")
+        mocker.spy(user_manager, "on_after_update")
         mocker.spy(user_manager, "_update")
         return user_manager
 

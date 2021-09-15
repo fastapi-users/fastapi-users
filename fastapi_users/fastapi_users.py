@@ -1,6 +1,6 @@
-from typing import Callable, Generic, Optional, Sequence, Type
+from typing import Generic, Sequence, Type
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter
 
 from fastapi_users import models
 from fastapi_users.authentication import Authenticator, BaseAuthentication
@@ -72,33 +72,9 @@ class FastAPIUsers(Generic[models.U, models.UC, models.UU, models.UD]):
             self._user_create_model,
         )
 
-    def get_verify_router(
-        self,
-        verification_token_secret: SecretType,
-        verification_token_lifetime_seconds: int = 3600,
-        after_verification_request: Optional[
-            Callable[[models.UD, str, Request], None]
-        ] = None,
-        after_verification: Optional[Callable[[models.UD, Request], None]] = None,
-    ) -> APIRouter:
-        """
-        Return a router with e-mail verification routes.
-
-        :param verification_token_secret: Secret to encode verification token.
-        :param verification_token_lifetime_seconds: Lifetime verification token.
-        :param after_verification_request: Optional function called after a successful
-        verify request.
-        :param after_verification: Optional function called after a successful
-        verification.
-        """
-        return get_verify_router(
-            self.get_user_manager,
-            self._user_model,
-            verification_token_secret,
-            verification_token_lifetime_seconds,
-            after_verification_request,
-            after_verification,
-        )
+    def get_verify_router(self) -> APIRouter:
+        """Return a router with e-mail verification routes."""
+        return get_verify_router(self.get_user_manager, self._user_model)
 
     def get_reset_password_router(self) -> APIRouter:
         """Return a reset password process router."""
