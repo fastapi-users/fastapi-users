@@ -1,28 +1,18 @@
 from typing import Any, AsyncGenerator, Dict, cast
-from unittest.mock import MagicMock
 
-import asynctest
 import httpx
 import pytest
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI, status
+from httpx_oauth.oauth2 import BaseOAuth2
 
 from fastapi_users.authentication import Authenticator
-from fastapi_users.router.common import ErrorCode
 from fastapi_users.router.oauth import generate_state_token, get_oauth_router
-from tests.conftest import MockAuthentication, UserDB
-
-
-def after_register_sync():
-    return MagicMock(return_value=None)
-
-
-def after_register_async():
-    return asynctest.CoroutineMock(return_value=None)
-
-
-@pytest.fixture(params=[after_register_sync, after_register_async])
-def after_register(request):
-    return request.param()
+from tests.conftest import (
+    AsyncMethodMocker,
+    MockAuthentication,
+    UserDB,
+    UserManagerMock,
+)
 
 
 @pytest.fixture
@@ -31,7 +21,6 @@ def get_test_app_client(
     get_user_manager_oauth,
     mock_authentication,
     oauth_client,
-    after_register,
     get_test_client,
 ):
     async def _get_test_app_client(
@@ -45,11 +34,9 @@ def get_test_app_client(
         oauth_router = get_oauth_router(
             oauth_client,
             get_user_manager_oauth,
-            UserDB,
             authenticator,
             secret,
             redirect_url,
-            after_register,
         )
 
         app = FastAPI()
@@ -80,64 +67,86 @@ async def test_app_client_redirect_url(get_test_app_client):
 @pytest.mark.asyncio
 class TestAuthorize:
     async def test_missing_authentication_backend(
-        self, test_app_client: httpx.AsyncClient, oauth_client
+        self,
+        async_method_mocker: AsyncMethodMocker,
+        test_app_client: httpx.AsyncClient,
+        oauth_client: BaseOAuth2,
     ):
-        with asynctest.patch.object(oauth_client, "get_authorization_url") as mock:
-            mock.return_value = "AUTHORIZATION_URL"
-            response = await test_app_client.get(
-                "/authorize",
-                params={"scopes": ["scope1", "scope2"]},
-            )
+        async_method_mocker(
+            oauth_client, "get_authorization_url", return_value="AUTHORIZATION_URL"
+        )
+
+        response = await test_app_client.get(
+            "/authorize",
+            params={"scopes": ["scope1", "scope2"]},
+        )
 
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     async def test_wrong_authentication_backend(
-        self, test_app_client: httpx.AsyncClient, oauth_client
+        self,
+        async_method_mocker: AsyncMethodMocker,
+        test_app_client: httpx.AsyncClient,
+        oauth_client: BaseOAuth2,
     ):
-        with asynctest.patch.object(oauth_client, "get_authorization_url") as mock:
-            mock.return_value = "AUTHORIZATION_URL"
-            response = await test_app_client.get(
-                "/authorize",
-                params={
-                    "authentication_backend": "foo",
-                    "scopes": ["scope1", "scope2"],
-                },
-            )
+        async_method_mocker(
+            oauth_client, "get_authorization_url", return_value="AUTHORIZATION_URL"
+        )
+
+        response = await test_app_client.get(
+            "/authorize",
+            params={
+                "authentication_backend": "foo",
+                "scopes": ["scope1", "scope2"],
+            },
+        )
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
-    async def test_success(self, test_app_client: httpx.AsyncClient, oauth_client):
-        with asynctest.patch.object(oauth_client, "get_authorization_url") as mock:
-            mock.return_value = "AUTHORIZATION_URL"
-            response = await test_app_client.get(
-                "/authorize",
-                params={
-                    "authentication_backend": "mock",
-                    "scopes": ["scope1", "scope2"],
-                },
-            )
+    async def test_success(
+        self,
+        async_method_mocker: AsyncMethodMocker,
+        test_app_client: httpx.AsyncClient,
+        oauth_client: BaseOAuth2,
+    ):
+        get_authorization_url_mock = async_method_mocker(
+            oauth_client, "get_authorization_url", return_value="AUTHORIZATION_URL"
+        )
+
+        response = await test_app_client.get(
+            "/authorize",
+            params={
+                "authentication_backend": "mock",
+                "scopes": ["scope1", "scope2"],
+            },
+        )
 
         assert response.status_code == status.HTTP_200_OK
-        mock.assert_awaited_once()
+        get_authorization_url_mock.assert_called_once()
 
         data = response.json()
         assert "authorization_url" in data
 
     async def test_with_redirect_url(
-        self, test_app_client_redirect_url: httpx.AsyncClient, oauth_client
+        self,
+        async_method_mocker: AsyncMethodMocker,
+        test_app_client_redirect_url: httpx.AsyncClient,
+        oauth_client: BaseOAuth2,
     ):
-        with asynctest.patch.object(oauth_client, "get_authorization_url") as mock:
-            mock.return_value = "AUTHORIZATION_URL"
-            response = await test_app_client_redirect_url.get(
-                "/authorize",
-                params={
-                    "authentication_backend": "mock",
-                    "scopes": ["scope1", "scope2"],
-                },
-            )
+        get_authorization_url_mock = async_method_mocker(
+            oauth_client, "get_authorization_url", return_value="AUTHORIZATION_URL"
+        )
+
+        response = await test_app_client_redirect_url.get(
+            "/authorize",
+            params={
+                "authentication_backend": "mock",
+                "scopes": ["scope1", "scope2"],
+            },
+        )
 
         assert response.status_code == status.HTTP_200_OK
-        mock.assert_awaited_once()
+        get_authorization_url_mock.assert_called_once()
 
         data = response.json()
         assert "authorization_url" in data
@@ -156,196 +165,110 @@ class TestAuthorize:
 class TestCallback:
     async def test_invalid_state(
         self,
+        async_method_mocker: AsyncMethodMocker,
         test_app_client: httpx.AsyncClient,
-        access_token,
-        oauth_client,
-        user_oauth,
-        after_register,
+        oauth_client: BaseOAuth2,
+        user_oauth: UserDB,
+        access_token: str,
     ):
-        with asynctest.patch.object(
-            oauth_client, "get_access_token"
-        ) as get_access_token_mock:
-            get_access_token_mock.return_value = access_token
-            with asynctest.patch.object(
-                oauth_client, "get_id_email"
-            ) as get_id_email_mock:
-                get_id_email_mock.return_value = ("user_oauth1", user_oauth.email)
-                response = await test_app_client.get(
-                    "/callback",
-                    params={"code": "CODE", "state": "STATE"},
-                )
+        async_method_mocker(oauth_client, "get_access_token", return_value=access_token)
+        get_id_email_mock = async_method_mocker(
+            oauth_client, "get_id_email", return_value=("user_oauth1", user_oauth.email)
+        )
 
-        get_id_email_mock.assert_awaited_once_with("TOKEN")
+        response = await test_app_client.get(
+            "/callback",
+            params={"code": "CODE", "state": "STATE"},
+        )
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
-        assert after_register.called is False
+        get_id_email_mock.assert_called_once_with("TOKEN")
 
-    async def test_existing_user_with_oauth(
+    async def test_active_user(
         self,
-        mock_user_db_oauth,
+        async_method_mocker: AsyncMethodMocker,
         test_app_client: httpx.AsyncClient,
-        access_token,
-        oauth_client,
-        user_oauth,
-        after_register,
+        oauth_client: BaseOAuth2,
+        user_oauth: UserDB,
+        user_manager_oauth: UserManagerMock,
+        access_token: str,
     ):
         state_jwt = generate_state_token({"authentication_backend": "mock"}, "SECRET")
-        with asynctest.patch.object(
-            oauth_client, "get_access_token"
-        ) as get_access_token_mock:
-            get_access_token_mock.return_value = access_token
-            with asynctest.patch.object(
-                oauth_client, "get_id_email"
-            ) as get_id_email_mock:
-                with asynctest.patch.object(
-                    mock_user_db_oauth, "update"
-                ) as user_update_mock:
-                    get_id_email_mock.return_value = ("user_oauth1", user_oauth.email)
-                    response = await test_app_client.get(
-                        "/callback",
-                        params={"code": "CODE", "state": state_jwt},
-                    )
+        async_method_mocker(oauth_client, "get_access_token", return_value=access_token)
+        async_method_mocker(
+            oauth_client, "get_id_email", return_value=("user_oauth1", user_oauth.email)
+        )
+        async_method_mocker(
+            user_manager_oauth, "oauth_callback", return_value=user_oauth
+        )
 
-        get_id_email_mock.assert_awaited_once_with("TOKEN")
-        user_update_mock.assert_awaited_once()
+        response = await test_app_client.get(
+            "/callback",
+            params={"code": "CODE", "state": state_jwt},
+        )
+
+        assert response.status_code == status.HTTP_200_OK
+
         data = cast(Dict[str, Any], response.json())
-
         assert data["token"] == str(user_oauth.id)
-
-        assert after_register.called is False
-
-    async def test_existing_user_without_oauth(
-        self,
-        mock_user_db_oauth,
-        test_app_client: httpx.AsyncClient,
-        access_token,
-        oauth_client,
-        superuser_oauth,
-        after_register,
-    ):
-        state_jwt = generate_state_token({"authentication_backend": "mock"}, "SECRET")
-        with asynctest.patch.object(
-            oauth_client, "get_access_token"
-        ) as get_access_token_mock:
-            get_access_token_mock.return_value = access_token
-            with asynctest.patch.object(
-                oauth_client, "get_id_email"
-            ) as get_id_email_mock:
-                with asynctest.patch.object(
-                    mock_user_db_oauth, "update"
-                ) as user_update_mock:
-                    get_id_email_mock.return_value = (
-                        "superuser_oauth1",
-                        superuser_oauth.email,
-                    )
-                    response = await test_app_client.get(
-                        "/callback",
-                        params={"code": "CODE", "state": state_jwt},
-                    )
-
-        get_id_email_mock.assert_awaited_once_with("TOKEN")
-        user_update_mock.assert_awaited_once()
-        data = cast(Dict[str, Any], response.json())
-
-        assert data["token"] == str(superuser_oauth.id)
-
-        assert after_register.called is False
-
-    async def test_unknown_user(
-        self,
-        mock_user_db_oauth,
-        test_app_client: httpx.AsyncClient,
-        access_token,
-        oauth_client,
-        after_register,
-    ):
-        state_jwt = generate_state_token({"authentication_backend": "mock"}, "SECRET")
-        with asynctest.patch.object(
-            oauth_client, "get_access_token"
-        ) as get_access_token_mock:
-            get_access_token_mock.return_value = access_token
-            with asynctest.patch.object(
-                oauth_client, "get_id_email"
-            ) as get_id_email_mock:
-                with asynctest.patch.object(
-                    mock_user_db_oauth, "create"
-                ) as user_create_mock:
-                    get_id_email_mock.return_value = (
-                        "unknown_user_oauth1",
-                        "galahad@camelot.bt",
-                    )
-                    response = await test_app_client.get(
-                        "/callback",
-                        params={"code": "CODE", "state": state_jwt},
-                    )
-
-        get_id_email_mock.assert_awaited_once_with("TOKEN")
-        user_create_mock.assert_awaited_once()
-        data = cast(Dict[str, Any], response.json())
-
-        assert "token" in data
-
-        assert after_register.called is True
-        actual_user = after_register.call_args[0][0]
-        assert str(actual_user.id) == data["token"]
-        request = after_register.call_args[0][1]
-        assert isinstance(request, Request)
 
     async def test_inactive_user(
         self,
+        async_method_mocker: AsyncMethodMocker,
         test_app_client: httpx.AsyncClient,
-        access_token,
-        oauth_client,
-        inactive_user_oauth,
-        after_register,
+        oauth_client: BaseOAuth2,
+        inactive_user_oauth: UserDB,
+        user_manager_oauth: UserManagerMock,
+        access_token: str,
     ):
         state_jwt = generate_state_token({"authentication_backend": "mock"}, "SECRET")
-        with asynctest.patch.object(
-            oauth_client, "get_access_token"
-        ) as get_access_token_mock:
-            get_access_token_mock.return_value = access_token
-            with asynctest.patch.object(
-                oauth_client, "get_id_email"
-            ) as get_id_email_mock:
-                get_id_email_mock.return_value = (
-                    "inactive_user_oauth1",
-                    inactive_user_oauth.email,
-                )
-                response = await test_app_client.get(
-                    "/callback",
-                    params={"code": "CODE", "state": state_jwt},
-                )
+        async_method_mocker(oauth_client, "get_access_token", return_value=access_token)
+        async_method_mocker(
+            oauth_client,
+            "get_id_email",
+            return_value=("user_oauth1", inactive_user_oauth.email),
+        )
+        async_method_mocker(
+            user_manager_oauth, "oauth_callback", return_value=inactive_user_oauth
+        )
+
+        response = await test_app_client.get(
+            "/callback",
+            params={"code": "CODE", "state": state_jwt},
+        )
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
-        data = cast(Dict[str, Any], response.json())
-        assert data["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
-
-        assert after_register.called is False
 
     async def test_redirect_url_router(
         self,
+        async_method_mocker: AsyncMethodMocker,
         test_app_client_redirect_url: httpx.AsyncClient,
-        access_token,
-        oauth_client,
-        user_oauth,
+        oauth_client: BaseOAuth2,
+        user_oauth: UserDB,
+        user_manager_oauth: UserManagerMock,
+        access_token: str,
     ):
         state_jwt = generate_state_token({"authentication_backend": "mock"}, "SECRET")
-        with asynctest.patch.object(
-            oauth_client, "get_access_token"
-        ) as get_access_token_mock:
-            get_access_token_mock.return_value = access_token
-            with asynctest.patch.object(
-                oauth_client, "get_id_email"
-            ) as get_id_email_mock:
-                get_id_email_mock.return_value = ("user_oauth1", user_oauth.email)
-                response = await test_app_client_redirect_url.get(
-                    "/callback",
-                    params={"code": "CODE", "state": state_jwt},
-                )
+        get_access_token_mock = async_method_mocker(
+            oauth_client, "get_access_token", return_value=access_token
+        )
+        async_method_mocker(
+            oauth_client, "get_id_email", return_value=("user_oauth1", user_oauth.email)
+        )
+        async_method_mocker(
+            user_manager_oauth, "oauth_callback", return_value=user_oauth
+        )
 
-        get_access_token_mock.assert_awaited_once_with(
+        response = await test_app_client_redirect_url.get(
+            "/callback",
+            params={"code": "CODE", "state": state_jwt},
+        )
+
+        assert response.status_code == status.HTTP_200_OK
+
+        get_access_token_mock.assert_called_once_with(
             "CODE", "http://www.tintagel.bt/callback"
         )
-        data = cast(Dict[str, Any], response.json())
 
+        data = cast(Dict[str, Any], response.json())
         assert data["token"] == str(user_oauth.id)

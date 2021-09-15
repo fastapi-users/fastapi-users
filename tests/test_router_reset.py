@@ -11,7 +11,7 @@ from fastapi_users.manager import (
     UserNotExists,
 )
 from fastapi_users.router import ErrorCode, get_reset_password_router
-from tests.conftest import UserManagerMock
+from tests.conftest import AsyncMethodMocker, UserManagerMock
 
 
 @pytest.fixture
@@ -57,10 +57,11 @@ class TestForgotPassword:
 
     async def test_existing_user(
         self,
+        async_method_mocker: AsyncMethodMocker,
         test_app_client: httpx.AsyncClient,
         user_manager: UserManagerMock,
     ):
-        user_manager.mock_method("forgot_password")
+        async_method_mocker(user_manager, "forgot_password", return_value=None)
         json = {"email": "king.arthur@camelot.bt"}
         response = await test_app_client.post("/forgot-password", json=json)
         assert response.status_code == status.HTTP_202_ACCEPTED
@@ -139,10 +140,11 @@ class TestResetPassword:
 
     async def test_valid_user_password(
         self,
+        async_method_mocker: AsyncMethodMocker,
         test_app_client: httpx.AsyncClient,
         user_manager: UserManagerMock,
     ):
-        user_manager.mock_method("reset_password")
+        async_method_mocker(user_manager, "reset_password", return_value=None)
         json = {"token": "foo", "password": "guinevere"}
         response = await test_app_client.post("/reset-password", json=json)
         assert response.status_code == status.HTTP_200_OK

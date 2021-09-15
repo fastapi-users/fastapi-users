@@ -1,9 +1,10 @@
-from typing import Callable
+from typing import Callable, cast
 
 import pytest
 from fastapi.security import OAuth2PasswordRequestForm
 from pytest_mock import MockerFixture
 
+from fastapi_users import models
 from fastapi_users.jwt import decode_jwt, generate_jwt
 from fastapi_users.manager import (
     InvalidPasswordException,
@@ -13,7 +14,7 @@ from fastapi_users.manager import (
     UserInactive,
     UserNotExists,
 )
-from tests.conftest import UserCreate, UserDB, UserManagerMock, UserUpdate
+from tests.conftest import UserCreate, UserDB, UserDBOAuth, UserManagerMock, UserUpdate
 
 
 @pytest.fixture
@@ -83,6 +84,61 @@ class TestCreateUser:
         assert created_user.is_active is result
 
         assert user_manager.on_after_register.called is True
+
+
+@pytest.mark.asyncio
+class TestOAuthCallback:
+    async def test_existing_user_with_oauth(
+        self, user_manager_oauth: UserManagerMock, user_oauth: UserDBOAuth
+    ):
+        oauth_account = models.BaseOAuthAccount(
+            **user_oauth.oauth_accounts[0].dict(exclude={"id", "access_token"}),
+            access_token="UPDATED_TOKEN"
+        )
+        user = cast(UserDBOAuth, await user_manager_oauth.oauth_callback(oauth_account))
+
+        assert user.id == user_oauth.id
+        assert len(user.oauth_accounts) == 2
+        assert user.oauth_accounts[0].oauth_name == "service1"
+        assert user.oauth_accounts[0].access_token == "UPDATED_TOKEN"
+        assert user.oauth_accounts[1].access_token == "TOKEN"
+        assert user.oauth_accounts[1].oauth_name == "service2"
+
+        assert user_manager_oauth.on_after_register.called is False
+
+    async def test_existing_user_without_oauth(
+        self, user_manager_oauth: UserManagerMock, superuser_oauth: UserDBOAuth
+    ):
+        oauth_account = models.BaseOAuthAccount(
+            oauth_name="service1",
+            access_token="TOKEN",
+            expires_at=1579000751,
+            account_id="superuser_oauth1",
+            account_email=superuser_oauth.email,
+        )
+        user = cast(UserDBOAuth, await user_manager_oauth.oauth_callback(oauth_account))
+
+        assert user.id == superuser_oauth.id
+        assert len(user.oauth_accounts) == 1
+        assert user.oauth_accounts[0].id == oauth_account.id
+
+        assert user_manager_oauth.on_after_register.called is False
+
+    async def test_new_user(self, user_manager_oauth: UserManagerMock):
+        oauth_account = models.BaseOAuthAccount(
+            oauth_name="service1",
+            access_token="TOKEN",
+            expires_at=1579000751,
+            account_id="new_user_oauth1",
+            account_email="galahad@camelot.bt",
+        )
+        user = cast(UserDBOAuth, await user_manager_oauth.oauth_callback(oauth_account))
+
+        assert user.email == "galahad@camelot.bt"
+        assert len(user.oauth_accounts) == 1
+        assert user.oauth_accounts[0].id == oauth_account.id
+
+        assert user_manager_oauth.on_after_register.called is True
 
 
 @pytest.mark.asyncio

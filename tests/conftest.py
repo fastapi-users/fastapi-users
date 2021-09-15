@@ -1,5 +1,5 @@
 import asyncio
-from typing import AsyncGenerator, List, Optional, Union
+from typing import Any, AsyncGenerator, Callable, List, Optional, Union
 from unittest.mock import MagicMock
 
 import httpx
@@ -65,16 +65,6 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
                 reason="Password should be at least 3 characters"
             )
 
-    def mock_method(self, name: str):
-        mock = MagicMock()
-
-        future: asyncio.Future = asyncio.Future()
-        future.set_result(None)
-        mock.return_value = future
-        mock.side_effect = None
-
-        setattr(self, name, mock)
-
 
 class UserManagerMock(UserManager):
     get_by_email: MagicMock
@@ -92,6 +82,30 @@ def event_loop():
     """Force the pytest-asyncio loop to be the main one."""
     loop = asyncio.get_event_loop()
     yield loop
+
+
+AsyncMethodMocker = Callable[..., MagicMock]
+
+
+@pytest.fixture
+def async_method_mocker(mocker: MockerFixture) -> AsyncMethodMocker:
+    def _async_method_mocker(
+        object: Any,
+        method: str,
+        return_value: Any = None,
+    ) -> MagicMock:
+        mock: MagicMock = mocker.MagicMock()
+
+        future: asyncio.Future = asyncio.Future()
+        future.set_result(return_value)
+        mock.return_value = future
+        mock.side_effect = None
+
+        setattr(object, method, mock)
+
+        return mock
+
+    return _async_method_mocker
 
 
 @pytest.fixture(params=["SECRET", SecretStr("SECRET")])
@@ -361,33 +375,30 @@ def mock_user_db_oauth(
 
 
 @pytest.fixture
-def get_mock_user_db(mock_user_db):
-    def _get_mock_user_db():
-        yield mock_user_db
+def make_user_manager(mocker: MockerFixture):
+    def _make_user_manager(user_db_model, mock_user_db):
+        user_manager = UserManager(user_db_model, mock_user_db)
+        mocker.spy(user_manager, "get_by_email")
+        mocker.spy(user_manager, "forgot_password")
+        mocker.spy(user_manager, "reset_password")
+        mocker.spy(user_manager, "on_after_register")
+        mocker.spy(user_manager, "on_after_update")
+        mocker.spy(user_manager, "on_after_forgot_password")
+        mocker.spy(user_manager, "on_after_reset_password")
+        mocker.spy(user_manager, "_update")
+        return user_manager
 
-    return _get_mock_user_db
+    return _make_user_manager
 
 
 @pytest.fixture
-def get_mock_user_db_oauth(mock_user_db_oauth):
-    def _get_mock_user_db_oauth():
-        yield mock_user_db_oauth
-
-    return _get_mock_user_db_oauth
+def user_manager(make_user_manager, mock_user_db):
+    return make_user_manager(UserDB, mock_user_db)
 
 
 @pytest.fixture
-def user_manager(mocker: MockerFixture, mock_user_db):
-    user_manager = UserManager(UserDB, mock_user_db)
-    mocker.spy(user_manager, "get_by_email")
-    mocker.spy(user_manager, "forgot_password")
-    mocker.spy(user_manager, "reset_password")
-    mocker.spy(user_manager, "on_after_register")
-    mocker.spy(user_manager, "on_after_update")
-    mocker.spy(user_manager, "on_after_forgot_password")
-    mocker.spy(user_manager, "on_after_reset_password")
-    mocker.spy(user_manager, "_update")
-    return user_manager
+def user_manager_oauth(make_user_manager, mock_user_db_oauth):
+    return make_user_manager(UserDBOAuth, mock_user_db_oauth)
 
 
 @pytest.fixture
@@ -399,9 +410,9 @@ def get_user_manager(user_manager):
 
 
 @pytest.fixture
-def get_user_manager_oauth(get_mock_user_db_oauth):
-    def _get_user_manager_oauth(user_db=Depends(get_mock_user_db_oauth)):
-        return UserManager(UserDBOAuth, user_db)
+def get_user_manager_oauth(user_manager_oauth):
+    def _get_user_manager_oauth():
+        return user_manager_oauth
 
     return _get_user_manager_oauth
 

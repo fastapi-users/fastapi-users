@@ -8,7 +8,7 @@ from pydantic import UUID4
 from fastapi_users import models, password
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
-from fastapi_users.password import get_password_hash
+from fastapi_users.password import generate_password, get_password_hash
 
 RESET_PASSWORD_TOKEN_AUDIENCE = "fastapi-users:reset"
 
@@ -103,6 +103,42 @@ class BaseUserManager(Generic[models.UC, models.UD]):
         await self.on_after_register(created_user, request)
 
         return created_user
+
+    async def oauth_callback(
+        self, oauth_account: models.BaseOAuthAccount, request: Optional[Request] = None
+    ) -> models.UD:
+        try:
+            user = await self.get_by_oauth_account(
+                oauth_account.oauth_name, oauth_account.account_id
+            )
+        except UserNotExists:
+            try:
+                # Link account
+                user = await self.get_by_email(oauth_account.account_email)
+                user.oauth_accounts.append(oauth_account)  # type: ignore
+                await self.user_db.update(user)
+            except UserNotExists:
+                # Create account
+                password = generate_password()
+                user = self.user_db_model(
+                    email=oauth_account.account_email,
+                    hashed_password=get_password_hash(password),
+                    oauth_accounts=[oauth_account],
+                )
+                await self.user_db.create(user)
+                await self.on_after_register(user, request)
+        else:
+            # Update oauth
+            updated_oauth_accounts = []
+            for existing_oauth_account in user.oauth_accounts:  # type: ignore
+                if existing_oauth_account.account_id == oauth_account.account_id:
+                    updated_oauth_accounts.append(oauth_account)
+                else:
+                    updated_oauth_accounts.append(existing_oauth_account)
+            user.oauth_accounts = updated_oauth_accounts  # type: ignore
+            await self.user_db.update(user)
+
+        return user
 
     async def forgot_password(
         self, user: models.UD, request: Optional[Request] = None
