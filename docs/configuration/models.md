@@ -1,4 +1,4 @@
-# User model
+# Models
 
 **FastAPI Users** defines a minimal User model for authentication purposes. It is structured like this:
 
@@ -67,15 +67,3 @@ class UserUpdate(models.BaseUserUpdate):
 class UserDB(User, models.BaseUserDB):
     pass
 ```
-
-## Next steps
-
-Depending on your database backend, the database configuration will differ a bit.
-
-[I'm using SQLAlchemy](databases/sqlalchemy.md)
-
-[I'm using MongoDB](databases/mongodb.md)
-
-[I'm using Tortoise ORM](databases/tortoise.md)
-
-[I'm using ormar](databases/ormar.md)

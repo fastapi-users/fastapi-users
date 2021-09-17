@@ -8,6 +8,7 @@ pytest-asyncio
 flake8-docstrings
 mkdocs
 mkdocs-material
+mkdocs-mermaid2-plugin
 black
 mypy
 codecov
