@@ -51,6 +51,7 @@ class BaseUserManager(Generic[models.UC, models.UD]):
     """
     User management logic.
 
+    :attribute user_db_model: Pydantic model of a DB representation of a user.
     :attribute reset_password_token_secret: Secret to encode reset password token.
     :attribute reset_password_token_lifetime_seconds: Lifetime of reset password token.
     :attribute reset_password_token_audience: JWT audience of reset password token.
@@ -58,13 +59,10 @@ class BaseUserManager(Generic[models.UC, models.UD]):
     :attribute verification_token_lifetime_seconds: Lifetime of verification token.
     :attribute verification_token_audience: JWT audience of verification token.
 
-    :param user_db_model: Pydantic model of a DB representation of a user.
     :param user_db: Database adapter instance.
     """
 
     user_db_model: Type[models.UD]
-    user_db: BaseUserDatabase[models.UD]
-
     reset_password_token_secret: SecretType
     reset_password_token_lifetime_seconds: int = 3600
     reset_password_token_audience: str = RESET_PASSWORD_TOKEN_AUDIENCE
@@ -73,12 +71,9 @@ class BaseUserManager(Generic[models.UC, models.UD]):
     verification_token_lifetime_seconds: int = 3600
     verification_token_audience: str = VERIFY_USER_TOKEN_AUDIENCE
 
-    def __init__(
-        self,
-        user_db_model: Type[models.UD],
-        user_db: BaseUserDatabase[models.UD],
-    ):
-        self.user_db_model = user_db_model
+    user_db: BaseUserDatabase[models.UD]
+
+    def __init__(self, user_db: BaseUserDatabase[models.UD]):
         self.user_db = user_db
 
     async def get(self, id: UUID4) -> models.UD:

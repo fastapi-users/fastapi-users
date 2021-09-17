@@ -1,5 +1,5 @@
 import asyncio
-from typing import Any, AsyncGenerator, Callable, List, Optional, Union
+from typing import Any, AsyncGenerator, Callable, Generic, List, Optional, Type, Union
 from unittest.mock import MagicMock
 
 import httpx
@@ -54,17 +54,27 @@ class UserDBOAuth(UserOAuth, UserDB):
     pass
 
 
-class UserManager(BaseUserManager[UserCreate, UserDB]):
+class BaseTestUserManager(
+    Generic[models.UC, models.UD], BaseUserManager[models.UC, models.UD]
+):
     reset_password_token_secret = "SECRET"
     verification_token_secret = "SECRET"
 
     async def validate_password(
-        self, password: str, user: Union[UserCreate, UserDB]
+        self, password: str, user: Union[models.UC, models.UD]
     ) -> None:
         if len(password) < 3:
             raise InvalidPasswordException(
                 reason="Password should be at least 3 characters"
             )
+
+
+class UserManager(BaseTestUserManager[UserCreate, UserDB]):
+    user_db_model = UserDB
+
+
+class UserManagerOAuth(BaseTestUserManager[UserCreate, UserDBOAuth]):
+    user_db_model = UserDBOAuth
 
 
 class UserManagerMock(UserManager):
@@ -381,8 +391,8 @@ def mock_user_db_oauth(
 
 @pytest.fixture
 def make_user_manager(mocker: MockerFixture):
-    def _make_user_manager(user_db_model, mock_user_db):
-        user_manager = UserManager(user_db_model, mock_user_db)
+    def _make_user_manager(user_manager_class: Type[BaseTestUserManager], mock_user_db):
+        user_manager = user_manager_class(mock_user_db)
         mocker.spy(user_manager, "get_by_email")
         mocker.spy(user_manager, "request_verify")
         mocker.spy(user_manager, "verify")
@@ -402,12 +412,12 @@ def make_user_manager(mocker: MockerFixture):
 
 @pytest.fixture
 def user_manager(make_user_manager, mock_user_db):
-    return make_user_manager(UserDB, mock_user_db)
+    return make_user_manager(UserManager, mock_user_db)
 
 
 @pytest.fixture
 def user_manager_oauth(make_user_manager, mock_user_db_oauth):
-    return make_user_manager(UserDBOAuth, mock_user_db_oauth)
+    return make_user_manager(UserManagerOAuth, mock_user_db_oauth)
 
 
 @pytest.fixture
