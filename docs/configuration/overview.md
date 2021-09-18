@@ -4,9 +4,10 @@ The schema below shows you how the library is structured and how each part fit t
 
 
 ```mermaid
-flowchart TB
+flowchart LR
     FASTAPI_USERS{FastAPIUsers}
     USER_MANAGER{UserManager}
+    DATABASE_DEPENDENCY[[get_user_db]]
     USER_MANAGER_DEPENDENCY[[get_user_manager]]
     CURRENT_USER[[current_user]]
     subgraph MODELS[Models]
@@ -37,7 +38,8 @@ flowchart TB
         COOKIE[CookieAuthentication]
         JWT[JWTAuthentication]
     end
-    DATABASE --> USER_MANAGER
+    DATABASE --> DATABASE_DEPENDENCY
+    DATABASE_DEPENDENCY --> USER_MANAGER
 
     MODELS --> USER_MANAGER
     MODELS --> FASTAPI_USERS

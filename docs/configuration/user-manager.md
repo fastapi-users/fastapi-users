@@ -8,7 +8,7 @@ It's designed to be easily extensible and customizable so that you can integrate
 
 You should define your own version of the `UserManager` class to set various parameters.
 
-```py hl_lines="13-29"
+```py hl_lines="12-28"
 {!./src/user_manager.py!}
 ```
 

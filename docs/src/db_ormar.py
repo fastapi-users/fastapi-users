@@ -2,6 +2,7 @@ import databases
 import sqlalchemy
 from fastapi_users.db import OrmarBaseUserModel, OrmarUserDatabase
 
+from .models import UserDB
 
 DATABASE_URL = "sqlite:///test.db"
 metadata = sqlalchemy.MetaData()
