@@ -536,19 +536,19 @@ class BaseUserManager(Generic[models.UC, models.UD]):
 
     async def _update(self, user: models.UD, update_dict: Dict[str, Any]) -> models.UD:
         for field in update_dict:
-            if field == "email":
+            value = update_dict[field]
+            if field == "email" and value != user.email:
                 try:
-                    await self.get_by_email(update_dict[field])
+                    await self.get_by_email(value)
                     raise UserAlreadyExists()
                 except UserNotExists:
-                    user.email = update_dict[field]
+                    user.email = value
             elif field == "password":
-                password = update_dict[field]
-                await self.validate_password(password, user)
-                hashed_password = get_password_hash(password)
+                await self.validate_password(value, user)
+                hashed_password = get_password_hash(value)
                 user.hashed_password = hashed_password
             else:
-                setattr(user, field, update_dict[field])
+                setattr(user, field, value)
         return await self.user_db.update(user)
 
 

@@ -471,6 +471,16 @@ class TestUpdateUser:
 
         assert user_manager.on_after_update.called is False
 
+    async def test_email_update_with_same_email(
+        self, user: UserDB, user_manager: UserManagerMock
+    ):
+        user_update = UserUpdate(email=user.email)
+        updated_user = await user_manager.update(user_update, user, safe=True)
+
+        assert updated_user.email == user.email
+
+        assert user_manager.on_after_update.called is True
+
 
 @pytest.mark.asyncio
 @pytest.mark.manager
