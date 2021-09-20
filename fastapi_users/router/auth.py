@@ -3,13 +3,13 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 from fastapi_users import models
 from fastapi_users.authentication import Authenticator, BaseAuthentication
-from fastapi_users.db import BaseUserDatabase
+from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from fastapi_users.router.common import ErrorCode
 
 
 def get_auth_router(
     backend: BaseAuthentication,
-    user_db: BaseUserDatabase[models.BaseUserDB],
+    get_user_manager: UserManagerDependency[models.UC, models.UD],
     authenticator: Authenticator,
     requires_verification: bool = False,
 ) -> APIRouter:
@@ -21,9 +21,11 @@ def get_auth_router(
 
     @router.post("/login")
     async def login(
-        response: Response, credentials: OAuth2PasswordRequestForm = Depends()
+        response: Response,
+        credentials: OAuth2PasswordRequestForm = Depends(),
+        user_manager: BaseUserManager[models.UC, models.UD] = Depends(get_user_manager),
     ):
-        user = await user_db.authenticate(credentials)
+        user = await user_manager.authenticate(credentials)
 
         if user is None or not user.is_active:
             raise HTTPException(

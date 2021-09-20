@@ -8,27 +8,20 @@ Here is a full working example with JWT authentication to help get you started.
 
 ## SQLAlchemy
 
-```py
-{!./src/full_sqlalchemy.py!}
-```
+<iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@frankie567/fastapi-users-sqlalchemy?embed=true"></iframe>
+
 
 ## MongoDB
 
-```py
-{!./src/full_mongodb.py!}
-```
+<iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@frankie567/fastapi-users-mongodb?embed=true"></iframe>
 
 ## Tortoise ORM
 
-```py
-{!./src/full_tortoise.py!}
-```
+<iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@frankie567/fastapi-users-tortoise?embed=true"></iframe>
 
 ## Ormar
 
-```py
-{!./src/full_ormar.py!}
-```
+<iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@frankie567/fastapi-users-ormar?embed=true"></iframe>
 
 ## What now?
 

@@ -28,4 +28,4 @@ pip install 'fastapi-users[ormar]'
 
 ---
 
-That's it! Now, let's have a look at our [User model](./configuration/model.md).
+That's it! Now, let's have a look at our [User model](./configuration/models.md).

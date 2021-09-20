@@ -1,98 +1,63 @@
-from typing import Callable, Optional
-
-import jwt
-from fastapi import APIRouter, Body, HTTPException, Request, status
-from pydantic import UUID4, EmailStr
+from fastapi import APIRouter, Body, Depends, HTTPException, Request, status
+from pydantic import EmailStr
 
 from fastapi_users import models
-from fastapi_users.db import BaseUserDatabase
-from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
-from fastapi_users.password import get_password_hash
-from fastapi_users.router.common import ErrorCode, run_handler
-from fastapi_users.user import InvalidPasswordException, ValidatePasswordProtocol
-
-RESET_PASSWORD_TOKEN_AUDIENCE = "fastapi-users:reset"
+from fastapi_users.manager import (
+    BaseUserManager,
+    InvalidPasswordException,
+    InvalidResetPasswordToken,
+    UserInactive,
+    UserManagerDependency,
+    UserNotExists,
+)
+from fastapi_users.router.common import ErrorCode
 
 
 def get_reset_password_router(
-    user_db: BaseUserDatabase[models.BaseUserDB],
-    reset_password_token_secret: SecretType,
-    reset_password_token_lifetime_seconds: int = 3600,
-    after_forgot_password: Optional[Callable[[models.UD, str, Request], None]] = None,
-    after_reset_password: Optional[Callable[[models.UD, Request], None]] = None,
-    validate_password: Optional[ValidatePasswordProtocol] = None,
+    get_user_manager: UserManagerDependency[models.UC, models.UD]
 ) -> APIRouter:
     """Generate a router with the reset password routes."""
     router = APIRouter()
 
     @router.post("/forgot-password", status_code=status.HTTP_202_ACCEPTED)
     async def forgot_password(
-        request: Request, email: EmailStr = Body(..., embed=True)
+        request: Request,
+        email: EmailStr = Body(..., embed=True),
+        user_manager: BaseUserManager[models.UC, models.UD] = Depends(get_user_manager),
     ):
-        user = await user_db.get_by_email(email)
+        try:
+            user = await user_manager.get_by_email(email)
+        except UserNotExists:
+            return None
 
-        if user is not None and user.is_active:
-            token_data = {"user_id": str(user.id), "aud": RESET_PASSWORD_TOKEN_AUDIENCE}
-            token = generate_jwt(
-                token_data,
-                reset_password_token_secret,
-                reset_password_token_lifetime_seconds,
-            )
-            if after_forgot_password:
-                await run_handler(after_forgot_password, user, token, request)
+        try:
+            await user_manager.forgot_password(user, request)
+        except UserInactive:
+            pass
 
         return None
 
     @router.post("/reset-password")
     async def reset_password(
-        request: Request, token: str = Body(...), password: str = Body(...)
+        request: Request,
+        token: str = Body(...),
+        password: str = Body(...),
+        user_manager: BaseUserManager[models.UC, models.UD] = Depends(get_user_manager),
     ):
         try:
-            data = decode_jwt(
-                token, reset_password_token_secret, [RESET_PASSWORD_TOKEN_AUDIENCE]
-            )
-            user_id = data.get("user_id")
-            if user_id is None:
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=ErrorCode.RESET_PASSWORD_BAD_TOKEN,
-                )
-
-            try:
-                user_uiid = UUID4(user_id)
-            except ValueError:
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=ErrorCode.RESET_PASSWORD_BAD_TOKEN,
-                )
-
-            user = await user_db.get(user_uiid)
-            if user is None or not user.is_active:
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=ErrorCode.RESET_PASSWORD_BAD_TOKEN,
-                )
-
-            if validate_password:
-                try:
-                    await validate_password(password, user)
-                except InvalidPasswordException as e:
-                    raise HTTPException(
-                        status_code=status.HTTP_400_BAD_REQUEST,
-                        detail={
-                            "code": ErrorCode.RESET_PASSWORD_INVALID_PASSWORD,
-                            "reason": e.reason,
-                        },
-                    )
-
-            user.hashed_password = get_password_hash(password)
-            await user_db.update(user)
-            if after_reset_password:
-                await run_handler(after_reset_password, user, request)
-        except jwt.PyJWTError:
+            await user_manager.reset_password(token, password, request)
+        except (InvalidResetPasswordToken, UserNotExists, UserInactive):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=ErrorCode.RESET_PASSWORD_BAD_TOKEN,
+            )
+        except InvalidPasswordException as e:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail={
+                    "code": ErrorCode.RESET_PASSWORD_INVALID_PASSWORD,
+                    "reason": e.reason,
+                },
             )
 
     return router

@@ -5,11 +5,11 @@ from typing import Optional, Sequence
 from fastapi import Depends, HTTPException, status
 from makefun import with_signature
 
+from fastapi_users import models
 from fastapi_users.authentication.base import BaseAuthentication  # noqa: F401
 from fastapi_users.authentication.cookie import CookieAuthentication  # noqa: F401
 from fastapi_users.authentication.jwt import JWTAuthentication  # noqa: F401
-from fastapi_users.db import BaseUserDatabase
-from fastapi_users.models import BaseUserDB
+from fastapi_users.manager import BaseUserManager, UserManagerDependency
 
 INVALID_CHARS_PATTERN = re.compile(r"[^0-9a-zA-Z_]")
 INVALID_LEADING_CHARS_PATTERN = re.compile(r"^[^a-zA-Z_]+")
@@ -35,17 +35,18 @@ class Authenticator:
     If no backend yields a user, an HTTPException is raised.
 
     :param backends: List of authentication backends.
-    :param user_db: Database adapter instance.
+    :param get_user_manager: User manager dependency callable.
     """
 
     backends: Sequence[BaseAuthentication]
-    user_db: BaseUserDatabase
 
     def __init__(
-        self, backends: Sequence[BaseAuthentication], user_db: BaseUserDatabase
+        self,
+        backends: Sequence[BaseAuthentication],
+        get_user_manager: UserManagerDependency[models.UC, models.UD],
     ):
         self.backends = backends
-        self.user_db = user_db
+        self.get_user_manager = get_user_manager
 
     def current_user(
         self,
@@ -80,6 +81,12 @@ class Authenticator:
                     default=Depends(backend.scheme),  # type: ignore
                 )
                 for backend in self.backends
+            ] + [
+                Parameter(
+                    name="user_manager",
+                    kind=Parameter.POSITIONAL_OR_KEYWORD,
+                    default=Depends(self.get_user_manager),
+                )
             ]
             signature = Signature(parameters)
         except ValueError:
@@ -101,17 +108,18 @@ class Authenticator:
     async def _authenticate(
         self,
         *args,
+        user_manager: BaseUserManager[models.UC, models.UD],
         optional: bool = False,
         active: bool = False,
         verified: bool = False,
         superuser: bool = False,
         **kwargs
-    ) -> Optional[BaseUserDB]:
-        user: Optional[BaseUserDB] = None
+    ) -> Optional[models.UD]:
+        user: Optional[models.UD] = None
         for backend in self.backends:
             token: str = kwargs[name_to_variable_name(backend.name)]
             if token:
-                user = await backend(token, self.user_db)
+                user = await backend(token, user_manager)
                 if user:
                     break
 

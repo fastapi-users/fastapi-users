@@ -10,22 +10,22 @@ from tests.conftest import MockAuthentication, UserDB
 
 
 @pytest.fixture
-def app_factory(mock_user_db, mock_authentication):
+def app_factory(get_user_manager, mock_authentication):
     def _app_factory(requires_verification: bool) -> FastAPI:
         mock_authentication_bis = MockAuthentication(name="mock-bis")
         authenticator = Authenticator(
-            [mock_authentication, mock_authentication_bis], mock_user_db
+            [mock_authentication, mock_authentication_bis], get_user_manager
         )
 
         mock_auth_router = get_auth_router(
             mock_authentication,
-            mock_user_db,
+            get_user_manager,
             authenticator,
             requires_verification=requires_verification,
         )
         mock_bis_auth_router = get_auth_router(
             mock_authentication_bis,
-            mock_user_db,
+            get_user_manager,
             authenticator,
             requires_verification=requires_verification,
         )

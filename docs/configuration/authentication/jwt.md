@@ -9,11 +9,7 @@ from fastapi_users.authentication import JWTAuthentication
 
 SECRET = "SECRET"
 
-auth_backends = []
-
 jwt_authentication = JWTAuthentication(secret=SECRET, lifetime_seconds=3600, tokenUrl="auth/jwt/login")
-
-auth_backends.append(jwt_authentication)
 ```
 
 As you can see, instantiation is quite simple. It accepts the following arguments:
@@ -69,7 +65,3 @@ from fastapi import Depends, Response
 async def refresh_jwt(response: Response, user=Depends(fastapi_users.current_user(active=True))):
     return await jwt_authentication.get_login_response(user, response)
 ```
-
-## Next steps
-
-We will now configure the main **FastAPI Users** object that will expose the [routers](../routers/index.md).

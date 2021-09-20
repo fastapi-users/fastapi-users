@@ -1,4 +1,4 @@
-from fastapi_users.db.base import BaseUserDatabase  # noqa: F401
+from fastapi_users.db.base import BaseUserDatabase, UserDatabaseDependency  # noqa: F401
 
 try:
     from fastapi_users_db_mongodb import MongoDBUserDatabase  # noqa: F401

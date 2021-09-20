@@ -54,6 +54,9 @@ class BaseUserDB(BaseUser):
         orm_mode = True
 
 
+U = TypeVar("U", bound=BaseUser)
+UC = TypeVar("UC", bound=BaseUserCreate)
+UU = TypeVar("UU", bound=BaseUserUpdate)
 UD = TypeVar("UD", bound=BaseUserDB)
 
 

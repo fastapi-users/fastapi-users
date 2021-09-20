@@ -52,37 +52,46 @@ def test_default_name(cookie_authentication: CookieAuthentication):
 class TestAuthenticate:
     @pytest.mark.asyncio
     async def test_missing_token(
-        self, mock_user_db, cookie_authentication: CookieAuthentication
+        self, user_manager, cookie_authentication: CookieAuthentication
     ):
-        authenticated_user = await cookie_authentication(None, mock_user_db)
+        authenticated_user = await cookie_authentication(None, user_manager)
         assert authenticated_user is None
 
     @pytest.mark.asyncio
     async def test_invalid_token(
-        self, mock_user_db, cookie_authentication: CookieAuthentication
+        self, user_manager, cookie_authentication: CookieAuthentication
     ):
-        authenticated_user = await cookie_authentication("foo", mock_user_db)
+        authenticated_user = await cookie_authentication("foo", user_manager)
         assert authenticated_user is None
 
     @pytest.mark.asyncio
     async def test_valid_token_missing_user_payload(
-        self, mock_user_db, token, cookie_authentication: CookieAuthentication
+        self, user_manager, token, cookie_authentication: CookieAuthentication
     ):
-        authenticated_user = await cookie_authentication(token(), mock_user_db)
+        authenticated_user = await cookie_authentication(token(), user_manager)
         assert authenticated_user is None
 
     @pytest.mark.asyncio
     async def test_valid_token_invalid_uuid(
-        self, mock_user_db, token, cookie_authentication: CookieAuthentication
+        self, user_manager, token, cookie_authentication: CookieAuthentication
     ):
-        authenticated_user = await cookie_authentication(token("foo"), mock_user_db)
+        authenticated_user = await cookie_authentication(token("foo"), user_manager)
+        assert authenticated_user is None
+
+    @pytest.mark.asyncio
+    async def test_valid_token_not_existing_user(
+        self, user_manager, token, cookie_authentication: CookieAuthentication
+    ):
+        authenticated_user = await cookie_authentication(
+            token("d35d213e-f3d8-4f08-954a-7e0d1bea286f"), user_manager
+        )
         assert authenticated_user is None
 
     @pytest.mark.asyncio
     async def test_valid_token(
-        self, mock_user_db, token, user, cookie_authentication: CookieAuthentication
+        self, user_manager, token, user, cookie_authentication: CookieAuthentication
     ):
-        authenticated_user = await cookie_authentication(token(user.id), mock_user_db)
+        authenticated_user = await cookie_authentication(token(user.id), user_manager)
         assert authenticated_user is not None
         assert authenticated_user.id == user.id
 

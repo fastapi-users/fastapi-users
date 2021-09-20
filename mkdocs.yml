@@ -31,39 +31,53 @@ markdown_extensions:
       permalink: true
   - admonition
   - codehilite
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:mermaid2.fence_mermaid
   - pymdownx.tasklist
   - pymdownx.tabbed
+
+plugins:
+  - search
+  - mermaid2:
+      arguments:
+        theme: |
+          ^(JSON.parse(window.localStorage.getItem('/.__palette')).index == 1) ? 'dark' : 'light'
+
+extra_javascript:
+    - https://unpkg.com/mermaid/dist/mermaid.min.js
 
 nav:
   - About: index.md
   - installation.md
   - Configuration:
-    - configuration/model.md
-    - Databases:
+    - configuration/overview.md
+    - configuration/models.md
+    - Database adapters:
       - configuration/databases/sqlalchemy.md
       - configuration/databases/mongodb.md
       - configuration/databases/tortoise.md
       - configuration/databases/ormar.md
-    - Authentication:
+    - Authentication backends:
       - Introduction: configuration/authentication/index.md
       - configuration/authentication/jwt.md
       - configuration/authentication/cookie.md
+    - configuration/user-manager.md
     - Routers:
       - Introduction: configuration/routers/index.md
       - configuration/routers/auth.md
       - configuration/routers/register.md
+      - configuration/routers/verify.md
       - configuration/routers/reset.md
       - configuration/routers/users.md
-      - configuration/routers/verify.md
-    - configuration/password-validation.md
     - configuration/full-example.md
     - configuration/oauth.md
   - Usage:
     - usage/flow.md
     - usage/routes.md
     - usage/current-user.md
-    - usage/helpers.md
   - Migration:
     - migration/08_to_1x.md
     - migration/1x_to_2x.md
@@ -71,3 +85,4 @@ nav:
     - migration/3x_to_4x.md
     - migration/4x_to_5x.md
     - migration/6x_to_7x.md
+    - migration/7x_to_8x.md

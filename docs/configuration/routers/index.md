@@ -1,12 +1,13 @@
 # Routers
 
-We're almost there! The last step is to configure the `FastAPIUsers` object that will wire the database adapter, the authentication classes and let us generate the actual **API routes**.
+We're almost there! The last step is to configure the `FastAPIUsers` object that will wire the user manager, the authentication classes and let us generate the actual **API routes**.
 
 ## Configure `FastAPIUsers`
 
 Configure `FastAPIUsers` object with all the elements we defined before. More precisely:
 
-* `db`: Database adapter instance.
+* `get_user_manager`: Dependency callable getter to inject the
+    user manager class instance. See [UserManager](../user-manager.md).
 * `auth_backends`: List of authentication backends. See [Authentication](../authentication/index.md).
 * `user_model`: Pydantic model of a user.
 * `user_create_model`: Pydantic model for creating a user.
@@ -17,8 +18,8 @@ Configure `FastAPIUsers` object with all the elements we defined before. More pr
 from fastapi_users import FastAPIUsers
 
 fastapi_users = FastAPIUsers(
-    user_db,
-    auth_backends,
+    get_user_manager,
+    [jwt_authentication],
     User,
     UserCreate,
     UserUpdate,

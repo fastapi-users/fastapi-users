@@ -1,46 +1,29 @@
 from typing import Any, AsyncGenerator, Dict, Tuple, cast
-from unittest.mock import MagicMock
 
-import asynctest
 import httpx
 import pytest
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI, status
 
 from fastapi_users.authentication import Authenticator
 from fastapi_users.router import ErrorCode, get_users_router
 from tests.conftest import MockAuthentication, User, UserDB, UserUpdate
 
 
-def after_update_sync():
-    return MagicMock(return_value=None)
-
-
-def after_update_async():
-    return asynctest.CoroutineMock(return_value=None)
-
-
-@pytest.fixture(params=[after_update_sync, after_update_async])
-def after_update(request):
-    return request.param()
-
-
 @pytest.fixture
-def app_factory(mock_user_db, mock_authentication, after_update, validate_password):
+def app_factory(get_user_manager, mock_authentication):
     def _app_factory(requires_verification: bool) -> FastAPI:
         mock_authentication_bis = MockAuthentication(name="mock-bis")
         authenticator = Authenticator(
-            [mock_authentication, mock_authentication_bis], mock_user_db
+            [mock_authentication, mock_authentication_bis], get_user_manager
         )
 
         user_router = get_users_router(
-            mock_user_db,
+            get_user_manager,
             User,
             UserUpdate,
             UserDB,
             authenticator,
-            after_update,
             requires_verification=requires_verification,
-            validate_password=validate_password,
         )
 
         app = FastAPI()
@@ -122,32 +105,27 @@ class TestUpdateMe:
     async def test_missing_token(
         self,
         test_app_client: Tuple[httpx.AsyncClient, bool],
-        after_update,
     ):
         client, _ = test_app_client
         response = await client.patch("/me")
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
-        assert after_update.called is False
 
     async def test_inactive_user(
         self,
         test_app_client: Tuple[httpx.AsyncClient, bool],
         inactive_user: UserDB,
-        after_update,
     ):
         client, _ = test_app_client
         response = await client.patch(
             "/me", headers={"Authorization": f"Bearer {inactive_user.id}"}
         )
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
-        assert after_update.called is False
 
     async def test_existing_email(
         self,
         test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
         verified_user: UserDB,
-        after_update,
     ):
         client, requires_verification = test_app_client
         response = await client.patch(
@@ -157,19 +135,15 @@ class TestUpdateMe:
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
-            assert after_update.called is False
         else:
             assert response.status_code == status.HTTP_400_BAD_REQUEST
             data = cast(Dict[str, Any], response.json())
             assert data["detail"] == ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS
-            assert after_update.called is False
 
     async def test_invalid_password(
         self,
         test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
-        after_update,
-        validate_password,
     ):
         client, requires_verification = test_app_client
         response = await client.patch(
@@ -179,7 +153,6 @@ class TestUpdateMe:
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
-            assert after_update.called is False
         else:
             assert response.status_code == status.HTTP_400_BAD_REQUEST
             data = cast(Dict[str, Any], response.json())
@@ -187,14 +160,11 @@ class TestUpdateMe:
                 "code": ErrorCode.UPDATE_USER_INVALID_PASSWORD,
                 "reason": "Password should be at least 3 characters",
             }
-            validate_password.assert_called_with("m", user)
-            assert after_update.called is False
 
     async def test_empty_body(
         self,
         test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
-        after_update,
     ):
         client, requires_verification = test_app_client
         response = await client.patch(
@@ -202,26 +172,16 @@ class TestUpdateMe:
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
-            assert after_update.called is False
         else:
             assert response.status_code == status.HTTP_200_OK
 
             data = cast(Dict[str, Any], response.json())
             assert data["email"] == user.email
 
-            assert after_update.called is True
-            actual_user = after_update.call_args[0][0]
-            assert actual_user.id == user.id
-            updated_fields = after_update.call_args[0][1]
-            assert updated_fields == {}
-            request = after_update.call_args[0][2]
-            assert isinstance(request, Request)
-
     async def test_valid_body(
         self,
         test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
-        after_update,
     ):
         client, requires_verification = test_app_client
         json = {"email": "king.arthur@tintagel.bt"}
@@ -230,26 +190,16 @@ class TestUpdateMe:
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
-            assert after_update.called is False
         else:
             assert response.status_code == status.HTTP_200_OK
 
             data = cast(Dict[str, Any], response.json())
             assert data["email"] == "king.arthur@tintagel.bt"
 
-            assert after_update.called is True
-            actual_user = after_update.call_args[0][0]
-            assert actual_user.id == user.id
-            updated_fields = after_update.call_args[0][1]
-            assert updated_fields == {"email": "king.arthur@tintagel.bt"}
-            request = after_update.call_args[0][2]
-            assert isinstance(request, Request)
-
     async def test_valid_body_is_superuser(
         self,
         test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
-        after_update,
     ):
         client, requires_verification = test_app_client
         json = {"is_superuser": True}
@@ -258,26 +208,16 @@ class TestUpdateMe:
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
-            assert after_update.called is False
         else:
             assert response.status_code == status.HTTP_200_OK
 
             data = cast(Dict[str, Any], response.json())
             assert data["is_superuser"] is False
 
-            assert after_update.called is True
-            actual_user = after_update.call_args[0][0]
-            assert actual_user.id == user.id
-            updated_fields = after_update.call_args[0][1]
-            assert updated_fields == {}
-            request = after_update.call_args[0][2]
-            assert isinstance(request, Request)
-
     async def test_valid_body_is_active(
         self,
         test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
-        after_update,
     ):
         client, requires_verification = test_app_client
         json = {"is_active": False}
@@ -286,26 +226,16 @@ class TestUpdateMe:
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
-            assert after_update.called is False
         else:
             assert response.status_code == status.HTTP_200_OK
 
             data = cast(Dict[str, Any], response.json())
             assert data["is_active"] is True
 
-            assert after_update.called is True
-            actual_user = after_update.call_args[0][0]
-            assert actual_user.id == user.id
-            updated_fields = after_update.call_args[0][1]
-            assert updated_fields == {}
-            request = after_update.call_args[0][2]
-            assert isinstance(request, Request)
-
     async def test_valid_body_is_verified(
         self,
         test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
-        after_update,
     ):
         client, requires_verification = test_app_client
         json = {"is_verified": True}
@@ -314,20 +244,11 @@ class TestUpdateMe:
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
-            assert after_update.called is False
         else:
             assert response.status_code == status.HTTP_200_OK
 
             data = cast(Dict[str, Any], response.json())
             assert data["is_verified"] is False
-
-            assert after_update.called is True
-            actual_user = after_update.call_args[0][0]
-            assert actual_user.id == user.id
-            updated_fields = after_update.call_args[0][1]
-            assert updated_fields == {}
-            request = after_update.call_args[0][2]
-            assert isinstance(request, Request)
 
     async def test_valid_body_password(
         self,
@@ -335,7 +256,6 @@ class TestUpdateMe:
         mock_user_db,
         test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
-        after_update,
     ):
         client, requires_verification = test_app_client
         mocker.spy(mock_user_db, "update")
@@ -347,7 +267,6 @@ class TestUpdateMe:
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
-            assert after_update.called is False
         else:
             assert response.status_code == status.HTTP_200_OK
             assert mock_user_db.update.called is True
@@ -355,19 +274,10 @@ class TestUpdateMe:
             updated_user = mock_user_db.update.call_args[0][0]
             assert updated_user.hashed_password != current_hashed_password
 
-            assert after_update.called is True
-            actual_user = after_update.call_args[0][0]
-            assert actual_user.id == user.id
-            updated_fields = after_update.call_args[0][1]
-            assert updated_fields == {"password": "merlin"}
-            request = after_update.call_args[0][2]
-            assert isinstance(request, Request)
-
     async def test_empty_body_verified_user(
         self,
         test_app_client: Tuple[httpx.AsyncClient, bool],
         verified_user: UserDB,
-        after_update,
     ):
         client, _ = test_app_client
         response = await client.patch(
@@ -378,19 +288,10 @@ class TestUpdateMe:
         data = cast(Dict[str, Any], response.json())
         assert data["email"] == verified_user.email
 
-        assert after_update.called is True
-        actual_user = after_update.call_args[0][0]
-        assert actual_user.id == verified_user.id
-        updated_fields = after_update.call_args[0][1]
-        assert updated_fields == {}
-        request = after_update.call_args[0][2]
-        assert isinstance(request, Request)
-
     async def test_valid_body_verified_user(
         self,
         test_app_client: Tuple[httpx.AsyncClient, bool],
         verified_user: UserDB,
-        after_update,
     ):
         client, _ = test_app_client
         json = {"email": "king.arthur@tintagel.bt"}
@@ -402,19 +303,10 @@ class TestUpdateMe:
         data = cast(Dict[str, Any], response.json())
         assert data["email"] == "king.arthur@tintagel.bt"
 
-        assert after_update.called is True
-        actual_user = after_update.call_args[0][0]
-        assert actual_user.id == verified_user.id
-        updated_fields = after_update.call_args[0][1]
-        assert updated_fields == {"email": "king.arthur@tintagel.bt"}
-        request = after_update.call_args[0][2]
-        assert isinstance(request, Request)
-
     async def test_valid_body_is_superuser_verified_user(
         self,
         test_app_client: Tuple[httpx.AsyncClient, bool],
         verified_user: UserDB,
-        after_update,
     ):
         client, _ = test_app_client
         json = {"is_superuser": True}
@@ -426,19 +318,10 @@ class TestUpdateMe:
         data = cast(Dict[str, Any], response.json())
         assert data["is_superuser"] is False
 
-        assert after_update.called is True
-        actual_user = after_update.call_args[0][0]
-        assert actual_user.id == verified_user.id
-        updated_fields = after_update.call_args[0][1]
-        assert updated_fields == {}
-        request = after_update.call_args[0][2]
-        assert isinstance(request, Request)
-
     async def test_valid_body_is_active_verified_user(
         self,
         test_app_client: Tuple[httpx.AsyncClient, bool],
         verified_user: UserDB,
-        after_update,
     ):
         client, _ = test_app_client
         json = {"is_active": False}
@@ -450,19 +333,10 @@ class TestUpdateMe:
         data = cast(Dict[str, Any], response.json())
         assert data["is_active"] is True
 
-        assert after_update.called is True
-        actual_user = after_update.call_args[0][0]
-        assert actual_user.id == verified_user.id
-        updated_fields = after_update.call_args[0][1]
-        assert updated_fields == {}
-        request = after_update.call_args[0][2]
-        assert isinstance(request, Request)
-
     async def test_valid_body_is_verified_verified_user(
         self,
         test_app_client: Tuple[httpx.AsyncClient, bool],
         verified_user: UserDB,
-        after_update,
     ):
         client, _ = test_app_client
         json = {"is_verified": False}
@@ -474,21 +348,12 @@ class TestUpdateMe:
         data = cast(Dict[str, Any], response.json())
         assert data["is_verified"] is True
 
-        assert after_update.called is True
-        actual_user = after_update.call_args[0][0]
-        assert actual_user.id == verified_user.id
-        updated_fields = after_update.call_args[0][1]
-        assert updated_fields == {}
-        request = after_update.call_args[0][2]
-        assert isinstance(request, Request)
-
     async def test_valid_body_password_verified_user(
         self,
         mocker,
         mock_user_db,
         test_app_client: Tuple[httpx.AsyncClient, bool],
         verified_user: UserDB,
-        after_update,
     ):
         client, _ = test_app_client
         mocker.spy(mock_user_db, "update")
@@ -503,14 +368,6 @@ class TestUpdateMe:
 
         updated_user = mock_user_db.update.call_args[0][0]
         assert updated_user.hashed_password != current_hashed_password
-
-        assert after_update.called is True
-        actual_user = after_update.call_args[0][0]
-        assert actual_user.id == verified_user.id
-        updated_fields = after_update.call_args[0][1]
-        assert updated_fields == {"password": "merlin"}
-        request = after_update.call_args[0][2]
-        assert isinstance(request, Request)
 
 
 @pytest.mark.router
@@ -733,7 +590,6 @@ class TestUpdateUser:
         user: UserDB,
         verified_user: UserDB,
         verified_superuser: UserDB,
-        after_update,
     ):
         client, _ = test_app_client
         response = await client.patch(
@@ -744,15 +600,12 @@ class TestUpdateUser:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS
-        assert after_update.called is False
 
     async def test_invalid_password_verified_superuser(
         self,
         test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserDB,
         verified_superuser: UserDB,
-        after_update,
-        validate_password,
     ):
         client, _ = test_app_client
         response = await client.patch(
@@ -766,8 +619,6 @@ class TestUpdateUser:
             "code": ErrorCode.UPDATE_USER_INVALID_PASSWORD,
             "reason": "Password should be at least 3 characters",
         }
-        validate_password.assert_called_with("m", user)
-        assert after_update.called is False
 
     async def test_valid_body_verified_superuser(
         self,

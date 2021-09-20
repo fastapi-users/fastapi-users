@@ -3,13 +3,13 @@ from typing import Any, Generic, Optional, TypeVar
 from fastapi import Response
 from fastapi.security.base import SecurityBase
 
-from fastapi_users.db import BaseUserDatabase
-from fastapi_users.models import BaseUserDB
+from fastapi_users import models
+from fastapi_users.manager import BaseUserManager
 
 T = TypeVar("T")
 
 
-class BaseAuthentication(Generic[T]):
+class BaseAuthentication(Generic[T, models.UC, models.UD]):
     """
     Base authentication backend.
 
@@ -28,12 +28,14 @@ class BaseAuthentication(Generic[T]):
         self.logout = logout
 
     async def __call__(
-        self, credentials: Optional[T], user_db: BaseUserDatabase
-    ) -> Optional[BaseUserDB]:
+        self,
+        credentials: Optional[T],
+        user_manager: BaseUserManager[models.UC, models.UD],
+    ) -> Optional[models.UD]:
         raise NotImplementedError()
 
-    async def get_login_response(self, user: BaseUserDB, response: Response) -> Any:
+    async def get_login_response(self, user: models.UD, response: Response) -> Any:
         raise NotImplementedError()
 
-    async def get_logout_response(self, user: BaseUserDB, response: Response) -> Any:
+    async def get_logout_response(self, user: models.UD, response: Response) -> Any:
         raise NotImplementedError()

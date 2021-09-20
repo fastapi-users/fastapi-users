@@ -28,7 +28,6 @@ requires = [
     "pyjwt ==2.1.0",
     "python-multipart ==0.0.5",
     "makefun >=1.9.2,<1.12",
-    "typing-extensions >=3.7.4.3; python_version < '3.8'",
 ]
 
 [tool.flit.metadata.requires-extra]

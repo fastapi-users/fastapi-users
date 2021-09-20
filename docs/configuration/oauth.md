@@ -46,7 +46,7 @@ class UserCreate(models.BaseUserCreate):
     pass
 
 
-class UserUpdate(User, models.BaseUserUpdate):
+class UserUpdate(models.BaseUserUpdate):
     pass
 
 
@@ -70,26 +70,14 @@ Notice that we inherit from the `BaseOAuthAccountMixin`, which adds a `List` of 
 
 You'll need to define the table for storing the OAuth account model. We provide a base one for this:
 
-```py
-from fastapi_users.db import SQLAlchemyBaseOAuthAccountTable
-
-class OAuthAccount(SQLAlchemyBaseOAuthAccountTable, Base):
-    pass
+```py hl_lines="21 22"
+{!./src/db_sqlalchemy_oauth.py!}
 ```
 
-Similarly, define the table for storing the User model:
+When instantiating the database adapter, you should pass this table in argument::
 
-```py
-from fastapi_users.db import SQLAlchemyBaseUserTable
-
-class UserTable(Base, SQLAlchemyBaseUserTable):
-    pass
-```
-
-Then, you should declare them on the database adapter:
-
-```py
-user_db = SQLAlchemyUserDatabase(UserDB, database, UserTable.__table__, OAuthAccount.__table__)
+```py hl_lines="31 34 35"
+{!./src/db_sqlalchemy_oauth.py!}
 ```
 
 #### MongoDB
@@ -100,12 +88,8 @@ Nothing to do, the [basic configuration](./databases/mongodb.md) is enough.
 
 You'll need to define the Tortoise model for storing the OAuth account model. We provide a base one for this:
 
-```py
-from fastapi_users.db.tortoise import TortoiseBaseOAuthAccountModel
-
-
-class OAuthAccount(TortoiseBaseOAuthAccountModel):
-    user = fields.ForeignKeyField("models.User", related_name="oauth_accounts")
+```py hl_lines="29 30"
+{!./src/db_tortoise_oauth_model.py!}
 ```
 
 !!! warning
@@ -113,8 +97,8 @@ class OAuthAccount(TortoiseBaseOAuthAccountModel):
 
 Then, you should declare it on the database adapter:
 
-```py
-user_db = TortoiseUserDatabase(UserDB, User, OAuthAccount)
+```py hl_lines="8 9"
+{!./src/db_tortoise_oauth_adapter.py!}
 ```
 
 ### Generate a router
@@ -122,51 +106,11 @@ user_db = TortoiseUserDatabase(UserDB, User, OAuthAccount)
 Once you have a `FastAPIUsers` instance, you can make it generate a single OAuth router for the given client.
 
 ```py
-from fastapi import FastAPI
-from fastapi_users import FastAPIUsers
-from httpx_oauth.clients.google import GoogleOAuth2
-
-google_oauth_client = GoogleOAuth2("CLIENT_ID", "CLIENT_SECRET")
-
-app = FastAPI()
-fastapi_users = FastAPIUsers(
-    user_db, auth_backends, User, UserCreate, UserUpdate, UserDB
+app.include_router(
+  fastapi_users.get_oauth_router(google_oauth_client, "SECRET"),
+  prefix="/auth/google",
+  tags=["auth"],
 )
-
-google_oauth_router = fastapi_users.get_oauth_router(google_oauth_client, SECRET)
-
-app.include_router(google_oauth_router, prefix="/auth/google", tags=["auth"])
-```
-
-### After register
-
-You can provide a custom function to be called after a successful registration. It is called with **two argument**: the **user** that has just registered, and the original **`Request` object**.
-
-Typically, you'll want to **send a welcome e-mail** or add it to your marketing analytics pipeline.
-
-You can define it as an `async` or standard method.
-
-Example:
-
-```py
-from fastapi import FastAPI
-from fastapi_users import FastAPIUsers
-from httpx_oauth.clients.google import GoogleOAuth2
-
-
-def on_after_register(user: UserDB, request: Request):
-    print(f"User {user.id} has registered.")
-
-google_oauth_client = GoogleOAuth2("CLIENT_ID", "CLIENT_SECRET")
-
-app = FastAPI()
-fastapi_users = FastAPIUsers(
-    user_db, auth_backends, User, UserCreate, UserUpdate, UserDB
-)
-
-google_oauth_router = fastapi_users.get_oauth_router(google_oauth_client, SECRET, after_register=on_after_register)
-
-app.include_router(google_oauth_router, prefix="/auth/google", tags=["auth"])
 ```
 
 ### Full example
@@ -177,18 +121,12 @@ app.include_router(google_oauth_router, prefix="/auth/google", tags=["auth"])
 
 #### SQLAlchemy
 
-``` py
-{!./src/oauth_full_sqlalchemy.py!}
-```
+<iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@frankie567/fastapi-users-sqlalchemy-oauth?embed=true"></iframe>
 
 #### MongoDB
 
-```py
-{!./src/oauth_full_mongodb.py!}
-```
+<iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@frankie567/fastapi-users-mongodb-oauth?embed=true"></iframe>
 
 #### Tortoise ORM
 
-```py
-{!./src/oauth_full_tortoise.py!}
-```
+<iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@frankie567/fastapi-users-tortoise-oauth?embed=true"></iframe>

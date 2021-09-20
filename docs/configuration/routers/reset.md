@@ -10,9 +10,13 @@ Check the [routes usage](../../usage/routes.md) to learn how to use them.
 from fastapi import FastAPI
 from fastapi_users import FastAPIUsers
 
+SECRET = "SECRET"
+
+jwt_authentication = JWTAuthentication(secret=SECRET, lifetime_seconds=3600)
+
 fastapi_users = FastAPIUsers(
-    user_db,
-    auth_backends,
+    get_user_manager,
+    [jwt_authentication],
     User,
     UserCreate,
     UserUpdate,
@@ -21,62 +25,7 @@ fastapi_users = FastAPIUsers(
 
 app = FastAPI()
 app.include_router(
-    fastapi_users.get_reset_password_router("SECRET"),
-    prefix="/auth",
-    tags=["auth"],
-)
-```
-
-Parameters:
-
-* `reset_password_token_secret` (`Union[str, pydantic.SecretStr]`): Secret to encode reset password token.
-* `reset_password_token_lifetime_seconds` (`int`): Lifetime of reset password token. **Defaults to 3600**.
-* `after_forgot_password`: Optional function called after a successful forgot password request. See below.
-
-## After forgot password
-
-You can provide a custom function to be called after a successful forgot password request. It is called with **three arguments**:
-
-* The **user** which has requested to reset their password.
-* A ready-to-use **JWT token** that will be accepted by the reset password route.
-* The original **`Request` object**.
-
-Typically, you'll want to **send an e-mail** with the link (and the token) that allows the user to reset their password.
-
-You can define it as an `async` or standard method.
-
-Example:
-
-```py
-def on_after_forgot_password(user: UserDB, token: str, request: Request):
-    print(f"User {user.id} has forgot their password. Reset token: {token}")
-
-app.include_router(
-    fastapi_users.get_reset_password_router("SECRET", after_forgot_password=on_after_forgot_password),
-    prefix="/auth",
-    tags=["auth"],
-)
-```
-
-## After reset password
-
-You can provide a custom function to be called after a successful password reset. It is called with **two arguments**:
-
-* The **user** which has reset their password.
-* The original **`Request` object**.
-
-For example, you may want to **send an e-mail** to the concerned user to warn him that their password has been changed and that they should take action if they think they have been hacked.
-
-You can define it as an `async` or standard method.
-
-Example:
-
-```py
-def on_after_reset_password(user: UserDB, request: Request):
-    print(f"User {user.id} has reset their password.")
-
-app.include_router(
-    fastapi_users.get_reset_password_router("SECRET", after_reset_password=on_after_reset_password),
+    fastapi_users.get_reset_password_router(),
     prefix="/auth",
     tags=["auth"],
 )

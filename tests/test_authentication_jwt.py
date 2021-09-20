@@ -32,27 +32,36 @@ def test_default_name(jwt_authentication):
 @pytest.mark.authentication
 class TestAuthenticate:
     @pytest.mark.asyncio
-    async def test_missing_token(self, jwt_authentication, mock_user_db):
-        authenticated_user = await jwt_authentication(None, mock_user_db)
+    async def test_missing_token(self, jwt_authentication, user_manager):
+        authenticated_user = await jwt_authentication(None, user_manager)
         assert authenticated_user is None
 
     @pytest.mark.asyncio
-    async def test_invalid_token(self, jwt_authentication, mock_user_db):
-        authenticated_user = await jwt_authentication("foo", mock_user_db)
+    async def test_invalid_token(self, jwt_authentication, user_manager):
+        authenticated_user = await jwt_authentication("foo", user_manager)
         assert authenticated_user is None
 
     @pytest.mark.asyncio
     async def test_valid_token_missing_user_payload(
-        self, jwt_authentication, mock_user_db, token
+        self, jwt_authentication, user_manager, token
     ):
-        authenticated_user = await jwt_authentication(token(), mock_user_db)
+        authenticated_user = await jwt_authentication(token(), user_manager)
         assert authenticated_user is None
 
     @pytest.mark.asyncio
     async def test_valid_token_invalid_uuid(
-        self, jwt_authentication, mock_user_db, token
+        self, jwt_authentication, user_manager, token
     ):
-        authenticated_user = await jwt_authentication(token("foo"), mock_user_db)
+        authenticated_user = await jwt_authentication(token("foo"), user_manager)
+        assert authenticated_user is None
+
+    @pytest.mark.asyncio
+    async def test_valid_token_not_existing_user(
+        self, jwt_authentication, user_manager, token
+    ):
+        authenticated_user = await jwt_authentication(
+            token("d35d213e-f3d8-4f08-954a-7e0d1bea286f"), user_manager
+        )
         assert authenticated_user is None
 
     @pytest.mark.asyncio
