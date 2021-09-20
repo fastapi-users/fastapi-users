@@ -8,7 +8,7 @@
 <meta content="Ready-to-use and customizable users management for FastAPI" name="description"/>
 <link href="../../favicon.png" rel="icon"/>
 <meta content="mkdocs-1.2.2, mkdocs-material-7.2.7" name="generator"/>
-<title>Get current user - FastAPI Users</title>
+<title>Models - FastAPI Users</title>
 <link href="../../assets/stylesheets/main.3c7cdd75.min.css" rel="stylesheet"/>
 <link href="../../assets/stylesheets/palette.3f5d1f46.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -22,7 +22,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#get-current-user">
+<a class="md-skip" href="#models">
           Skip to content
         </a>
 </div>
@@ -46,7 +46,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              Get current user
+              Models
             
           </span>
 </div>
@@ -138,8 +138,8 @@
         Installation
       </a>
 </li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" id="__nav_3" type="checkbox"/>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" id="__nav_3" type="checkbox"/>
 <label class="md-nav__link" for="__nav_3">
         Configuration
         <span class="md-nav__icon md-icon"></span>
@@ -151,14 +151,41 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/overview/">
+<a class="md-nav__link" href="../overview/">
         Overview
       </a>
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/models/">
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+          Models
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
         Models
       </a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#define-your-models">
+    Define your models
+  </a>
+<nav aria-label="Define your models" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#adding-your-own-fields">
+    Adding your own fields
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
 </li>
 <li class="md-nav__item md-nav__item--nested">
 <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3" id="__nav_3_3" type="checkbox"/>
@@ -173,22 +200,22 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/databases/sqlalchemy/">
+<a class="md-nav__link" href="../databases/sqlalchemy/">
         SQLAlchemy
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/databases/mongodb/">
+<a class="md-nav__link" href="../databases/mongodb/">
         MongoDB
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/databases/tortoise/">
+<a class="md-nav__link" href="../databases/tortoise/">
         Tortoise ORM
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/databases/ormar/">
+<a class="md-nav__link" href="../databases/ormar/">
         Ormar
       </a>
 </li>
@@ -208,17 +235,17 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/authentication/">
+<a class="md-nav__link" href="../authentication/">
         Introduction
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/authentication/jwt/">
+<a class="md-nav__link" href="../authentication/jwt/">
         JWT
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/authentication/cookie/">
+<a class="md-nav__link" href="../authentication/cookie/">
         Cookie
       </a>
 </li>
@@ -226,7 +253,7 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/user-manager/">
+<a class="md-nav__link" href="../user-manager/">
         UserManager
       </a>
 </li>
@@ -243,32 +270,32 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/routers/">
+<a class="md-nav__link" href="../routers/">
         Introduction
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/routers/auth/">
+<a class="md-nav__link" href="../routers/auth/">
         Auth router
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/routers/register/">
+<a class="md-nav__link" href="../routers/register/">
         Register routes
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/routers/verify/">
+<a class="md-nav__link" href="../routers/verify/">
         Verify router
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/routers/reset/">
+<a class="md-nav__link" href="../routers/reset/">
         Reset password router
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/routers/users/">
+<a class="md-nav__link" href="../routers/users/">
         Users router
       </a>
 </li>
@@ -276,20 +303,20 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/full-example/">
+<a class="md-nav__link" href="../full-example/">
         Full example
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/oauth/">
+<a class="md-nav__link" href="../oauth/">
         OAuth2
       </a>
 </li>
 </ul>
 </nav>
 </li>
-<li class="md-nav__item md-nav__item--active md-nav__item--nested">
-<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" id="__nav_4" type="checkbox"/>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" id="__nav_4" type="checkbox"/>
 <label class="md-nav__link" for="__nav_4">
         Usage
         <span class="md-nav__icon md-icon"></span>
@@ -301,71 +328,19 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../flow/">
+<a class="md-nav__link" href="../../usage/flow/">
         Flow
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../routes/">
+<a class="md-nav__link" href="../../usage/routes/">
         Routes
       </a>
 </li>
-<li class="md-nav__item md-nav__item--active">
-<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
-<label class="md-nav__link md-nav__link--active" for="__toc">
-          Get current user
-          <span class="md-nav__icon md-icon"></span>
-</label>
-<a class="md-nav__link md-nav__link--active" href="./">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../usage/current-user/">
         Get current user
       </a>
-<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
-<label class="md-nav__title" for="__toc">
-<span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#current_user">
-    current_user
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#examples">
-    Examples
-  </a>
-<nav aria-label="Examples" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#get-the-current-user-active-or-not">
-    Get the current user (active or not)
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#get-the-current-active-user">
-    Get the current active user
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#get-the-current-active-and-verified-user">
-    Get the current active and verified user
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#get-the-current-active-superuser">
-    Get the current active superuser
-  </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#in-a-path-operation">
-    In a path operation
-  </a>
-</li>
-</ul>
-</nav>
 </li>
 </ul>
 </nav>
@@ -435,43 +410,18 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#current_user">
-    current_user
+<a class="md-nav__link" href="#define-your-models">
+    Define your models
   </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#examples">
-    Examples
-  </a>
-<nav aria-label="Examples" class="md-nav">
+<nav aria-label="Define your models" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#get-the-current-user-active-or-not">
-    Get the current user (active or not)
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#get-the-current-active-user">
-    Get the current active user
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#get-the-current-active-and-verified-user">
-    Get the current active and verified user
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#get-the-current-active-superuser">
-    Get the current active superuser
+<a class="md-nav__link" href="#adding-your-own-fields">
+    Adding your own fields
   </a>
 </li>
 </ul>
 </nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#in-a-path-operation">
-    In a path operation
-  </a>
 </li>
 </ul>
 </nav>
@@ -480,69 +430,74 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1 id="get-current-user">Get current user<a class="headerlink" href="#get-current-user" title="Permanent link">¶</a></h1>
-<p><strong>FastAPI Users</strong> provides a dependency callable to easily inject authenticated user in your routes. They are available from your <code>FastAPIUsers</code> instance.</p>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>For more information about how to make an authenticated request to your API, check the documentation of your <a href="../../configuration/authentication/">Authentication method</a>.</p>
-</div>
-<h2 id="current_user"><code>current_user</code><a class="headerlink" href="#current_user" title="Permanent link">¶</a></h2>
-<p>Return a dependency callable to retrieve currently authenticated user, passing the following parameters:</p>
+<h1 id="models">Models<a class="headerlink" href="#models" title="Permanent link">¶</a></h1>
+<p><strong>FastAPI Users</strong> defines a minimal User model for authentication purposes. It is structured like this:</p>
 <ul>
-<li><code>optional</code>: If <code>True</code>, <code>None</code> is returned if there is no authenticated user or if it doesn't pass the other requirements. Otherwise, throw <code>401 Unauthorized</code>. Defaults to <code>False</code>.</li>
-<li><code>active</code>: If <code>True</code>, throw <code>401 Unauthorized</code> if the authenticated user is inactive. Defaults to <code>False</code>.</li>
-<li><code>verified</code>: If <code>True</code>, throw <code>403 Forbidden</code> if the authenticated user is not verified. Defaults to <code>False</code>.</li>
-<li><code>superuser</code>: If <code>True</code>, throw <code>403 Forbidden</code> if the authenticated user is not a superuser. Defaults to <code>False</code>.</li>
+<li><code>id</code> (<code>UUID4</code>) – Unique identifier of the user. Defaults to a <strong>UUID4</strong>.</li>
+<li><code>email</code> (<code>str</code>) – Email of the user. Validated by <a href="https://github.com/JoshData/python-email-validator"><code>email-validator</code></a>.</li>
+<li><code>is_active</code> (<code>bool</code>) – Whether or not the user is active. If not, login and forgot password requests will be denied. Defaults to <code>True</code>.</li>
+<li><code>is_verified</code> (<code>bool</code>) – Whether or not the user is verified. Optional but helpful with the <a href="../routers/verify/"><code>verify</code> router</a> logic. Defaults to <code>False</code>.</li>
+<li><code>is_superuser</code> (<code>bool</code>) – Whether or not the user is a superuser. Useful to implement administration logic. Defaults to <code>False</code>.</li>
 </ul>
-<div class="admonition tip">
-<p class="admonition-title">Create it once and reuse it</p>
-<p>This function is a <strong>factory</strong>, a function returning another function 🤯</p>
-<p>It's this returned function that will be the dependency called by FastAPI in your API routes.</p>
-<p>To avoid having to generate it on each route and avoid issues when unit testing, it's <strong>strongly recommended</strong> that you assign the result in a variable and reuse it at will in your routes. The examples below demonstrate this pattern.</p>
-</div>
-<h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">¶</a></h2>
-<h3 id="get-the-current-user-active-or-not">Get the current user (<strong>active or not</strong>)<a class="headerlink" href="#get-the-current-user-active-or-not" title="Permanent link">¶</a></h3>
-<div class="highlight"><pre><span></span><code><span class="n">current_user</span> <span class="o">=</span> <span class="n">fastapi_users</span><span class="o">.</span><span class="n">current_user</span><span class="p">()</span>
+<h2 id="define-your-models">Define your models<a class="headerlink" href="#define-your-models" title="Permanent link">¶</a></h2>
+<p>There are four Pydantic models variations provided as mixins:</p>
+<ul>
+<li><code>BaseUser</code>, which provides the basic fields and validation ;</li>
+<li><code>BaseCreateUser</code>, dedicated to user registration, which consists of compulsory <code>email</code> and <code>password</code> fields ;</li>
+<li><code>BaseUpdateUser</code>, dedicated to user profile update, which adds an optional <code>password</code> field ;</li>
+<li><code>BaseUserDB</code>, which is a representation of the user in database, adding a <code>hashed_password</code> field.</li>
+</ul>
+<p>You should define each of those variations, inheriting from each mixin:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">models</span>
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/protected-route"</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">protected_route</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_user</span><span class="p">)):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">"Hello, </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">"</span>
-</code></pre></div>
-<h3 id="get-the-current-active-user">Get the current <strong>active</strong> user<a class="headerlink" href="#get-the-current-active-user" title="Permanent link">¶</a></h3>
-<div class="highlight"><pre><span></span><code><span class="n">current_active_user</span> <span class="o">=</span> <span class="n">fastapi_users</span><span class="o">.</span><span class="n">current_user</span><span class="p">(</span><span class="n">active</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/protected-route"</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">protected_route</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_active_user</span><span class="p">)):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">"Hello, </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">"</span>
-</code></pre></div>
-<h3 id="get-the-current-active-and-verified-user">Get the current <strong>active</strong> and <strong>verified</strong> user<a class="headerlink" href="#get-the-current-active-and-verified-user" title="Permanent link">¶</a></h3>
-<div class="highlight"><pre><span></span><code><span class="n">current_active_verified_user</span> <span class="o">=</span> <span class="n">fastapi_users</span><span class="o">.</span><span class="n">current_user</span><span class="p">(</span><span class="n">active</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verified</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUser</span><span class="p">):</span>
+    <span class="k">pass</span>
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/protected-route"</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">protected_route</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_active_verified_user</span><span class="p">)):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">"Hello, </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">"</span>
-</code></pre></div>
-<h3 id="get-the-current-active-superuser">Get the current active <strong>superuser</strong><a class="headerlink" href="#get-the-current-active-superuser" title="Permanent link">¶</a></h3>
-<div class="highlight"><pre><span></span><code><span class="n">current_superuser</span> <span class="o">=</span> <span class="n">fastapi_users</span><span class="o">.</span><span class="n">current_user</span><span class="p">(</span><span class="n">active</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">superuser</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/protected-route"</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">protected_route</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_superuser</span><span class="p">)):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">"Hello, </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">"</span>
+<span class="k">class</span> <span class="nc">UserCreate</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUserCreate</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserUpdate</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUserUpdate</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserDB</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserDB</span><span class="p">):</span>
+    <span class="k">pass</span>
 </code></pre></div>
-<h2 id="in-a-path-operation">In a path operation<a class="headerlink" href="#in-a-path-operation" title="Permanent link">¶</a></h2>
-<p>If you don't need the user in the route logic, you can use this syntax:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/protected-route"</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="n">Depends</span><span class="p">(</span><span class="n">current_superuser</span><span class="p">)])</span>
-<span class="k">def</span> <span class="nf">protected_route</span><span class="p">():</span>
-    <span class="k">return</span> <span class="s2">"Hello, some user."</span>
+<h3 id="adding-your-own-fields">Adding your own fields<a class="headerlink" href="#adding-your-own-fields" title="Permanent link">¶</a></h3>
+<p>You can of course add your own properties there to fit to your needs. In the example below, we add a required string property, <code>first_name</code>, and an optional date property, <code>birthdate</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">models</span>
+
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUser</span><span class="p">):</span>
+    <span class="n">first_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">birthdate</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">UserCreate</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUserCreate</span><span class="p">):</span>
+    <span class="n">first_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">birthdate</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">UserUpdate</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUserUpdate</span><span class="p">):</span>
+    <span class="n">first_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">birthdate</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">UserDB</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserDB</span><span class="p">):</span>
+    <span class="k">pass</span>
 </code></pre></div>
-<p>You can read more about this <a href="https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/">in FastAPI docs</a>.</p>
 </article>
 </div>
 </div>
 </main>
 <footer class="md-footer">
 <nav aria-label="Footer" class="md-footer__inner md-grid">
-<a aria-label="Previous: Routes" class="md-footer__link md-footer__link--prev" href="../routes/" rel="prev">
+<a aria-label="Previous: Overview" class="md-footer__link md-footer__link--prev" href="../overview/" rel="prev">
 <div class="md-footer__button md-icon">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
 </div>
@@ -551,17 +506,17 @@
 <span class="md-footer__direction">
                 Previous
               </span>
-              Routes
+              Overview
             </div>
 </div>
 </a>
-<a aria-label="Next: 0.8.x ➡️ 1.x.x" class="md-footer__link md-footer__link--next" href="../../migration/08_to_1x/" rel="next">
+<a aria-label="Next: SQLAlchemy" class="md-footer__link md-footer__link--next" href="../databases/sqlalchemy/" rel="next">
 <div class="md-footer__title">
 <div class="md-ellipsis">
 <span class="md-footer__direction">
                 Next
               </span>
-              0.8.x ➡️ 1.x.x
+              SQLAlchemy
             </div>
 </div>
 <div class="md-footer__button md-icon">

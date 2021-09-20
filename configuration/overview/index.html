@@ -8,7 +8,7 @@
 <meta content="Ready-to-use and customizable users management for FastAPI" name="description"/>
 <link href="../../favicon.png" rel="icon"/>
 <meta content="mkdocs-1.2.2, mkdocs-material-7.2.7" name="generator"/>
-<title>Get current user - FastAPI Users</title>
+<title>Overview - FastAPI Users</title>
 <link href="../../assets/stylesheets/main.3c7cdd75.min.css" rel="stylesheet"/>
 <link href="../../assets/stylesheets/palette.3f5d1f46.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -22,7 +22,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#get-current-user">
+<a class="md-skip" href="#overview">
           Skip to content
         </a>
 </div>
@@ -46,7 +46,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              Get current user
+              Overview
             
           </span>
 </div>
@@ -138,8 +138,8 @@
         Installation
       </a>
 </li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" id="__nav_3" type="checkbox"/>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" id="__nav_3" type="checkbox"/>
 <label class="md-nav__link" for="__nav_3">
         Configuration
         <span class="md-nav__icon md-icon"></span>
@@ -150,13 +150,51 @@
           Configuration
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/overview/">
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+          Overview
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
         Overview
       </a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#models">
+    Models
+  </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/models/">
+<a class="md-nav__link" href="#database-adapters">
+    Database adapters
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#authentication-backends">
+    Authentication backends
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#usermanager">
+    UserManager
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#fastapiusers-and-routers">
+    FastAPIUsers and routers
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../models/">
         Models
       </a>
 </li>
@@ -173,22 +211,22 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/databases/sqlalchemy/">
+<a class="md-nav__link" href="../databases/sqlalchemy/">
         SQLAlchemy
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/databases/mongodb/">
+<a class="md-nav__link" href="../databases/mongodb/">
         MongoDB
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/databases/tortoise/">
+<a class="md-nav__link" href="../databases/tortoise/">
         Tortoise ORM
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/databases/ormar/">
+<a class="md-nav__link" href="../databases/ormar/">
         Ormar
       </a>
 </li>
@@ -208,17 +246,17 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/authentication/">
+<a class="md-nav__link" href="../authentication/">
         Introduction
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/authentication/jwt/">
+<a class="md-nav__link" href="../authentication/jwt/">
         JWT
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/authentication/cookie/">
+<a class="md-nav__link" href="../authentication/cookie/">
         Cookie
       </a>
 </li>
@@ -226,7 +264,7 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/user-manager/">
+<a class="md-nav__link" href="../user-manager/">
         UserManager
       </a>
 </li>
@@ -243,32 +281,32 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/routers/">
+<a class="md-nav__link" href="../routers/">
         Introduction
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/routers/auth/">
+<a class="md-nav__link" href="../routers/auth/">
         Auth router
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/routers/register/">
+<a class="md-nav__link" href="../routers/register/">
         Register routes
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/routers/verify/">
+<a class="md-nav__link" href="../routers/verify/">
         Verify router
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/routers/reset/">
+<a class="md-nav__link" href="../routers/reset/">
         Reset password router
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/routers/users/">
+<a class="md-nav__link" href="../routers/users/">
         Users router
       </a>
 </li>
@@ -276,20 +314,20 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/full-example/">
+<a class="md-nav__link" href="../full-example/">
         Full example
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/oauth/">
+<a class="md-nav__link" href="../oauth/">
         OAuth2
       </a>
 </li>
 </ul>
 </nav>
 </li>
-<li class="md-nav__item md-nav__item--active md-nav__item--nested">
-<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" id="__nav_4" type="checkbox"/>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" id="__nav_4" type="checkbox"/>
 <label class="md-nav__link" for="__nav_4">
         Usage
         <span class="md-nav__icon md-icon"></span>
@@ -301,71 +339,19 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../flow/">
+<a class="md-nav__link" href="../../usage/flow/">
         Flow
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../routes/">
+<a class="md-nav__link" href="../../usage/routes/">
         Routes
       </a>
 </li>
-<li class="md-nav__item md-nav__item--active">
-<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
-<label class="md-nav__link md-nav__link--active" for="__toc">
-          Get current user
-          <span class="md-nav__icon md-icon"></span>
-</label>
-<a class="md-nav__link md-nav__link--active" href="./">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../usage/current-user/">
         Get current user
       </a>
-<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
-<label class="md-nav__title" for="__toc">
-<span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#current_user">
-    current_user
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#examples">
-    Examples
-  </a>
-<nav aria-label="Examples" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#get-the-current-user-active-or-not">
-    Get the current user (active or not)
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#get-the-current-active-user">
-    Get the current active user
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#get-the-current-active-and-verified-user">
-    Get the current active and verified user
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#get-the-current-active-superuser">
-    Get the current active superuser
-  </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#in-a-path-operation">
-    In a path operation
-  </a>
-</li>
-</ul>
-</nav>
 </li>
 </ul>
 </nav>
@@ -435,42 +421,28 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#current_user">
-    current_user
+<a class="md-nav__link" href="#models">
+    Models
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#examples">
-    Examples
-  </a>
-<nav aria-label="Examples" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#get-the-current-user-active-or-not">
-    Get the current user (active or not)
+<a class="md-nav__link" href="#database-adapters">
+    Database adapters
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#get-the-current-active-user">
-    Get the current active user
+<a class="md-nav__link" href="#authentication-backends">
+    Authentication backends
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#get-the-current-active-and-verified-user">
-    Get the current active and verified user
+<a class="md-nav__link" href="#usermanager">
+    UserManager
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#get-the-current-active-superuser">
-    Get the current active superuser
-  </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#in-a-path-operation">
-    In a path operation
+<a class="md-nav__link" href="#fastapiusers-and-routers">
+    FastAPIUsers and routers
   </a>
 </li>
 </ul>
@@ -480,69 +452,84 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1 id="get-current-user">Get current user<a class="headerlink" href="#get-current-user" title="Permanent link">¶</a></h1>
-<p><strong>FastAPI Users</strong> provides a dependency callable to easily inject authenticated user in your routes. They are available from your <code>FastAPIUsers</code> instance.</p>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>For more information about how to make an authenticated request to your API, check the documentation of your <a href="../../configuration/authentication/">Authentication method</a>.</p>
+<h1 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">¶</a></h1>
+<p>The schema below shows you how the library is structured and how each part fit together.</p>
+<div class="mermaid">flowchart LR
+    FASTAPI_USERS{FastAPIUsers}
+    USER_MANAGER{UserManager}
+    DATABASE_DEPENDENCY[[get_user_db]]
+    USER_MANAGER_DEPENDENCY[[get_user_manager]]
+    CURRENT_USER[[current_user]]
+    subgraph MODELS[Models]
+        direction RL
+        USER[User]
+        USER_CREATE[UserCreate]
+        USER_UPDATE[UserUpdate]
+        USER_DB[UserDB]
+    end
+    subgraph DATABASE[Database adapters]
+        direction RL
+        SQLALCHEMY[SQLAlchemy]
+        MONGODB[MongoDB]
+        TORTOISE[Tortoise ORM]
+        ORMAR[Ormar]
+    end
+    subgraph ROUTERS[Routers]
+        direction RL
+        REGISTER[[get_register_router]]
+        VERIFY[[get_verify_router]]
+        RESET[[get_reset_password_router]]
+        AUTH[[get_auth_router]]
+        OAUTH[[get_oauth_router]]
+        USERS[[get_users_router]]
+    end
+    subgraph AUTH_BACKENDS[Authentication backends]
+        direction RL
+        COOKIE[CookieAuthentication]
+        JWT[JWTAuthentication]
+    end
+    DATABASE --&gt; DATABASE_DEPENDENCY
+    DATABASE_DEPENDENCY --&gt; USER_MANAGER
+
+    MODELS --&gt; USER_MANAGER
+    MODELS --&gt; FASTAPI_USERS
+
+    USER_MANAGER --&gt; USER_MANAGER_DEPENDENCY
+    USER_MANAGER_DEPENDENCY --&gt; FASTAPI_USERS
+
+    FASTAPI_USERS --&gt; ROUTERS
+
+    AUTH_BACKENDS --&gt; AUTH
+    AUTH_BACKENDS --&gt; FASTAPI_USERS
+
+    FASTAPI_USERS --&gt; CURRENT_USER
 </div>
-<h2 id="current_user"><code>current_user</code><a class="headerlink" href="#current_user" title="Permanent link">¶</a></h2>
-<p>Return a dependency callable to retrieve currently authenticated user, passing the following parameters:</p>
-<ul>
-<li><code>optional</code>: If <code>True</code>, <code>None</code> is returned if there is no authenticated user or if it doesn't pass the other requirements. Otherwise, throw <code>401 Unauthorized</code>. Defaults to <code>False</code>.</li>
-<li><code>active</code>: If <code>True</code>, throw <code>401 Unauthorized</code> if the authenticated user is inactive. Defaults to <code>False</code>.</li>
-<li><code>verified</code>: If <code>True</code>, throw <code>403 Forbidden</code> if the authenticated user is not verified. Defaults to <code>False</code>.</li>
-<li><code>superuser</code>: If <code>True</code>, throw <code>403 Forbidden</code> if the authenticated user is not a superuser. Defaults to <code>False</code>.</li>
-</ul>
-<div class="admonition tip">
-<p class="admonition-title">Create it once and reuse it</p>
-<p>This function is a <strong>factory</strong>, a function returning another function 🤯</p>
-<p>It's this returned function that will be the dependency called by FastAPI in your API routes.</p>
-<p>To avoid having to generate it on each route and avoid issues when unit testing, it's <strong>strongly recommended</strong> that you assign the result in a variable and reuse it at will in your routes. The examples below demonstrate this pattern.</p>
-</div>
-<h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">¶</a></h2>
-<h3 id="get-the-current-user-active-or-not">Get the current user (<strong>active or not</strong>)<a class="headerlink" href="#get-the-current-user-active-or-not" title="Permanent link">¶</a></h3>
-<div class="highlight"><pre><span></span><code><span class="n">current_user</span> <span class="o">=</span> <span class="n">fastapi_users</span><span class="o">.</span><span class="n">current_user</span><span class="p">()</span>
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/protected-route"</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">protected_route</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_user</span><span class="p">)):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">"Hello, </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">"</span>
-</code></pre></div>
-<h3 id="get-the-current-active-user">Get the current <strong>active</strong> user<a class="headerlink" href="#get-the-current-active-user" title="Permanent link">¶</a></h3>
-<div class="highlight"><pre><span></span><code><span class="n">current_active_user</span> <span class="o">=</span> <span class="n">fastapi_users</span><span class="o">.</span><span class="n">current_user</span><span class="p">(</span><span class="n">active</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/protected-route"</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">protected_route</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_active_user</span><span class="p">)):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">"Hello, </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">"</span>
-</code></pre></div>
-<h3 id="get-the-current-active-and-verified-user">Get the current <strong>active</strong> and <strong>verified</strong> user<a class="headerlink" href="#get-the-current-active-and-verified-user" title="Permanent link">¶</a></h3>
-<div class="highlight"><pre><span></span><code><span class="n">current_active_verified_user</span> <span class="o">=</span> <span class="n">fastapi_users</span><span class="o">.</span><span class="n">current_user</span><span class="p">(</span><span class="n">active</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verified</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/protected-route"</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">protected_route</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_active_verified_user</span><span class="p">)):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">"Hello, </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">"</span>
-</code></pre></div>
-<h3 id="get-the-current-active-superuser">Get the current active <strong>superuser</strong><a class="headerlink" href="#get-the-current-active-superuser" title="Permanent link">¶</a></h3>
-<div class="highlight"><pre><span></span><code><span class="n">current_superuser</span> <span class="o">=</span> <span class="n">fastapi_users</span><span class="o">.</span><span class="n">current_user</span><span class="p">(</span><span class="n">active</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">superuser</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/protected-route"</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">protected_route</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_superuser</span><span class="p">)):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">"Hello, </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">"</span>
-</code></pre></div>
-<h2 id="in-a-path-operation">In a path operation<a class="headerlink" href="#in-a-path-operation" title="Permanent link">¶</a></h2>
-<p>If you don't need the user in the route logic, you can use this syntax:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/protected-route"</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="n">Depends</span><span class="p">(</span><span class="n">current_superuser</span><span class="p">)])</span>
-<span class="k">def</span> <span class="nf">protected_route</span><span class="p">():</span>
-    <span class="k">return</span> <span class="s2">"Hello, some user."</span>
-</code></pre></div>
-<p>You can read more about this <a href="https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/">in FastAPI docs</a>.</p>
+<h2 id="models">Models<a class="headerlink" href="#models" title="Permanent link">¶</a></h2>
+<p>Pydantic models representing the data structure of a user. Base classes are provided with the required fields to make authentication work. You should sub-class each of them and add your own fields there.</p>
+<p>➡️ <a href="../models/">Configure the models</a></p>
+<h2 id="database-adapters">Database adapters<a class="headerlink" href="#database-adapters" title="Permanent link">¶</a></h2>
+<p>FastAPI Users is compatible with various databases and ORM. To build the interface between those database tools and the library, we provide database adapters classes that you need to instantiate and configure.</p>
+<p>➡️ <a href="../databases/sqlalchemy/">I'm using SQLAlchemy</a></p>
+<p>➡️ <a href="../databases/mongodb/">I'm using MongoDB</a></p>
+<p>➡️ <a href="../databases/tortoise/">I'm using Tortoise ORM</a></p>
+<p>➡️ <a href="../databases/ormar/">I'm using ormar</a></p>
+<h2 id="authentication-backends">Authentication backends<a class="headerlink" href="#authentication-backends" title="Permanent link">¶</a></h2>
+<p>Authentication backends define the way users sessions are managed in your app, like access tokens or cookies.</p>
+<p>➡️ <a href="../authentication/">Configure the authentication backends</a></p>
+<h2 id="usermanager"><code>UserManager</code><a class="headerlink" href="#usermanager" title="Permanent link">¶</a></h2>
+<p>The <code>UserManager</code> object bears most of the logic of FastAPI Users: registration, verification, password reset... We provide a <code>BaseUserManager</code> with this common logic; which you should overload to define how to validate passwords or handle events.</p>
+<p>This <code>UserManager</code> object should be provided through a FastAPI dependency, <code>get_user_manager</code>.</p>
+<p>➡️ <a href="../user-manager/">Configure <code>UserManager</code></a></p>
+<h2 id="fastapiusers-and-routers"><code>FastAPIUsers</code> and routers<a class="headerlink" href="#fastapiusers-and-routers" title="Permanent link">¶</a></h2>
+<p>Finally, <code>FastAPIUsers</code> object is the main class from which you'll be able to generate routers for classic routes like registration or login, but also get the <code>current_user</code> dependency factory to inject the authenticated user in your own routes.</p>
+<p>➡️ <a href="../routers/">Configure <code>FastAPIUsers</code> and routers</a></p>
 </article>
 </div>
 </div>
 </main>
 <footer class="md-footer">
 <nav aria-label="Footer" class="md-footer__inner md-grid">
-<a aria-label="Previous: Routes" class="md-footer__link md-footer__link--prev" href="../routes/" rel="prev">
+<a aria-label="Previous: Installation" class="md-footer__link md-footer__link--prev" href="../../installation/" rel="prev">
 <div class="md-footer__button md-icon">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
 </div>
@@ -551,17 +538,17 @@
 <span class="md-footer__direction">
                 Previous
               </span>
-              Routes
+              Installation
             </div>
 </div>
 </a>
-<a aria-label="Next: 0.8.x ➡️ 1.x.x" class="md-footer__link md-footer__link--next" href="../../migration/08_to_1x/" rel="next">
+<a aria-label="Next: Models" class="md-footer__link md-footer__link--next" href="../models/" rel="next">
 <div class="md-footer__title">
 <div class="md-ellipsis">
 <span class="md-footer__direction">
                 Next
               </span>
-              0.8.x ➡️ 1.x.x
+              Models
             </div>
 </div>
 <div class="md-footer__button md-icon">
@@ -588,5 +575,7 @@
 <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.94ec81fe.min.js", "version": null}</script>
 <script src="../../assets/javascripts/bundle.48dfec6c.min.js"></script>
 <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
-</body>
+<script>mermaid.initialize({
+    theme: (JSON.parse(window.localStorage.getItem('/.__palette')).index == 1) ? 'dark' : 'light'
+});</script></body>
 </html>
