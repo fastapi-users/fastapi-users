@@ -1,18 +1,18 @@
 import asyncio
-from typing import Any, AsyncGenerator, Callable, Generic, List, Optional, Type, Union
+from typing import Any, AsyncGenerator, Callable, Generic, Optional, Type, Union
 from unittest.mock import MagicMock
 
 import httpx
 import pytest
 from asgi_lifespan import LifespanManager
-from fastapi import Depends, FastAPI, Response
+from fastapi import FastAPI, Response
 from fastapi.security import OAuth2PasswordBearer
 from httpx_oauth.oauth2 import OAuth2
 from pydantic import UUID4, SecretStr
 from pytest_mock import MockerFixture
 
 from fastapi_users import models
-from fastapi_users.authentication import Authenticator, BaseAuthentication
+from fastapi_users.authentication import BaseAuthentication
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.jwt import SecretType
 from fastapi_users.manager import (
@@ -474,39 +474,6 @@ def get_test_client():
                 yield test_client
 
     return _get_test_client
-
-
-@pytest.fixture
-@pytest.mark.asyncio
-def get_test_auth_client(get_user_manager, get_test_client):
-    async def _get_test_auth_client(
-        backends: List[BaseAuthentication],
-    ) -> AsyncGenerator[httpx.AsyncClient, None]:
-        app = FastAPI()
-        authenticator = Authenticator(backends, get_user_manager)
-
-        @app.get("/test-current-user")
-        def test_current_user(user: UserDB = Depends(authenticator.current_user())):
-            return user
-
-        @app.get("/test-current-active-user")
-        def test_current_active_user(
-            user: UserDB = Depends(authenticator.current_user(active=True)),
-        ):
-            return user
-
-        @app.get("/test-current-superuser")
-        def test_current_superuser(
-            user: UserDB = Depends(
-                authenticator.current_user(active=True, superuser=True)
-            ),
-        ):
-            return user
-
-        async for client in get_test_client(app):
-            yield client
-
-    return _get_test_auth_client
 
 
 @pytest.fixture

@@ -1,6 +1,6 @@
 import re
 from inspect import Parameter, Signature
-from typing import Optional, Sequence
+from typing import Callable, Optional, Sequence
 
 from fastapi import Depends, HTTPException, status
 from makefun import with_signature
@@ -24,6 +24,9 @@ def name_to_variable_name(name: str) -> str:
 
 class DuplicateBackendNamesError(Exception):
     pass
+
+
+EnabledBackendsDependency = Callable[..., Sequence[BaseAuthentication]]
 
 
 class Authenticator:
@@ -54,6 +57,7 @@ class Authenticator:
         active: bool = False,
         verified: bool = False,
         superuser: bool = False,
+        get_enabled_backends: Optional[EnabledBackendsDependency] = None,
     ):
         """
         Return a dependency callable to retrieve currently authenticated user.
@@ -68,6 +72,13 @@ class Authenticator:
         the authenticated user is not verified. Defaults to `False`.
         :param superuser: If `True`, throw `403 Forbidden` if
         the authenticated user is not a superuser. Defaults to `False`.
+        :param get_enabled_backends: Optional dependency callable returning
+        a list of enabled authentication backends.
+        Useful if you want to dynamically enable some authentication backends
+        based on external logic, like a configuration in database.
+        By default, all specified authentication backends are enabled.
+        Please not however that every backends will appear in the OpenAPI documentation,
+        as FastAPI resolves it statically.
         """
         # Here comes some blood magic 🧙‍♂️
         # Thank to "makefun", we are able to generate callable
@@ -88,6 +99,14 @@ class Authenticator:
                     default=Depends(self.get_user_manager),
                 )
             ]
+            if get_enabled_backends is not None:
+                parameters += [
+                    Parameter(
+                        name="enabled_backends",
+                        kind=Parameter.POSITIONAL_OR_KEYWORD,
+                        default=Depends(get_enabled_backends),
+                    )
+                ]
             signature = Signature(parameters)
         except ValueError:
             raise DuplicateBackendNamesError()
@@ -116,12 +135,16 @@ class Authenticator:
         **kwargs
     ) -> Optional[models.UD]:
         user: Optional[models.UD] = None
+        enabled_backends: Sequence[BaseAuthentication] = kwargs.get(
+            "enabled_backends", self.backends
+        )
         for backend in self.backends:
-            token: str = kwargs[name_to_variable_name(backend.name)]
-            if token:
-                user = await backend(token, user_manager)
-                if user:
-                    break
+            if backend in enabled_backends:
+                token: str = kwargs[name_to_variable_name(backend.name)]
+                if token:
+                    user = await backend(token, user_manager)
+                    if user:
+                        break
 
         status_code = status.HTTP_401_UNAUTHORIZED
         if user:

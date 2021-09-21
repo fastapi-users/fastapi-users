@@ -13,6 +13,7 @@ Return a dependency callable to retrieve currently authenticated user, passing t
 * `active`: If `True`, throw `401 Unauthorized` if the authenticated user is inactive. Defaults to `False`.
 * `verified`: If `True`, throw `403 Forbidden` if the authenticated user is not verified. Defaults to `False`.
 * `superuser`: If `True`, throw `403 Forbidden` if the authenticated user is not a superuser. Defaults to `False`.
+* `get_enabled_backends`: Optional dependency callable returning a list of enabled authentication backends. Useful if you want to dynamically enable some authentication backends based on external logic, like a configuration in database. By default, all specified authentication backends are enabled. *Please not however that every backends will appear in the OpenAPI documentation, as FastAPI resolves it statically.*
 
 !!! tip "Create it once and reuse it"
     This function is a **factory**, a function returning another function 🤯
@@ -61,6 +62,41 @@ current_superuser = fastapi_users.current_user(active=True, superuser=True)
 @app.get("/protected-route")
 def protected_route(user: User = Depends(current_superuser)):
     return f"Hello, {user.email}"
+```
+
+### Dynamically enable authentication backends
+
+!!! warning
+    This is an advanced feature for cases where you have several authentication backends that are enabled conditionally. In most cases, you won't need this option.
+
+```py
+from fastapi import Request
+from fastapi_users.authentication import CookieAuthentication, JWTAuthentication
+
+SECRET = "SECRET"
+jwt_authentication = JWTAuthentication(secret=SECRET, lifetime_seconds=3600)
+cookie_authentication = CookieAuthentication(secret=SECRET, lifetime_seconds=3600)
+
+
+async def get_enabled_backends(request: Request):
+    """Return the enabled dependencies following custom logic."""
+    if request.url.path == "/protected-route-only-jwt":
+        return [jwt_authentication]
+    else:
+        return [cookie_authentication, jwt_authentication]
+
+
+current_active_user = fastapi_users.current_user(active=True, get_enabled_backends=get_enabled_backends)
+
+
+@app.get("/protected-route")
+def protected_route(user: User = Depends(current_active_user)):
+    return f"Hello, {user.email}. You are authenticated with a cookie or a JWT."
+
+
+@app.get("/protected-route-only-jwt")
+def protected_route(user: User = Depends(current_active_user)):
+    return f"Hello, {user.email}. You are authenticated with a JWT."
 ```
 
 ## In a path operation
