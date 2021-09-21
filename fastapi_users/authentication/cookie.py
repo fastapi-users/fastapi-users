@@ -91,7 +91,12 @@ class CookieAuthentication(
         except UserNotExists:
             return None
 
-    async def get_login_response(self, user: models.UD, response: Response) -> Any:
+    async def get_login_response(
+        self,
+        user: models.UD,
+        response: Response,
+        user_manager: BaseUserManager[models.UC, models.UD],
+    ) -> Any:
         token = await self._generate_token(user)
         response.set_cookie(
             self.cookie_name,
@@ -108,7 +113,12 @@ class CookieAuthentication(
         # so that FastAPI can terminate it properly
         return None
 
-    async def get_logout_response(self, user: models.UD, response: Response) -> Any:
+    async def get_logout_response(
+        self,
+        user: models.UD,
+        response: Response,
+        user_manager: BaseUserManager[models.UC, models.UD],
+    ) -> Any:
         response.delete_cookie(
             self.cookie_name, path=self.cookie_path, domain=self.cookie_domain
         )

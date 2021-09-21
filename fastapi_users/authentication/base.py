@@ -34,8 +34,18 @@ class BaseAuthentication(Generic[T, models.UC, models.UD]):
     ) -> Optional[models.UD]:
         raise NotImplementedError()
 
-    async def get_login_response(self, user: models.UD, response: Response) -> Any:
+    async def get_login_response(
+        self,
+        user: models.UD,
+        response: Response,
+        user_manager: BaseUserManager[models.UC, models.UD],
+    ) -> Any:
         raise NotImplementedError()
 
-    async def get_logout_response(self, user: models.UD, response: Response) -> Any:
+    async def get_logout_response(
+        self,
+        user: models.UD,
+        response: Response,
+        user_manager: BaseUserManager[models.UC, models.UD],
+    ) -> Any:
         raise NotImplementedError()

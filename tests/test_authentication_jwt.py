@@ -72,8 +72,10 @@ class TestAuthenticate:
 
 @pytest.mark.authentication
 @pytest.mark.asyncio
-async def test_get_login_response(jwt_authentication, user):
-    login_response = await jwt_authentication.get_login_response(user, Response())
+async def test_get_login_response(jwt_authentication, user, user_manager):
+    login_response = await jwt_authentication.get_login_response(
+        user, Response(), user_manager
+    )
 
     assert "access_token" in login_response
     assert login_response["token_type"] == "bearer"
@@ -87,6 +89,6 @@ async def test_get_login_response(jwt_authentication, user):
 
 @pytest.mark.authentication
 @pytest.mark.asyncio
-async def test_get_logout_response(jwt_authentication, user):
+async def test_get_logout_response(jwt_authentication, user, user_manager):
     with pytest.raises(NotImplementedError):
-        await jwt_authentication.get_logout_response(user, Response())
+        await jwt_authentication.get_logout_response(user, Response(), user_manager)

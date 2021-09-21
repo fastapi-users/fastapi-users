@@ -19,13 +19,13 @@ class TestAuthenticate:
 
 @pytest.mark.authentication
 @pytest.mark.asyncio
-async def test_get_login_response(base_authentication, user):
+async def test_get_login_response(base_authentication, user, user_manager):
     with pytest.raises(NotImplementedError):
-        await base_authentication.get_login_response(user, Response())
+        await base_authentication.get_login_response(user, Response(), user_manager)
 
 
 @pytest.mark.authentication
 @pytest.mark.asyncio
-async def test_get_logout_response(base_authentication, user):
+async def test_get_logout_response(base_authentication, user, user_manager):
     with pytest.raises(NotImplementedError):
-        await base_authentication.get_logout_response(user, Response())
+        await base_authentication.get_logout_response(user, Response(), user_manager)

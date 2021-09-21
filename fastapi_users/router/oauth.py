@@ -112,6 +112,6 @@ def get_oauth_router(
         # Authenticate
         for backend in authenticator.backends:
             if backend.name == state_data["authentication_backend"]:
-                return await backend.get_login_response(user, response)
+                return await backend.get_login_response(user, response, user_manager)
 
     return router

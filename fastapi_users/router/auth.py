@@ -37,12 +37,18 @@ def get_auth_router(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=ErrorCode.LOGIN_USER_NOT_VERIFIED,
             )
-        return await backend.get_login_response(user, response)
+        return await backend.get_login_response(user, response, user_manager)
 
     if backend.logout:
 
         @router.post("/logout")
-        async def logout(response: Response, user=Depends(get_current_user)):
-            return await backend.get_logout_response(user, response)
+        async def logout(
+            response: Response,
+            user=Depends(get_current_user),
+            user_manager: BaseUserManager[models.UC, models.UD] = Depends(
+                get_user_manager
+            ),
+        ):
+            return await backend.get_logout_response(user, response, user_manager)
 
     return router

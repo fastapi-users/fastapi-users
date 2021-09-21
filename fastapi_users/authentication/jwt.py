@@ -67,7 +67,12 @@ class JWTAuthentication(
         except UserNotExists:
             return None
 
-    async def get_login_response(self, user: models.UD, response: Response) -> Any:
+    async def get_login_response(
+        self,
+        user: models.UD,
+        response: Response,
+        user_manager: BaseUserManager[models.UC, models.UD],
+    ) -> Any:
         token = await self._generate_token(user)
         return {"access_token": token, "token_type": "bearer"}
 

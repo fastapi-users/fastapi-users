@@ -452,10 +452,14 @@ class MockAuthentication(BaseAuthentication[str, UserCreate, UserDB]):
                 return None
         return None
 
-    async def get_login_response(self, user: UserDB, response: Response):
+    async def get_login_response(
+        self, user: UserDB, response: Response, user_manager: BaseUserManager
+    ):
         return {"token": user.id}
 
-    async def get_logout_response(self, user: UserDB, response: Response):
+    async def get_logout_response(
+        self, user: UserDB, response: Response, user_manager: BaseUserManager
+    ):
         return None
 
 

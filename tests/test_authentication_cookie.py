@@ -98,7 +98,9 @@ class TestAuthenticate:
 
 @pytest.mark.authentication
 @pytest.mark.asyncio
-async def test_get_login_response(user, cookie_authentication: CookieAuthentication):
+async def test_get_login_response(
+    user, cookie_authentication: CookieAuthentication, user_manager
+):
     secret = cookie_authentication.secret
     path = cookie_authentication.cookie_path
     domain = cookie_authentication.cookie_domain
@@ -106,7 +108,9 @@ async def test_get_login_response(user, cookie_authentication: CookieAuthenticat
     httponly = cookie_authentication.cookie_httponly
 
     response = Response()
-    login_response = await cookie_authentication.get_login_response(user, response)
+    login_response = await cookie_authentication.get_login_response(
+        user, response, user_manager
+    )
 
     # We shouldn't return directly the response
     # so that FastAPI can terminate it properly
@@ -148,9 +152,13 @@ async def test_get_login_response(user, cookie_authentication: CookieAuthenticat
 
 @pytest.mark.authentication
 @pytest.mark.asyncio
-async def test_get_logout_response(user, cookie_authentication: CookieAuthentication):
+async def test_get_logout_response(
+    user, cookie_authentication: CookieAuthentication, user_manager
+):
     response = Response()
-    logout_response = await cookie_authentication.get_logout_response(user, response)
+    logout_response = await cookie_authentication.get_logout_response(
+        user, response, user_manager
+    )
 
     # We shouldn't return directly the response
     # so that FastAPI can terminate it properly
