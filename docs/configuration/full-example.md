@@ -8,18 +8,26 @@ Here is a full working example with JWT authentication to help get you started.
 
 ## SQLAlchemy
 
+[Open ↗️](https://replit.com/@frankie567/fastapi-users-sqlalchemy)
+
 <iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@frankie567/fastapi-users-sqlalchemy?embed=true"></iframe>
 
 
 ## MongoDB
 
+[Open ↗️](https://replit.com/@frankie567/fastapi-users-mongodb)
+
 <iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@frankie567/fastapi-users-mongodb?embed=true"></iframe>
 
 ## Tortoise ORM
 
+[Open ↗️](https://replit.com/@frankie567/fastapi-users-tortoise)
+
 <iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@frankie567/fastapi-users-tortoise?embed=true"></iframe>
 
 ## Ormar
+
+[Open ↗️](https://replit.com/@frankie567/fastapi-users-ormar)
 
 <iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@frankie567/fastapi-users-ormar?embed=true"></iframe>
 

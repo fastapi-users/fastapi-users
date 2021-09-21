@@ -121,12 +121,18 @@ app.include_router(
 
 #### SQLAlchemy
 
+[Open ↗️](https://replit.com/@frankie567/fastapi-users-sqlalchemy-oauth)
+
 <iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@frankie567/fastapi-users-sqlalchemy-oauth?embed=true"></iframe>
 
 #### MongoDB
 
+[Open ↗️](https://replit.com/@frankie567/fastapi-users-mongodb-oauth)
+
 <iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@frankie567/fastapi-users-mongodb-oauth?embed=true"></iframe>
 
 #### Tortoise ORM
+
+[Open ↗️](https://replit.com/@frankie567/fastapi-users-tortoise-oauth)
 
 <iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@frankie567/fastapi-users-tortoise-oauth?embed=true"></iframe>
