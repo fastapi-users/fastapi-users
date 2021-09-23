@@ -340,6 +340,16 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "maximka1221",
+      "name": "Maxim",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1503245?v=4",
+      "profile": "https://github.com/maximka1221",
+      "contributions": [
+        "doc",
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
