@@ -171,7 +171,7 @@ from fastapi_users import BaseUserManager
 
 class UserManager(BaseUserManager[UserCreate, UserDB]):
     # ...
-    async def on_after_request_verify(
+    async def on_after_verify(
         self, user: UserDB, request: Optional[Request] = None
     ):
         print(f"User {user.id} has been verified")
@@ -197,7 +197,7 @@ from fastapi_users import BaseUserManager
 
 class UserManager(BaseUserManager[UserCreate, UserDB]):
     # ...
-    async def on_after_request_verify(
+    async def on_after_forgot_password(
         self, user: UserDB, token: str, request: Optional[Request] = None
     ):
         print(f"User {user.id} has forgot their password. Reset token: {token}")
