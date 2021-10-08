@@ -350,6 +350,15 @@
         "doc",
         "bug"
       ]
+    },
+    {
+      "login": "scottdavort",
+      "name": "scottdavort",
+      "avatar_url": "https://avatars.githubusercontent.com/u/58272461?v=4",
+      "profile": "https://github.com/scottdavort",
+      "contributions": [
+        "financial"
+      ]
     }
   ],
   "contributorsPerLine": 7,
