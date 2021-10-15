@@ -137,5 +137,5 @@ async def test_authenticator_none_enabled(get_test_auth_client, user):
 @pytest.mark.asyncio
 async def test_authenticators_with_same_name(get_test_auth_client):
     with pytest.raises(DuplicateBackendNamesError):
-        async for client in get_test_auth_client([BackendNone(), BackendNone()]):
+        async for _ in get_test_auth_client([BackendNone(), BackendNone()]):
             pass

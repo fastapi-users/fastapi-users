@@ -50,11 +50,10 @@ def get_oauth_router(
         scopes: List[str] = Query(None),
     ):
         # Check that authentication_backend exists
-        backend_exists = False
-        for backend in authenticator.backends:
-            if backend.name == authentication_backend:
-                backend_exists = True
-                break
+        backend_exists = any(
+            backend.name == authentication_backend for backend in authenticator.backends
+        )
+
         if not backend_exists:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
 
