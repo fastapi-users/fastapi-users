@@ -13,7 +13,7 @@
 [![PyPI version](https://badge.fury.io/py/fastapi-users.svg)](https://badge.fury.io/py/fastapi-users)
 [![Downloads](https://pepy.tech/badge/fastapi-users)](https://pepy.tech/project/fastapi-users)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-39-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-40-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <p align="center">
     <a href="https://www.buymeacoffee.com/frankie567"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=frankie567&button_colour=FF5F5F&font_colour=ffffff&font_family=Lato&outline_colour=000000&coffee_colour=FFDD00"></a>
@@ -124,6 +124,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/maximka1221"><img src="https://avatars.githubusercontent.com/u/1503245?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Maxim</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=maximka1221" title="Documentation">📖</a> <a href="https://github.com/fastapi-users/fastapi-users/issues?q=author%3Amaximka1221" title="Bug reports">🐛</a></td>
     <td align="center"><a href="https://github.com/scottdavort"><img src="https://avatars.githubusercontent.com/u/58272461?v=4?s=100" width="100px;" alt=""/><br /><sub><b>scottdavort</b></sub></a><br /><a href="#financial-scottdavort" title="Financial">💵</a></td>
     <td align="center"><a href="https://github.com/jdukewich"><img src="https://avatars.githubusercontent.com/u/37190801?v=4?s=100" width="100px;" alt=""/><br /><sub><b>John Dukewich</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=jdukewich" title="Documentation">📖</a></td>
+    <td align="center"><a href="http://yezz.me"><img src="https://avatars.githubusercontent.com/u/52716203?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Yasser Tahiri</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=yezz123" title="Code">💻</a></td>
   </tr>
 </table>
 
