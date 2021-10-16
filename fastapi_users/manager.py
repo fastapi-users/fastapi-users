@@ -307,7 +307,10 @@ class BaseUserManager(Generic[models.UC, models.UD]):
         if not user.is_active:
             raise UserInactive()
 
-        token_data = {"user_id": str(user.id), "aud": self.reset_password_token_audience}
+        token_data = {
+            "user_id": str(user.id),
+            "aud": self.reset_password_token_audience,
+        }
         token = generate_jwt(
             token_data,
             self.reset_password_token_secret,
@@ -535,8 +538,7 @@ class BaseUserManager(Generic[models.UC, models.UD]):
         return user
 
     async def _update(self, user: models.UD, update_dict: Dict[str, Any]) -> models.UD:
-        for field in update_dict:
-            value = update_dict[field]
+        for field, value in update_dict.items():
             if field == "email" and value != user.email:
                 try:
                     await self.get_by_email(value)
