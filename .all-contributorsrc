@@ -359,6 +359,15 @@
       "contributions": [
         "financial"
       ]
+    },
+    {
+      "login": "yezz123",
+      "name": "Yasser Tahiri",
+      "avatar_url": "https://avatars.githubusercontent.com/u/52716203?v=4",
+      "profile": "http://yezz.me",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
