@@ -359,6 +359,15 @@
       "contributions": [
         "financial"
       ]
+    },
+    {
+      "login": "jdukewich",
+      "name": "John Dukewich",
+      "avatar_url": "https://avatars.githubusercontent.com/u/37190801?v=4",
+      "profile": "https://github.com/jdukewich",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
