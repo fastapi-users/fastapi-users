@@ -104,6 +104,19 @@ class TestVerifyTokenRequest:
         response = await test_app_client.post("/request-verify-token", json=json)
         assert response.status_code == status.HTTP_202_ACCEPTED
 
+    async def test_token_namespace(
+        self,
+        get_user_manager,
+    ):
+        verify_router = get_verify_router(
+            get_user_manager,
+            User,
+        )
+
+        app = FastAPI()
+        app.include_router(verify_router)
+        assert app.url_path_for("verify:request-token") == "/request-verify-token"
+
 
 @pytest.mark.router
 @pytest.mark.asyncio
@@ -166,3 +179,16 @@ class TestVerify:
         assert response.status_code == status.HTTP_200_OK
         data = cast(Dict[str, Any], response.json())
         assert data["id"] == str(user.id)
+
+    async def test_verify_namespace(
+        self,
+        get_user_manager,
+    ):
+        verify_router = get_verify_router(
+            get_user_manager,
+            User,
+        )
+
+        app = FastAPI()
+        app.include_router(verify_router)
+        assert app.url_path_for("verify:verify") == "/verify"
