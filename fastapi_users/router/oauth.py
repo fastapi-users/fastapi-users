@@ -30,7 +30,7 @@ def get_oauth_router(
 ) -> APIRouter:
     """Generate a router with the OAuth routes."""
     router = APIRouter()
-    callback_route_name = f"{oauth_client.name}-callback"
+    callback_route_name = f"oauth:{oauth_client.name}-callback"
 
     if redirect_url is not None:
         oauth2_authorize_callback = OAuth2AuthorizeCallback(
@@ -43,7 +43,7 @@ def get_oauth_router(
             route_name=callback_route_name,
         )
 
-    @router.get("/authorize")
+    @router.get("/authorize", name="oauth:authorize")
     async def authorize(
         request: Request,
         authentication_backend: str,
@@ -74,7 +74,7 @@ def get_oauth_router(
 
         return {"authorization_url": authorization_url}
 
-    @router.get("/callback", name=f"{oauth_client.name}-callback")
+    @router.get("/callback", name=f"oauth:{oauth_client.name}-callback")
     async def callback(
         request: Request,
         response: Response,
