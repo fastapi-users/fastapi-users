@@ -59,7 +59,6 @@ class FastAPIUsers(Generic[models.U, models.UC, models.UU, models.UD]):
         self._user_db_model = user_db_model
         self._user_create_model = user_create_model
         self._user_update_model = user_update_model
-        self._user_db_model = user_db_model
 
         self.get_user_manager = get_user_manager
         self.current_user = self.authenticator.current_user
