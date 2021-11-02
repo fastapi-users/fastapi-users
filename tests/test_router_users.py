@@ -202,6 +202,21 @@ class TestUpdateMe:
             data = cast(Dict[str, Any], response.json())
             assert data["email"] == "king.arthur@tintagel.bt"
 
+    async def test_unvalidated_after_email_change(
+        self,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
+        verified_user: UserDB,
+    ):
+        client, _ = test_app_client
+        json = {"email": "king.arthur@tintagel.bt"}
+        response = await client.patch(
+            "/me", json=json, headers={"Authorization": f"Bearer {verified_user.id}"}
+        )
+        assert response.status_code == status.HTTP_200_OK
+
+        data = cast(Dict[str, Any], response.json())
+        assert data["is_verified"] is False
+
     async def test_valid_body_is_superuser(
         self,
         test_app_client: Tuple[httpx.AsyncClient, bool],
