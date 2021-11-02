@@ -202,7 +202,7 @@ class TestUpdateMe:
             data = cast(Dict[str, Any], response.json())
             assert data["email"] == "king.arthur@tintagel.bt"
 
-    async def test_unvalidated_after_email_change(
+    async def test_unverified_after_email_change(
         self,
         test_app_client: Tuple[httpx.AsyncClient, bool],
         verified_user: UserDB,
