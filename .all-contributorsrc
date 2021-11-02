@@ -395,6 +395,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "justb4",
+      "name": "Just van den Broecke",
+      "avatar_url": "https://avatars.githubusercontent.com/u/582630?v=4",
+      "profile": "http://justobjects.nl",
+      "contributions": [
+        "financial"
+      ]
     }
   ],
   "contributorsPerLine": 7,
