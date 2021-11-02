@@ -272,3 +272,31 @@ class TestCallback:
 
         data = cast(Dict[str, Any], response.json())
         assert data["token"] == str(user_oauth.id)
+
+
+@pytest.mark.asyncio
+async def test_oauth_authorize_namespace(
+    secret,
+    get_user_manager_oauth,
+    mock_authentication,
+    oauth_client,
+    get_test_client,
+    redirect_url: str = None,
+):
+
+    mock_authentication_bis = MockAuthentication(name="mock-bis")
+    authenticator = Authenticator(
+        [mock_authentication, mock_authentication_bis], get_user_manager_oauth
+    )
+
+    app = FastAPI()
+    app.include_router(
+        get_oauth_router(
+            oauth_client,
+            get_user_manager_oauth,
+            authenticator,
+            secret,
+            redirect_url,
+        )
+    )
+    assert app.url_path_for("oauth:authorize") == "/authorize"

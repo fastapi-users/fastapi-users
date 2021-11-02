@@ -21,7 +21,7 @@ def get_register_router(
     router = APIRouter()
 
     @router.post(
-        "/register", response_model=user_model, status_code=status.HTTP_201_CREATED
+        "/register", response_model=user_model, status_code=status.HTTP_201_CREATED, name="register:register"
     )
     async def register(
         request: Request,

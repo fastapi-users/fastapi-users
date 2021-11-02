@@ -19,7 +19,7 @@ def get_auth_router(
         active=True, verified=requires_verification
     )
 
-    @router.post("/login")
+    @router.post("/login", name="auth:login")
     async def login(
         response: Response,
         credentials: OAuth2PasswordRequestForm = Depends(),
@@ -41,7 +41,7 @@ def get_auth_router(
 
     if backend.logout:
 
-        @router.post("/logout")
+        @router.post("/logout", name="auth:logout")
         async def logout(
             response: Response,
             user=Depends(get_current_user),

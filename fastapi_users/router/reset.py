@@ -19,7 +19,7 @@ def get_reset_password_router(
     """Generate a router with the reset password routes."""
     router = APIRouter()
 
-    @router.post("/forgot-password", status_code=status.HTTP_202_ACCEPTED)
+    @router.post("/forgot-password", status_code=status.HTTP_202_ACCEPTED, name="reset:forgot_password")
     async def forgot_password(
         request: Request,
         email: EmailStr = Body(..., embed=True),
@@ -37,7 +37,7 @@ def get_reset_password_router(
 
         return None
 
-    @router.post("/reset-password")
+    @router.post("/reset-password", name="reset:reset_password")
     async def reset_password(
         request: Request,
         token: str = Body(...),

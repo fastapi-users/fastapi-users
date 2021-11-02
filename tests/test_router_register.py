@@ -102,3 +102,18 @@ class TestRegister:
 
         data = cast(Dict[str, Any], response.json())
         assert data["is_active"] is True
+
+
+@pytest.mark.asyncio
+async def test_register_namespace(
+    get_user_manager
+):
+    app = FastAPI()
+    app.include_router(
+        get_register_router(
+            get_user_manager,
+            User,
+            UserCreate,
+        )
+    )
+    assert app.url_path_for("register:register") == "/register"
