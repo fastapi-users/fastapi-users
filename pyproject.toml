@@ -32,7 +32,7 @@ requires = [
 
 [tool.flit.metadata.requires-extra]
 sqlalchemy = [
-    "fastapi-users-db-sqlalchemy @ git+https://github.com/fastapi-users-db-sqlalchemy.git",
+    "fastapi-users-db-sqlalchemy @ git+https://github.com/artreven/fastapi-users-db-sqlalchemy.git",
 ]
 mongodb = [
     "fastapi-users-db-mongodb >=1.0.0",
