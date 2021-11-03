@@ -34,6 +34,9 @@ class BackendNone(
     ) -> Optional[models.UD]:
         return None
 
+    async def decode_jwt(self, token: str):
+        return dict()
+
 
 class BackendUser(
     Generic[models.UC, models.UD], BaseAuthentication[str, models.UC, models.UD]
@@ -49,6 +52,9 @@ class BackendUser(
         user_manager: BaseUserManager[models.UC, models.UD],
     ) -> Optional[models.UD]:
         return self.user
+
+    async def decode_jwt(self, token: str):
+        return dict()
 
 
 @pytest.fixture

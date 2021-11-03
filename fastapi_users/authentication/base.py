@@ -49,3 +49,6 @@ class BaseAuthentication(Generic[T, models.UC, models.UD]):
         user_manager: BaseUserManager[models.UC, models.UD],
     ) -> Any:
         raise NotImplementedError()
+
+    async def decode_jwt(self, token: str) -> dict:
+        raise NotImplementedError

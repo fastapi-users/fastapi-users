@@ -78,4 +78,10 @@ class JWTAuthentication(
 
     async def _generate_token(self, user: models.UD) -> str:
         data = {"user_id": str(user.id), "aud": self.token_audience}
+        if user.scopes:
+            data["scopes"] = user.scopes
         return generate_jwt(data, self.secret, self.lifetime_seconds)
+
+    async def decode_jwt(self, token: str) -> dict:
+        data = decode_jwt(token, self.secret, self.token_audience)
+        return data

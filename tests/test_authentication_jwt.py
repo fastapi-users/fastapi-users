@@ -15,10 +15,12 @@ def jwt_authentication(secret):
 
 @pytest.fixture
 def token(secret):
-    def _token(user_id=None, lifetime=LIFETIME):
+    def _token(user_id=None, scopes=None, lifetime=LIFETIME):
         data = {"aud": "fastapi-users:auth"}
         if user_id is not None:
             data["user_id"] = str(user_id)
+        if scopes is not None:
+            data["scopes"] = scopes
         return generate_jwt(data, secret, lifetime)
 
     return _token
@@ -72,9 +74,9 @@ class TestAuthenticate:
 
 @pytest.mark.authentication
 @pytest.mark.asyncio
-async def test_get_login_response(jwt_authentication, user, user_manager):
+async def test_get_login_response(jwt_authentication, scoped_user, user_manager):
     login_response = await jwt_authentication.get_login_response(
-        user, Response(), user_manager
+        scoped_user, Response(), user_manager
     )
 
     assert "access_token" in login_response
@@ -84,7 +86,17 @@ async def test_get_login_response(jwt_authentication, user, user_manager):
     decoded = decode_jwt(
         token, jwt_authentication.secret, audience=["fastapi-users:auth"]
     )
-    assert decoded["user_id"] == str(user.id)
+    assert decoded["user_id"] == str(scoped_user.id)
+    assert decoded["scopes"] == ["read"]
+
+
+@pytest.mark.authentication
+@pytest.mark.asyncio
+async def test_decode_jwt_response(jwt_authentication, user, token):
+    token_data = await jwt_authentication.decode_jwt(token(user.id, scopes=["read"]))
+
+    assert token_data["user_id"] == str(user.id)
+    assert token_data["scopes"] == ["read"]
 
 
 @pytest.mark.authentication

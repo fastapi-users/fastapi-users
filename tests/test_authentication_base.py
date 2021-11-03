@@ -29,3 +29,10 @@ async def test_get_login_response(base_authentication, user, user_manager):
 async def test_get_logout_response(base_authentication, user, user_manager):
     with pytest.raises(NotImplementedError):
         await base_authentication.get_logout_response(user, Response(), user_manager)
+
+
+@pytest.mark.authentication
+@pytest.mark.asyncio
+async def test_decode_jwt_response(base_authentication, user):
+    with pytest.raises(NotImplementedError):
+        await base_authentication.decode_jwt(user)

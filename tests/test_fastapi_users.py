@@ -1,8 +1,9 @@
+import json
 from typing import AsyncGenerator
 
 import httpx
 import pytest
-from fastapi import Depends, FastAPI, status
+from fastapi import Depends, FastAPI, Security, status
 
 from fastapi_users import FastAPIUsers
 from tests.conftest import User, UserCreate, UserDB, UserUpdate
@@ -48,6 +49,18 @@ async def test_app_client(
 
     @app.get("/current-verified-user")
     def current_verified_user(user=Depends(fastapi_users.current_user(verified=True))):
+        return user
+
+    @app.get("/current-scoped-user-read")
+    def current_scoped_user_read(
+        user=Depends(fastapi_users.current_user(security_scopes=["read"])),
+    ):
+        return user
+
+    @app.get("/current-scoped-user-write")
+    def current_scoped_user_write(
+        user=Depends(fastapi_users.current_user(security_scopes=["write"])),
+    ):
         return user
 
     @app.get("/current-superuser")
@@ -212,6 +225,49 @@ class TestGetCurrentVerifiedUser:
         response = await test_app_client.get(
             "/current-verified-user",
             headers={"Authorization": f"Bearer {verified_user.id}"},
+        )
+        assert response.status_code == status.HTTP_200_OK
+
+
+@pytest.mark.fastapi_users
+@pytest.mark.asyncio
+class TestGetCurrentScopedUser:
+    async def test_missing_token(self, test_app_client: httpx.AsyncClient):
+        response = await test_app_client.get("/current-scoped-user-read")
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    async def test_invalid_token(self, test_app_client: httpx.AsyncClient):
+        response = await test_app_client.get(
+            "/current-scoped-user-read", headers={"Authorization": "Bearer foo"}
+        )
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    async def test_valid_token_no_scope_user(
+        self, test_app_client: httpx.AsyncClient, user: UserDB
+    ):
+        response = await test_app_client.get(
+            "/current-scoped-user-read",
+            headers={"Authorization": f"Bearer {user.id}"},
+        )
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    async def test_valid_token_invalid_scope_user(
+        self, test_app_client: httpx.AsyncClient, scoped_user: UserDB
+    ):
+        token_data = {"scopes": scoped_user.scopes, "user_id": str(scoped_user.id)}
+        response = await test_app_client.get(
+            "/current-scoped-user-write",
+            headers={"Authorization": f"Bearer {json.dumps(token_data)}"},
+        )
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    async def test_valid_token_valid_scope_user(
+        self, test_app_client: httpx.AsyncClient, scoped_user: UserDB
+    ):
+        token_data = {"scopes": scoped_user.scopes, "user_id": str(scoped_user.id)}
+        response = await test_app_client.get(
+            "/current-scoped-user-read",
+            headers={"Authorization": f"Bearer {json.dumps(token_data)}"},
         )
         assert response.status_code == status.HTTP_200_OK
 

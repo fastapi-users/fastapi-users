@@ -1,4 +1,5 @@
 import asyncio
+import json
 from typing import Any, AsyncGenerator, Callable, Generic, Optional, Type, Union
 from unittest.mock import MagicMock
 
@@ -155,6 +156,15 @@ def inactive_user() -> UserDB:
 
 
 @pytest.fixture
+def inactive_user() -> UserDB:
+    return UserDB(
+        email="percival@camelot.bt",
+        hashed_password=angharad_password_hash,
+        is_active=False,
+    )
+
+
+@pytest.fixture
 def inactive_user_oauth(oauth_account3) -> UserDBOAuth:
     return UserDBOAuth(
         email="percival@camelot.bt",
@@ -181,6 +191,17 @@ def verified_user_oauth(oauth_account4) -> UserDBOAuth:
         hashed_password=excalibur_password_hash,
         is_active=False,
         oauth_accounts=[oauth_account4],
+    )
+
+
+@pytest.fixture
+def scoped_user() -> UserDB:
+    return UserDB(
+        email="lake.lady@camelot.bt",
+        hashed_password=excalibur_password_hash,
+        is_active=True,
+        is_verified=True,
+        scopes=["read"],
     )
 
 
@@ -281,7 +302,7 @@ def oauth_account5() -> BaseOAuthAccount:
 
 @pytest.fixture
 def mock_user_db(
-    user, verified_user, inactive_user, superuser, verified_superuser
+    user, verified_user, inactive_user, scoped_user, superuser, verified_superuser
 ) -> BaseUserDatabase:
     class MockUserDatabase(BaseUserDatabase[UserDB]):
         async def get(self, id: UUID4) -> Optional[UserDB]:
@@ -291,6 +312,8 @@ def mock_user_db(
                 return verified_user
             if id == inactive_user.id:
                 return inactive_user
+            if id == scoped_user.id:
+                return scoped_user
             if id == superuser.id:
                 return superuser
             if id == verified_superuser.id:
@@ -305,6 +328,8 @@ def mock_user_db(
                 return verified_user
             if lower_email == inactive_user.email.lower():
                 return inactive_user
+            if lower_email == scoped_user.email.lower():
+                return scoped_user
             if lower_email == superuser.email.lower():
                 return superuser
             if lower_email == verified_superuser.email.lower():
@@ -443,6 +468,8 @@ class MockAuthentication(BaseAuthentication[str, UserCreate, UserDB]):
 
     async def __call__(self, credentials: Optional[str], user_manager: BaseUserManager):
         if credentials is not None:
+            if "user_id" in credentials:
+                credentials = json.loads(credentials)["user_id"]
             try:
                 token_uuid = UUID4(credentials)
                 return await user_manager.get(token_uuid)
@@ -461,6 +488,12 @@ class MockAuthentication(BaseAuthentication[str, UserCreate, UserDB]):
         self, user: UserDB, response: Response, user_manager: BaseUserManager
     ):
         return None
+
+    async def decode_jwt(self, token: Optional[str]):
+        try:
+            return json.loads(token)
+        except (json.decoder.JSONDecodeError, TypeError) as e:
+            return dict()
 
 
 @pytest.fixture

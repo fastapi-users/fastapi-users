@@ -1,6 +1,6 @@
 import re
 from inspect import Parameter, Signature
-from typing import Callable, Optional, Sequence
+from typing import Callable, List, Optional, Sequence
 
 from fastapi import Depends, HTTPException, status
 from makefun import with_signature
@@ -57,6 +57,7 @@ class Authenticator:
         active: bool = False,
         verified: bool = False,
         superuser: bool = False,
+        security_scopes: List[str] = None,
         get_enabled_backends: Optional[EnabledBackendsDependency] = None,
     ):
         """
@@ -72,6 +73,8 @@ class Authenticator:
         the authenticated user is not verified. Defaults to `False`.
         :param superuser: If `True`, throw `403 Forbidden` if
         the authenticated user is not a superuser. Defaults to `False`.
+        :param scopes: If an app uses token's scopes and if scopes are provided,
+        but the user does not have the respective permission, throw `401 Unauthorized`.
         :param get_enabled_backends: Optional dependency callable returning
         a list of enabled authentication backends.
         Useful if you want to dynamically enable some authentication backends
@@ -118,8 +121,9 @@ class Authenticator:
                 optional=optional,
                 active=active,
                 verified=verified,
+                security_scopes=security_scopes,
                 superuser=superuser,
-                **kwargs
+                **kwargs,
             )
 
         return current_user_dependency
@@ -131,22 +135,33 @@ class Authenticator:
         optional: bool = False,
         active: bool = False,
         verified: bool = False,
+        security_scopes: List[str] = None,
         superuser: bool = False,
-        **kwargs
+        **kwargs,
     ) -> Optional[models.UD]:
         user: Optional[models.UD] = None
         enabled_backends: Sequence[BaseAuthentication] = kwargs.get(
             "enabled_backends", self.backends
         )
+        status_code = status.HTTP_401_UNAUTHORIZED
         for backend in self.backends:
             if backend in enabled_backends:
                 token: str = kwargs[name_to_variable_name(backend.name)]
+
+                if security_scopes:
+                    token_data = await backend.decode_jwt(token=token)
+                    token_scopes = token_data.get("scopes", [])
+                    for scope in security_scopes:
+                        if scope not in token_scopes:
+                            if not optional:
+                                status_code = status.HTTP_403_FORBIDDEN
+                                raise HTTPException(status_code=status_code)
+
                 if token:
                     user = await backend(token, user_manager)
                     if user:
                         break
 
-        status_code = status.HTTP_401_UNAUTHORIZED
         if user:
             status_code = status.HTTP_403_FORBIDDEN
             if active and not user.is_active:
