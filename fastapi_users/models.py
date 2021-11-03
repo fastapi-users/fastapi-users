@@ -14,6 +14,7 @@ class CreateUpdateDictModel(BaseModel):
                 "is_active",
                 "is_verified",
                 "oauth_accounts",
+                "scopes"
             },
         )
 
