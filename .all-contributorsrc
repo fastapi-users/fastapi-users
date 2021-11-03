@@ -377,6 +377,33 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "BrandonGoding",
+      "name": "Brandon H. Goding",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17888319?v=4",
+      "profile": "https://www.brandongoding.tech",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "PovilasKud",
+      "name": "PovilasK",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7852173?v=4",
+      "profile": "https://github.com/PovilasKud",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "justb4",
+      "name": "Just van den Broecke",
+      "avatar_url": "https://avatars.githubusercontent.com/u/582630?v=4",
+      "profile": "http://justobjects.nl",
+      "contributions": [
+        "financial"
+      ]
     }
   ],
   "contributorsPerLine": 7,
