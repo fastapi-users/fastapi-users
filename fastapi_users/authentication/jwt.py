@@ -1,4 +1,4 @@
-from typing import Any, Generic, List, Optional
+from typing import Any, Generic, List, Optional, Dict
 
 import jwt
 from fastapi import Response
@@ -36,9 +36,13 @@ class JWTAuthentication(
         tokenUrl: str = "auth/jwt/login",
         name: str = "jwt",
         token_audience: List[str] = ["fastapi-users:auth"],
+        security_scopes: Optional[Dict[str, str]] = None
     ):
         super().__init__(name, logout=False)
-        self.scheme = OAuth2PasswordBearer(tokenUrl, auto_error=False)
+        if security_scopes is not None:
+            self.scheme = OAuth2PasswordBearer(tokenUrl, auto_error=False, scopes=security_scopes)
+        else:
+            self.scheme = OAuth2PasswordBearer(tokenUrl, auto_error=False)
         self.secret = secret
         self.token_audience = token_audience
         self.lifetime_seconds = lifetime_seconds
