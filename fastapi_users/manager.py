@@ -545,6 +545,7 @@ class BaseUserManager(Generic[models.UC, models.UD]):
                     raise UserAlreadyExists()
                 except UserNotExists:
                     user.email = value
+                    user.is_verified = False
             elif field == "password":
                 await self.validate_password(value, user)
                 hashed_password = get_password_hash(value)
