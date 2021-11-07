@@ -31,5 +31,5 @@ users = UserTable.__table__
 oauth_accounts = OAuthAccount.__table__
 
 
-def get_user_db():
+async def get_user_db():
     yield SQLAlchemyUserDatabase(UserDB, database, users, oauth_accounts)
