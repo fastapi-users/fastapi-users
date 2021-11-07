@@ -404,6 +404,16 @@
       "contributions": [
         "financial"
       ]
+    },
+    {
+      "login": "jakemanger",
+      "name": "jakemanger",
+      "avatar_url": "https://avatars.githubusercontent.com/u/52495554?v=4",
+      "profile": "https://github.com/jakemanger",
+      "contributions": [
+        "bug",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
