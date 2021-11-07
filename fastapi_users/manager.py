@@ -160,7 +160,7 @@ class BaseUserManager(Generic[models.UC, models.UD]):
         self, oauth_account: models.BaseOAuthAccount, request: Optional[Request] = None
     ) -> models.UD:
         """
-        Handle the callback after a successfull OAuth authentication.
+        Handle the callback after a successful OAuth authentication.
 
         If the user already exists with this OAuth account, the token is updated.
 
