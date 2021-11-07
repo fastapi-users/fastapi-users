@@ -78,6 +78,8 @@ nav:
     - usage/flow.md
     - usage/routes.md
     - usage/current-user.md
+  - Cookbook:
+    - cookbook/create-user-programmatically.md
   - Migration:
     - migration/08_to_1x.md
     - migration/1x_to_2x.md
