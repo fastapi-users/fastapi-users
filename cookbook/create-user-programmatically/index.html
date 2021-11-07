@@ -8,7 +8,7 @@
 <meta content="Ready-to-use and customizable users management for FastAPI" name="description"/>
 <link href="../../favicon.png" rel="icon"/>
 <meta content="mkdocs-1.2.3, mkdocs-material-7.3.6" name="generator"/>
-<title>Overview - FastAPI Users</title>
+<title>Create a user programmatically - FastAPI Users</title>
 <link href="../../assets/stylesheets/main.a57b2b03.min.css" rel="stylesheet"/>
 <link href="../../assets/stylesheets/palette.3f5d1f46.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -22,7 +22,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#overview">
+<a class="md-skip" href="#create-a-user-programmatically">
           Skip to content
         </a>
 </div>
@@ -46,7 +46,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              Overview
+              Create a user programmatically
             
           </span>
 </div>
@@ -138,8 +138,8 @@
         Installation
       </a>
 </li>
-<li class="md-nav__item md-nav__item--active md-nav__item--nested">
-<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" id="__nav_3" type="checkbox"/>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" id="__nav_3" type="checkbox"/>
 <label class="md-nav__link" for="__nav_3">
           Configuration
           <span class="md-nav__icon md-icon"></span>
@@ -150,51 +150,13 @@
           Configuration
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item md-nav__item--active">
-<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
-<label class="md-nav__link md-nav__link--active" for="__toc">
-          Overview
-          <span class="md-nav__icon md-icon"></span>
-</label>
-<a class="md-nav__link md-nav__link--active" href="./">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../configuration/overview/">
         Overview
       </a>
-<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
-<label class="md-nav__title" for="__toc">
-<span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#models">
-    Models
-  </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#database-adapters">
-    Database adapters
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#authentication-backends">
-    Authentication backends
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#usermanager">
-    UserManager
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#fastapiusers-and-routers">
-    FastAPIUsers and routers
-  </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../models/">
+<a class="md-nav__link" href="../../configuration/models/">
         Models
       </a>
 </li>
@@ -211,22 +173,22 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../databases/sqlalchemy/">
+<a class="md-nav__link" href="../../configuration/databases/sqlalchemy/">
         SQLAlchemy
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../databases/mongodb/">
+<a class="md-nav__link" href="../../configuration/databases/mongodb/">
         MongoDB
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../databases/tortoise/">
+<a class="md-nav__link" href="../../configuration/databases/tortoise/">
         Tortoise ORM
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../databases/ormar/">
+<a class="md-nav__link" href="../../configuration/databases/ormar/">
         Ormar
       </a>
 </li>
@@ -246,17 +208,17 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../authentication/">
+<a class="md-nav__link" href="../../configuration/authentication/">
         Introduction
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../authentication/jwt/">
+<a class="md-nav__link" href="../../configuration/authentication/jwt/">
         JWT
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../authentication/cookie/">
+<a class="md-nav__link" href="../../configuration/authentication/cookie/">
         Cookie
       </a>
 </li>
@@ -264,7 +226,7 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../user-manager/">
+<a class="md-nav__link" href="../../configuration/user-manager/">
         UserManager
       </a>
 </li>
@@ -281,32 +243,32 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../routers/">
+<a class="md-nav__link" href="../../configuration/routers/">
         Introduction
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../routers/auth/">
+<a class="md-nav__link" href="../../configuration/routers/auth/">
         Auth router
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../routers/register/">
+<a class="md-nav__link" href="../../configuration/routers/register/">
         Register routes
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../routers/verify/">
+<a class="md-nav__link" href="../../configuration/routers/verify/">
         Verify router
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../routers/reset/">
+<a class="md-nav__link" href="../../configuration/routers/reset/">
         Reset password router
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../routers/users/">
+<a class="md-nav__link" href="../../configuration/routers/users/">
         Users router
       </a>
 </li>
@@ -314,12 +276,12 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../full-example/">
+<a class="md-nav__link" href="../../configuration/full-example/">
         Full example
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../oauth/">
+<a class="md-nav__link" href="../../configuration/oauth/">
         OAuth2
       </a>
 </li>
@@ -356,8 +318,8 @@
 </ul>
 </nav>
 </li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" id="__nav_5" type="checkbox"/>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" id="__nav_5" type="checkbox"/>
 <label class="md-nav__link" for="__nav_5">
           Cookbook
           <span class="md-nav__icon md-icon"></span>
@@ -368,10 +330,38 @@
           Cookbook
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../cookbook/create-user-programmatically/">
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+          Create a user programmatically
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
         Create a user programmatically
       </a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1-define-dependencies-as-context-managers">
+    1. Define dependencies as context managers
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2-write-a-function">
+    2. Write a function
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3-use-it">
+    3. Use it
+  </a>
+</li>
+</ul>
+</nav>
 </li>
 </ul>
 </nav>
@@ -441,28 +431,18 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#models">
-    Models
+<a class="md-nav__link" href="#1-define-dependencies-as-context-managers">
+    1. Define dependencies as context managers
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#database-adapters">
-    Database adapters
+<a class="md-nav__link" href="#2-write-a-function">
+    2. Write a function
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#authentication-backends">
-    Authentication backends
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#usermanager">
-    UserManager
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#fastapiusers-and-routers">
-    FastAPIUsers and routers
+<a class="md-nav__link" href="#3-use-it">
+    3. Use it
   </a>
 </li>
 </ul>
@@ -472,84 +452,87 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">¶</a></h1>
-<p>The schema below shows you how the library is structured and how each part fit together.</p>
-<div class="mermaid">flowchart LR
-    FASTAPI_USERS{FastAPIUsers}
-    USER_MANAGER{UserManager}
-    DATABASE_DEPENDENCY[[get_user_db]]
-    USER_MANAGER_DEPENDENCY[[get_user_manager]]
-    CURRENT_USER[[current_user]]
-    subgraph MODELS[Models]
-        direction RL
-        USER[User]
-        USER_CREATE[UserCreate]
-        USER_UPDATE[UserUpdate]
-        USER_DB[UserDB]
-    end
-    subgraph DATABASE[Database adapters]
-        direction RL
-        SQLALCHEMY[SQLAlchemy]
-        MONGODB[MongoDB]
-        TORTOISE[Tortoise ORM]
-        ORMAR[Ormar]
-    end
-    subgraph ROUTERS[Routers]
-        direction RL
-        REGISTER[[get_register_router]]
-        VERIFY[[get_verify_router]]
-        RESET[[get_reset_password_router]]
-        AUTH[[get_auth_router]]
-        OAUTH[[get_oauth_router]]
-        USERS[[get_users_router]]
-    end
-    subgraph AUTH_BACKENDS[Authentication backends]
-        direction RL
-        COOKIE[CookieAuthentication]
-        JWT[JWTAuthentication]
-    end
-    DATABASE --&gt; DATABASE_DEPENDENCY
-    DATABASE_DEPENDENCY --&gt; USER_MANAGER
+<h1 id="create-a-user-programmatically">Create a user programmatically<a class="headerlink" href="#create-a-user-programmatically" title="Permanent link">¶</a></h1>
+<p>Sometimes, you'll need to create a user programmatically in the code rather than passing by the REST API endpoint. To do this, we'll create a function that you can call from your code.</p>
+<p>In this context, we are outside the dependency injection mechanism of FastAPI, so we have to take care of instantiating the <a href="../../configuration/user-manager/"><code>UserManager</code> class</a> and all other dependent objects <strong>manually</strong>.</p>
+<p>For this cookbook, we'll consider you are starting from one of the <a href="../../configuration/full-example/">full example</a>.</p>
+<h2 id="1-define-dependencies-as-context-managers">1. Define dependencies as context managers<a class="headerlink" href="#1-define-dependencies-as-context-managers" title="Permanent link">¶</a></h2>
+<p>Generally, FastAPI dependencies are defined as <strong>generators</strong>, using the <code>yield</code> keyword. FastAPI knows very well to handle them inside its dependency injection system. For example, here is the definition of the <code>get_user_manager</code> dependency:</p>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_manager</span><span class="p">(</span><span class="n">user_db</span><span class="p">:</span> <span class="n">SQLAlchemyUserDatabase</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_user_db</span><span class="p">)):</span>
+  <span class="k">yield</span> <span class="n">UserManager</span><span class="p">(</span><span class="n">user_db</span><span class="p">)</span>
+</code></pre></div>
+<p>In Python, when we want to use a generator, we have to use a <code>for</code> loop, which would be a bit unnatural in this context since we have only one value to get, the user manager instance. To avoid this, we'll transform them into <strong>context managers</strong>, so we can call them using the <code>with..as</code> syntax. Fortunately, the standard library provides tools to automatically transform generators into context managers.</p>
+<p>In the following sample, we import our dependencies and create a context manager version using <code>contextlib.asynccontextmanager</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">contextlib</span>
 
-    MODELS --&gt; USER_MANAGER
-    MODELS --&gt; FASTAPI_USERS
+<span class="kn">from</span> <span class="nn">fastapi_users.manager</span> <span class="kn">import</span> <span class="n">UserAlreadyExists</span>
 
-    USER_MANAGER --&gt; USER_MANAGER_DEPENDENCY
-    USER_MANAGER_DEPENDENCY --&gt; FASTAPI_USERS
+<span class="kn">from</span> <span class="nn">app.db</span> <span class="kn">import</span> <span class="n">get_user_db</span>
+<span class="kn">from</span> <span class="nn">app.models</span> <span class="kn">import</span> <span class="n">UserCreate</span>
+<span class="kn">from</span> <span class="nn">app.users</span> <span class="kn">import</span> <span class="n">get_user_manager</span>
 
-    FASTAPI_USERS --&gt; ROUTERS
+<span class="hll"><span class="n">get_user_db_context</span> <span class="o">=</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">asynccontextmanager</span><span class="p">(</span><span class="n">get_user_db</span><span class="p">)</span>
+</span><span class="hll"><span class="n">get_user_manager_context</span> <span class="o">=</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">asynccontextmanager</span><span class="p">(</span><span class="n">get_user_manager</span><span class="p">)</span>
+</span>
 
-    AUTH_BACKENDS --&gt; AUTH
-    AUTH_BACKENDS --&gt; FASTAPI_USERS
-
-    FASTAPI_USERS --&gt; CURRENT_USER
+<span class="k">async</span> <span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">is_superuser</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">get_user_db_context</span><span class="p">()</span> <span class="k">as</span> <span class="n">user_db</span><span class="p">:</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="n">get_user_manager_context</span><span class="p">(</span><span class="n">user_db</span><span class="p">)</span> <span class="k">as</span> <span class="n">user_manager</span><span class="p">:</span>
+                <span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">user_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+                    <span class="n">UserCreate</span><span class="p">(</span>
+                        <span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span> <span class="n">is_superuser</span><span class="o">=</span><span class="n">is_superuser</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"User created </span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">UserAlreadyExists</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"User </span><span class="si">{</span><span class="n">email</span><span class="si">}</span><span class="s2"> already exists"</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">I have other dependencies</p>
+<p>Since FastAPI Users fully embraces dependency injection, you may have more arguments passed to your database or user manager dependencies. It's important then to not forget anyone. Once again, outside the dependency injection system, you are responsible of instantiating <strong>everything</strong> yourself.</p>
 </div>
-<h2 id="models">Models<a class="headerlink" href="#models" title="Permanent link">¶</a></h2>
-<p>Pydantic models representing the data structure of a user. Base classes are provided with the required fields to make authentication work. You should sub-class each of them and add your own fields there.</p>
-<p>➡️ <a href="../models/">Configure the models</a></p>
-<h2 id="database-adapters">Database adapters<a class="headerlink" href="#database-adapters" title="Permanent link">¶</a></h2>
-<p>FastAPI Users is compatible with various databases and ORM. To build the interface between those database tools and the library, we provide database adapters classes that you need to instantiate and configure.</p>
-<p>➡️ <a href="../databases/sqlalchemy/">I'm using SQLAlchemy</a></p>
-<p>➡️ <a href="../databases/mongodb/">I'm using MongoDB</a></p>
-<p>➡️ <a href="../databases/tortoise/">I'm using Tortoise ORM</a></p>
-<p>➡️ <a href="../databases/ormar/">I'm using ormar</a></p>
-<h2 id="authentication-backends">Authentication backends<a class="headerlink" href="#authentication-backends" title="Permanent link">¶</a></h2>
-<p>Authentication backends define the way users sessions are managed in your app, like access tokens or cookies.</p>
-<p>➡️ <a href="../authentication/">Configure the authentication backends</a></p>
-<h2 id="usermanager"><code>UserManager</code><a class="headerlink" href="#usermanager" title="Permanent link">¶</a></h2>
-<p>The <code>UserManager</code> object bears most of the logic of FastAPI Users: registration, verification, password reset... We provide a <code>BaseUserManager</code> with this common logic; which you should overload to define how to validate passwords or handle events.</p>
-<p>This <code>UserManager</code> object should be provided through a FastAPI dependency, <code>get_user_manager</code>.</p>
-<p>➡️ <a href="../user-manager/">Configure <code>UserManager</code></a></p>
-<h2 id="fastapiusers-and-routers"><code>FastAPIUsers</code> and routers<a class="headerlink" href="#fastapiusers-and-routers" title="Permanent link">¶</a></h2>
-<p>Finally, <code>FastAPIUsers</code> object is the main class from which you'll be able to generate routers for classic routes like registration or login, but also get the <code>current_user</code> dependency factory to inject the authenticated user in your own routes.</p>
-<p>➡️ <a href="../routers/">Configure <code>FastAPIUsers</code> and routers</a></p>
+<h2 id="2-write-a-function">2. Write a function<a class="headerlink" href="#2-write-a-function" title="Permanent link">¶</a></h2>
+<p>We are now ready to write a function. The example below shows you a basic example but you can of course adapt it to your own needs. The key part here is once again to <strong>take care of opening every context managers and pass them every required arguments</strong>, as the dependency manager would do.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">contextlib</span>
+
+<span class="kn">from</span> <span class="nn">fastapi_users.manager</span> <span class="kn">import</span> <span class="n">UserAlreadyExists</span>
+
+<span class="kn">from</span> <span class="nn">app.db</span> <span class="kn">import</span> <span class="n">get_user_db</span>
+<span class="kn">from</span> <span class="nn">app.models</span> <span class="kn">import</span> <span class="n">UserCreate</span>
+<span class="kn">from</span> <span class="nn">app.users</span> <span class="kn">import</span> <span class="n">get_user_manager</span>
+
+<span class="n">get_user_db_context</span> <span class="o">=</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">asynccontextmanager</span><span class="p">(</span><span class="n">get_user_db</span><span class="p">)</span>
+<span class="n">get_user_manager_context</span> <span class="o">=</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">asynccontextmanager</span><span class="p">(</span><span class="n">get_user_manager</span><span class="p">)</span>
+
+
+<span class="hll"><span class="k">async</span> <span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">is_superuser</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+</span><span class="hll">    <span class="k">try</span><span class="p">:</span>
+</span><span class="hll">        <span class="k">async</span> <span class="k">with</span> <span class="n">get_user_db_context</span><span class="p">()</span> <span class="k">as</span> <span class="n">user_db</span><span class="p">:</span>
+</span><span class="hll">            <span class="k">async</span> <span class="k">with</span> <span class="n">get_user_manager_context</span><span class="p">(</span><span class="n">user_db</span><span class="p">)</span> <span class="k">as</span> <span class="n">user_manager</span><span class="p">:</span>
+</span><span class="hll">                <span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">user_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+</span><span class="hll">                    <span class="n">UserCreate</span><span class="p">(</span>
+</span><span class="hll">                        <span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span> <span class="n">is_superuser</span><span class="o">=</span><span class="n">is_superuser</span>
+</span><span class="hll">                    <span class="p">)</span>
+</span><span class="hll">                <span class="p">)</span>
+</span><span class="hll">                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"User created </span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</span><span class="hll">    <span class="k">except</span> <span class="n">UserAlreadyExists</span><span class="p">:</span>
+</span><span class="hll">        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"User </span><span class="si">{</span><span class="n">email</span><span class="si">}</span><span class="s2"> already exists"</span><span class="p">)</span>
+</span></code></pre></div>
+<h2 id="3-use-it">3. Use it<a class="headerlink" href="#3-use-it" title="Permanent link">¶</a></h2>
+<p>You can now easily use it in a script. For example:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+  <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">create_user</span><span class="p">(</span><span class="s2">"king.arthur@camelot.bt"</span><span class="p">,</span> <span class="s2">"guinevere"</span><span class="p">))</span>
+</code></pre></div>
 </article>
 </div>
 </div>
 </main>
 <footer class="md-footer">
 <nav aria-label="Footer" class="md-footer__inner md-grid">
-<a aria-label="Previous: Installation" class="md-footer__link md-footer__link--prev" href="../../installation/" rel="prev">
+<a aria-label="Previous: Get current user" class="md-footer__link md-footer__link--prev" href="../../usage/current-user/" rel="prev">
 <div class="md-footer__button md-icon">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
 </div>
@@ -558,17 +541,17 @@
 <span class="md-footer__direction">
                 Previous
               </span>
-              Installation
+              Get current user
             </div>
 </div>
 </a>
-<a aria-label="Next: Models" class="md-footer__link md-footer__link--next" href="../models/" rel="next">
+<a aria-label="Next: 0.8.x ➡️ 1.x.x" class="md-footer__link md-footer__link--next" href="../../migration/08_to_1x/" rel="next">
 <div class="md-footer__title">
 <div class="md-ellipsis">
 <span class="md-footer__direction">
                 Next
               </span>
-              Models
+              0.8.x ➡️ 1.x.x
             </div>
 </div>
 <div class="md-footer__button md-icon">
@@ -596,7 +579,5 @@
 <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.fcfe8b6d.min.js", "version": null}</script>
 <script src="../../assets/javascripts/bundle.b1047164.min.js"></script>
 <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
-<script>mermaid.initialize({
-    theme: (JSON.parse(window.localStorage.getItem('/.__palette')).index == 1) ? 'dark' : 'light'
-});</script></body>
+</body>
 </html>

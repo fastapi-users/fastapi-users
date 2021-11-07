@@ -28,5 +28,5 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
         print(f"Verification requested for user {user.id}. Verification token: {token}")
 
 
-def get_user_manager(user_db=Depends(get_user_db)):
+async def get_user_manager(user_db=Depends(get_user_db)):
     yield UserManager(user_db)

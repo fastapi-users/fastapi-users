@@ -20,5 +20,5 @@ engine = sqlalchemy.create_engine(DATABASE_URL)
 metadata.create_all(engine)
 
 
-def get_user_db():
+async def get_user_db():
     yield OrmarUserDatabase(UserDB, UserModel)

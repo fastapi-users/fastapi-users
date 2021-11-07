@@ -5,5 +5,5 @@ from .models import OAuthAccount, UserDB, UserModel
 DATABASE_URL = "sqlite://./test.db"
 
 
-def get_user_db():
+async def get_user_db():
     yield TortoiseUserDatabase(UserDB, UserModel, OAuthAccount)

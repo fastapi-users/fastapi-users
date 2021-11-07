@@ -402,11 +402,31 @@
 <li class="md-nav__item md-nav__item--nested">
 <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" id="__nav_5" type="checkbox"/>
 <label class="md-nav__link" for="__nav_5">
+          Cookbook
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Cookbook" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+          Cookbook
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../cookbook/create-user-programmatically/">
+        Create a user programmatically
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6">
           Migration
           <span class="md-nav__icon md-icon"></span>
 </label>
 <nav aria-label="Migration" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="__nav_5">
+<label class="md-nav__title" for="__nav_6">
 <span class="md-nav__icon md-icon"></span>
           Migration
         </label>
@@ -573,7 +593,7 @@
 </span><span class="hll">        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Verification requested for user </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">. Verification token: </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </span>
 
-<span class="k">def</span> <span class="nf">get_user_manager</span><span class="p">(</span><span class="n">user_db</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">get_user_db</span><span class="p">)):</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_manager</span><span class="p">(</span><span class="n">user_db</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">get_user_db</span><span class="p">)):</span>
     <span class="k">yield</span> <span class="n">UserManager</span><span class="p">(</span><span class="n">user_db</span><span class="p">)</span>
 </code></pre></div>
 <p>As you can see, you have to define here various attributes and methods. You can find the complete list of those below.</p>
@@ -609,7 +629,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Verification requested for user </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">. Verification token: </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 
-<span class="hll"><span class="k">def</span> <span class="nf">get_user_manager</span><span class="p">(</span><span class="n">user_db</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">get_user_db</span><span class="p">)):</span>
+<span class="hll"><span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_manager</span><span class="p">(</span><span class="n">user_db</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">get_user_db</span><span class="p">)):</span>
 </span><span class="hll">    <span class="k">yield</span> <span class="n">UserManager</span><span class="p">(</span><span class="n">user_db</span><span class="p">)</span>
 </span></code></pre></div>
 <p>Notice that we use the <code>get_user_db</code> dependency we defined earlier to inject the database instance.</p>

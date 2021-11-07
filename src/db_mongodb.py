@@ -11,5 +11,5 @@ db = client["database_name"]
 collection = db["users"]
 
 
-def get_user_db():
+async def get_user_db():
     yield MongoDBUserDatabase(UserDB, collection)
