@@ -44,9 +44,16 @@ def get_oauth_router(
             route_name=callback_route_name,
         )
 
-    AuthenticationBackendName: enum.EnumMeta = enum.Enum("AuthenticationBackendName", {backend.name: backend.name for backend in authenticator.backends})
+    AuthenticationBackendName: enum.EnumMeta = enum.Enum(
+        "AuthenticationBackendName",
+        {backend.name: backend.name for backend in authenticator.backends},
+    )
 
-    @router.get("/authorize", name="oauth:authorize", response_model=models.OAuth2AuthorizeResponse)
+    @router.get(
+        "/authorize",
+        name="oauth:authorize",
+        response_model=models.OAuth2AuthorizeResponse,
+    )
     async def authorize(
         request: Request,
         authentication_backend: AuthenticationBackendName,
