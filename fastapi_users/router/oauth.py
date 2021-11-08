@@ -43,7 +43,7 @@ def get_oauth_router(
             route_name=callback_route_name,
         )
 
-    @router.get("/authorize", name="oauth:authorize")
+    @router.get("/authorize", name="oauth:authorize", response_model=models.OAuth2AuthorizeResponse)
     async def authorize(
         request: Request,
         authentication_backend: str,
