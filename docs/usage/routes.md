@@ -229,9 +229,7 @@ Return the authorization URL for the OAuth service where you should redirect you
     ```
 
 !!! fail "`422 Validation Error`"
-
-!!! fail "`400 Bad Request`"
-    Unknown authentication backend.
+    Invalid parameters - e.g. unknown authentication backend.
 
 ### `GET /callback`
 
