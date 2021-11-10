@@ -1,14 +1,19 @@
-from typing import Any, Generic, List, Optional
+from typing import Any, Dict, Generic, List, Optional
 
 import jwt
-from fastapi import Response
+from fastapi import Response, status
 from fastapi.security import OAuth2PasswordBearer
-from pydantic import UUID4
+from pydantic import BaseModel, UUID4
 
 from fastapi_users import models
 from fastapi_users.authentication.base import BaseAuthentication
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.manager import BaseUserManager, UserNotExists
+
+
+class JWTLoginResponse(BaseModel):
+    access_token: str
+    token_type: str
 
 
 class JWTAuthentication(
@@ -74,7 +79,25 @@ class JWTAuthentication(
         user_manager: BaseUserManager[models.UC, models.UD],
     ) -> Any:
         token = await self._generate_token(user)
-        return {"access_token": token, "token_type": "bearer"}
+        return JWTLoginResponse(access_token=token, token_type="bearer")
+
+    @staticmethod
+    def get_login_responses_success() -> Dict[str, Any]:
+        return {
+            status.HTTP_200_OK: {
+                "model": JWTLoginResponse,
+                "content": {
+                    "application/json": {
+                        "example": {
+                            "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiOTIyMWZmYzktNjQwZi00MzcyLTg2Z"
+                                            "DMtY2U2NDJjYmE1NjAzIiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTcxNTA0MTkzfQ."
+                                            "M10bjOe45I5Ncu_uXvOmVV8QxnL-nZfcH96U90JaocI",
+                            "token_type": "bearer"
+                        }
+                    }
+                }
+            },
+        }
 
     async def _generate_token(self, user: models.UD) -> str:
         data = {"user_id": str(user.id), "aud": self.token_audience}

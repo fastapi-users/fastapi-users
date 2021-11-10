@@ -1,7 +1,8 @@
-from typing import Any, Generic, Optional, TypeVar
+from typing import Any, Dict, Generic, Optional, Type, TypeVar, Union
 
 from fastapi import Response
 from fastapi.security.base import SecurityBase
+from pydantic import BaseModel
 
 from fastapi_users import models
 from fastapi_users.manager import BaseUserManager
@@ -42,10 +43,24 @@ class BaseAuthentication(Generic[T, models.UC, models.UD]):
     ) -> Any:
         raise NotImplementedError()
 
+    @staticmethod
+    def get_login_responses_success() -> Dict[str, Any]:
+        """
+        Returns a dictionary to use for the fastapi route decorator's responses parameter.
+        """
+        raise NotImplementedError()
+
     async def get_logout_response(
         self,
         user: models.UD,
         response: Response,
         user_manager: BaseUserManager[models.UC, models.UD],
     ) -> Any:
+        raise NotImplementedError()
+
+    @staticmethod
+    def get_logout_responses_success() -> Dict[str, Any]:
+        """
+        Returns a dictionary to use for the fastapi route decorator's responses parameter.
+        """
         raise NotImplementedError()

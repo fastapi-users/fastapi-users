@@ -77,12 +77,10 @@ async def test_get_login_response(jwt_authentication, user, user_manager):
         user, Response(), user_manager
     )
 
-    assert "access_token" in login_response
-    assert login_response["token_type"] == "bearer"
+    assert login_response.token_type == "bearer"
 
-    token = login_response["access_token"]
     decoded = decode_jwt(
-        token, jwt_authentication.secret, audience=["fastapi-users:auth"]
+        login_response.access_token, jwt_authentication.secret, audience=["fastapi-users:auth"]
     )
     assert decoded["user_id"] == str(user.id)
 
@@ -92,3 +90,10 @@ async def test_get_login_response(jwt_authentication, user, user_manager):
 async def test_get_logout_response(jwt_authentication, user, user_manager):
     with pytest.raises(NotImplementedError):
         await jwt_authentication.get_logout_response(user, Response(), user_manager)
+
+
+@pytest.mark.authentication
+@pytest.mark.asyncio
+async def test_get_logout_response_success(jwt_authentication, user, user_manager):
+    with pytest.raises(NotImplementedError):
+        await jwt_authentication.get_logout_responses_success()

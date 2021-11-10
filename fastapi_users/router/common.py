@@ -1,3 +1,10 @@
+from pydantic import BaseModel
+
+
+class ErrorModel(BaseModel):
+    detail: str
+
+
 class ErrorCode:
     REGISTER_INVALID_PASSWORD = "REGISTER_INVALID_PASSWORD"
     REGISTER_USER_ALREADY_EXISTS = "REGISTER_USER_ALREADY_EXISTS"
