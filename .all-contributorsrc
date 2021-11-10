@@ -423,6 +423,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "matyasrichter",
+      "name": "Matyáš Richter",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20258539?v=4",
+      "profile": "https://github.com/matyasrichter",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
