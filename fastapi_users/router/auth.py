@@ -24,17 +24,19 @@ def get_auth_router(
             "model": ErrorModel,
             "content": {
                 "application/json": {
-                    "example": {
-                        "detail": ErrorCode.LOGIN_BAD_CREDENTIALS
-                    }
+                    "example": {"detail": ErrorCode.LOGIN_BAD_CREDENTIALS}
                 }
-            }
+            },
         },
-        **backend.get_login_responses_success()
+        **backend.get_login_responses_success(),
     }
 
-    @router.post("/login", name="auth:login", responses=login_responses,
-                 description=f"Produces error codes: `{ErrorCode.LOGIN_BAD_CREDENTIALS}`, `{ErrorCode.LOGIN_USER_NOT_VERIFIED}`.")
+    @router.post(
+        "/login",
+        name="auth:login",
+        responses=login_responses,
+        description=f"Produces error codes: `{ErrorCode.LOGIN_BAD_CREDENTIALS}`, `{ErrorCode.LOGIN_USER_NOT_VERIFIED}`.",
+    )
     async def login(
         response: Response,
         credentials: OAuth2PasswordRequestForm = Depends(),
@@ -55,11 +57,14 @@ def get_auth_router(
         return await backend.get_login_response(user, response, user_manager)
 
     if backend.logout:
-        logout_responses = {**{
-            status.HTTP_401_UNAUTHORIZED: {
-                "description": "Missing token or inactive user."
-            }
-        }, **backend.get_logout_responses_success()}
+        logout_responses = {
+            **{
+                status.HTTP_401_UNAUTHORIZED: {
+                    "description": "Missing token or inactive user."
+                }
+            },
+            **backend.get_logout_responses_success(),
+        }
 
         @router.post("/logout", name="auth:logout", responses=logout_responses)
         async def logout(

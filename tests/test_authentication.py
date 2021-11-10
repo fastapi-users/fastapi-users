@@ -1,4 +1,13 @@
-from typing import Any, AsyncGenerator, Callable, Dict, Generic, List, Optional, Sequence
+from typing import (
+    Any,
+    AsyncGenerator,
+    Callable,
+    Dict,
+    Generic,
+    List,
+    Optional,
+    Sequence,
+)
 
 import httpx
 import pytest

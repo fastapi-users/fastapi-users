@@ -6,7 +6,9 @@ from fastapi_users import models
 from fastapi_users.fastapi_users import FastAPIUsers
 
 app = FastAPI()
-jwt_authentication = fastapi_users.authentication.JWTAuthentication(secret="", lifetime_seconds=3600)
+jwt_authentication = fastapi_users.authentication.JWTAuthentication(
+    secret="", lifetime_seconds=3600
+)
 cookie_authentication = fastapi_users.authentication.CookieAuthentication(secret="")
 users = FastAPIUsers(
     lambda: None,
@@ -37,8 +39,15 @@ class TestLogin:
 
     def test_jwt_login_200_body(self, get_openapi_dict):
         """Check if example is up to date"""
-        example = get_openapi_dict["paths"]["/jwt/login"]["post"]["responses"]["200"]["content"]["application/json"]["example"]
-        assert fastapi_users.authentication.jwt.JWTLoginResponse.schema()["properties"].keys() == example.keys()
+        example = get_openapi_dict["paths"]["/jwt/login"]["post"]["responses"]["200"][
+            "content"
+        ]["application/json"]["example"]
+        assert (
+            fastapi_users.authentication.jwt.JWTLoginResponse.schema()[
+                "properties"
+            ].keys()
+            == example.keys()
+        )
 
     def test_cookie_login_status_codes(self, get_openapi_dict):
         route = get_openapi_dict["paths"]["/cookie/login"]["post"]

@@ -80,7 +80,9 @@ async def test_get_login_response(jwt_authentication, user, user_manager):
     assert login_response.token_type == "bearer"
 
     decoded = decode_jwt(
-        login_response.access_token, jwt_authentication.secret, audience=["fastapi-users:auth"]
+        login_response.access_token,
+        jwt_authentication.secret,
+        audience=["fastapi-users:auth"],
     )
     assert decoded["user_id"] == str(user.id)
 

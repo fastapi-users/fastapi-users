@@ -3,7 +3,7 @@ from typing import Any, Dict, Generic, List, Optional
 import jwt
 from fastapi import Response, status
 from fastapi.security import OAuth2PasswordBearer
-from pydantic import BaseModel, UUID4
+from pydantic import UUID4, BaseModel
 
 from fastapi_users import models
 from fastapi_users.authentication.base import BaseAuthentication
@@ -90,12 +90,12 @@ class JWTAuthentication(
                     "application/json": {
                         "example": {
                             "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiOTIyMWZmYzktNjQwZi00MzcyLTg2Z"
-                                            "DMtY2U2NDJjYmE1NjAzIiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTcxNTA0MTkzfQ."
-                                            "M10bjOe45I5Ncu_uXvOmVV8QxnL-nZfcH96U90JaocI",
-                            "token_type": "bearer"
+                            "DMtY2U2NDJjYmE1NjAzIiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTcxNTA0MTkzfQ."
+                            "M10bjOe45I5Ncu_uXvOmVV8QxnL-nZfcH96U90JaocI",
+                            "token_type": "bearer",
                         }
                     }
-                }
+                },
             },
         }
 

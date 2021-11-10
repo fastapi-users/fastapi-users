@@ -3,7 +3,7 @@ from typing import Any, Dict, Generic, List, Optional, Type, Union
 import jwt
 from fastapi import Response, status
 from fastapi.security import APIKeyCookie
-from pydantic import BaseModel, UUID4
+from pydantic import UUID4, BaseModel
 
 from fastapi_users import models
 from fastapi_users.authentication import BaseAuthentication
@@ -113,12 +113,8 @@ class CookieAuthentication(
         # so that FastAPI can terminate it properly
         return None
 
-    def get_login_responses_success(self)  -> Dict[str, Any]:
-        return {
-            status.HTTP_200_OK: {
-                "model": None
-            }
-        }
+    def get_login_responses_success(self) -> Dict[str, Any]:
+        return {status.HTTP_200_OK: {"model": None}}
 
     async def get_logout_response(
         self,
@@ -131,11 +127,7 @@ class CookieAuthentication(
         )
 
     def get_logout_responses_success(self) -> Dict[str, Any]:
-        return {
-            status.HTTP_200_OK: {
-                "model": None
-            }
-        }
+        return {status.HTTP_200_OK: {"model": None}}
 
     async def _generate_token(self, user: models.UD) -> str:
         data = {"user_id": str(user.id), "aud": self.token_audience}
