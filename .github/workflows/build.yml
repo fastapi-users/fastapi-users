@@ -22,6 +22,8 @@ jobs:
         pip install -r requirements.dev.txt
     - name: Check codestyle
       run: make format-check
+    - name: Lint
+      run: make lint
     - name: Test with pytest
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
