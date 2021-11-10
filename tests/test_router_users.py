@@ -57,9 +57,7 @@ class TestMe:
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     async def test_inactive_user(
-        self,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
-        inactive_user: UserDB,
+        self, test_app_client: Tuple[httpx.AsyncClient, bool], inactive_user: UserDB,
     ):
         client, _ = test_app_client
         response = await client.get(
@@ -68,9 +66,7 @@ class TestMe:
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     async def test_active_user(
-        self,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
-        user: UserDB,
+        self, test_app_client: Tuple[httpx.AsyncClient, bool], user: UserDB,
     ):
         client, requires_verification = test_app_client
         response = await client.get(
@@ -85,9 +81,7 @@ class TestMe:
             assert data["email"] == user.email
 
     async def test_verified_user(
-        self,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
-        verified_user: UserDB,
+        self, test_app_client: Tuple[httpx.AsyncClient, bool], verified_user: UserDB,
     ):
         client, _ = test_app_client
         response = await client.get(
@@ -98,10 +92,7 @@ class TestMe:
         assert data["id"] == str(verified_user.id)
         assert data["email"] == verified_user.email
 
-    async def test_current_user_namespace(
-        self,
-        app_factory
-    ):
+    async def test_current_user_namespace(self, app_factory):
         assert app_factory(True).url_path_for("users:current_user") == "/me"
 
 
@@ -109,17 +100,14 @@ class TestMe:
 @pytest.mark.asyncio
 class TestUpdateMe:
     async def test_missing_token(
-        self,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
+        self, test_app_client: Tuple[httpx.AsyncClient, bool],
     ):
         client, _ = test_app_client
         response = await client.patch("/me")
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     async def test_inactive_user(
-        self,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
-        inactive_user: UserDB,
+        self, test_app_client: Tuple[httpx.AsyncClient, bool], inactive_user: UserDB,
     ):
         client, _ = test_app_client
         response = await client.patch(
@@ -147,9 +135,7 @@ class TestUpdateMe:
             assert data["detail"] == ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS
 
     async def test_invalid_password(
-        self,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
-        user: UserDB,
+        self, test_app_client: Tuple[httpx.AsyncClient, bool], user: UserDB,
     ):
         client, requires_verification = test_app_client
         response = await client.patch(
@@ -168,9 +154,7 @@ class TestUpdateMe:
             }
 
     async def test_empty_body(
-        self,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
-        user: UserDB,
+        self, test_app_client: Tuple[httpx.AsyncClient, bool], user: UserDB,
     ):
         client, requires_verification = test_app_client
         response = await client.patch(
@@ -185,9 +169,7 @@ class TestUpdateMe:
             assert data["email"] == user.email
 
     async def test_valid_body(
-        self,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
-        user: UserDB,
+        self, test_app_client: Tuple[httpx.AsyncClient, bool], user: UserDB,
     ):
         client, requires_verification = test_app_client
         json = {"email": "king.arthur@tintagel.bt"}
@@ -203,9 +185,7 @@ class TestUpdateMe:
             assert data["email"] == "king.arthur@tintagel.bt"
 
     async def test_unverified_after_email_change(
-        self,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
-        verified_user: UserDB,
+        self, test_app_client: Tuple[httpx.AsyncClient, bool], verified_user: UserDB,
     ):
         client, _ = test_app_client
         json = {"email": "king.arthur@tintagel.bt"}
@@ -218,9 +198,7 @@ class TestUpdateMe:
         assert data["is_verified"] is False
 
     async def test_valid_body_is_superuser(
-        self,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
-        user: UserDB,
+        self, test_app_client: Tuple[httpx.AsyncClient, bool], user: UserDB,
     ):
         client, requires_verification = test_app_client
         json = {"is_superuser": True}
@@ -236,9 +214,7 @@ class TestUpdateMe:
             assert data["is_superuser"] is False
 
     async def test_valid_body_is_active(
-        self,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
-        user: UserDB,
+        self, test_app_client: Tuple[httpx.AsyncClient, bool], user: UserDB,
     ):
         client, requires_verification = test_app_client
         json = {"is_active": False}
@@ -254,9 +230,7 @@ class TestUpdateMe:
             assert data["is_active"] is True
 
     async def test_valid_body_is_verified(
-        self,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
-        user: UserDB,
+        self, test_app_client: Tuple[httpx.AsyncClient, bool], user: UserDB,
     ):
         client, requires_verification = test_app_client
         json = {"is_verified": True}
@@ -296,9 +270,7 @@ class TestUpdateMe:
             assert updated_user.hashed_password != current_hashed_password
 
     async def test_empty_body_verified_user(
-        self,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
-        verified_user: UserDB,
+        self, test_app_client: Tuple[httpx.AsyncClient, bool], verified_user: UserDB,
     ):
         client, _ = test_app_client
         response = await client.patch(
@@ -310,9 +282,7 @@ class TestUpdateMe:
         assert data["email"] == verified_user.email
 
     async def test_valid_body_verified_user(
-        self,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
-        verified_user: UserDB,
+        self, test_app_client: Tuple[httpx.AsyncClient, bool], verified_user: UserDB,
     ):
         client, _ = test_app_client
         json = {"email": "king.arthur@tintagel.bt"}
@@ -325,9 +295,7 @@ class TestUpdateMe:
         assert data["email"] == "king.arthur@tintagel.bt"
 
     async def test_valid_body_is_superuser_verified_user(
-        self,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
-        verified_user: UserDB,
+        self, test_app_client: Tuple[httpx.AsyncClient, bool], verified_user: UserDB,
     ):
         client, _ = test_app_client
         json = {"is_superuser": True}
@@ -340,9 +308,7 @@ class TestUpdateMe:
         assert data["is_superuser"] is False
 
     async def test_valid_body_is_active_verified_user(
-        self,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
-        verified_user: UserDB,
+        self, test_app_client: Tuple[httpx.AsyncClient, bool], verified_user: UserDB,
     ):
         client, _ = test_app_client
         json = {"is_active": False}
@@ -355,9 +321,7 @@ class TestUpdateMe:
         assert data["is_active"] is True
 
     async def test_valid_body_is_verified_verified_user(
-        self,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
-        verified_user: UserDB,
+        self, test_app_client: Tuple[httpx.AsyncClient, bool], verified_user: UserDB,
     ):
         client, _ = test_app_client
         json = {"is_verified": False}
@@ -400,9 +364,7 @@ class TestGetUser:
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     async def test_regular_user(
-        self,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
-        user: UserDB,
+        self, test_app_client: Tuple[httpx.AsyncClient, bool], user: UserDB,
     ):
         client, requires_verification = test_app_client
         response = await client.get(
@@ -413,9 +375,7 @@ class TestGetUser:
             assert response.status_code == status.HTTP_403_FORBIDDEN
 
     async def test_verified_user(
-        self,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
-        verified_user: UserDB,
+        self, test_app_client: Tuple[httpx.AsyncClient, bool], verified_user: UserDB,
     ):
         client, _ = test_app_client
         response = await client.get(
@@ -425,9 +385,7 @@ class TestGetUser:
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
     async def test_not_existing_user_unverified_superuser(
-        self,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
-        superuser: UserDB,
+        self, test_app_client: Tuple[httpx.AsyncClient, bool], superuser: UserDB,
     ):
         client, requires_verification = test_app_client
         response = await client.get(
@@ -486,11 +444,7 @@ class TestGetUser:
         assert data["id"] == str(user.id)
         assert "hashed_password" not in data
 
-    async def test_get_user_namespace(
-        self,
-        app_factory,
-        user: UserDB
-    ):
+    async def test_get_user_namespace(self, app_factory, user: UserDB):
         assert app_factory(True).url_path_for("users:user", id=user.id) == f"/{user.id}"
 
 
@@ -503,9 +457,7 @@ class TestUpdateUser:
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     async def test_regular_user(
-        self,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
-        user: UserDB,
+        self, test_app_client: Tuple[httpx.AsyncClient, bool], user: UserDB,
     ):
         client, requires_verification = test_app_client
         response = await client.patch(
@@ -516,9 +468,7 @@ class TestUpdateUser:
             assert response.status_code == status.HTTP_403_FORBIDDEN
 
     async def test_verified_user(
-        self,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
-        verified_user: UserDB,
+        self, test_app_client: Tuple[httpx.AsyncClient, bool], verified_user: UserDB,
     ):
         client, _ = test_app_client
         response = await client.patch(
@@ -528,9 +478,7 @@ class TestUpdateUser:
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
     async def test_not_existing_user_unverified_superuser(
-        self,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
-        superuser: UserDB,
+        self, test_app_client: Tuple[httpx.AsyncClient, bool], superuser: UserDB,
     ):
         client, requires_verification = test_app_client
         response = await client.patch(
@@ -844,9 +792,7 @@ class TestDeleteUser:
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     async def test_regular_user(
-        self,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
-        user: UserDB,
+        self, test_app_client: Tuple[httpx.AsyncClient, bool], user: UserDB,
     ):
         client, requires_verification = test_app_client
         response = await client.delete(
@@ -857,9 +803,7 @@ class TestDeleteUser:
             assert response.status_code == status.HTTP_403_FORBIDDEN
 
     async def test_verified_user(
-        self,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
-        verified_user: UserDB,
+        self, test_app_client: Tuple[httpx.AsyncClient, bool], verified_user: UserDB,
     ):
         client, _ = test_app_client
         response = await client.delete(
@@ -869,9 +813,7 @@ class TestDeleteUser:
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
     async def test_not_existing_user_unverified_superuser(
-        self,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
-        superuser: UserDB,
+        self, test_app_client: Tuple[httpx.AsyncClient, bool], superuser: UserDB,
     ):
         client, requires_verification = test_app_client
         response = await client.delete(

@@ -58,18 +58,14 @@ async def test_app_client(
 @pytest.mark.asyncio
 class TestLogin:
     async def test_empty_body(
-        self,
-        path,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
+        self, path, test_app_client: Tuple[httpx.AsyncClient, bool],
     ):
         client, _ = test_app_client
         response = await client.post(path, data={})
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     async def test_missing_username(
-        self,
-        path,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
+        self, path, test_app_client: Tuple[httpx.AsyncClient, bool],
     ):
         client, _ = test_app_client
         data = {"password": "guinevere"}
@@ -77,9 +73,7 @@ class TestLogin:
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     async def test_missing_password(
-        self,
-        path,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
+        self, path, test_app_client: Tuple[httpx.AsyncClient, bool],
     ):
         client, _ = test_app_client
         data = {"username": "king.arthur@camelot.bt"}
@@ -87,9 +81,7 @@ class TestLogin:
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     async def test_not_existing_user(
-        self,
-        path,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
+        self, path, test_app_client: Tuple[httpx.AsyncClient, bool],
     ):
         client, _ = test_app_client
         data = {"username": "lancelot@camelot.bt", "password": "guinevere"}
@@ -99,9 +91,7 @@ class TestLogin:
         assert data["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
 
     async def test_wrong_password(
-        self,
-        path,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
+        self, path, test_app_client: Tuple[httpx.AsyncClient, bool],
     ):
         client, _ = test_app_client
         data = {"username": "king.arthur@camelot.bt", "password": "percival"}
@@ -146,9 +136,7 @@ class TestLogin:
         assert response.json() == {"token": str(verified_user.id)}
 
     async def test_inactive_user(
-        self,
-        path,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
+        self, path, test_app_client: Tuple[httpx.AsyncClient, bool],
     ):
         client, _ = test_app_client
         data = {"username": "percival@camelot.bt", "password": "angharad"}
@@ -157,15 +145,9 @@ class TestLogin:
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
 
-    async def test_login_namespace(
-        self,
-        path,
-        app_factory
-    ):
+    async def test_login_namespace(self, path, app_factory):
         split_url = app_factory(True).url_path_for("auth:login").split("/")
         assert split_url[len(split_url) - 1] in path
-
-
 
 
 @pytest.mark.router
@@ -173,9 +155,7 @@ class TestLogin:
 @pytest.mark.asyncio
 class TestLogout:
     async def test_missing_token(
-        self,
-        path,
-        test_app_client: Tuple[httpx.AsyncClient, bool],
+        self, path, test_app_client: Tuple[httpx.AsyncClient, bool],
     ):
         client, _ = test_app_client
         response = await client.post(path)
@@ -210,10 +190,6 @@ class TestLogout:
         )
         assert response.status_code == status.HTTP_200_OK
 
-    async def test_logout_namespace(
-        self,
-        path,
-        app_factory
-    ):
+    async def test_logout_namespace(self, path, app_factory):
         split_url = app_factory(True).url_path_for("auth:logout").split("/")
         assert split_url[len(split_url) - 1] in path

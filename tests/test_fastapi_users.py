@@ -11,19 +11,10 @@ from tests.conftest import User, UserCreate, UserDB, UserUpdate
 @pytest.fixture
 @pytest.mark.asyncio
 async def test_app_client(
-    secret,
-    get_user_manager,
-    mock_authentication,
-    oauth_client,
-    get_test_client,
+    secret, get_user_manager, mock_authentication, oauth_client, get_test_client,
 ) -> AsyncGenerator[httpx.AsyncClient, None]:
     fastapi_users = FastAPIUsers[User, UserCreate, UserUpdate, UserDB](
-        get_user_manager,
-        [mock_authentication],
-        User,
-        UserCreate,
-        UserUpdate,
-        UserDB,
+        get_user_manager, [mock_authentication], User, UserCreate, UserUpdate, UserDB,
     )
 
     app = FastAPI()
@@ -201,8 +192,7 @@ class TestGetCurrentVerifiedUser:
         self, test_app_client: httpx.AsyncClient, user: UserDB
     ):
         response = await test_app_client.get(
-            "/current-verified-user",
-            headers={"Authorization": f"Bearer {user.id}"},
+            "/current-verified-user", headers={"Authorization": f"Bearer {user.id}"},
         )
         assert response.status_code == status.HTTP_403_FORBIDDEN
 

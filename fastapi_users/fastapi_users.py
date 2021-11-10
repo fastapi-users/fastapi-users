@@ -66,9 +66,7 @@ class FastAPIUsers(Generic[models.U, models.UC, models.UU, models.UD]):
     def get_register_router(self) -> APIRouter:
         """Return a router with a register route."""
         return get_register_router(
-            self.get_user_manager,
-            self._user_model,
-            self._user_create_model,
+            self.get_user_manager, self._user_model, self._user_create_model,
         )
 
     def get_verify_router(self) -> APIRouter:
@@ -90,10 +88,7 @@ class FastAPIUsers(Generic[models.U, models.UC, models.UU, models.UD]):
         require the user to be verified or not.
         """
         return get_auth_router(
-            backend,
-            self.get_user_manager,
-            self.authenticator,
-            requires_verification,
+            backend, self.get_user_manager, self.authenticator, requires_verification,
         )
 
     def get_oauth_router(
@@ -118,10 +113,7 @@ class FastAPIUsers(Generic[models.U, models.UC, models.UU, models.UD]):
             redirect_url,
         )
 
-    def get_users_router(
-        self,
-        requires_verification: bool = False,
-    ) -> APIRouter:
+    def get_users_router(self, requires_verification: bool = False,) -> APIRouter:
         """
         Return a router with routes to manage users.
 

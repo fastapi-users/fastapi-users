@@ -391,8 +391,7 @@ class TestResetPassword:
     ):
         with pytest.raises(UserInactive):
             await user_manager.reset_password(
-                forgot_password_token(inactive_user.id),
-                "guinevere",
+                forgot_password_token(inactive_user.id), "guinevere",
             )
         assert user_manager._update.called is False
         assert user_manager.on_after_reset_password.called is False
@@ -402,8 +401,7 @@ class TestResetPassword:
     ):
         with pytest.raises(InvalidPasswordException):
             await user_manager.reset_password(
-                forgot_password_token(user.id),
-                "h",
+                forgot_password_token(user.id), "h",
             )
         assert user_manager.on_after_reset_password.called is False
 

@@ -105,9 +105,7 @@ AsyncMethodMocker = Callable[..., MagicMock]
 @pytest.fixture
 def async_method_mocker(mocker: MockerFixture) -> AsyncMethodMocker:
     def _async_method_mocker(
-        object: Any,
-        method: str,
-        return_value: Any = None,
+        object: Any, method: str, return_value: Any = None,
     ) -> MagicMock:
         mock: MagicMock = mocker.MagicMock()
 
@@ -131,8 +129,7 @@ def secret(request) -> SecretType:
 @pytest.fixture
 def user() -> UserDB:
     return UserDB(
-        email="king.arthur@camelot.bt",
-        hashed_password=guinevere_password_hash,
+        email="king.arthur@camelot.bt", hashed_password=guinevere_password_hash,
     )
 
 
