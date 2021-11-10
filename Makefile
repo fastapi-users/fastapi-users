@@ -16,6 +16,9 @@ isort-docs-check:
 format-check: isort-src-check isort-docs-check
 	black --check .
 
+lint:
+	flake8 ./fastapi_users ./tests
+
 test:
 	pytest --cov=fastapi_users/ --cov-report=term-missing --cov-fail-under=100
 
