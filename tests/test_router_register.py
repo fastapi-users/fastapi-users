@@ -13,7 +13,11 @@ from tests.conftest import User, UserCreate
 async def test_app_client(
     get_user_manager, get_test_client
 ) -> AsyncGenerator[httpx.AsyncClient, None]:
-    register_router = get_register_router(get_user_manager, User, UserCreate,)
+    register_router = get_register_router(
+        get_user_manager,
+        User,
+        UserCreate,
+    )
 
     app = FastAPI()
     app.include_router(register_router)
@@ -103,5 +107,11 @@ class TestRegister:
 @pytest.mark.asyncio
 async def test_register_namespace(get_user_manager):
     app = FastAPI()
-    app.include_router(get_register_router(get_user_manager, User, UserCreate,))
+    app.include_router(
+        get_register_router(
+            get_user_manager,
+            User,
+            UserCreate,
+        )
+    )
     assert app.url_path_for("register:register") == "/register"

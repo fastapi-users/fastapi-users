@@ -17,9 +17,13 @@ from tests.conftest import AsyncMethodMocker, User, UserDB, UserManagerMock
 @pytest.fixture
 @pytest.mark.asyncio
 async def test_app_client(
-    get_user_manager, get_test_client,
+    get_user_manager,
+    get_test_client,
 ) -> AsyncGenerator[httpx.AsyncClient, None]:
-    verify_router = get_verify_router(get_user_manager, User,)
+    verify_router = get_verify_router(
+        get_user_manager,
+        User,
+    )
 
     app = FastAPI()
     app.include_router(verify_router)
@@ -32,14 +36,18 @@ async def test_app_client(
 @pytest.mark.asyncio
 class TestVerifyTokenRequest:
     async def test_empty_body(
-        self, test_app_client: httpx.AsyncClient, user_manager: UserManagerMock,
+        self,
+        test_app_client: httpx.AsyncClient,
+        user_manager: UserManagerMock,
     ):
         response = await test_app_client.post("/request-verify-token", json={})
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
         assert user_manager.request_verify.called is False
 
     async def test_wrong_email(
-        self, test_app_client: httpx.AsyncClient, user_manager: UserManagerMock,
+        self,
+        test_app_client: httpx.AsyncClient,
+        user_manager: UserManagerMock,
     ):
         json = {"email": "king.arthur"}
         response = await test_app_client.post("/request-verify-token", json=json)
@@ -47,7 +55,9 @@ class TestVerifyTokenRequest:
         assert user_manager.request_verify.called is False
 
     async def test_user_not_exists(
-        self, test_app_client: httpx.AsyncClient, user_manager: UserManagerMock,
+        self,
+        test_app_client: httpx.AsyncClient,
+        user_manager: UserManagerMock,
     ):
         user_manager.get_by_email.side_effect = UserNotExists()
         json = {"email": "user@example.com"}
@@ -95,9 +105,13 @@ class TestVerifyTokenRequest:
         assert response.status_code == status.HTTP_202_ACCEPTED
 
     async def test_token_namespace(
-        self, get_user_manager,
+        self,
+        get_user_manager,
     ):
-        verify_router = get_verify_router(get_user_manager, User,)
+        verify_router = get_verify_router(
+            get_user_manager,
+            User,
+        )
 
         app = FastAPI()
         app.include_router(verify_router)
@@ -108,14 +122,18 @@ class TestVerifyTokenRequest:
 @pytest.mark.asyncio
 class TestVerify:
     async def test_empty_body(
-        self, test_app_client: httpx.AsyncClient, user_manager: UserManagerMock,
+        self,
+        test_app_client: httpx.AsyncClient,
+        user_manager: UserManagerMock,
     ):
         response = await test_app_client.post("/verify", json={})
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
         assert user_manager.verify.called is False
 
     async def test_invalid_verify_token(
-        self, test_app_client: httpx.AsyncClient, user_manager: UserManagerMock,
+        self,
+        test_app_client: httpx.AsyncClient,
+        user_manager: UserManagerMock,
     ):
         user_manager.verify.side_effect = InvalidVerifyToken()
         response = await test_app_client.post("/verify", json={"token": "foo"})
@@ -125,7 +143,9 @@ class TestVerify:
         assert data["detail"] == ErrorCode.VERIFY_USER_BAD_TOKEN
 
     async def test_user_not_exists(
-        self, test_app_client: httpx.AsyncClient, user_manager: UserManagerMock,
+        self,
+        test_app_client: httpx.AsyncClient,
+        user_manager: UserManagerMock,
     ):
         user_manager.verify.side_effect = UserNotExists()
         response = await test_app_client.post("/verify", json={"token": "foo"})
@@ -135,7 +155,9 @@ class TestVerify:
         assert data["detail"] == ErrorCode.VERIFY_USER_BAD_TOKEN
 
     async def test_user_already_verified(
-        self, test_app_client: httpx.AsyncClient, user_manager: UserManagerMock,
+        self,
+        test_app_client: httpx.AsyncClient,
+        user_manager: UserManagerMock,
     ):
         user_manager.verify.side_effect = UserAlreadyVerified()
         response = await test_app_client.post("/verify", json={"token": "foo"})
@@ -159,9 +181,13 @@ class TestVerify:
         assert data["id"] == str(user.id)
 
     async def test_verify_namespace(
-        self, get_user_manager,
+        self,
+        get_user_manager,
     ):
-        verify_router = get_verify_router(get_user_manager, User,)
+        verify_router = get_verify_router(
+            get_user_manager,
+            User,
+        )
 
         app = FastAPI()
         app.include_router(verify_router)

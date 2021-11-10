@@ -17,7 +17,11 @@ from tests.conftest import (
 
 @pytest.fixture
 def get_test_app_client(
-    secret, get_user_manager_oauth, mock_authentication, oauth_client, get_test_client,
+    secret,
+    get_user_manager_oauth,
+    mock_authentication,
+    oauth_client,
+    get_test_client,
 ):
     async def _get_test_app_client(
         redirect_url: str = None,
@@ -28,7 +32,11 @@ def get_test_app_client(
         )
 
         oauth_router = get_oauth_router(
-            oauth_client, get_user_manager_oauth, authenticator, secret, redirect_url,
+            oauth_client,
+            get_user_manager_oauth,
+            authenticator,
+            secret,
+            redirect_url,
         )
 
         app = FastAPI()
@@ -69,7 +77,8 @@ class TestAuthorize:
         )
 
         response = await test_app_client.get(
-            "/authorize", params={"scopes": ["scope1", "scope2"]},
+            "/authorize",
+            params={"scopes": ["scope1", "scope2"]},
         )
 
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
@@ -86,7 +95,10 @@ class TestAuthorize:
 
         response = await test_app_client.get(
             "/authorize",
-            params={"authentication_backend": "foo", "scopes": ["scope1", "scope2"],},
+            params={
+                "authentication_backend": "foo",
+                "scopes": ["scope1", "scope2"],
+            },
         )
 
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
@@ -103,7 +115,10 @@ class TestAuthorize:
 
         response = await test_app_client.get(
             "/authorize",
-            params={"authentication_backend": "mock", "scopes": ["scope1", "scope2"],},
+            params={
+                "authentication_backend": "mock",
+                "scopes": ["scope1", "scope2"],
+            },
         )
 
         assert response.status_code == status.HTTP_200_OK
@@ -124,7 +139,10 @@ class TestAuthorize:
 
         response = await test_app_client_redirect_url.get(
             "/authorize",
-            params={"authentication_backend": "mock", "scopes": ["scope1", "scope2"],},
+            params={
+                "authentication_backend": "mock",
+                "scopes": ["scope1", "scope2"],
+            },
         )
 
         assert response.status_code == status.HTTP_200_OK
@@ -159,7 +177,8 @@ class TestCallback:
         )
 
         response = await test_app_client.get(
-            "/callback", params={"code": "CODE", "state": "STATE"},
+            "/callback",
+            params={"code": "CODE", "state": "STATE"},
         )
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
@@ -184,7 +203,8 @@ class TestCallback:
         )
 
         response = await test_app_client.get(
-            "/callback", params={"code": "CODE", "state": state_jwt},
+            "/callback",
+            params={"code": "CODE", "state": state_jwt},
         )
 
         assert response.status_code == status.HTTP_200_OK
@@ -213,7 +233,8 @@ class TestCallback:
         )
 
         response = await test_app_client.get(
-            "/callback", params={"code": "CODE", "state": state_jwt},
+            "/callback",
+            params={"code": "CODE", "state": state_jwt},
         )
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -239,7 +260,8 @@ class TestCallback:
         )
 
         response = await test_app_client_redirect_url.get(
-            "/callback", params={"code": "CODE", "state": state_jwt},
+            "/callback",
+            params={"code": "CODE", "state": state_jwt},
         )
 
         assert response.status_code == status.HTTP_200_OK
@@ -270,7 +292,11 @@ async def test_oauth_authorize_namespace(
     app = FastAPI()
     app.include_router(
         get_oauth_router(
-            oauth_client, get_user_manager_oauth, authenticator, secret, redirect_url,
+            oauth_client,
+            get_user_manager_oauth,
+            authenticator,
+            secret,
+            redirect_url,
         )
     )
     assert app.url_path_for("oauth:authorize") == "/authorize"
