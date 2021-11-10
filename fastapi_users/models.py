@@ -79,3 +79,7 @@ class BaseOAuthAccountMixin(BaseModel):
     """Adds OAuth accounts list to a User model."""
 
     oauth_accounts: List[BaseOAuthAccount] = []
+
+
+class OAuth2AuthorizeResponse(BaseModel):
+    authorization_url: str

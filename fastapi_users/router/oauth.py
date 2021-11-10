@@ -1,3 +1,4 @@
+import enum
 from typing import Dict, List
 
 import jwt
@@ -43,27 +44,28 @@ def get_oauth_router(
             route_name=callback_route_name,
         )
 
-    @router.get("/authorize", name="oauth:authorize")
+    AuthenticationBackendName: enum.EnumMeta = enum.Enum(
+        "AuthenticationBackendName",
+        {backend.name: backend.name for backend in authenticator.backends},
+    )
+
+    @router.get(
+        "/authorize",
+        name="oauth:authorize",
+        response_model=models.OAuth2AuthorizeResponse,
+    )
     async def authorize(
         request: Request,
-        authentication_backend: str,
+        authentication_backend: AuthenticationBackendName,
         scopes: List[str] = Query(None),
     ):
-        # Check that authentication_backend exists
-        backend_exists = any(
-            backend.name == authentication_backend for backend in authenticator.backends
-        )
-
-        if not backend_exists:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
-
         if redirect_url is not None:
             authorize_redirect_url = redirect_url
         else:
             authorize_redirect_url = request.url_for(callback_route_name)
 
         state_data = {
-            "authentication_backend": authentication_backend,
+            "authentication_backend": str(authentication_backend),
         }
         state = generate_state_token(state_data, state_secret)
         authorization_url = await oauth_client.get_authorization_url(
