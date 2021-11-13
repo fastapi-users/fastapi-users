@@ -1,10 +1,19 @@
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
+from pydantic import BaseModel
 
 from fastapi_users import models
 from fastapi_users.authentication import Authenticator, BaseAuthentication
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from fastapi_users.router.common import ErrorCode, ErrorModel
+
+
+class LoginBadCredentials(BaseModel):
+    detail: ErrorCode.LOGIN_BAD_CREDENTIALS
+
+
+class LoginUserNotVerified(BaseModel):
+    detail: ErrorCode.LOGIN_USER_NOT_VERIFIED
 
 
 def get_auth_router(
@@ -24,7 +33,16 @@ def get_auth_router(
             "model": ErrorModel,
             "content": {
                 "application/json": {
-                    "example": {"detail": ErrorCode.LOGIN_BAD_CREDENTIALS}
+                    "examples": {
+                        ErrorCode.LOGIN_BAD_CREDENTIALS: {
+                            "summary": "Bad credentials or the user is inactive.",
+                            "value": {"detail": ErrorCode.LOGIN_BAD_CREDENTIALS}
+                        },
+                        ErrorCode.LOGIN_USER_NOT_VERIFIED: {
+                            "summary": "The user is not verified.",
+                            "value": {"detail": ErrorCode.LOGIN_USER_NOT_VERIFIED}
+                        }
+                    }
                 }
             },
         },
@@ -35,7 +53,6 @@ def get_auth_router(
         "/login",
         name="auth:login",
         responses=login_responses,
-        description=f"Produces error codes: `{ErrorCode.LOGIN_BAD_CREDENTIALS}`, `{ErrorCode.LOGIN_USER_NOT_VERIFIED}`.",
     )
     async def login(
         response: Response,
