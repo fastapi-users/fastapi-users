@@ -243,6 +243,18 @@ Depending on the situation, several things can happen:
     * A new user is created and linked to the OAuth account.
     * The user is authenticated following the chosen [authentication method](../configuration/authentication/index.md).
 
+!!! fail "`400 Bad Request`"
+    Invalid token.
+
+!!! fail "`400 Bad Request`"
+    User is inactive.
+
+    ```json
+    {
+        "detail": "LOGIN_BAD_CREDENTIALS"
+    }
+    ```
+
 ## Users router
 
 ### `GET /me`

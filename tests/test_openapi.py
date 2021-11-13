@@ -1,6 +1,7 @@
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
+from httpx_oauth.clients.google import GoogleOAuth2
 
 import fastapi_users.authentication
 from fastapi_users import models
@@ -24,7 +25,7 @@ app.include_router(users.get_verify_router())
 app.include_router(users.get_register_router())
 app.include_router(users.get_users_router())
 app.include_router(users.get_reset_password_router())
-# app.include_router(users.get_oauth_router())
+app.include_router(users.get_oauth_router(GoogleOAuth2(client_id="1234", client_secret="4321"), state_secret="secret"))
 app.include_router(users.get_auth_router(jwt_authentication), prefix="/jwt")
 app.include_router(users.get_auth_router(cookie_authentication), prefix="/cookie")
 
@@ -110,5 +111,15 @@ class TestVerify:
         assert list(route["responses"].keys()) == ["200", "400", "422"]
 
     def test_request_verify_status_codes(self, get_openapi_dict):
-        route = get_openapi_dict["paths"]["/request-verify"]["post"]
+        route = get_openapi_dict["paths"]["/request-verify-token"]["post"]
         assert list(route["responses"].keys()) == ["202", "422"]
+
+
+class TestOAuth2:
+    def test_google_authorize_status_codes(self, get_openapi_dict):
+        route = get_openapi_dict["paths"]["/authorize"]["get"]
+        assert list(route["responses"].keys()) == ["200", "422"]
+
+    def test_google_callback_status_codes(self, get_openapi_dict):
+        route = get_openapi_dict["paths"]["/callback"]["get"]
+        assert list(route["responses"].keys()) == ["200", "400", "422"]
