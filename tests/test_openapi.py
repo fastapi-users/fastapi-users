@@ -96,3 +96,9 @@ class TestUsers:
     def test_get_me_status_codes(self, get_openapi_dict):
         route = get_openapi_dict["paths"]["/me"]["get"]
         assert list(route["responses"].keys()) == ["200", "401"]
+
+
+class TestRegister:
+    def test_register_status_codes(self, get_openapi_dict):
+        route = get_openapi_dict["paths"]["/register"]["post"]
+        assert list(route["responses"].keys()) == ["201", "400", "422"]

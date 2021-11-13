@@ -90,7 +90,7 @@ Register a new user. Will call the `on_after_register` [handler](../configuratio
     ```json
     {
         "detail": {
-            "code": "RESET_PASSWORD_INVALID_PASSWORD",
+            "code": "REGISTER_INVALID_PASSWORD",
             "reason": "Password should be at least 3 characters"
         }
     }

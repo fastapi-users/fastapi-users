@@ -9,7 +9,7 @@ from fastapi_users.manager import (
     UserAlreadyExists,
     UserManagerDependency,
 )
-from fastapi_users.router.common import ErrorCode
+from fastapi_users.router.common import ErrorCode, ErrorModel
 
 
 def get_register_router(
@@ -21,7 +21,32 @@ def get_register_router(
     router = APIRouter()
 
     @router.post(
-        "/register", response_model=user_model, status_code=status.HTTP_201_CREATED, name="register:register"
+        "/register",
+        response_model=user_model,
+        status_code=status.HTTP_201_CREATED,
+        name="register:register",
+        responses={
+            status.HTTP_400_BAD_REQUEST: {
+                "model": ErrorModel,
+                "content": {
+                    "application/json": {
+                        "examples": {
+                            ErrorCode.REGISTER_USER_ALREADY_EXISTS: {
+                                "summary": "A user with this email already exists.",
+                                "value": {"detail": ErrorCode.REGISTER_USER_ALREADY_EXISTS}
+                            },
+                            ErrorCode.REGISTER_INVALID_PASSWORD: {
+                                "summary": "Password validation failed.",
+                                "value": {"detail": {
+                                    "code": ErrorCode.REGISTER_INVALID_PASSWORD,
+                                    "reason": "Password should be at least 3 characters"}
+                                }
+                            }
+                        }
+                    }
+                },
+            },
+        }
     )
     async def register(
         request: Request,
