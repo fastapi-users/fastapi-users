@@ -1,8 +1,15 @@
+from typing import Dict, Union
+
 from pydantic import BaseModel
 
 
 class ErrorModel(BaseModel):
-    detail: str
+    detail: Union[str, Dict[str, str]]
+
+
+class ErrorCodeReasonModel(BaseModel):
+    code: str
+    reason: str
 
 
 class ErrorCode:

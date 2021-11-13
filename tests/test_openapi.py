@@ -1,5 +1,6 @@
 import pytest
 from fastapi import FastAPI
+from fastapi.testclient import TestClient
 
 import fastapi_users.authentication
 from fastapi_users import models
@@ -11,6 +12,7 @@ jwt_authentication = fastapi_users.authentication.JWTAuthentication(
 )
 cookie_authentication = fastapi_users.authentication.CookieAuthentication(secret="")
 users = FastAPIUsers(
+    # dummy get_user_manager
     lambda: None,
     [cookie_authentication, jwt_authentication],
     models.BaseUser,
@@ -30,6 +32,10 @@ app.include_router(users.get_auth_router(cookie_authentication), prefix="/cookie
 @pytest.fixture(scope="module")
 def get_openapi_dict():
     return app.openapi()
+
+
+def test_openapi_generated_ok():
+    assert TestClient(app).get("/openapi.json").status_code == 200
 
 
 class TestLogin:
@@ -58,3 +64,14 @@ class TestLogout:
     def test_cookie_logout_status_codes(self, get_openapi_dict):
         route = get_openapi_dict["paths"]["/cookie/logout"]["post"]
         assert ["200", "401"] == list(route["responses"].keys())
+
+
+class TestReset:
+    def test_reset_password_status_codes(self, get_openapi_dict):
+        route = get_openapi_dict["paths"]["/reset-password"]["post"]
+        assert ["200", "400", "422"] == list(route["responses"].keys())
+
+    def test_forgot_password_status_codes(self, get_openapi_dict):
+        route = get_openapi_dict["paths"]["/forgot-password"]["post"]
+        assert ["202", "422"] == list(route["responses"].keys())
+

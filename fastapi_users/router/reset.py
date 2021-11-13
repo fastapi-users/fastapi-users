@@ -10,7 +10,7 @@ from fastapi_users.manager import (
     UserManagerDependency,
     UserNotExists,
 )
-from fastapi_users.router.common import ErrorCode
+from fastapi_users.router.common import ErrorCode, ErrorModel
 
 
 def get_reset_password_router(
@@ -37,7 +37,32 @@ def get_reset_password_router(
 
         return None
 
-    @router.post("/reset-password", name="reset:reset_password")
+    @router.post(
+        "/reset-password",
+        name="reset:reset_password",
+        responses={
+            status.HTTP_400_BAD_REQUEST: {
+                "model": ErrorModel,
+                "content": {
+                    "application/json": {
+                        "examples": {
+                            ErrorCode.RESET_PASSWORD_BAD_TOKEN: {
+                                "summary": "Bad or expired token.",
+                                "value": {"detail": ErrorCode.RESET_PASSWORD_BAD_TOKEN}
+                            },
+                            ErrorCode.RESET_PASSWORD_INVALID_PASSWORD: {
+                                "summary": "Password validation failed.",
+                                "value": {"detail": {
+                                    "code": ErrorCode.RESET_PASSWORD_INVALID_PASSWORD,
+                                    "reason": "Password should be at least 3 characters"}
+                                }
+                            }
+                        }
+                    }
+                },
+            },
+        }
+    )
     async def reset_password(
         request: Request,
         token: str = Body(...),
