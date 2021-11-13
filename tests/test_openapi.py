@@ -102,3 +102,13 @@ class TestRegister:
     def test_register_status_codes(self, get_openapi_dict):
         route = get_openapi_dict["paths"]["/register"]["post"]
         assert list(route["responses"].keys()) == ["201", "400", "422"]
+
+
+class TestVerify:
+    def test_verify_status_codes(self, get_openapi_dict):
+        route = get_openapi_dict["paths"]["/verify"]["post"]
+        assert list(route["responses"].keys()) == ["200", "400", "422"]
+
+    def test_request_verify_status_codes(self, get_openapi_dict):
+        route = get_openapi_dict["paths"]["/request-verify"]["post"]
+        assert list(route["responses"].keys()) == ["202", "422"]

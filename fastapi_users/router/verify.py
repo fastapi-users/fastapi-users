@@ -12,7 +12,7 @@ from fastapi_users.manager import (
     UserManagerDependency,
     UserNotExists,
 )
-from fastapi_users.router.common import ErrorCode
+from fastapi_users.router.common import ErrorCode, ErrorModel
 
 
 def get_verify_router(
@@ -35,7 +35,30 @@ def get_verify_router(
 
         return None
 
-    @router.post("/verify", response_model=user_model, name="verify:verify")
+    @router.post(
+        "/verify",
+        response_model=user_model,
+        name="verify:verify",
+        responses={
+            status.HTTP_400_BAD_REQUEST: {
+                "model": ErrorModel,
+                "content": {
+                    "application/json": {
+                        "examples": {
+                            ErrorCode.VERIFY_USER_BAD_TOKEN: {
+                                "summary": "Bad token, not existing user or not the e-mail currently set for the user.",
+                                "value": {"detail": ErrorCode.VERIFY_USER_BAD_TOKEN}
+                            },
+                            ErrorCode.VERIFY_USER_ALREADY_VERIFIED: {
+                                "summary": "The user is already verified.",
+                                "value": {"detail": ErrorCode.VERIFY_USER_ALREADY_VERIFIED}
+                            }
+                        }
+                    }
+                },
+            }
+        }
+    )
     async def verify(
         request: Request,
         token: str = Body(..., embed=True),
