@@ -42,7 +42,16 @@ def get_users_router(
         except UserNotExists:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    @router.get("/me", response_model=user_model, name="users:current_user")
+    @router.get(
+        "/me",
+        response_model=user_model,
+        name="users:current_user",
+        responses={
+            status.HTTP_401_UNAUTHORIZED: {
+                "description": "Missing token or inactive user.",
+            },
+        }
+    )
     async def me(
         user: user_db_model = Depends(get_current_active_user),  # type: ignore
     ):
@@ -52,7 +61,32 @@ def get_users_router(
         "/me",
         response_model=user_model,
         dependencies=[Depends(get_current_active_user)],
-        name="users:current_user"
+        name="users:current_user",
+        responses={
+            status.HTTP_401_UNAUTHORIZED: {
+                "description": "Missing token or inactive user.",
+            },
+            status.HTTP_400_BAD_REQUEST: {
+                "model": ErrorModel,
+                "content": {
+                    "application/json": {
+                        "examples": {
+                            ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS: {
+                                "summary": "Password validation failed.",
+                                "value": {"detail": ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS}
+                            },
+                            ErrorCode.UPDATE_USER_INVALID_PASSWORD: {
+                                "summary": "Password validation failed.",
+                                "value": {"detail": {
+                                    "code": ErrorCode.UPDATE_USER_INVALID_PASSWORD,
+                                    "reason": "Password should be at least 3 characters"}
+                                }
+                            }
+                        }
+                    }
+                },
+            },
+        }
     )
     async def update_me(
         request: Request,

@@ -88,3 +88,11 @@ class TestUsers:
     def test_get_id_status_codes(self, get_openapi_dict):
         route = get_openapi_dict["paths"]["/{id}"]["get"]
         assert list(route["responses"].keys()) == ["200", "401", "403", "404", "422"]
+
+    def test_patch_me_status_codes(self, get_openapi_dict):
+        route = get_openapi_dict["paths"]["/me"]["patch"]
+        assert list(route["responses"].keys()) == ["200", "401", "400", "422"]
+
+    def test_get_me_status_codes(self, get_openapi_dict):
+        route = get_openapi_dict["paths"]["/me"]["get"]
+        assert list(route["responses"].keys()) == ["200", "401"]

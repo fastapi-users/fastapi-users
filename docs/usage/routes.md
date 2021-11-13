@@ -309,6 +309,16 @@ Update the current authenticated active user.
     }
     ```
 
+!!! fail "`400 Bad Request`"
+    A user with this email already exists.
+    ```json
+    {
+        "detail": "UPDATE_USER_EMAIL_ALREADY_EXISTS"
+    }
+    ```
+
+!!! fail "`422 Validation Error`"
+
 ### `GET /{user_id}`
 
 Return the user with id `user_id`.
