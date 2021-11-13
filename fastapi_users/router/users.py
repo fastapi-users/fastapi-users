@@ -72,7 +72,7 @@ def get_users_router(
                     "application/json": {
                         "examples": {
                             ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS: {
-                                "summary": "Password validation failed.",
+                                "summary": "A user with this email already exists.",
                                 "value": {"detail": ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS}
                             },
                             ErrorCode.UPDATE_USER_INVALID_PASSWORD: {
@@ -153,7 +153,7 @@ def get_users_router(
                     "application/json": {
                         "examples": {
                             ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS: {
-                                "summary": "Password validation failed.",
+                                "summary": "A user with this email already exists.",
                                 "value": {"detail": ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS}
                             },
                             ErrorCode.UPDATE_USER_INVALID_PASSWORD: {
