@@ -377,6 +377,14 @@ Update the user with id `user_id`.
     }
     ```
 
+!!! fail "`400 Bad Request`"
+    A user with this email already exists.
+    ```json
+    {
+        "detail": "UPDATE_USER_EMAIL_ALREADY_EXISTS"
+    }
+    ```
+
 ### `DELETE /{user_id}`
 
 Delete the user with id `user_id`.

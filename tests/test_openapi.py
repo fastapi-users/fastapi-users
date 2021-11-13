@@ -41,7 +41,7 @@ def test_openapi_generated_ok():
 class TestLogin:
     def test_jwt_login_status_codes(self, get_openapi_dict):
         route = get_openapi_dict["paths"]["/jwt/login"]["post"]
-        assert ["200", "400", "422"] == list(route["responses"].keys())
+        assert list(route["responses"].keys()) == ["200", "400", "422"]
 
     def test_jwt_login_200_body(self, get_openapi_dict):
         """Check if example is up to date"""
@@ -49,10 +49,10 @@ class TestLogin:
             "content"
         ]["application/json"]["example"]
         assert (
+            example.keys() ==
             fastapi_users.authentication.jwt.JWTLoginResponse.schema()[
                 "properties"
             ].keys()
-            == example.keys()
         )
 
     def test_cookie_login_status_codes(self, get_openapi_dict):
@@ -63,15 +63,28 @@ class TestLogin:
 class TestLogout:
     def test_cookie_logout_status_codes(self, get_openapi_dict):
         route = get_openapi_dict["paths"]["/cookie/logout"]["post"]
-        assert ["200", "401"] == list(route["responses"].keys())
+        assert list(route["responses"].keys()) == ["200", "401"]
 
 
 class TestReset:
     def test_reset_password_status_codes(self, get_openapi_dict):
         route = get_openapi_dict["paths"]["/reset-password"]["post"]
-        assert ["200", "400", "422"] == list(route["responses"].keys())
+        assert list(route["responses"].keys()) == ["200", "400", "422"]
 
     def test_forgot_password_status_codes(self, get_openapi_dict):
         route = get_openapi_dict["paths"]["/forgot-password"]["post"]
-        assert ["202", "422"] == list(route["responses"].keys())
+        assert list(route["responses"].keys()) == ["202", "422"]
 
+
+class TestUsers:
+    def test_patch_id_status_codes(self, get_openapi_dict):
+        route = get_openapi_dict["paths"]["/{id}"]["patch"]
+        assert list(route["responses"].keys()) == ["200", "401", "403", "404", "400", "422"]
+
+    def test_delete_id_status_codes(self, get_openapi_dict):
+        route = get_openapi_dict["paths"]["/{id}"]["delete"]
+        assert list(route["responses"].keys()) == ["204", "401", "403", "404", "422"]
+
+    def test_get_id_status_codes(self, get_openapi_dict):
+        route = get_openapi_dict["paths"]["/{id}"]["get"]
+        assert list(route["responses"].keys()) == ["200", "401", "403", "404", "422"]
