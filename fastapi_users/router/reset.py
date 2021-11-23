@@ -1,4 +1,4 @@
-from typing import Any, Dict, Final
+from typing import Any, Dict
 
 from fastapi import APIRouter, Body, Depends, HTTPException, Request, status
 from pydantic import EmailStr
@@ -14,7 +14,7 @@ from fastapi_users.manager import (
 )
 from fastapi_users.router.common import ErrorCode, ErrorModel
 
-RESET_PASSWORD_RESPONSES: Final[Dict[int, Dict[str, Any]]] = {
+RESET_PASSWORD_RESPONSES: Dict[int, Dict[str, Any]] = {
     status.HTTP_400_BAD_REQUEST: {
         "model": ErrorModel,
         "content": {
