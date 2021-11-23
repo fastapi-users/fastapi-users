@@ -98,4 +98,4 @@ async def test_get_logout_response(jwt_authentication, user, user_manager):
 @pytest.mark.asyncio
 async def test_get_logout_response_success(jwt_authentication, user, user_manager):
     with pytest.raises(NotImplementedError):
-        await jwt_authentication.get_logout_responses_success()
+        await jwt_authentication.get_openapi_logout_responses_success()

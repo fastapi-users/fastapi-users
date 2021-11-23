@@ -46,7 +46,7 @@ def get_auth_router(
                 }
             },
         },
-        **backend.get_login_responses_success(),
+        **backend.get_openapi_login_responses_success(),
     }
 
     @router.post(
@@ -80,7 +80,7 @@ def get_auth_router(
                     "description": "Missing token or inactive user."
                 }
             },
-            **backend.get_logout_responses_success(),
+            **backend.get_openapi_logout_responses_success(),
         }
 
         @router.post("/logout", name="auth:logout", responses=logout_responses)

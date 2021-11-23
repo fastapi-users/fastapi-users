@@ -113,7 +113,7 @@ class CookieAuthentication(
         # so that FastAPI can terminate it properly
         return None
 
-    def get_login_responses_success(self) -> Dict[str, Any]:
+    def get_openapi_login_responses_success(self) -> Dict[str, Any]:
         return {status.HTTP_200_OK: {"model": None}}
 
     async def get_logout_response(
@@ -126,7 +126,7 @@ class CookieAuthentication(
             self.cookie_name, path=self.cookie_path, domain=self.cookie_domain
         )
 
-    def get_logout_responses_success(self) -> Dict[str, Any]:
+    def get_openapi_logout_responses_success(self) -> Dict[str, Any]:
         return {status.HTTP_200_OK: {"model": None}}
 
     async def _generate_token(self, user: models.UD) -> str:

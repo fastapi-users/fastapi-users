@@ -82,7 +82,7 @@ class JWTAuthentication(
         return JWTLoginResponse(access_token=token, token_type="bearer")
 
     @staticmethod
-    def get_login_responses_success() -> Dict[str, Any]:
+    def get_openapi_login_responses_success() -> Dict[str, Any]:
         return {
             status.HTTP_200_OK: {
                 "model": JWTLoginResponse,

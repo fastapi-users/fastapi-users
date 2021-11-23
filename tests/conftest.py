@@ -463,11 +463,11 @@ class MockAuthentication(BaseAuthentication[str, UserCreate, UserDB]):
         return None
 
     @staticmethod
-    def get_login_responses_success() -> Dict[str, Any]:
+    def get_openapi_login_responses_success() -> Dict[str, Any]:
         return {}
 
     @staticmethod
-    def get_logout_responses_success() -> Dict[str, Any]:
+    def get_openapi_logout_responses_success() -> Dict[str, Any]:
         return {}
 
 
