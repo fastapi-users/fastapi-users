@@ -52,7 +52,7 @@ def get_users_router(
         "/me",
         response_model=user_model,
         dependencies=[Depends(get_current_active_user)],
-        name="users:current_user"
+        name="users:current_user",
     )
     async def update_me(
         request: Request,
@@ -82,7 +82,7 @@ def get_users_router(
         "/{id:uuid}",
         response_model=user_model,
         dependencies=[Depends(get_current_superuser)],
-        name="users:user"
+        name="users:user",
     )
     async def get_user(user=Depends(get_user_or_404)):
         return user
@@ -91,7 +91,7 @@ def get_users_router(
         "/{id:uuid}",
         response_model=user_model,
         dependencies=[Depends(get_current_superuser)],
-        name="users:user"
+        name="users:user",
     )
     async def update_user(
         user_update: user_update_model,  # type: ignore
@@ -122,7 +122,7 @@ def get_users_router(
         status_code=status.HTTP_204_NO_CONTENT,
         response_class=Response,
         dependencies=[Depends(get_current_superuser)],
-        name="users:user"
+        name="users:user",
     )
     async def delete_user(
         user=Depends(get_user_or_404),

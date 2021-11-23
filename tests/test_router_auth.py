@@ -157,15 +157,9 @@ class TestLogin:
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
 
-    async def test_login_namespace(
-        self,
-        path,
-        app_factory
-    ):
+    async def test_login_namespace(self, path, app_factory):
         split_url = app_factory(True).url_path_for("auth:login").split("/")
         assert split_url[len(split_url) - 1] in path
-
-
 
 
 @pytest.mark.router
@@ -210,10 +204,6 @@ class TestLogout:
         )
         assert response.status_code == status.HTTP_200_OK
 
-    async def test_logout_namespace(
-        self,
-        path,
-        app_factory
-    ):
+    async def test_logout_namespace(self, path, app_factory):
         split_url = app_factory(True).url_path_for("auth:logout").split("/")
         assert split_url[len(split_url) - 1] in path

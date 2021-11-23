@@ -105,9 +105,7 @@ class TestRegister:
 
 
 @pytest.mark.asyncio
-async def test_register_namespace(
-    get_user_manager
-):
+async def test_register_namespace(get_user_manager):
     app = FastAPI()
     app.include_router(
         get_register_router(
