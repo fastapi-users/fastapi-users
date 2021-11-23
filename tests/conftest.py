@@ -1,5 +1,5 @@
 import asyncio
-from typing import Any, AsyncGenerator, Callable, Generic, Optional, Type, Union
+from typing import Any, AsyncGenerator, Callable, Dict, Generic, Optional, Type, Union
 from unittest.mock import MagicMock
 
 import httpx
@@ -461,6 +461,14 @@ class MockAuthentication(BaseAuthentication[str, UserCreate, UserDB]):
         self, user: UserDB, response: Response, user_manager: BaseUserManager
     ):
         return None
+
+    @staticmethod
+    def get_openapi_login_responses_success() -> Dict[str, Any]:
+        return {}
+
+    @staticmethod
+    def get_openapi_logout_responses_success() -> Dict[str, Any]:
+        return {}
 
 
 @pytest.fixture

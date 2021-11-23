@@ -1,4 +1,13 @@
-from typing import AsyncGenerator, Callable, Generic, List, Optional, Sequence
+from typing import (
+    Any,
+    AsyncGenerator,
+    Callable,
+    Dict,
+    Generic,
+    List,
+    Optional,
+    Sequence,
+)
 
 import httpx
 import pytest
@@ -34,6 +43,14 @@ class BackendNone(
     ) -> Optional[models.UD]:
         return None
 
+    @staticmethod
+    def get_openapi_login_responses_success() -> Dict[str, Any]:
+        return {}
+
+    @staticmethod
+    def get_openapi_logout_responses_success() -> Dict[str, Any]:
+        return {}
+
 
 class BackendUser(
     Generic[models.UC, models.UD], BaseAuthentication[str, models.UC, models.UD]
@@ -49,6 +66,14 @@ class BackendUser(
         user_manager: BaseUserManager[models.UC, models.UD],
     ) -> Optional[models.UD]:
         return self.user
+
+    @staticmethod
+    def get_openapi_login_responses_success() -> Dict[str, Any]:
+        return {}
+
+    @staticmethod
+    def get_openapi_logout_responses_success() -> Dict[str, Any]:
+        return {}
 
 
 @pytest.fixture

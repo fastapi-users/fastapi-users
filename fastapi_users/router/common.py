@@ -1,3 +1,17 @@
+from typing import Dict, Union
+
+from pydantic import BaseModel
+
+
+class ErrorModel(BaseModel):
+    detail: Union[str, Dict[str, str]]
+
+
+class ErrorCodeReasonModel(BaseModel):
+    code: str
+    reason: str
+
+
 class ErrorCode:
     REGISTER_INVALID_PASSWORD = "REGISTER_INVALID_PASSWORD"
     REGISTER_USER_ALREADY_EXISTS = "REGISTER_USER_ALREADY_EXISTS"

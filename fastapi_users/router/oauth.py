@@ -10,7 +10,7 @@ from fastapi_users import models
 from fastapi_users.authentication import Authenticator
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
-from fastapi_users.router.common import ErrorCode
+from fastapi_users.router.common import ErrorCode, ErrorModel
 
 STATE_TOKEN_AUDIENCE = "fastapi-users:oauth-state"
 
@@ -76,7 +76,31 @@ def get_oauth_router(
 
         return {"authorization_url": authorization_url}
 
-    @router.get("/callback", name=f"oauth:{oauth_client.name}-callback")
+    @router.get(
+        "/callback",
+        name=f"oauth:{oauth_client.name}-callback",
+        description="The response varies based on the"
+        "`authentication_backend` used on the `/authorize` endpoint.",
+        responses={
+            status.HTTP_400_BAD_REQUEST: {
+                "model": ErrorModel,
+                "content": {
+                    "application/json": {
+                        "examples": {
+                            "jwt_decode": {
+                                "summary": "Invalid token.",
+                                "value": None,
+                            },
+                            ErrorCode.LOGIN_BAD_CREDENTIALS: {
+                                "summary": "Password validation failed.",
+                                "value": {"detail": ErrorCode.LOGIN_BAD_CREDENTIALS},
+                            },
+                        }
+                    }
+                },
+            },
+        },
+    )
     async def callback(
         request: Request,
         response: Response,

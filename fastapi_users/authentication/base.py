@@ -1,4 +1,4 @@
-from typing import Any, Generic, Optional, TypeVar
+from typing import Any, Dict, Generic, Optional, TypeVar
 
 from fastapi import Response
 from fastapi.security.base import SecurityBase
@@ -42,10 +42,20 @@ class BaseAuthentication(Generic[T, models.UC, models.UD]):
     ) -> Any:
         raise NotImplementedError()
 
+    @staticmethod
+    def get_openapi_login_responses_success() -> Dict[str, Any]:
+        """Return a dictionary to use for the openapi responses route parameter."""
+        raise NotImplementedError()
+
     async def get_logout_response(
         self,
         user: models.UD,
         response: Response,
         user_manager: BaseUserManager[models.UC, models.UD],
     ) -> Any:
+        raise NotImplementedError()
+
+    @staticmethod
+    def get_openapi_logout_responses_success() -> Dict[str, Any]:
+        """Return a dictionary to use for the openapi responses route parameter."""
         raise NotImplementedError()

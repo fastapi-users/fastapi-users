@@ -29,3 +29,15 @@ async def test_get_login_response(base_authentication, user, user_manager):
 async def test_get_logout_response(base_authentication, user, user_manager):
     with pytest.raises(NotImplementedError):
         await base_authentication.get_logout_response(user, Response(), user_manager)
+
+
+@pytest.mark.authentication
+def test_get_login_response_success(base_authentication, user, user_manager):
+    with pytest.raises(NotImplementedError):
+        base_authentication.get_openapi_login_responses_success()
+
+
+@pytest.mark.authentication
+def test_get_logout_response_success(base_authentication, user, user_manager):
+    with pytest.raises(NotImplementedError):
+        base_authentication.get_openapi_logout_responses_success()
