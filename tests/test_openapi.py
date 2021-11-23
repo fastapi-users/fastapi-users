@@ -25,7 +25,11 @@ app.include_router(users.get_verify_router())
 app.include_router(users.get_register_router())
 app.include_router(users.get_users_router())
 app.include_router(users.get_reset_password_router())
-app.include_router(users.get_oauth_router(GoogleOAuth2(client_id="1234", client_secret="4321"), state_secret="secret"))
+app.include_router(
+    users.get_oauth_router(
+        GoogleOAuth2(client_id="1234", client_secret="4321"), state_secret="secret"
+    )
+)
 app.include_router(users.get_auth_router(jwt_authentication), prefix="/jwt")
 app.include_router(users.get_auth_router(cookie_authentication), prefix="/cookie")
 
@@ -50,8 +54,8 @@ class TestLogin:
             "content"
         ]["application/json"]["example"]
         assert (
-            example.keys() ==
-            fastapi_users.authentication.jwt.JWTLoginResponse.schema()[
+            example.keys()
+            == fastapi_users.authentication.jwt.JWTLoginResponse.schema()[
                 "properties"
             ].keys()
         )
@@ -80,7 +84,14 @@ class TestReset:
 class TestUsers:
     def test_patch_id_status_codes(self, get_openapi_dict):
         route = get_openapi_dict["paths"]["/{id}"]["patch"]
-        assert list(route["responses"].keys()) == ["200", "401", "403", "404", "400", "422"]
+        assert list(route["responses"].keys()) == [
+            "200",
+            "401",
+            "403",
+            "404",
+            "400",
+            "422",
+        ]
 
     def test_delete_id_status_codes(self, get_openapi_dict):
         route = get_openapi_dict["paths"]["/{id}"]["delete"]

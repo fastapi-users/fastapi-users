@@ -93,12 +93,12 @@ def get_oauth_router(
                             ErrorCode.LOGIN_BAD_CREDENTIALS: {
                                 "summary": "Password validation failed.",
                                 "value": {"detail": ErrorCode.LOGIN_BAD_CREDENTIALS},
-                            }
+                            },
                         }
                     }
                 },
             },
-        }
+        },
     )
     async def callback(
         request: Request,

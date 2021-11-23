@@ -33,20 +33,24 @@ def get_register_router(
                         "examples": {
                             ErrorCode.REGISTER_USER_ALREADY_EXISTS: {
                                 "summary": "A user with this email already exists.",
-                                "value": {"detail": ErrorCode.REGISTER_USER_ALREADY_EXISTS}
+                                "value": {
+                                    "detail": ErrorCode.REGISTER_USER_ALREADY_EXISTS
+                                },
                             },
                             ErrorCode.REGISTER_INVALID_PASSWORD: {
                                 "summary": "Password validation failed.",
-                                "value": {"detail": {
-                                    "code": ErrorCode.REGISTER_INVALID_PASSWORD,
-                                    "reason": "Password should be at least 3 characters"}
-                                }
-                            }
+                                "value": {
+                                    "detail": {
+                                        "code": ErrorCode.REGISTER_INVALID_PASSWORD,
+                                        "reason": "Password should be at least 3 characters",
+                                    }
+                                },
+                            },
                         }
                     }
                 },
             },
-        }
+        },
     )
     async def register(
         request: Request,

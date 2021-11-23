@@ -51,17 +51,19 @@ def get_verify_router(
                         "examples": {
                             ErrorCode.VERIFY_USER_BAD_TOKEN: {
                                 "summary": "Bad token, not existing user or not the e-mail currently set for the user.",
-                                "value": {"detail": ErrorCode.VERIFY_USER_BAD_TOKEN}
+                                "value": {"detail": ErrorCode.VERIFY_USER_BAD_TOKEN},
                             },
                             ErrorCode.VERIFY_USER_ALREADY_VERIFIED: {
                                 "summary": "The user is already verified.",
-                                "value": {"detail": ErrorCode.VERIFY_USER_ALREADY_VERIFIED}
-                            }
+                                "value": {
+                                    "detail": ErrorCode.VERIFY_USER_ALREADY_VERIFIED
+                                },
+                            },
                         }
                     }
                 },
             }
-        }
+        },
     )
     async def verify(
         request: Request,

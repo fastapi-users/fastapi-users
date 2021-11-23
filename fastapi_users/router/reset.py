@@ -52,20 +52,22 @@ def get_reset_password_router(
                         "examples": {
                             ErrorCode.RESET_PASSWORD_BAD_TOKEN: {
                                 "summary": "Bad or expired token.",
-                                "value": {"detail": ErrorCode.RESET_PASSWORD_BAD_TOKEN}
+                                "value": {"detail": ErrorCode.RESET_PASSWORD_BAD_TOKEN},
                             },
                             ErrorCode.RESET_PASSWORD_INVALID_PASSWORD: {
                                 "summary": "Password validation failed.",
-                                "value": {"detail": {
-                                    "code": ErrorCode.RESET_PASSWORD_INVALID_PASSWORD,
-                                    "reason": "Password should be at least 3 characters"}
-                                }
-                            }
+                                "value": {
+                                    "detail": {
+                                        "code": ErrorCode.RESET_PASSWORD_INVALID_PASSWORD,
+                                        "reason": "Password should be at least 3 characters",
+                                    }
+                                },
+                            },
                         }
                     }
                 },
             },
-        }
+        },
     )
     async def reset_password(
         request: Request,
