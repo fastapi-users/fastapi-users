@@ -49,7 +49,7 @@ class TestLogin:
         assert list(route["responses"].keys()) == ["200", "400", "422"]
 
     def test_jwt_login_200_body(self, get_openapi_dict):
-        """Check if example is up to date"""
+        """Check if example is up to date."""
         example = get_openapi_dict["paths"]["/jwt/login"]["post"]["responses"]["200"][
             "content"
         ]["application/json"]["example"]

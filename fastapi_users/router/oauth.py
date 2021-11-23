@@ -79,7 +79,8 @@ def get_oauth_router(
     @router.get(
         "/callback",
         name=f"oauth:{oauth_client.name}-callback",
-        description="The response varies based on the `authentication_backend` used on the `/authorize` endpoint.",
+        description="The response varies based on the"
+        "`authentication_backend` used on the `/authorize` endpoint.",
         responses={
             status.HTTP_400_BAD_REQUEST: {
                 "model": ErrorModel,

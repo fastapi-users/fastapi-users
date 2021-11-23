@@ -42,7 +42,8 @@ def get_register_router(
                                 "value": {
                                     "detail": {
                                         "code": ErrorCode.REGISTER_INVALID_PASSWORD,
-                                        "reason": "Password should be at least 3 characters",
+                                        "reason": "Password should be"
+                                        "at least 3 characters",
                                     }
                                 },
                             },

@@ -82,7 +82,8 @@ def get_users_router(
                                 "value": {
                                     "detail": {
                                         "code": ErrorCode.UPDATE_USER_INVALID_PASSWORD,
-                                        "reason": "Password should be at least 3 characters",
+                                        "reason": "Password should be"
+                                        "at least 3 characters",
                                     }
                                 },
                             },
@@ -167,7 +168,8 @@ def get_users_router(
                                 "value": {
                                     "detail": {
                                         "code": ErrorCode.UPDATE_USER_INVALID_PASSWORD,
-                                        "reason": "Password should be at least 3 characters",
+                                        "reason": "Password should be"
+                                        "at least 3 characters",
                                     }
                                 },
                             },

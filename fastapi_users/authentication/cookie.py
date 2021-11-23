@@ -1,9 +1,9 @@
-from typing import Any, Dict, Generic, List, Optional, Type, Union
+from typing import Any, Dict, Generic, List, Optional
 
 import jwt
 from fastapi import Response, status
 from fastapi.security import APIKeyCookie
-from pydantic import UUID4, BaseModel
+from pydantic import UUID4
 
 from fastapi_users import models
 from fastapi_users.authentication import BaseAuthentication

@@ -50,7 +50,8 @@ def get_verify_router(
                     "application/json": {
                         "examples": {
                             ErrorCode.VERIFY_USER_BAD_TOKEN: {
-                                "summary": "Bad token, not existing user or not the e-mail currently set for the user.",
+                                "summary": "Bad token, not existing user or"
+                                "not the e-mail currently set for the user.",
                                 "value": {"detail": ErrorCode.VERIFY_USER_BAD_TOKEN},
                             },
                             ErrorCode.VERIFY_USER_ALREADY_VERIFIED: {

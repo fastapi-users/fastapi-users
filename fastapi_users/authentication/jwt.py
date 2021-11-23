@@ -89,8 +89,10 @@ class JWTAuthentication(
                 "content": {
                     "application/json": {
                         "example": {
-                            "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiOTIyMWZmYzktNjQwZi00MzcyLTg2Z"
-                            "DMtY2U2NDJjYmE1NjAzIiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTcxNTA0MTkzfQ."
+                            "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1"
+                            "c2VyX2lkIjoiOTIyMWZmYzktNjQwZi00MzcyLTg2Z"
+                            "DMtY2U2NDJjYmE1NjAzIiwiYXVkIjoiZmFzdGFwaS"
+                            "11c2VyczphdXRoIiwiZXhwIjoxNTcxNTA0MTkzfQ."
                             "M10bjOe45I5Ncu_uXvOmVV8QxnL-nZfcH96U90JaocI",
                             "token_type": "bearer",
                         }
