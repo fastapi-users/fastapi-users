@@ -1,10 +1,9 @@
 import contextlib
 
-from fastapi_users.manager import UserAlreadyExists
-
 from app.db import get_user_db
 from app.models import UserCreate
 from app.users import get_user_manager
+from fastapi_users.manager import UserAlreadyExists
 
 get_user_db_context = contextlib.asynccontextmanager(get_user_db)
 get_user_manager_context = contextlib.asynccontextmanager(get_user_manager)
