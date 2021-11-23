@@ -11,6 +11,7 @@ home-page = "https://github.com/fastapi-users/fastapi-users"
 classifiers = [
     "License :: OSI Approved :: MIT License",
     "Development Status :: 5 - Production/Stable",
+    "Framework :: FastAPI",
     "Framework :: AsyncIO",
     "Intended Audience :: Developers",
     "Programming Language :: Python :: 3.7",
