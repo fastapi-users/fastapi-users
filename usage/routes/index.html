@@ -751,7 +751,7 @@
 <p><a href="../../configuration/user-manager/#validate_password">Password validation</a> failed.</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
     <span class="nt">"detail"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">"code"</span><span class="p">:</span> <span class="s2">"RESET_PASSWORD_INVALID_PASSWORD"</span><span class="p">,</span>
+        <span class="nt">"code"</span><span class="p">:</span> <span class="s2">"REGISTER_INVALID_PASSWORD"</span><span class="p">,</span>
         <span class="nt">"reason"</span><span class="p">:</span> <span class="s2">"Password should be at least 3 characters"</span>
     <span class="p">}</span>
 <span class="p">}</span>
@@ -837,14 +837,6 @@
 </div>
 <div class="admonition fail">
 <p class="admonition-title"><code>400 Bad Request</code></p>
-<p>Expired token.</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"detail"</span><span class="p">:</span> <span class="s2">"VERIFY_USER_TOKEN_EXPIRED"</span>
-<span class="p">}</span>
-</code></pre></div>
-</div>
-<div class="admonition fail">
-<p class="admonition-title"><code>400 Bad Request</code></p>
 <p>Bad token, not existing user or not the e-mail currently set for the user.</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
     <span class="nt">"detail"</span><span class="p">:</span> <span class="s2">"VERIFY_USER_BAD_TOKEN"</span>
@@ -909,6 +901,18 @@
 </ul>
 </li>
 </ul>
+<div class="admonition fail">
+<p class="admonition-title"><code>400 Bad Request</code></p>
+<p>Invalid token.</p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>400 Bad Request</code></p>
+<p>User is inactive.</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+    <span class="nt">"detail"</span><span class="p">:</span> <span class="s2">"LOGIN_BAD_CREDENTIALS"</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
 <h2 id="users-router">Users router<a class="headerlink" href="#users-router" title="Permanent link">¶</a></h2>
 <h3 id="get-me"><code>GET /me</code><a class="headerlink" href="#get-me" title="Permanent link">¶</a></h3>
 <p>Return the current authenticated active user.</p>
@@ -960,6 +964,17 @@
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>400 Bad Request</code></p>
+<p>A user with this email already exists.
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+    <span class="nt">"detail"</span><span class="p">:</span> <span class="s2">"UPDATE_USER_EMAIL_ALREADY_EXISTS"</span>
+<span class="p">}</span>
+</code></pre></div></p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>422 Validation Error</code></p>
 </div>
 <h3 id="get-user_id"><code>GET /{user_id}</code><a class="headerlink" href="#get-user_id" title="Permanent link">¶</a></h3>
 <p>Return the user with id <code>user_id</code>.</p>
@@ -1029,6 +1044,14 @@
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>400 Bad Request</code></p>
+<p>A user with this email already exists.
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+    <span class="nt">"detail"</span><span class="p">:</span> <span class="s2">"UPDATE_USER_EMAIL_ALREADY_EXISTS"</span>
+<span class="p">}</span>
+</code></pre></div></p>
 </div>
 <h3 id="delete-user_id"><code>DELETE /{user_id}</code><a class="headerlink" href="#delete-user_id" title="Permanent link">¶</a></h3>
 <p>Delete the user with id <code>user_id</code>.</p>
