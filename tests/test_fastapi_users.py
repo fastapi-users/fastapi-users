@@ -58,9 +58,7 @@ async def test_app_client(
 
     @app.get("/current-verified-superuser")
     def current_verified_superuser(
-        user=Depends(
-            users.current_user(active=True, verified=True, superuser=True)
-        ),
+        user=Depends(users.current_user(active=True, verified=True, superuser=True)),
     ):
         return user
 
@@ -82,9 +80,7 @@ async def test_app_client(
 
     @app.get("/optional-current-superuser")
     def optional_current_superuser(
-        user=Depends(
-            users.current_user(optional=True, active=True, superuser=True)
-        ),
+        user=Depends(users.current_user(optional=True, active=True, superuser=True)),
     ):
         return user
 
