@@ -14,7 +14,7 @@ SECRET = "SECRET"
 
 jwt_authentication = JWTAuthentication(secret=SECRET, lifetime_seconds=3600)
 
-fastapi_users = FastAPIUsers(
+users = FastAPIUsers(
     get_user_manager,
     [jwt_authentication],
     User,

@@ -17,7 +17,7 @@ Configure `FastAPIUsers` object with all the elements we defined before. More pr
 ```py
 from fastapi_users import FastAPIUsers
 
-fastapi_users = FastAPIUsers(
+users = FastAPIUsers(
     get_user_manager,
     [jwt_authentication],
     User,

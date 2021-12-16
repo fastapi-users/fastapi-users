@@ -17,7 +17,7 @@ async def test_app_client(
     oauth_client,
     get_test_client,
 ) -> AsyncGenerator[httpx.AsyncClient, None]:
-    fastapi_users = FastAPIUsers[User, UserCreate, UserUpdate, UserDB](
+    users = FastAPIUsers[User, UserCreate, UserUpdate, UserDB](
         get_user_manager,
         [mock_authentication],
         User,
@@ -27,63 +27,63 @@ async def test_app_client(
     )
 
     app = FastAPI()
-    app.include_router(fastapi_users.get_register_router())
-    app.include_router(fastapi_users.get_reset_password_router())
-    app.include_router(fastapi_users.get_auth_router(mock_authentication))
-    app.include_router(fastapi_users.get_oauth_router(oauth_client, secret))
-    app.include_router(fastapi_users.get_users_router(), prefix="/users")
-    app.include_router(fastapi_users.get_verify_router())
+    app.include_router(users.get_register_router())
+    app.include_router(users.get_reset_password_router())
+    app.include_router(users.get_auth_router(mock_authentication))
+    app.include_router(users.get_oauth_router(oauth_client, secret))
+    app.include_router(users.get_users_router(), prefix="/users")
+    app.include_router(users.get_verify_router())
 
     @app.delete("/users/me")
     def custom_users_route():
         return None
 
     @app.get("/current-user")
-    def current_user(user=Depends(fastapi_users.current_user())):
+    def current_user(user=Depends(users.current_user())):
         return user
 
     @app.get("/current-active-user")
-    def current_active_user(user=Depends(fastapi_users.current_user(active=True))):
+    def current_active_user(user=Depends(users.current_user(active=True))):
         return user
 
     @app.get("/current-verified-user")
-    def current_verified_user(user=Depends(fastapi_users.current_user(verified=True))):
+    def current_verified_user(user=Depends(users.current_user(verified=True))):
         return user
 
     @app.get("/current-superuser")
     def current_superuser(
-        user=Depends(fastapi_users.current_user(active=True, superuser=True))
+        user=Depends(users.current_user(active=True, superuser=True))
     ):
         return user
 
     @app.get("/current-verified-superuser")
     def current_verified_superuser(
         user=Depends(
-            fastapi_users.current_user(active=True, verified=True, superuser=True)
+            users.current_user(active=True, verified=True, superuser=True)
         ),
     ):
         return user
 
     @app.get("/optional-current-user")
-    def optional_current_user(user=Depends(fastapi_users.current_user(optional=True))):
+    def optional_current_user(user=Depends(users.current_user(optional=True))):
         return user
 
     @app.get("/optional-current-active-user")
     def optional_current_active_user(
-        user=Depends(fastapi_users.current_user(optional=True, active=True)),
+        user=Depends(users.current_user(optional=True, active=True)),
     ):
         return user
 
     @app.get("/optional-current-verified-user")
     def optional_current_verified_user(
-        user=Depends(fastapi_users.current_user(optional=True, verified=True)),
+        user=Depends(users.current_user(optional=True, verified=True)),
     ):
         return user
 
     @app.get("/optional-current-superuser")
     def optional_current_superuser(
         user=Depends(
-            fastapi_users.current_user(optional=True, active=True, superuser=True)
+            users.current_user(optional=True, active=True, superuser=True)
         ),
     ):
         return user
@@ -91,7 +91,7 @@ async def test_app_client(
     @app.get("/optional-current-verified-superuser")
     def optional_current_verified_superuser(
         user=Depends(
-            fastapi_users.current_user(
+            users.current_user(
                 optional=True, active=True, verified=True, superuser=True
             )
         ),
