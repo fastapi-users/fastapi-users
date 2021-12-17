@@ -44,10 +44,8 @@ def get_oauth_router(
             route_name=callback_route_name,
         )
 
-    AuthenticationBackendName: enum.EnumMeta = enum.Enum(
-        "AuthenticationBackendName",
-        {backend.name: backend.name for backend in authenticator.backends},
-    )
+    # matches name of first backend OR name of second backend OR ...
+    auth_backend_regex = "^(" + "|".join(backend.name for backend in authenticator.backends) + ")$"
 
     @router.get(
         "/authorize",
@@ -56,7 +54,7 @@ def get_oauth_router(
     )
     async def authorize(
         request: Request,
-        authentication_backend: AuthenticationBackendName,
+        authentication_backend: str = Query(..., regex=auth_backend_regex),
         scopes: List[str] = Query(None),
     ):
         if redirect_url is not None:
