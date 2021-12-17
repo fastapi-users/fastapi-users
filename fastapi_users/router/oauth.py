@@ -1,4 +1,3 @@
-import enum
 from typing import Dict, List
 
 import jwt
@@ -45,7 +44,8 @@ def get_oauth_router(
         )
 
     # matches name of first backend OR name of second backend OR ...
-    auth_backend_regex = "^(" + "|".join(backend.name for backend in authenticator.backends) + ")$"
+    auth_backend_names = [backend.name for backend in authenticator.backends]
+    auth_backend_regex = "^(" + "|".join(auth_backend_names) + ")$"
 
     @router.get(
         "/authorize",

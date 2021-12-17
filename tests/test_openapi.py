@@ -1,8 +1,8 @@
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
-from httpx_oauth.clients.google import GoogleOAuth2
 from httpx_oauth.clients.facebook import FacebookOAuth2
+from httpx_oauth.clients.google import GoogleOAuth2
 
 import fastapi_users.authentication
 from fastapi_users import models
@@ -140,13 +140,15 @@ class TestOAuth2:
         a = FastAPI()
         a.include_router(
             users.get_oauth_router(
-                GoogleOAuth2(client_id="1234", client_secret="4321"), state_secret="secret"
+                GoogleOAuth2(client_id="1234", client_secret="4321"),
+                state_secret="secret",
             ),
             prefix="/google",
         )
         a.include_router(
             users.get_oauth_router(
-                FacebookOAuth2(client_id="1234", client_secret="4321"), state_secret="secret"
+                FacebookOAuth2(client_id="1234", client_secret="4321"),
+                state_secret="secret",
             ),
             prefix="/facebook",
         )
