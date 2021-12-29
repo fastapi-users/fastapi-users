@@ -1,5 +1,3 @@
-from typing import Any, Dict
-
 from fastapi import APIRouter, Body, Depends, HTTPException, Request, status
 from pydantic import EmailStr
 

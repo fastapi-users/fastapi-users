@@ -1,20 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
-from pydantic import BaseModel
 
 from fastapi_users import models
 from fastapi_users.authentication import AuthenticationBackend, Authenticator, Strategy
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from fastapi_users.openapi import OpenAPIResponseType
 from fastapi_users.router.common import ErrorCode, ErrorModel
-
-
-class LoginBadCredentials(BaseModel):
-    detail: ErrorCode.LOGIN_BAD_CREDENTIALS
-
-
-class LoginUserNotVerified(BaseModel):
-    detail: ErrorCode.LOGIN_USER_NOT_VERIFIED
 
 
 def get_auth_router(
