@@ -3,7 +3,7 @@ from typing import Generic, Sequence, Type
 from fastapi import APIRouter
 
 from fastapi_users import models
-from fastapi_users.authentication import Authenticator, BaseAuthentication
+from fastapi_users.authentication import AuthenticationBackend, Authenticator
 from fastapi_users.jwt import SecretType
 from fastapi_users.manager import UserManagerDependency
 from fastapi_users.router import (
@@ -47,7 +47,7 @@ class FastAPIUsers(Generic[models.U, models.UC, models.UU, models.UD]):
     def __init__(
         self,
         get_user_manager: UserManagerDependency[models.UC, models.UD],
-        auth_backends: Sequence[BaseAuthentication],
+        auth_backends: Sequence[AuthenticationBackend],
         user_model: Type[models.U],
         user_create_model: Type[models.UC],
         user_update_model: Type[models.UU],
@@ -80,7 +80,7 @@ class FastAPIUsers(Generic[models.U, models.UC, models.UU, models.UD]):
         return get_reset_password_router(self.get_user_manager)
 
     def get_auth_router(
-        self, backend: BaseAuthentication, requires_verification: bool = False
+        self, backend: AuthenticationBackend, requires_verification: bool = False
     ) -> APIRouter:
         """
         Return an auth router for a given authentication backend.

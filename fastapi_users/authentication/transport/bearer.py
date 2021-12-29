@@ -1,10 +1,11 @@
-from typing import Any, Dict, Union
+from typing import Any
 
 from fastapi import Response, status
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel
 
 from fastapi_users.authentication.transport.base import Transport
+from fastapi_users.openapi import OpenAPIResponseType
 
 
 class BearerResponse(BaseModel):
@@ -16,13 +17,14 @@ class BearerTransport(Transport):
     scheme: OAuth2PasswordBearer
 
     def __init__(self, tokenUrl: str):
+        self.has_logout = False
         self.scheme = OAuth2PasswordBearer(tokenUrl, auto_error=False)
 
     async def get_login_response(self, token: str, response: Response) -> Any:
         return BearerResponse(access_token=token, token_type="bearer")
 
     @staticmethod
-    def get_openapi_login_responses_success() -> Dict[Union[int, str], Dict[str, Any]]:
+    def get_openapi_login_responses_success() -> OpenAPIResponseType:
         return {
             status.HTTP_200_OK: {
                 "model": BearerResponse,

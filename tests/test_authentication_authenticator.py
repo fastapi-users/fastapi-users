@@ -1,13 +1,4 @@
-from typing import (
-    Any,
-    AsyncGenerator,
-    Callable,
-    Dict,
-    Generic,
-    List,
-    Optional,
-    Sequence,
-)
+from typing import AsyncGenerator, Callable, Generic, List, Optional, Sequence
 
 import httpx
 import pytest
@@ -15,11 +6,10 @@ from fastapi import Depends, FastAPI, Request, status
 from fastapi.security.base import SecurityBase
 
 from fastapi_users import models
-from fastapi_users.authentication import (
-    Authenticator,
-    BaseAuthentication,
-    DuplicateBackendNamesError,
-)
+from fastapi_users.authentication import AuthenticationBackend, Authenticator
+from fastapi_users.authentication.authenticator import DuplicateBackendNamesError
+from fastapi_users.authentication.strategy import Strategy
+from fastapi_users.authentication.transport import Transport
 from fastapi_users.manager import BaseUserManager
 from tests.conftest import UserDB
 
@@ -29,60 +19,58 @@ class MockSecurityScheme(SecurityBase):
         return "mock"
 
 
-class BackendNone(
-    Generic[models.UC, models.UD], BaseAuthentication[str, models.UC, models.UD]
-):
-    def __init__(self, name="none"):
-        super().__init__(name, logout=False)
-        self.scheme = MockSecurityScheme()
+class MockTransport(Transport):
+    scheme: MockSecurityScheme
 
-    async def __call__(
-        self,
-        credentials: Optional[str],
-        user_manager: BaseUserManager[models.UC, models.UD],
+    def __init__(self):
+        self.scheme = MockSecurityScheme()
+        self.has_logout = False
+
+
+class NoneStrategy(Strategy):
+    async def read_token(
+        self, token: Optional[str], user_manager: BaseUserManager[models.UC, models.UD]
     ) -> Optional[models.UD]:
         return None
 
-    @staticmethod
-    def get_openapi_login_responses_success() -> Dict[str, Any]:
-        return {}
 
-    @staticmethod
-    def get_openapi_logout_responses_success() -> Dict[str, Any]:
-        return {}
-
-
-class BackendUser(
-    Generic[models.UC, models.UD], BaseAuthentication[str, models.UC, models.UD]
-):
-    def __init__(self, user: models.UD, name="user"):
-        super().__init__(name, logout=False)
-        self.scheme = MockSecurityScheme()
+class UserStrategy(Strategy, Generic[models.UC, models.UD]):
+    def __init__(self, user: models.UD):
         self.user = user
 
-    async def __call__(
-        self,
-        credentials: Optional[str],
-        user_manager: BaseUserManager[models.UC, models.UD],
+    async def read_token(
+        self, token: Optional[str], user_manager: BaseUserManager[models.UC, models.UD]
     ) -> Optional[models.UD]:
         return self.user
 
-    @staticmethod
-    def get_openapi_login_responses_success() -> Dict[str, Any]:
-        return {}
 
-    @staticmethod
-    def get_openapi_logout_responses_success() -> Dict[str, Any]:
-        return {}
+@pytest.fixture
+def get_backend_none():
+    def _get_backend_none(name: str = "none"):
+        return AuthenticationBackend(
+            name=name, transport=MockTransport(), strategy=NoneStrategy()
+        )
+
+    return _get_backend_none
+
+
+@pytest.fixture
+def get_backend_user(user: UserDB):
+    def _get_backend_user(name: str = "user"):
+        return AuthenticationBackend(
+            name=name, transport=MockTransport(), strategy=UserStrategy(user)
+        )
+
+    return _get_backend_user
 
 
 @pytest.fixture
 @pytest.mark.asyncio
 def get_test_auth_client(get_user_manager, get_test_client):
     async def _get_test_auth_client(
-        backends: List[BaseAuthentication],
+        backends: List[AuthenticationBackend],
         get_enabled_backends: Optional[
-            Callable[..., Sequence[BaseAuthentication]]
+            Callable[..., Sequence[AuthenticationBackend]]
         ] = None,
     ) -> AsyncGenerator[httpx.AsyncClient, None]:
         app = FastAPI()
@@ -126,17 +114,17 @@ def get_test_auth_client(get_user_manager, get_test_client):
 
 @pytest.mark.authentication
 @pytest.mark.asyncio
-async def test_authenticator(get_test_auth_client, user):
-    async for client in get_test_auth_client([BackendNone(), BackendUser(user)]):
+async def test_authenticator(get_test_auth_client, get_backend_none, get_backend_user):
+    async for client in get_test_auth_client([get_backend_none(), get_backend_user()]):
         response = await client.get("/test-current-user")
         assert response.status_code == status.HTTP_200_OK
 
 
 @pytest.mark.authentication
 @pytest.mark.asyncio
-async def test_authenticator_none(get_test_auth_client):
+async def test_authenticator_none(get_test_auth_client, get_backend_none):
     async for client in get_test_auth_client(
-        [BackendNone(), BackendNone(name="none-bis")]
+        [get_backend_none(), get_backend_none(name="none-bis")]
     ):
         response = await client.get("/test-current-user")
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
@@ -144,9 +132,11 @@ async def test_authenticator_none(get_test_auth_client):
 
 @pytest.mark.authentication
 @pytest.mark.asyncio
-async def test_authenticator_none_enabled(get_test_auth_client, user):
-    backend_none = BackendNone()
-    backend_user = BackendUser(user)
+async def test_authenticator_none_enabled(
+    get_test_auth_client, get_backend_none, get_backend_user
+):
+    backend_none = get_backend_none()
+    backend_user = get_backend_user()
 
     async def get_enabled_backends():
         return [backend_none]
@@ -160,7 +150,7 @@ async def test_authenticator_none_enabled(get_test_auth_client, user):
 
 @pytest.mark.authentication
 @pytest.mark.asyncio
-async def test_authenticators_with_same_name(get_test_auth_client):
+async def test_authenticators_with_same_name(get_test_auth_client, get_backend_none):
     with pytest.raises(DuplicateBackendNamesError):
-        async for _ in get_test_auth_client([BackendNone(), BackendNone()]):
+        async for _ in get_test_auth_client([get_backend_none(), get_backend_none()]):
             pass

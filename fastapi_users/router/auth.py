@@ -3,8 +3,9 @@ from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel
 
 from fastapi_users import models
-from fastapi_users.authentication import Authenticator, BaseAuthentication
+from fastapi_users.authentication import AuthenticationBackend, Authenticator
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
+from fastapi_users.openapi import OpenAPIResponseType
 from fastapi_users.router.common import ErrorCode, ErrorModel
 
 
@@ -17,7 +18,7 @@ class LoginUserNotVerified(BaseModel):
 
 
 def get_auth_router(
-    backend: BaseAuthentication,
+    backend: AuthenticationBackend,
     get_user_manager: UserManagerDependency[models.UC, models.UD],
     authenticator: Authenticator,
     requires_verification: bool = False,
@@ -28,7 +29,7 @@ def get_auth_router(
         active=True, verified=requires_verification
     )
 
-    login_responses = {
+    login_responses: OpenAPIResponseType = {
         status.HTTP_400_BAD_REQUEST: {
             "model": ErrorModel,
             "content": {
@@ -46,7 +47,7 @@ def get_auth_router(
                 }
             },
         },
-        **backend.get_openapi_login_responses_success(),
+        **backend.transport.get_openapi_login_responses_success(),
     }
 
     @router.post(
@@ -71,16 +72,16 @@ def get_auth_router(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=ErrorCode.LOGIN_USER_NOT_VERIFIED,
             )
-        return await backend.get_login_response(user, response, user_manager)
+        return await backend.get_login_response(user, response)
 
-    if backend.logout:
-        logout_responses = {
+    if backend.has_logout():
+        logout_responses: OpenAPIResponseType = {
             **{
                 status.HTTP_401_UNAUTHORIZED: {
                     "description": "Missing token or inactive user."
                 }
             },
-            **backend.get_openapi_logout_responses_success(),
+            **backend.transport.get_openapi_logout_responses_success(),
         }
 
         @router.post("/logout", name="auth:logout", responses=logout_responses)
@@ -91,6 +92,6 @@ def get_auth_router(
                 get_user_manager
             ),
         ):
-            return await backend.get_logout_response(user, response, user_manager)
+            return await backend.get_logout_response(response)
 
     return router

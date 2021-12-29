@@ -6,13 +6,13 @@ from fastapi import FastAPI, status
 
 from fastapi_users.authentication import Authenticator
 from fastapi_users.router import ErrorCode, get_auth_router
-from tests.conftest import MockAuthentication, UserDB
+from tests.conftest import UserDB, get_mock_authentication
 
 
 @pytest.fixture
 def app_factory(get_user_manager, mock_authentication):
     def _app_factory(requires_verification: bool) -> FastAPI:
-        mock_authentication_bis = MockAuthentication(name="mock-bis")
+        mock_authentication_bis = get_mock_authentication(name="mock-bis")
         authenticator = Authenticator(
             [mock_authentication, mock_authentication_bis], get_user_manager
         )
@@ -129,7 +129,10 @@ class TestLogin:
             assert data["detail"] == ErrorCode.LOGIN_USER_NOT_VERIFIED
         else:
             assert response.status_code == status.HTTP_200_OK
-            assert response.json() == {"token": str(user.id)}
+            assert response.json() == {
+                "access_token": str(user.id),
+                "token_type": "bearer",
+            }
 
     @pytest.mark.parametrize("email", ["lake.lady@camelot.bt", "Lake.Lady@camelot.bt"])
     async def test_valid_credentials_verified(
@@ -143,7 +146,10 @@ class TestLogin:
         data = {"username": email, "password": "excalibur"}
         response = await client.post(path, data=data)
         assert response.status_code == status.HTTP_200_OK
-        assert response.json() == {"token": str(verified_user.id)}
+        assert response.json() == {
+            "access_token": str(verified_user.id),
+            "token_type": "bearer",
+        }
 
     async def test_inactive_user(
         self,

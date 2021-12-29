@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Generic, List, Optional
 
 import jwt
 from pydantic import UUID4
@@ -9,7 +9,7 @@ from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.manager import BaseUserManager, UserNotExists
 
 
-class JWTStrategy(Strategy):
+class JWTStrategy(Strategy, Generic[models.UC, models.UD]):
     def __init__(
         self,
         secret: SecretType,

@@ -12,9 +12,10 @@ from fastapi_users.manager import (
     UserManagerDependency,
     UserNotExists,
 )
+from fastapi_users.openapi import OpenAPIResponseType
 from fastapi_users.router.common import ErrorCode, ErrorModel
 
-RESET_PASSWORD_RESPONSES: Dict[int, Dict[str, Any]] = {
+RESET_PASSWORD_RESPONSES: OpenAPIResponseType = {
     status.HTTP_400_BAD_REQUEST: {
         "model": ErrorModel,
         "content": {

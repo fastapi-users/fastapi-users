@@ -1,9 +1,10 @@
-from typing import Any, Dict, Optional, Union
+from typing import Any, Optional
 
 from fastapi import Response, status
 from fastapi.security import APIKeyCookie
 
 from fastapi_users.authentication.transport.base import Transport
+from fastapi_users.openapi import OpenAPIResponseType
 
 
 class CookieTransport(Transport):
@@ -19,6 +20,7 @@ class CookieTransport(Transport):
         cookie_httponly: bool = True,
         cookie_samesite: str = "lax",
     ):
+        self.has_logout = True
         self.cookie_name = cookie_name
         self.cookie_max_age = cookie_max_age
         self.cookie_path = cookie_path
@@ -50,9 +52,9 @@ class CookieTransport(Transport):
         )
 
     @staticmethod
-    def get_openapi_login_responses_success() -> Dict[Union[int, str], Dict[str, Any]]:
+    def get_openapi_login_responses_success() -> OpenAPIResponseType:
         return {status.HTTP_200_OK: {"model": None}}
 
     @staticmethod
-    def get_openapi_logout_responses_success() -> Dict[Union[int, str], Dict[str, Any]]:
+    def get_openapi_logout_responses_success() -> OpenAPIResponseType:
         return {status.HTTP_200_OK: {"model": None}}

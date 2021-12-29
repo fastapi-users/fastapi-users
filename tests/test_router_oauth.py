@@ -9,9 +9,9 @@ from fastapi_users.authentication import Authenticator
 from fastapi_users.router.oauth import generate_state_token, get_oauth_router
 from tests.conftest import (
     AsyncMethodMocker,
-    MockAuthentication,
     UserDB,
     UserManagerMock,
+    get_mock_authentication,
 )
 
 
@@ -26,7 +26,7 @@ def get_test_app_client(
     async def _get_test_app_client(
         redirect_url: str = None,
     ) -> AsyncGenerator[httpx.AsyncClient, None]:
-        mock_authentication_bis = MockAuthentication(name="mock-bis")
+        mock_authentication_bis = get_mock_authentication(name="mock-bis")
         authenticator = Authenticator(
             [mock_authentication, mock_authentication_bis], get_user_manager_oauth
         )
@@ -210,7 +210,7 @@ class TestCallback:
         assert response.status_code == status.HTTP_200_OK
 
         data = cast(Dict[str, Any], response.json())
-        assert data["token"] == str(user_oauth.id)
+        assert data["access_token"] == str(user_oauth.id)
 
     async def test_inactive_user(
         self,
@@ -271,7 +271,7 @@ class TestCallback:
         )
 
         data = cast(Dict[str, Any], response.json())
-        assert data["token"] == str(user_oauth.id)
+        assert data["access_token"] == str(user_oauth.id)
 
 
 @pytest.mark.asyncio
@@ -284,7 +284,7 @@ async def test_oauth_authorize_namespace(
     redirect_url: str = None,
 ):
 
-    mock_authentication_bis = MockAuthentication(name="mock-bis")
+    mock_authentication_bis = get_mock_authentication(name="mock-bis")
     authenticator = Authenticator(
         [mock_authentication, mock_authentication_bis], get_user_manager_oauth
     )
