@@ -13,11 +13,14 @@ class BackendWithoutLogoutError(RuntimeError):
 
 class AuthenticationBackend(Generic[models.UC, models.UD]):
     """
-    TODO
+    Combination of an authentication transport and strategy.
+
+    Together, they provide a full authentication method logic.
 
     :param name: Name of the backend.
-    :param transport: TODO
-    :param get_strategy: TODO
+    :param transport: Authentication transport instance.
+    :param get_strategy: Dependency callable returning
+    an authentication strategy instance.
     """
 
     name: str
