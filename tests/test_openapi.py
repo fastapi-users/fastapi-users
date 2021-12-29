@@ -1,6 +1,7 @@
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
+from httpx_oauth.clients.facebook import FacebookOAuth2
 from httpx_oauth.clients.google import GoogleOAuth2
 
 import fastapi_users.authentication
@@ -134,3 +135,21 @@ class TestOAuth2:
     def test_google_callback_status_codes(self, get_openapi_dict):
         route = get_openapi_dict["paths"]["/callback"]["get"]
         assert list(route["responses"].keys()) == ["200", "400", "422"]
+
+    def test_two_oauth_routers(self):
+        a = FastAPI()
+        a.include_router(
+            users.get_oauth_router(
+                GoogleOAuth2(client_id="1234", client_secret="4321"),
+                state_secret="secret",
+            ),
+            prefix="/google",
+        )
+        a.include_router(
+            users.get_oauth_router(
+                FacebookOAuth2(client_id="1234", client_secret="4321"),
+                state_secret="secret",
+            ),
+            prefix="/facebook",
+        )
+        assert TestClient(a).get("/openapi.json").status_code == 200
