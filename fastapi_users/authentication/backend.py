@@ -7,10 +7,6 @@ from fastapi_users.authentication.strategy import Strategy
 from fastapi_users.authentication.transport import Transport
 
 
-class BackendWithoutLogoutError(RuntimeError):
-    pass
-
-
 class AuthenticationBackend(Generic[models.UC, models.UD]):
     """
     Combination of an authentication transport and strategy.
@@ -51,7 +47,4 @@ class AuthenticationBackend(Generic[models.UC, models.UD]):
     async def get_logout_response(
         self, strategy: Strategy[models.UC, models.UD], response: Response
     ) -> Any:
-        if not self.has_logout():
-            raise BackendWithoutLogoutError()
-
         return await self.transport.get_logout_response(response)
