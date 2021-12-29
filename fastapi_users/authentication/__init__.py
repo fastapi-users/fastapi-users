@@ -1,3 +1,4 @@
+import enum
 import re
 from inspect import Parameter, Signature
 from typing import Callable, Optional, Sequence
@@ -42,6 +43,7 @@ class Authenticator:
     """
 
     backends: Sequence[BaseAuthentication]
+    backends_enum: enum.Enum
 
     def __init__(
         self,
@@ -49,6 +51,10 @@ class Authenticator:
         get_user_manager: UserManagerDependency[models.UC, models.UD],
     ):
         self.backends = backends
+        self.backends_enum = enum.Enum(  # type: ignore
+            "AuthenticationBackendName",
+            {backend.name: backend.name for backend in backends},  # type: ignore
+        )
         self.get_user_manager = get_user_manager
 
     def current_user(
