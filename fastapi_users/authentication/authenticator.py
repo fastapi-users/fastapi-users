@@ -152,11 +152,11 @@ class Authenticator:
         )
         for backend in self.backends:
             if backend in enabled_backends:
-                token: str = kwargs[name_to_variable_name(backend.name)]
+                token: Optional[str] = kwargs[name_to_variable_name(backend.name)]
                 strategy: Strategy[models.UC, models.UD] = kwargs[
                     name_to_strategy_variable_name(backend.name)
                 ]
-                if token:
+                if token is not None:
                     user = await strategy.read_token(token, user_manager)
                     if user:
                         break
