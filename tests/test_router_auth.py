@@ -163,10 +163,6 @@ class TestLogin:
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
 
-    async def test_login_namespace(self, path, app_factory):
-        split_url = app_factory(True).url_path_for("auth:login").split("/")
-        assert split_url[len(split_url) - 1] in path
-
 
 @pytest.mark.router
 @pytest.mark.parametrize("path", ["/mock/logout", "/mock-bis/logout"])
@@ -210,6 +206,13 @@ class TestLogout:
         )
         assert response.status_code == status.HTTP_200_OK
 
-    async def test_logout_namespace(self, path, app_factory):
-        split_url = app_factory(True).url_path_for("auth:logout").split("/")
-        assert split_url[len(split_url) - 1] in path
+
+@pytest.mark.asyncio
+@pytest.mark.router
+async def test_route_names(app_factory, mock_authentication):
+    app = app_factory(False)
+    login_route_name = f"auth:{mock_authentication.name}.login"
+    assert app.url_path_for(login_route_name) == "/mock/login"
+
+    logout_route_name = f"auth:{mock_authentication.name}.logout"
+    assert app.url_path_for(logout_route_name) == "/mock/logout"

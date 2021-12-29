@@ -99,21 +99,23 @@ class FastAPIUsers(Generic[models.U, models.UC, models.UU, models.UD]):
     def get_oauth_router(
         self,
         oauth_client: BaseOAuth2,
+        backend: AuthenticationBackend,
         state_secret: SecretType,
         redirect_url: str = None,
     ) -> APIRouter:
         """
-        Return an OAuth router for a given OAuth client.
+        Return an OAuth router for a given OAuth client and authentication backend.
 
         :param oauth_client: The HTTPX OAuth client instance.
+        :param backend: The authentication backend instance.
         :param state_secret: Secret used to encode the state JWT.
         :param redirect_url: Optional arbitrary redirect URL for the OAuth2 flow.
         If not given, the URL to the callback endpoint will be generated.
         """
         return get_oauth_router(
             oauth_client,
+            backend,
             self.get_user_manager,
-            self.authenticator,
             state_secret,
             redirect_url,
         )

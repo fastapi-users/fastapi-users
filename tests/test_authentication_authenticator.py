@@ -48,7 +48,7 @@ class UserStrategy(Strategy, Generic[models.UC, models.UD]):
 def get_backend_none():
     def _get_backend_none(name: str = "none"):
         return AuthenticationBackend(
-            name=name, transport=MockTransport(), strategy=NoneStrategy()
+            name=name, transport=MockTransport(), get_strategy=lambda: NoneStrategy()
         )
 
     return _get_backend_none
@@ -58,7 +58,9 @@ def get_backend_none():
 def get_backend_user(user: UserDB):
     def _get_backend_user(name: str = "user"):
         return AuthenticationBackend(
-            name=name, transport=MockTransport(), strategy=UserStrategy(user)
+            name=name,
+            transport=MockTransport(),
+            get_strategy=lambda: UserStrategy(user),
         )
 
     return _get_backend_user

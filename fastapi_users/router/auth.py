@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel
 
 from fastapi_users import models
-from fastapi_users.authentication import AuthenticationBackend, Authenticator
+from fastapi_users.authentication import AuthenticationBackend, Authenticator, Strategy
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from fastapi_users.openapi import OpenAPIResponseType
 from fastapi_users.router.common import ErrorCode, ErrorModel
@@ -52,13 +52,14 @@ def get_auth_router(
 
     @router.post(
         "/login",
-        name="auth:login",
+        name=f"auth:{backend.name}.login",
         responses=login_responses,
     )
     async def login(
         response: Response,
         credentials: OAuth2PasswordRequestForm = Depends(),
         user_manager: BaseUserManager[models.UC, models.UD] = Depends(get_user_manager),
+        strategy: Strategy[models.UC, models.UD] = Depends(backend.get_strategy),
     ):
         user = await user_manager.authenticate(credentials)
 
@@ -72,7 +73,7 @@ def get_auth_router(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=ErrorCode.LOGIN_USER_NOT_VERIFIED,
             )
-        return await backend.get_login_response(user, response)
+        return await backend.get_login_response(strategy, user, response)
 
     if backend.has_logout():
         logout_responses: OpenAPIResponseType = {
@@ -84,14 +85,16 @@ def get_auth_router(
             **backend.transport.get_openapi_logout_responses_success(),
         }
 
-        @router.post("/logout", name="auth:logout", responses=logout_responses)
+        @router.post(
+            "/logout",
+            name=f"auth:{backend.name}.logout",
+            responses=logout_responses,
+            dependencies=[Depends(get_current_user)],
+        )
         async def logout(
             response: Response,
-            user=Depends(get_current_user),
-            user_manager: BaseUserManager[models.UC, models.UD] = Depends(
-                get_user_manager
-            ),
+            strategy: Strategy[models.UC, models.UD] = Depends(backend.get_strategy),
         ):
-            return await backend.get_logout_response(response)
+            return await backend.get_logout_response(strategy, response)
 
     return router

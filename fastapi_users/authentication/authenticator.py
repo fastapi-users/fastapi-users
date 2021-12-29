@@ -1,13 +1,13 @@
-import enum
 import re
 from inspect import Parameter, Signature
-from typing import Callable, Optional, Sequence, cast
+from typing import Callable, List, Optional, Sequence, cast
 
 from fastapi import Depends, HTTPException, status
 from makefun import with_signature
 
 from fastapi_users import models
 from fastapi_users.authentication.backend import AuthenticationBackend
+from fastapi_users.authentication.strategy import Strategy
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
 
 INVALID_CHARS_PATTERN = re.compile(r"[^0-9a-zA-Z_]")
@@ -19,6 +19,11 @@ def name_to_variable_name(name: str) -> str:
     name = re.sub(INVALID_CHARS_PATTERN, "", name)
     name = re.sub(INVALID_LEADING_CHARS_PATTERN, "", name)
     return name
+
+
+def name_to_strategy_variable_name(name: str) -> str:
+    """Transform a backend name string into a strategy variable name."""
+    return f"strategy_{name_to_variable_name(name)}"
 
 
 class DuplicateBackendNamesError(Exception):
@@ -49,10 +54,6 @@ class Authenticator:
     ):
         self.backends = backends
         self.get_user_manager = get_user_manager
-        self.backends_enum = enum.Enum(  # type: ignore
-            "AuthenticationBackendName",
-            {backend.name: backend.name for backend in self.backends},
-        )
 
     def current_user(
         self,
@@ -88,20 +89,28 @@ class Authenticator:
         # with a dynamic number of dependencies at runtime.
         # This way, each security schemes are detected by the OpenAPI generator.
         try:
-            parameters = [
-                Parameter(
-                    name=name_to_variable_name(backend.name),
-                    kind=Parameter.POSITIONAL_OR_KEYWORD,
-                    default=Depends(cast(Callable, backend.transport.scheme)),
-                )
-                for backend in self.backends
-            ] + [
+            parameters: List[Parameter] = [
                 Parameter(
                     name="user_manager",
                     kind=Parameter.POSITIONAL_OR_KEYWORD,
                     default=Depends(self.get_user_manager),
                 )
             ]
+
+            for backend in self.backends:
+                parameters += [
+                    Parameter(
+                        name=name_to_variable_name(backend.name),
+                        kind=Parameter.POSITIONAL_OR_KEYWORD,
+                        default=Depends(cast(Callable, backend.transport.scheme)),
+                    ),
+                    Parameter(
+                        name=name_to_strategy_variable_name(backend.name),
+                        kind=Parameter.POSITIONAL_OR_KEYWORD,
+                        default=Depends(backend.get_strategy),
+                    ),
+                ]
+
             if get_enabled_backends is not None:
                 parameters += [
                     Parameter(
@@ -122,7 +131,7 @@ class Authenticator:
                 active=active,
                 verified=verified,
                 superuser=superuser,
-                **kwargs
+                **kwargs,
             )
 
         return current_user_dependency
@@ -135,7 +144,7 @@ class Authenticator:
         active: bool = False,
         verified: bool = False,
         superuser: bool = False,
-        **kwargs
+        **kwargs,
     ) -> Optional[models.UD]:
         user: Optional[models.UD] = None
         enabled_backends: Sequence[AuthenticationBackend] = kwargs.get(
@@ -144,8 +153,11 @@ class Authenticator:
         for backend in self.backends:
             if backend in enabled_backends:
                 token: str = kwargs[name_to_variable_name(backend.name)]
+                strategy: Strategy[models.UC, models.UD] = kwargs[
+                    name_to_strategy_variable_name(backend.name)
+                ]
                 if token:
-                    user = await backend.strategy.read_token(token, user_manager)
+                    user = await strategy.read_token(token, user_manager)
                     if user:
                         break
 

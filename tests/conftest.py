@@ -472,7 +472,7 @@ def get_mock_authentication(name: str):
     return AuthenticationBackend(
         name=name,
         transport=MockTransport(tokenUrl="/login"),
-        strategy=MockStrategy(),
+        get_strategy=lambda: MockStrategy(),
     )
 
 
