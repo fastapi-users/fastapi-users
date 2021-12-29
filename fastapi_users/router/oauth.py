@@ -1,4 +1,3 @@
-import enum
 from typing import Dict, List
 
 import jwt
@@ -44,11 +43,6 @@ def get_oauth_router(
             route_name=callback_route_name,
         )
 
-    AuthenticationBackendName: enum.EnumMeta = enum.Enum(
-        "AuthenticationBackendName",
-        {backend.name: backend.name for backend in authenticator.backends},
-    )
-
     @router.get(
         "/authorize",
         name="oauth:authorize",
@@ -56,7 +50,7 @@ def get_oauth_router(
     )
     async def authorize(
         request: Request,
-        authentication_backend: AuthenticationBackendName,
+        authentication_backend: authenticator.backends_enum,  # type: ignore
         scopes: List[str] = Query(None),
     ):
         if redirect_url is not None:
