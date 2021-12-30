@@ -16,7 +16,7 @@ As you can see, instantiation is quite simple. It accepts the following argument
 
 ## Login
 
-This method will return a JWT token upon successful login:
+This method will return the in the following form upon successful login:
 
 !!! success "`200 OK`"
     ```json
@@ -26,15 +26,15 @@ This method will return a JWT token upon successful login:
     }
     ```
 
-> Check documentation about [login route](../../usage/routes.md#post-loginname).
+> Check documentation about [login route](../../../usage/routes.md#post-login).
 
 ## Logout
 
-This backend does not provide a logout method.
+The logout method with this transport returns nothing.
 
 ## Authentication
 
-This method expects that you provide a `Bearer` authentication with a valid JWT.
+This method expects that you provide a `Bearer` authentication with a valid token corresponding to your strategy.
 
 ```bash
 curl http://localhost:9000/protected-route -H'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiOTIyMWZmYzktNjQwZi00MzcyLTg2ZDMtY2U2NDJjYmE1NjAzIiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTcxNTA0MTkzfQ.M10bjOe45I5Ncu_uXvOmVV8QxnL-nZfcH96U90JaocI'

@@ -45,10 +45,6 @@ Logout the authenticated user against the method named `name`. Check the corresp
 !!! success "`200 OK`"
     The logout process was successful.
 
-
-!!! tip
-    Some backend (like JWT) won't produce this route.
-
 ## Register router
 
 ### `POST /register`

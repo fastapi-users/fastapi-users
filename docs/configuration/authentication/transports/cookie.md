@@ -26,7 +26,7 @@ This method will return a response with a valid `set-cookie` header upon success
 
 !!! success "`200 OK`"
 
-> Check documentation about [login route](../../usage/routes.md#post-loginname).
+> Check documentation about [login route](../../../usage/routes.md#post-login).
 
 ## Logout
 
@@ -34,7 +34,7 @@ This method will remove the authentication cookie:
 
 !!! success "`200 OK`"
 
-> Check documentation about [logout route](../../usage/routes.md#post-logoutname).
+> Check documentation about [logout route](../../../usage/routes.md#post-logout).
 
 ## Authentication
 

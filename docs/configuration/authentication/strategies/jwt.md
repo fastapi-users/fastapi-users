@@ -23,3 +23,7 @@ As you can see, instantiation is quite simple. It accepts the following argument
     To allow strategies to be instantiated dynamically with other dependencies, they have to be provided as a callable to the authentication backend.
 
     For `JWTStrategy`, since it doesn't require dependencies, it can be as simple as the function above.
+
+## Logout
+
+On logout, this strategy **won't do anything**. Indeed, a JWT can't be invalidated on the server-side: it's valid until it expires.
