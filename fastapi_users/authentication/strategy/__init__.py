@@ -3,6 +3,7 @@ from fastapi_users.authentication.strategy.base import (
     StrategyDestroyNotSupportedError,
 )
 from fastapi_users.authentication.strategy.db import (
+    A,
     AccessTokenDatabase,
     BaseAccessToken,
     DatabaseStrategy,
@@ -15,6 +16,7 @@ except ImportError:  # pragma: no cover
     pass
 
 __all__ = [
+    "A",
     "AccessTokenDatabase",
     "BaseAccessToken",
     "DatabaseStrategy",
