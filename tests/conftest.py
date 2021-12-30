@@ -440,7 +440,6 @@ def get_user_manager_oauth(user_manager_oauth):
 class MockTransport(BearerTransport):
     def __init__(self, tokenUrl: str):
         super().__init__(tokenUrl)
-        self.has_logout = True
 
     async def get_logout_response(self, response: Response) -> Any:
         return None
@@ -466,6 +465,9 @@ class MockStrategy(Strategy[UserCreate, UserDB]):
 
     async def write_token(self, user: models.UD) -> str:
         return str(user.id)
+
+    async def destroy_token(self, token: str, user: models.UD) -> None:
+        return None
 
 
 def get_mock_authentication(name: str):

@@ -12,9 +12,12 @@ from fastapi.security.base import SecurityBase
 from fastapi_users.openapi import OpenAPIResponseType
 
 
+class TransportLogoutNotSupportedError(Exception):
+    pass
+
+
 class Transport(Protocol):
     scheme: SecurityBase
-    has_logout: bool
 
     async def get_login_response(self, token: str, response: Response) -> Any:
         ...  # pragma: no cover

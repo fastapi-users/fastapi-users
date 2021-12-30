@@ -3,8 +3,14 @@ from typing import Any, Callable, Generic
 from fastapi import Response
 
 from fastapi_users import models
-from fastapi_users.authentication.strategy import Strategy
-from fastapi_users.authentication.transport import Transport
+from fastapi_users.authentication.strategy import (
+    Strategy,
+    StrategyDestroyNotSupportedError,
+)
+from fastapi_users.authentication.transport import (
+    Transport,
+    TransportLogoutNotSupportedError,
+)
 
 
 class AuthenticationBackend(Generic[models.UC, models.UD]):
@@ -32,10 +38,7 @@ class AuthenticationBackend(Generic[models.UC, models.UD]):
         self.transport = transport
         self.get_strategy = get_strategy
 
-    def has_logout(self) -> bool:
-        return self.transport.has_logout
-
-    async def get_login_response(
+    async def login(
         self,
         strategy: Strategy[models.UC, models.UD],
         user: models.UD,
@@ -44,7 +47,19 @@ class AuthenticationBackend(Generic[models.UC, models.UD]):
         token = await strategy.write_token(user)
         return await self.transport.get_login_response(token, response)
 
-    async def get_logout_response(
-        self, strategy: Strategy[models.UC, models.UD], response: Response
+    async def logout(
+        self,
+        strategy: Strategy[models.UC, models.UD],
+        user: models.UD,
+        token: str,
+        response: Response,
     ) -> Any:
-        return await self.transport.get_logout_response(response)
+        try:
+            await strategy.destroy_token(token, user)
+        except StrategyDestroyNotSupportedError:
+            pass
+
+        try:
+            await self.transport.get_logout_response(response)
+        except TransportLogoutNotSupportedError:
+            return None

@@ -20,7 +20,6 @@ class CookieTransport(Transport):
         cookie_httponly: bool = True,
         cookie_samesite: str = "lax",
     ):
-        self.has_logout = True
         self.cookie_name = cookie_name
         self.cookie_max_age = cookie_max_age
         self.cookie_path = cookie_path

@@ -1,6 +1,9 @@
 import pytest
 
-from fastapi_users.authentication.strategy import JWTStrategy
+from fastapi_users.authentication.strategy import (
+    JWTStrategy,
+    StrategyDestroyNotSupportedError,
+)
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 
 LIFETIME = 3600
@@ -68,10 +71,17 @@ class TestReadToken:
 
 @pytest.mark.authentication
 @pytest.mark.asyncio
-async def test_write_token(jwt_strategy: JWTStrategy, user, user_manager):
+async def test_write_token(jwt_strategy: JWTStrategy, user):
     token = await jwt_strategy.write_token(user)
 
     decoded = decode_jwt(
         token, jwt_strategy.secret, audience=jwt_strategy.token_audience
     )
     assert decoded["user_id"] == str(user.id)
+
+
+@pytest.mark.authentication
+@pytest.mark.asyncio
+async def test_destroy_token(jwt_strategy: JWTStrategy, user):
+    with pytest.raises(StrategyDestroyNotSupportedError):
+        await jwt_strategy.destroy_token("TOKEN", user)

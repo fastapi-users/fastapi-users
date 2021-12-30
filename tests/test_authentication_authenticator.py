@@ -24,7 +24,6 @@ class MockTransport(Transport):
 
     def __init__(self):
         self.scheme = MockSecurityScheme()
-        self.has_logout = False
 
 
 class NoneStrategy(Strategy):
