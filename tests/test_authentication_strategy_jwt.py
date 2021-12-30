@@ -62,9 +62,9 @@ class TestReadToken:
 
     @pytest.mark.asyncio
     async def test_valid_token(
-        self, jwt_strategy: JWTStrategy, mock_user_db, token, user
+        self, jwt_strategy: JWTStrategy, user_manager, token, user
     ):
-        authenticated_user = await jwt_strategy.read_token(token(user.id), mock_user_db)
+        authenticated_user = await jwt_strategy.read_token(token(user.id), user_manager)
         assert authenticated_user is not None
         assert authenticated_user.id == user.id
 
