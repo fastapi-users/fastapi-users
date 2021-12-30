@@ -46,7 +46,7 @@ The token will be send through a cookie.
 
 It manages how the token is generated and secured. We currently provide two methods:
 
-#### [JWT](strategy/jwt.md)
+#### [JWT](strategies/jwt.md)
 
 The token is self-contained in a JSON Web Token.
 
@@ -57,7 +57,7 @@ The token is self-contained in a JSON Web Token.
 
     ➡️ Use it if you want to get up-and-running quickly.
 
-#### [Redis](strategy/redis.md)
+#### [Redis](strategies/redis.md)
 
 The token is stored in a Redis key-store.
 
