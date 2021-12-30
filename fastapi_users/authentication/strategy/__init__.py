@@ -3,11 +3,11 @@ from fastapi_users.authentication.strategy.base import (
     StrategyDestroyNotSupportedError,
 )
 from fastapi_users.authentication.strategy.jwt import JWTStrategy
-from fastapi_users.authentication.strategy.redis_session import RedisSessionStrategy
+from fastapi_users.authentication.strategy.redis import RedisStrategy
 
 __all__ = [
     "JWTStrategy",
     "Strategy",
     "StrategyDestroyNotSupportedError",
-    "RedisSessionStrategy",
+    "RedisStrategy",
 ]

@@ -57,14 +57,14 @@ The token is self-contained in a JSON Web Token.
 
     ➡️ Use it if you want to get up-and-running quickly.
 
-#### [Redis Session](strategy/redis-session.md)
+#### [Redis](strategy/redis.md)
 
 The token is stored in a Redis key-store.
 
 !!! tip "Pros and cons"
 
     * ✅ Secure and performant.
-    * ✅ Sessions can be invalidated server-side by removing tokens from Redis.
+    * ✅ Tokens can be invalidated server-side by removing tokens from Redis.
     * ❌ A Redis server is needed.
 
-    ➡️ Use it if you want maximum performance while being able to invalidate sessions.
+    ➡️ Use it if you want maximum performance while being able to invalidate tokens.
