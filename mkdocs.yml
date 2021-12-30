@@ -25,8 +25,6 @@ repo_url: https://github.com/fastapi-users/fastapi-users
 edit_uri: ""
 
 markdown_extensions:
-  - markdown_include.include:
-      base_path: docs
   - toc:
       permalink: true
   - admonition
@@ -37,7 +35,12 @@ markdown_extensions:
           class: mermaid
           format: !!python/name:mermaid2.fence_mermaid
   - pymdownx.tasklist
-  - pymdownx.tabbed
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.snippets
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
 
 plugins:
   - search

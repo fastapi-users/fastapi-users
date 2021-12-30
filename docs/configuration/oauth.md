@@ -71,13 +71,13 @@ Notice that we inherit from the `BaseOAuthAccountMixin`, which adds a `List` of 
 You'll need to define the table for storing the OAuth account model. We provide a base one for this:
 
 ```py hl_lines="21 22"
-{!./src/db_sqlalchemy_oauth.py!}
+--8<-- "docs/src/db_sqlalchemy_oauth.py"
 ```
 
 When instantiating the database adapter, you should pass this table in argument::
 
 ```py hl_lines="31 34 35"
-{!./src/db_sqlalchemy_oauth.py!}
+--8<-- "docs/src/db_sqlalchemy_oauth.py"
 ```
 
 #### MongoDB
@@ -89,7 +89,7 @@ Nothing to do, the [basic configuration](./databases/mongodb.md) is enough.
 You'll need to define the Tortoise model for storing the OAuth account model. We provide a base one for this:
 
 ```py hl_lines="29 30"
-{!./src/db_tortoise_oauth_model.py!}
+--8<-- "docs/src/db_tortoise_oauth_model.py"
 ```
 
 !!! warning
@@ -98,7 +98,7 @@ You'll need to define the Tortoise model for storing the OAuth account model. We
 Then, you should declare it on the database adapter:
 
 ```py hl_lines="8 9"
-{!./src/db_tortoise_oauth_adapter.py!}
+--8<-- "docs/src/db_tortoise_oauth_adapter.py"
 ```
 
 ### Generate a router
