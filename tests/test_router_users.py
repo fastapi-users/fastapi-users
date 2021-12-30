@@ -6,13 +6,13 @@ from fastapi import FastAPI, status
 
 from fastapi_users.authentication import Authenticator
 from fastapi_users.router import ErrorCode, get_users_router
-from tests.conftest import MockAuthentication, User, UserDB, UserUpdate
+from tests.conftest import User, UserDB, UserUpdate, get_mock_authentication
 
 
 @pytest.fixture
 def app_factory(get_user_manager, mock_authentication):
     def _app_factory(requires_verification: bool) -> FastAPI:
-        mock_authentication_bis = MockAuthentication(name="mock-bis")
+        mock_authentication_bis = get_mock_authentication(name="mock-bis")
         authenticator = Authenticator(
             [mock_authentication, mock_authentication_bis], get_user_manager
         )

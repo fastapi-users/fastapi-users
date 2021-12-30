@@ -19,8 +19,8 @@ In Python, when we want to use a generator, we have to use a `for` loop, which w
 
 In the following sample, we import our dependencies and create a context manager version using `contextlib.asynccontextmanager`:
 
-```py hl_lines="9 10"
-{!./src/cookbook_create_user_programmatically.py!}
+```py hl_lines="8 9"
+--8<-- "docs/src/cookbook_create_user_programmatically.py"
 ```
 
 !!! info "I have other dependencies"
@@ -30,8 +30,8 @@ In the following sample, we import our dependencies and create a context manager
 
 We are now ready to write a function. The example below shows you a basic example but you can of course adapt it to your own needs. The key part here is once again to **take care of opening every context managers and pass them every required arguments**, as the dependency manager would do.
 
-```py hl_lines="13-24"
-{!./src/cookbook_create_user_programmatically.py!}
+```py hl_lines="12-23"
+--8<-- "docs/src/cookbook_create_user_programmatically.py"
 ```
 
 ## 3. Use it

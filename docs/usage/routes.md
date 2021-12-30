@@ -45,10 +45,6 @@ Logout the authenticated user against the method named `name`. Check the corresp
 !!! success "`200 OK`"
     The logout process was successful.
 
-
-!!! tip
-    Some backend (like JWT) won't produce this route.
-
 ## Register router
 
 ### `POST /register`
@@ -209,7 +205,6 @@ Each OAuth router you define will expose the two following routes.
 Return the authorization URL for the OAuth service where you should redirect your user.
 
 !!! abstract "Query parameters"
-    * `authentication_backend`: `name` property of a defined [authentication method](../configuration/authentication/index.md) to use to authenticate the user on successful callback. Usually `jwt` or `cookie`.
     * `scopes`: Optional list of scopes to ask for. Expected format: `scopes=a&scopes=b`.
 
 !!! success "`200 OK`"

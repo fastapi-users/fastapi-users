@@ -1,0 +1,3 @@
+fastapi
+fastapi-users[mongodb]
+uvicorn[standard]

@@ -53,7 +53,7 @@ Now, you can login as this new user.
 
 You can generate a [login route](../configuration/routers/auth.md) for each [authentication backend](../configuration/authentication/index.md). Each backend will have a different response.
 
-### JWT backend
+### Bearer + JWT
 
 #### Request
 
@@ -101,7 +101,7 @@ You'll get a JSON response looking like this:
 
 You can use this token to make authenticated requests as the user `king.arthur@camelot.bt`. We'll see how in the next section.
 
-### Cookie backend
+### Cookie + JWT
 
 #### Request
 
@@ -371,7 +371,7 @@ You'll get an empty response.
 
 ## 6. Logout
 
-We can also end the session. Note that it doesn't apply to every [authentication backends](../configuration/authentication/index.md). For JWT, it doesn't make sense to end the session, the token is valid until it expires. However, for **Cookie** backend, the server will clear the cookie.
+We can also end the session.
 
 ### Request
 

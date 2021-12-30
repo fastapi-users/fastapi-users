@@ -6,13 +6,13 @@ from fastapi import FastAPI, status
 
 from fastapi_users.authentication import Authenticator
 from fastapi_users.router import ErrorCode, get_auth_router
-from tests.conftest import MockAuthentication, UserDB
+from tests.conftest import UserDB, get_mock_authentication
 
 
 @pytest.fixture
 def app_factory(get_user_manager, mock_authentication):
     def _app_factory(requires_verification: bool) -> FastAPI:
-        mock_authentication_bis = MockAuthentication(name="mock-bis")
+        mock_authentication_bis = get_mock_authentication(name="mock-bis")
         authenticator = Authenticator(
             [mock_authentication, mock_authentication_bis], get_user_manager
         )
@@ -129,7 +129,10 @@ class TestLogin:
             assert data["detail"] == ErrorCode.LOGIN_USER_NOT_VERIFIED
         else:
             assert response.status_code == status.HTTP_200_OK
-            assert response.json() == {"token": str(user.id)}
+            assert response.json() == {
+                "access_token": str(user.id),
+                "token_type": "bearer",
+            }
 
     @pytest.mark.parametrize("email", ["lake.lady@camelot.bt", "Lake.Lady@camelot.bt"])
     async def test_valid_credentials_verified(
@@ -143,7 +146,10 @@ class TestLogin:
         data = {"username": email, "password": "excalibur"}
         response = await client.post(path, data=data)
         assert response.status_code == status.HTTP_200_OK
-        assert response.json() == {"token": str(verified_user.id)}
+        assert response.json() == {
+            "access_token": str(verified_user.id),
+            "token_type": "bearer",
+        }
 
     async def test_inactive_user(
         self,
@@ -156,10 +162,6 @@ class TestLogin:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
-
-    async def test_login_namespace(self, path, app_factory):
-        split_url = app_factory(True).url_path_for("auth:login").split("/")
-        assert split_url[len(split_url) - 1] in path
 
 
 @pytest.mark.router
@@ -204,6 +206,13 @@ class TestLogout:
         )
         assert response.status_code == status.HTTP_200_OK
 
-    async def test_logout_namespace(self, path, app_factory):
-        split_url = app_factory(True).url_path_for("auth:logout").split("/")
-        assert split_url[len(split_url) - 1] in path
+
+@pytest.mark.asyncio
+@pytest.mark.router
+async def test_route_names(app_factory, mock_authentication):
+    app = app_factory(False)
+    login_route_name = f"auth:{mock_authentication.name}.login"
+    assert app.url_path_for(login_route_name) == "/mock/login"
+
+    logout_route_name = f"auth:{mock_authentication.name}.logout"
+    assert app.url_path_for(logout_route_name) == "/mock/logout"

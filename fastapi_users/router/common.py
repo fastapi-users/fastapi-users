@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Dict, Union
 
 from pydantic import BaseModel
@@ -12,7 +13,7 @@ class ErrorCodeReasonModel(BaseModel):
     reason: str
 
 
-class ErrorCode:
+class ErrorCode(str, Enum):
     REGISTER_INVALID_PASSWORD = "REGISTER_INVALID_PASSWORD"
     REGISTER_USER_ALREADY_EXISTS = "REGISTER_USER_ALREADY_EXISTS"
     LOGIN_BAD_CREDENTIALS = "LOGIN_BAD_CREDENTIALS"

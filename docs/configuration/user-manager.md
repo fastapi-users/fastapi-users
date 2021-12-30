@@ -9,7 +9,7 @@ It's designed to be easily extensible and customizable so that you can integrate
 You should define your own version of the `UserManager` class to set various parameters.
 
 ```py hl_lines="12-28"
-{!./src/user_manager.py!}
+--8<-- "docs/src/user_manager.py"
 ```
 
 As you can see, you have to define here various attributes and methods. You can find the complete list of those below.
@@ -19,7 +19,7 @@ As you can see, you have to define here various attributes and methods. You can 
 The `UserManager` class will be injected at runtime using a FastAPI dependency. This way, you can run it in a database session or swap it with a mock during testing.
 
 ```py hl_lines="31-32"
-{!./src/user_manager.py!}
+--8<-- "docs/src/user_manager.py"
 ```
 
 Notice that we use the `get_user_db` dependency we defined earlier to inject the database instance.

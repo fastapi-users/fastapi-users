@@ -25,8 +25,6 @@ repo_url: https://github.com/fastapi-users/fastapi-users
 edit_uri: ""
 
 markdown_extensions:
-  - markdown_include.include:
-      base_path: docs
   - toc:
       permalink: true
   - admonition
@@ -37,7 +35,12 @@ markdown_extensions:
           class: mermaid
           format: !!python/name:mermaid2.fence_mermaid
   - pymdownx.tasklist
-  - pymdownx.tabbed
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.snippets
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
 
 plugins:
   - search
@@ -62,8 +65,13 @@ nav:
       - configuration/databases/ormar.md
     - Authentication backends:
       - Introduction: configuration/authentication/index.md
-      - configuration/authentication/jwt.md
-      - configuration/authentication/cookie.md
+      - Transports:
+        - configuration/authentication/transports/cookie.md
+        - configuration/authentication/transports/bearer.md
+      - Strategies:
+        - configuration/authentication/strategies/jwt.md
+        - configuration/authentication/strategies/redis.md
+      - configuration/authentication/backend.md
     - configuration/user-manager.md
     - Routers:
       - Introduction: configuration/routers/index.md
@@ -88,3 +96,4 @@ nav:
     - migration/4x_to_5x.md
     - migration/6x_to_7x.md
     - migration/7x_to_8x.md
+    - migration/8x_to_9x.md

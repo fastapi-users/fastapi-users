@@ -19,7 +19,7 @@ from fastapi_users import FastAPIUsers
 
 fastapi_users = FastAPIUsers(
     get_user_manager,
-    [jwt_authentication],
+    [auth_backend],
     User,
     UserCreate,
     UserUpdate,

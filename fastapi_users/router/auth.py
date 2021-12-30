@@ -1,34 +1,28 @@
+from typing import Tuple
+
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
-from pydantic import BaseModel
 
 from fastapi_users import models
-from fastapi_users.authentication import Authenticator, BaseAuthentication
+from fastapi_users.authentication import AuthenticationBackend, Authenticator, Strategy
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
+from fastapi_users.openapi import OpenAPIResponseType
 from fastapi_users.router.common import ErrorCode, ErrorModel
 
 
-class LoginBadCredentials(BaseModel):
-    detail: ErrorCode.LOGIN_BAD_CREDENTIALS
-
-
-class LoginUserNotVerified(BaseModel):
-    detail: ErrorCode.LOGIN_USER_NOT_VERIFIED
-
-
 def get_auth_router(
-    backend: BaseAuthentication,
+    backend: AuthenticationBackend,
     get_user_manager: UserManagerDependency[models.UC, models.UD],
     authenticator: Authenticator,
     requires_verification: bool = False,
 ) -> APIRouter:
     """Generate a router with login/logout routes for an authentication backend."""
     router = APIRouter()
-    get_current_user = authenticator.current_user(
+    get_current_user_token = authenticator.current_user_token(
         active=True, verified=requires_verification
     )
 
-    login_responses = {
+    login_responses: OpenAPIResponseType = {
         status.HTTP_400_BAD_REQUEST: {
             "model": ErrorModel,
             "content": {
@@ -46,18 +40,19 @@ def get_auth_router(
                 }
             },
         },
-        **backend.get_openapi_login_responses_success(),
+        **backend.transport.get_openapi_login_responses_success(),
     }
 
     @router.post(
         "/login",
-        name="auth:login",
+        name=f"auth:{backend.name}.login",
         responses=login_responses,
     )
     async def login(
         response: Response,
         credentials: OAuth2PasswordRequestForm = Depends(),
         user_manager: BaseUserManager[models.UC, models.UD] = Depends(get_user_manager),
+        strategy: Strategy[models.UC, models.UD] = Depends(backend.get_strategy),
     ):
         user = await user_manager.authenticate(credentials)
 
@@ -71,26 +66,26 @@ def get_auth_router(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=ErrorCode.LOGIN_USER_NOT_VERIFIED,
             )
-        return await backend.get_login_response(user, response, user_manager)
+        return await backend.login(strategy, user, response)
 
-    if backend.logout:
-        logout_responses = {
-            **{
-                status.HTTP_401_UNAUTHORIZED: {
-                    "description": "Missing token or inactive user."
-                }
-            },
-            **backend.get_openapi_logout_responses_success(),
-        }
+    logout_responses: OpenAPIResponseType = {
+        **{
+            status.HTTP_401_UNAUTHORIZED: {
+                "description": "Missing token or inactive user."
+            }
+        },
+        **backend.transport.get_openapi_logout_responses_success(),
+    }
 
-        @router.post("/logout", name="auth:logout", responses=logout_responses)
-        async def logout(
-            response: Response,
-            user=Depends(get_current_user),
-            user_manager: BaseUserManager[models.UC, models.UD] = Depends(
-                get_user_manager
-            ),
-        ):
-            return await backend.get_logout_response(user, response, user_manager)
+    @router.post(
+        "/logout", name=f"auth:{backend.name}.logout", responses=logout_responses
+    )
+    async def logout(
+        response: Response,
+        user_token: Tuple[models.UD, str] = Depends(get_current_user_token),
+        strategy: Strategy[models.UC, models.UD] = Depends(backend.get_strategy),
+    ):
+        user, token = user_token
+        return await backend.logout(strategy, user, token, response)
 
     return router

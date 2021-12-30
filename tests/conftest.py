@@ -1,18 +1,18 @@
 import asyncio
-from typing import Any, AsyncGenerator, Callable, Dict, Generic, Optional, Type, Union
+from typing import Any, AsyncGenerator, Callable, Generic, Optional, Type, Union
 from unittest.mock import MagicMock
 
 import httpx
 import pytest
 from asgi_lifespan import LifespanManager
 from fastapi import FastAPI, Response
-from fastapi.security import OAuth2PasswordBearer
 from httpx_oauth.oauth2 import OAuth2
 from pydantic import UUID4, SecretStr
 from pytest_mock import MockerFixture
 
 from fastapi_users import models
-from fastapi_users.authentication import BaseAuthentication
+from fastapi_users.authentication import AuthenticationBackend, BearerTransport
+from fastapi_users.authentication.strategy import Strategy
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.jwt import SecretType
 from fastapi_users.manager import (
@@ -21,6 +21,7 @@ from fastapi_users.manager import (
     UserNotExists,
 )
 from fastapi_users.models import BaseOAuthAccount, BaseOAuthAccountMixin
+from fastapi_users.openapi import OpenAPIResponseType
 from fastapi_users.password import get_password_hash
 
 guinevere_password_hash = get_password_hash("guinevere")
@@ -436,15 +437,25 @@ def get_user_manager_oauth(user_manager_oauth):
     return _get_user_manager_oauth
 
 
-class MockAuthentication(BaseAuthentication[str, UserCreate, UserDB]):
-    def __init__(self, name: str = "mock"):
-        super().__init__(name, logout=True)
-        self.scheme = OAuth2PasswordBearer("/login", auto_error=False)
+class MockTransport(BearerTransport):
+    def __init__(self, tokenUrl: str):
+        super().__init__(tokenUrl)
 
-    async def __call__(self, credentials: Optional[str], user_manager: BaseUserManager):
-        if credentials is not None:
+    async def get_logout_response(self, response: Response) -> Any:
+        return None
+
+    @staticmethod
+    def get_openapi_logout_responses_success() -> OpenAPIResponseType:
+        return {}
+
+
+class MockStrategy(Strategy[UserCreate, UserDB]):
+    async def read_token(
+        self, token: Optional[str], user_manager: BaseUserManager[UserCreate, UserDB]
+    ) -> Optional[UserDB]:
+        if token is not None:
             try:
-                token_uuid = UUID4(credentials)
+                token_uuid = UUID4(token)
                 return await user_manager.get(token_uuid)
             except ValueError:
                 return None
@@ -452,28 +463,24 @@ class MockAuthentication(BaseAuthentication[str, UserCreate, UserDB]):
                 return None
         return None
 
-    async def get_login_response(
-        self, user: UserDB, response: Response, user_manager: BaseUserManager
-    ):
-        return {"token": user.id}
+    async def write_token(self, user: models.UD) -> str:
+        return str(user.id)
 
-    async def get_logout_response(
-        self, user: UserDB, response: Response, user_manager: BaseUserManager
-    ):
+    async def destroy_token(self, token: str, user: models.UD) -> None:
         return None
 
-    @staticmethod
-    def get_openapi_login_responses_success() -> Dict[str, Any]:
-        return {}
 
-    @staticmethod
-    def get_openapi_logout_responses_success() -> Dict[str, Any]:
-        return {}
+def get_mock_authentication(name: str):
+    return AuthenticationBackend(
+        name=name,
+        transport=MockTransport(tokenUrl="/login"),
+        get_strategy=lambda: MockStrategy(),
+    )
 
 
 @pytest.fixture
 def mock_authentication():
-    return MockAuthentication()
+    return get_mock_authentication(name="mock")
 
 
 @pytest.fixture

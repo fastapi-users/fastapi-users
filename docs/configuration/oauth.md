@@ -71,13 +71,13 @@ Notice that we inherit from the `BaseOAuthAccountMixin`, which adds a `List` of 
 You'll need to define the table for storing the OAuth account model. We provide a base one for this:
 
 ```py hl_lines="21 22"
-{!./src/db_sqlalchemy_oauth.py!}
+--8<-- "docs/src/db_sqlalchemy_oauth.py"
 ```
 
 When instantiating the database adapter, you should pass this table in argument::
 
 ```py hl_lines="31 34 35"
-{!./src/db_sqlalchemy_oauth.py!}
+--8<-- "docs/src/db_sqlalchemy_oauth.py"
 ```
 
 #### MongoDB
@@ -89,7 +89,7 @@ Nothing to do, the [basic configuration](./databases/mongodb.md) is enough.
 You'll need to define the Tortoise model for storing the OAuth account model. We provide a base one for this:
 
 ```py hl_lines="29 30"
-{!./src/db_tortoise_oauth_model.py!}
+--8<-- "docs/src/db_tortoise_oauth_model.py"
 ```
 
 !!! warning
@@ -98,16 +98,16 @@ You'll need to define the Tortoise model for storing the OAuth account model. We
 Then, you should declare it on the database adapter:
 
 ```py hl_lines="8 9"
-{!./src/db_tortoise_oauth_adapter.py!}
+--8<-- "docs/src/db_tortoise_oauth_adapter.py"
 ```
 
 ### Generate a router
 
-Once you have a `FastAPIUsers` instance, you can make it generate a single OAuth router for the given client.
+Once you have a `FastAPIUsers` instance, you can make it generate a single OAuth router for a given client **and** authentication backend.
 
 ```py
 app.include_router(
-  fastapi_users.get_oauth_router(google_oauth_client, "SECRET"),
+  fastapi_users.get_oauth_router(google_oauth_client, auth_backend, "SECRET"),
   prefix="/auth/google",
   tags=["auth"],
 )
@@ -121,18 +121,120 @@ app.include_router(
 
 #### SQLAlchemy
 
-[Open ↗️](https://replit.com/@frankie567/fastapi-users-sqlalchemy-oauth)
+[Open :octicons-link-external-16:](https://github.com/fastapi-users/fastapi-users/tree/master/examples/sqlalchemy-oauth)
 
-<iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@frankie567/fastapi-users-sqlalchemy-oauth?embed=true"></iframe>
+=== ":octicons-file-code-16: requirements.txt"
+
+    ```
+    --8<-- "examples/sqlalchemy-oauth/requirements.txt"
+    ```
+
+=== ":octicons-file-code-16: main.py"
+
+    ```py
+    --8<-- "examples/sqlalchemy-oauth/main.py"
+    ```
+
+=== ":octicons-file-code-16: app/app.py"
+
+    ```py
+    --8<-- "examples/sqlalchemy-oauth/app/app.py"
+    ```
+
+=== ":octicons-file-code-16: app/db.py"
+
+    ```py
+    --8<-- "examples/sqlalchemy-oauth/app/db.py"
+    ```
+
+=== ":octicons-file-code-16: app/models.py"
+
+    ```py
+    --8<-- "examples/sqlalchemy-oauth/app/models.py"
+    ```
+
+=== ":octicons-file-code-16: app/users.py"
+
+    ```py
+    --8<-- "examples/sqlalchemy-oauth/app/users.py"
+    ```
 
 #### MongoDB
 
-[Open ↗️](https://replit.com/@frankie567/fastapi-users-mongodb-oauth)
+[Open :octicons-link-external-16:](https://github.com/fastapi-users/fastapi-users/tree/master/examples/mongodb-oauth)
 
-<iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@frankie567/fastapi-users-mongodb-oauth?embed=true"></iframe>
+=== ":octicons-file-code-16: requirements.txt"
+
+    ```
+    --8<-- "examples/mongodb-oauth/requirements.txt"
+    ```
+
+=== ":octicons-file-code-16: main.py"
+
+    ```py
+    --8<-- "examples/mongodb-oauth/main.py"
+    ```
+
+=== ":octicons-file-code-16: app/app.py"
+
+    ```py
+    --8<-- "examples/mongodb-oauth/app/app.py"
+    ```
+
+=== ":octicons-file-code-16: app/db.py"
+
+    ```py
+    --8<-- "examples/mongodb-oauth/app/db.py"
+    ```
+
+=== ":octicons-file-code-16: app/models.py"
+
+    ```py
+    --8<-- "examples/mongodb-oauth/app/models.py"
+    ```
+
+=== ":octicons-file-code-16: app/users.py"
+
+    ```py
+    --8<-- "examples/mongodb-oauth/app/users.py"
+    ```
 
 #### Tortoise ORM
 
-[Open ↗️](https://replit.com/@frankie567/fastapi-users-tortoise-oauth)
+[Open :octicons-link-external-16:](https://github.com/fastapi-users/fastapi-users/tree/master/examples/tortoise-oauth)
 
-<iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@frankie567/fastapi-users-tortoise-oauth?embed=true"></iframe>
+=== ":octicons-file-code-16: requirements.txt"
+
+    ```
+    --8<-- "examples/tortoise-oauth/requirements.txt"
+    ```
+
+=== ":octicons-file-code-16: main.py"
+
+    ```py
+    --8<-- "examples/tortoise-oauth/main.py"
+    ```
+
+=== ":octicons-file-code-16: app/app.py"
+
+    ```py
+    --8<-- "examples/tortoise-oauth/app/app.py"
+    ```
+
+=== ":octicons-file-code-16: app/db.py"
+
+    ```py
+    --8<-- "examples/tortoise-oauth/app/db.py"
+    ```
+
+=== ":octicons-file-code-16: app/models.py"
+
+    ```py
+    --8<-- "examples/tortoise-oauth/app/models.py"
+    ```
+
+=== ":octicons-file-code-16: app/users.py"
+
+    ```py
+    --8<-- "examples/tortoise-oauth/app/users.py"
+    ```

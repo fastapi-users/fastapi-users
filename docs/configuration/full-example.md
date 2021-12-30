@@ -8,28 +8,123 @@ Here is a full working example with JWT authentication to help get you started.
 
 ## SQLAlchemy
 
-[Open ↗️](https://replit.com/@frankie567/fastapi-users-sqlalchemy)
+[Open :octicons-link-external-16:](https://github.com/fastapi-users/fastapi-users/tree/master/examples/sqlalchemy)
 
-<iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@frankie567/fastapi-users-sqlalchemy?embed=true"></iframe>
+=== ":octicons-file-code-16: requirements.txt"
 
+    ```
+    --8<-- "examples/sqlalchemy/requirements.txt"
+    ```
+
+=== ":octicons-file-code-16: main.py"
+
+    ```py
+    --8<-- "examples/sqlalchemy/main.py"
+    ```
+
+=== ":octicons-file-code-16: app/app.py"
+
+    ```py
+    --8<-- "examples/sqlalchemy/app/app.py"
+    ```
+
+=== ":octicons-file-code-16: app/db.py"
+
+    ```py
+    --8<-- "examples/sqlalchemy/app/db.py"
+    ```
+
+=== ":octicons-file-code-16: app/models.py"
+
+    ```py
+    --8<-- "examples/sqlalchemy/app/models.py"
+    ```
+
+=== ":octicons-file-code-16: app/users.py"
+
+    ```py
+    --8<-- "examples/sqlalchemy/app/users.py"
+    ```
 
 ## MongoDB
 
-[Open ↗️](https://replit.com/@frankie567/fastapi-users-mongodb)
+[Open :octicons-link-external-16:](https://github.com/fastapi-users/fastapi-users/tree/master/examples/mongodb)
 
-<iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@frankie567/fastapi-users-mongodb?embed=true"></iframe>
+=== ":octicons-file-code-16: requirements.txt"
+
+    ```
+    --8<-- "examples/mongodb/requirements.txt"
+    ```
+
+=== ":octicons-file-code-16: main.py"
+
+    ```py
+    --8<-- "examples/mongodb/main.py"
+    ```
+
+=== ":octicons-file-code-16: app/app.py"
+
+    ```py
+    --8<-- "examples/mongodb/app/app.py"
+    ```
+
+=== ":octicons-file-code-16: app/db.py"
+
+    ```py
+    --8<-- "examples/mongodb/app/db.py"
+    ```
+
+=== ":octicons-file-code-16: app/models.py"
+
+    ```py
+    --8<-- "examples/mongodb/app/models.py"
+    ```
+
+=== ":octicons-file-code-16: app/users.py"
+
+    ```py
+    --8<-- "examples/mongodb/app/users.py"
+    ```
 
 ## Tortoise ORM
 
-[Open ↗️](https://replit.com/@frankie567/fastapi-users-tortoise)
+[Open :octicons-link-external-16:](https://github.com/fastapi-users/fastapi-users/tree/master/examples/tortoise)
 
-<iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@frankie567/fastapi-users-tortoise?embed=true"></iframe>
+=== ":octicons-file-code-16: requirements.txt"
 
-## Ormar
+    ```
+    --8<-- "examples/tortoise/requirements.txt"
+    ```
 
-[Open ↗️](https://replit.com/@frankie567/fastapi-users-ormar)
+=== ":octicons-file-code-16: main.py"
 
-<iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@frankie567/fastapi-users-ormar?embed=true"></iframe>
+    ```py
+    --8<-- "examples/tortoise/main.py"
+    ```
+
+=== ":octicons-file-code-16: app/app.py"
+
+    ```py
+    --8<-- "examples/tortoise/app/app.py"
+    ```
+
+=== ":octicons-file-code-16: app/db.py"
+
+    ```py
+    --8<-- "examples/tortoise/app/db.py"
+    ```
+
+=== ":octicons-file-code-16: app/models.py"
+
+    ```py
+    --8<-- "examples/tortoise/app/models.py"
+    ```
+
+=== ":octicons-file-code-16: app/users.py"
+
+    ```py
+    --8<-- "examples/tortoise/app/users.py"
+    ```
 
 ## What now?
 
