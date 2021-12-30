@@ -228,21 +228,108 @@
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#provided-methods">
-    Provided methods
+<a class="md-nav__link" href="#transport-strategy-authentication-backend">
+    Transport + Strategy = Authentication backend
+  </a>
+<nav aria-label="Transport + Strategy = Authentication backend" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#transport">
+    Transport
+  </a>
+<nav aria-label="Transport" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#bearer">
+    Bearer
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cookie">
+    Cookie
   </a>
 </li>
 </ul>
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="jwt/">
+<a class="md-nav__link" href="#strategy">
+    Strategy
+  </a>
+<nav aria-label="Strategy" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#jwt">
+    JWT
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#redis">
+    Redis
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4_2" id="__nav_3_4_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3_4_2">
+          Transports
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Transports" class="md-nav" data-md-level="3">
+<label class="md-nav__title" for="__nav_3_4_2">
+<span class="md-nav__icon md-icon"></span>
+          Transports
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="transports/cookie/">
+        Cookie
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="transports/bearer/">
+        Bearer
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4_3" id="__nav_3_4_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3_4_3">
+          Strategies
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Strategies" class="md-nav" data-md-level="3">
+<label class="md-nav__title" for="__nav_3_4_3">
+<span class="md-nav__icon md-icon"></span>
+          Strategies
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="strategies/jwt/">
         JWT
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="cookie/">
-        Cookie
+<a class="md-nav__link" href="strategies/redis/">
+        Redis
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="backend/">
+        Create a backend
       </a>
 </li>
 </ul>
@@ -408,6 +495,11 @@
         7.x.x ➡️ 8.x.x
       </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../migration/8x_to_9x/">
+        8.x.x ➡️ 9.x.x
+      </a>
+</li>
 </ul>
 </nav>
 </li>
@@ -431,9 +523,51 @@
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#provided-methods">
-    Provided methods
+<a class="md-nav__link" href="#transport-strategy-authentication-backend">
+    Transport + Strategy = Authentication backend
   </a>
+<nav aria-label="Transport + Strategy = Authentication backend" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#transport">
+    Transport
+  </a>
+<nav aria-label="Transport" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#bearer">
+    Bearer
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cookie">
+    Cookie
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#strategy">
+    Strategy
+  </a>
+<nav aria-label="Strategy" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#jwt">
+    JWT
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#redis">
+    Redis
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
 </li>
 </ul>
 </nav>
@@ -447,12 +581,56 @@
 <h2 id="how-it-works">How it works?<a class="headerlink" href="#how-it-works" title="Permanent link">¶</a></h2>
 <p>You can have <strong>several</strong> authentication methods, e.g. a cookie authentication for browser-based queries and a JWT token authentication for pure API queries.</p>
 <p>When checking authentication, each method is run one after the other. The first method yielding a user wins. If no method yields a user, an <code>HTTPException</code> is raised.</p>
-<p>For each backend, you'll be able to add a router with the corresponding <code>/login</code> and <code>/logout</code> (if applicable routes). More on this in the <a href="../routers/">routers documentation</a>.</p>
-<h2 id="provided-methods">Provided methods<a class="headerlink" href="#provided-methods" title="Permanent link">¶</a></h2>
+<p>For each backend, you'll be able to add a router with the corresponding <code>/login</code> and <code>/logout</code>. More on this in the <a href="../routers/">routers documentation</a>.</p>
+<h2 id="transport-strategy-authentication-backend">Transport + Strategy = Authentication backend<a class="headerlink" href="#transport-strategy-authentication-backend" title="Permanent link">¶</a></h2>
+<p>An authentication backend is composed of two parts:</p>
+<h3 id="transport">Transport<a class="headerlink" href="#transport" title="Permanent link">¶</a></h3>
+<p>It manages how the token will be carried over the request. We currently provide two methods:</p>
+<h4 id="bearer"><a href="transports/bearer/">Bearer</a><a class="headerlink" href="#bearer" title="Permanent link">¶</a></h4>
+<p>The token will be send through an <code>Authorization: Bearer</code> header.</p>
+<div class="admonition tip">
+<p class="admonition-title">Pros and cons</p>
 <ul>
-<li><a href="jwt/">JWT authentication</a></li>
-<li><a href="cookie/">Cookie authentication</a></li>
+<li>✅ Easy to read and set in every requests.</li>
+<li>❌ Needs to be stored manually somewhere in the client.</li>
 </ul>
+<p>➡️ Use it if you want to implement a mobile application or a pure REST API.</p>
+</div>
+<h4 id="cookie"><a href="transports/cookie/">Cookie</a><a class="headerlink" href="#cookie" title="Permanent link">¶</a></h4>
+<p>The token will be send through a cookie.</p>
+<div class="admonition tip">
+<p class="admonition-title">Pros and cons</p>
+<ul>
+<li>✅ Automatically stored and sent securely by web browsers in every requests.</li>
+<li>✅ Automatically removed at expiration by web browsers.</li>
+<li>❌ Needs a CSRF protection for maximum security.</li>
+<li>❌ Harder to work with outside a browser, like a mobile app or a server.</li>
+</ul>
+<p>➡️ Use it if you want to implement a web frontend.</p>
+</div>
+<h3 id="strategy">Strategy<a class="headerlink" href="#strategy" title="Permanent link">¶</a></h3>
+<p>It manages how the token is generated and secured. We currently provide two methods:</p>
+<h4 id="jwt"><a href="strategies/jwt/">JWT</a><a class="headerlink" href="#jwt" title="Permanent link">¶</a></h4>
+<p>The token is self-contained in a JSON Web Token.</p>
+<div class="admonition tip">
+<p class="admonition-title">Pros and cons</p>
+<ul>
+<li>✅ Self-contained: it doesn't need to be stored in a database.</li>
+<li>❌ Can't be invalidated on the server-side: it's valid until it expires.</li>
+</ul>
+<p>➡️ Use it if you want to get up-and-running quickly.</p>
+</div>
+<h4 id="redis"><a href="strategies/redis/">Redis</a><a class="headerlink" href="#redis" title="Permanent link">¶</a></h4>
+<p>The token is stored in a Redis key-store.</p>
+<div class="admonition tip">
+<p class="admonition-title">Pros and cons</p>
+<ul>
+<li>✅ Secure and performant.</li>
+<li>✅ Tokens can be invalidated server-side by removing tokens from Redis.</li>
+<li>❌ A Redis server is needed.</li>
+</ul>
+<p>➡️ Use it if you want maximum performance while being able to invalidate tokens.</p>
+</div>
 </article>
 </div>
 </div>
@@ -472,13 +650,13 @@
             </div>
 </div>
 </a>
-<a aria-label="Next: JWT" class="md-footer__link md-footer__link--next" href="jwt/" rel="next">
+<a aria-label="Next: Cookie" class="md-footer__link md-footer__link--next" href="transports/cookie/" rel="next">
 <div class="md-footer__title">
 <div class="md-ellipsis">
 <span class="md-footer__direction">
                 Next
               </span>
-              JWT
+              Cookie
             </div>
 </div>
 <div class="md-footer__button md-icon">

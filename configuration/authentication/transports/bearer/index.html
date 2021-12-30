@@ -6,15 +6,15 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="Ready-to-use and customizable users management for FastAPI" name="description"/>
-<link href="../../../favicon.png" rel="icon"/>
+<link href="../../../../favicon.png" rel="icon"/>
 <meta content="mkdocs-1.2.3, mkdocs-material-8.1.3" name="generator"/>
-<title>Cookie - FastAPI Users</title>
-<link href="../../../assets/stylesheets/main.edf004c2.min.css" rel="stylesheet"/>
-<link href="../../../assets/stylesheets/palette.e6a45f82.min.css" rel="stylesheet"/>
+<title>Bearer - FastAPI Users</title>
+<link href="../../../../assets/stylesheets/main.edf004c2.min.css" rel="stylesheet"/>
+<link href="../../../../assets/stylesheets/palette.e6a45f82.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&amp;display=fallback" rel="stylesheet"/>
 <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
-<script>__md_scope=new URL("../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<script>__md_scope=new URL("../../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
 </head>
 <body data-md-color-accent="red" data-md-color-primary="red" data-md-color-scheme="default" dir="ltr">
 <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)</script>
@@ -22,7 +22,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#cookie">
+<a class="md-skip" href="#bearer">
           Skip to content
         </a>
 </div>
@@ -30,7 +30,7 @@
 </div>
 <header class="md-header" data-md-component="header">
 <nav aria-label="Header" class="md-header__inner md-grid">
-<a aria-label="FastAPI Users" class="md-header__button md-logo" data-md-component="logo" href="../../.." title="FastAPI Users">
+<a aria-label="FastAPI Users" class="md-header__button md-logo" data-md-component="logo" href="../../../.." title="FastAPI Users">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M16.5 12A2.5 2.5 0 0 0 19 9.5 2.5 2.5 0 0 0 16.5 7 2.5 2.5 0 0 0 14 9.5a2.5 2.5 0 0 0 2.5 2.5M9 11a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m7.5 3c-1.83 0-5.5.92-5.5 2.75V19h11v-2.25c0-1.83-3.67-2.75-5.5-2.75M9 13c-2.33 0-7 1.17-7 3.5V19h7v-2.25c0-.85.33-2.34 2.37-3.47C10.5 13.1 9.66 13 9 13z"></path></svg>
 </a>
 <label class="md-header__button md-icon" for="__drawer">
@@ -46,7 +46,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              Cookie
+              Bearer
             
           </span>
 </div>
@@ -112,7 +112,7 @@
 <div class="md-sidebar__inner">
 <nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
 <label class="md-nav__title" for="__drawer">
-<a aria-label="FastAPI Users" class="md-nav__button md-logo" data-md-component="logo" href="../../.." title="FastAPI Users">
+<a aria-label="FastAPI Users" class="md-nav__button md-logo" data-md-component="logo" href="../../../.." title="FastAPI Users">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M16.5 12A2.5 2.5 0 0 0 19 9.5 2.5 2.5 0 0 0 16.5 7 2.5 2.5 0 0 0 14 9.5a2.5 2.5 0 0 0 2.5 2.5M9 11a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m7.5 3c-1.83 0-5.5.92-5.5 2.75V19h11v-2.25c0-1.83-3.67-2.75-5.5-2.75M9 13c-2.33 0-7 1.17-7 3.5V19h7v-2.25c0-.85.33-2.34 2.37-3.47C10.5 13.1 9.66 13 9 13z"></path></svg>
 </a>
     FastAPI Users
@@ -129,12 +129,12 @@
 </div>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../..">
+<a class="md-nav__link" href="../../../..">
         About
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../../installation/">
+<a class="md-nav__link" href="../../../../installation/">
         Installation
       </a>
 </li>
@@ -151,12 +151,12 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../overview/">
+<a class="md-nav__link" href="../../../overview/">
         Overview
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../models/">
+<a class="md-nav__link" href="../../../models/">
         Models
       </a>
 </li>
@@ -173,22 +173,22 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../databases/sqlalchemy/">
+<a class="md-nav__link" href="../../../databases/sqlalchemy/">
         SQLAlchemy
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../databases/mongodb/">
+<a class="md-nav__link" href="../../../databases/mongodb/">
         MongoDB
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../databases/tortoise/">
+<a class="md-nav__link" href="../../../databases/tortoise/">
         Tortoise ORM
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../databases/ormar/">
+<a class="md-nav__link" href="../../../databases/ormar/">
         Ormar
       </a>
 </li>
@@ -208,23 +208,35 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../">
+<a class="md-nav__link" href="../../">
         Introduction
       </a>
 </li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4_2" id="__nav_3_4_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3_4_2">
+          Transports
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Transports" class="md-nav" data-md-level="3">
+<label class="md-nav__title" for="__nav_3_4_2">
+<span class="md-nav__icon md-icon"></span>
+          Transports
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../jwt/">
-        JWT
+<a class="md-nav__link" href="../cookie/">
+        Cookie
       </a>
 </li>
 <li class="md-nav__item md-nav__item--active">
 <input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
 <label class="md-nav__link md-nav__link--active" for="__toc">
-          Cookie
+          Bearer
           <span class="md-nav__icon md-icon"></span>
 </label>
 <a class="md-nav__link md-nav__link--active" href="./">
-        Cookie
+        Bearer
       </a>
 <nav aria-label="Table of contents" class="md-nav md-nav--secondary">
 <label class="md-nav__title" for="__toc">
@@ -258,8 +270,41 @@
 </ul>
 </nav>
 </li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4_3" id="__nav_3_4_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3_4_3">
+          Strategies
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Strategies" class="md-nav" data-md-level="3">
+<label class="md-nav__title" for="__nav_3_4_3">
+<span class="md-nav__icon md-icon"></span>
+          Strategies
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../user-manager/">
+<a class="md-nav__link" href="../../strategies/jwt/">
+        JWT
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../strategies/redis/">
+        Redis
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../backend/">
+        Create a backend
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../user-manager/">
         UserManager
       </a>
 </li>
@@ -276,32 +321,32 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../routers/">
+<a class="md-nav__link" href="../../../routers/">
         Introduction
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../routers/auth/">
+<a class="md-nav__link" href="../../../routers/auth/">
         Auth router
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../routers/register/">
+<a class="md-nav__link" href="../../../routers/register/">
         Register routes
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../routers/verify/">
+<a class="md-nav__link" href="../../../routers/verify/">
         Verify router
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../routers/reset/">
+<a class="md-nav__link" href="../../../routers/reset/">
         Reset password router
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../routers/users/">
+<a class="md-nav__link" href="../../../routers/users/">
         Users router
       </a>
 </li>
@@ -309,12 +354,12 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../full-example/">
+<a class="md-nav__link" href="../../../full-example/">
         Full example
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../oauth/">
+<a class="md-nav__link" href="../../../oauth/">
         OAuth2
       </a>
 </li>
@@ -334,17 +379,17 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../../usage/flow/">
+<a class="md-nav__link" href="../../../../usage/flow/">
         Flow
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../../usage/routes/">
+<a class="md-nav__link" href="../../../../usage/routes/">
         Routes
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../../usage/current-user/">
+<a class="md-nav__link" href="../../../../usage/current-user/">
         Get current user
       </a>
 </li>
@@ -364,7 +409,7 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../../cookbook/create-user-programmatically/">
+<a class="md-nav__link" href="../../../../cookbook/create-user-programmatically/">
         Create a user programmatically
       </a>
 </li>
@@ -384,38 +429,43 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../../migration/08_to_1x/">
+<a class="md-nav__link" href="../../../../migration/08_to_1x/">
         0.8.x ➡️ 1.x.x
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../../migration/1x_to_2x/">
+<a class="md-nav__link" href="../../../../migration/1x_to_2x/">
         1.x.x ➡️ 2.x.x
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../../migration/2x_to_3x/">
+<a class="md-nav__link" href="../../../../migration/2x_to_3x/">
         2.x.x ➡️ 3.x.x
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../../migration/3x_to_4x/">
+<a class="md-nav__link" href="../../../../migration/3x_to_4x/">
         3.x.x ➡️ 4.x.x
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../../migration/4x_to_5x/">
+<a class="md-nav__link" href="../../../../migration/4x_to_5x/">
         4.x.x ➡️ 5.x.x
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../../migration/6x_to_7x/">
+<a class="md-nav__link" href="../../../../migration/6x_to_7x/">
         6.x.x ➡️ 7.x.x
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../../migration/7x_to_8x/">
+<a class="md-nav__link" href="../../../../migration/7x_to_8x/">
         7.x.x ➡️ 8.x.x
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../../migration/8x_to_9x/">
+        8.x.x ➡️ 9.x.x
       </a>
 </li>
 </ul>
@@ -462,62 +512,43 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1 id="cookie">Cookie<a class="headerlink" href="#cookie" title="Permanent link">¶</a></h1>
-<p>Cookies are an easy way to store stateful information into the user browser. Thus, it is more useful for browser-based navigation (e.g. a front-end app making API requests) rather than pure API interaction.</p>
+<h1 id="bearer">Bearer<a class="headerlink" href="#bearer" title="Permanent link">¶</a></h1>
+<p>With this transport, the token is expected inside the <code>Authorization</code> header of the HTTP request with the <code>Bearer</code> scheme. It's particularly suited for pure API interaction or mobile apps.</p>
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">¶</a></h2>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi_users.authentication</span> <span class="kn">import</span> <span class="n">CookieAuthentication</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi_users.authentication</span> <span class="kn">import</span> <span class="n">BearerTransport</span>
 
-<span class="n">SECRET</span> <span class="o">=</span> <span class="s2">"SECRET"</span>
-
-<span class="n">cookie_authentication</span> <span class="o">=</span> <span class="n">CookieAuthentication</span><span class="p">(</span><span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span>
+<span class="n">bearer_transport</span> <span class="o">=</span> <span class="n">BearerTransport</span><span class="p">(</span><span class="n">tokenUrl</span><span class="o">=</span><span class="s2">"auth/jwt/login"</span><span class="p">)</span>
 </code></pre></div>
 <p>As you can see, instantiation is quite simple. It accepts the following arguments:</p>
 <ul>
-<li><code>secret</code> (<code>Union[str, pydantic.SecretStr]</code>): A constant secret which is used to encode the cookie. <strong>Use a strong passphrase and keep it secure.</strong></li>
-<li><code>lifetime_seconds</code> (<code>int</code>): The lifetime of the cookie in seconds.</li>
-<li><code>cookie_name</code> (<code>fastapiusersauth</code>): Name of the cookie.</li>
-<li><code>cookie_path</code> (<code>/</code>): Cookie path.</li>
-<li><code>cookie_domain</code> (<code>None</code>): Cookie domain.</li>
-<li><code>cookie_secure</code> (<code>True</code>): Whether to only send the cookie to the server via SSL request.</li>
-<li><code>cookie_httponly</code> (<code>True</code>): Whether to prevent access to the cookie via JavaScript.</li>
-<li><code>cookie_samesite</code> (<code>lax</code>): A string that specifies the samesite strategy for the cookie. Valid values are <code>lax</code>, <code>strict</code> and <code>none</code>. Defaults to <code>lax</code>.</li>
-<li><code>name</code> (<code>Optional[str]</code>): Name of the backend. It's useful in the case you wish to have several backends of the same class. Each backend should have a unique name. Defaults to <code>cookie</code>.</li>
+<li><code>tokenUrl</code> (<code>str</code>): The exact path of your login endpoint. It'll allow the interactive documentation to automatically discover it and get a working <em>Authorize</em> button. In most cases, you'll probably need a <strong>relative</strong> path, not absolute. You can read more details about this in the <a href="https://fastapi.tiangolo.com/tutorial/security/first-steps/#fastapis-oauth2passwordbearer">FastAPI documentation</a>.</li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="n">cookie_authentication</span> <span class="o">=</span> <span class="n">CookieAuthentication</span><span class="p">(</span>
-    <span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span>
-    <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">"my-cookie"</span><span class="p">,</span>
-<span class="p">)</span>
-</code></pre></div>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>The value of the cookie is actually a JWT. This authentication backend shares most of its logic with the <a href="../jwt/">JWT</a> one.</p>
-</div>
 <h2 id="login">Login<a class="headerlink" href="#login" title="Permanent link">¶</a></h2>
-<p>This method will return a response with a valid <code>set-cookie</code> header upon successful login:</p>
+<p>This method will return the in the following form upon successful login:</p>
 <div class="admonition success">
 <p class="admonition-title"><code>200 OK</code></p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"access_token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiOTIyMWZmYzktNjQwZi00MzcyLTg2ZDMtY2U2NDJjYmE1NjAzIiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTcxNTA0MTkzfQ.M10bjOe45I5Ncu_uXvOmVV8QxnL-nZfcH96U90JaocI"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"token_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bearer"</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
 </div>
 <blockquote>
-<p>Check documentation about <a href="../../../usage/routes/#post-loginname">login route</a>.</p>
+<p>Check documentation about <a href="../../../../usage/routes/#post-login">login route</a>.</p>
 </blockquote>
 <h2 id="logout">Logout<a class="headerlink" href="#logout" title="Permanent link">¶</a></h2>
-<p>This method will remove the authentication cookie:</p>
-<div class="admonition success">
-<p class="admonition-title"><code>200 OK</code></p>
-</div>
-<blockquote>
-<p>Check documentation about <a href="../../../usage/routes/#post-logoutname">logout route</a>.</p>
-</blockquote>
+<p>The logout method with this transport returns nothing.</p>
 <h2 id="authentication">Authentication<a class="headerlink" href="#authentication" title="Permanent link">¶</a></h2>
-<p>This method expects that you provide a valid cookie in the headers.</p>
+<p>This method expects that you provide a <code>Bearer</code> authentication with a valid token corresponding to your strategy.</p>
+<div class="highlight"><pre><span></span><code>curl http://localhost:9000/protected-route -H<span class="s1">'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiOTIyMWZmYzktNjQwZi00MzcyLTg2ZDMtY2U2NDJjYmE1NjAzIiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTcxNTA0MTkzfQ.M10bjOe45I5Ncu_uXvOmVV8QxnL-nZfcH96U90JaocI'</span>
+</code></pre></div>
 </article>
 </div>
 </div>
 </main>
 <footer class="md-footer">
 <nav aria-label="Footer" class="md-footer__inner md-grid">
-<a aria-label="Previous: JWT" class="md-footer__link md-footer__link--prev" href="../jwt/" rel="prev">
+<a aria-label="Previous: Cookie" class="md-footer__link md-footer__link--prev" href="../cookie/" rel="prev">
 <div class="md-footer__button md-icon">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
 </div>
@@ -526,17 +557,17 @@
 <span class="md-footer__direction">
                 Previous
               </span>
-              JWT
+              Cookie
             </div>
 </div>
 </a>
-<a aria-label="Next: UserManager" class="md-footer__link md-footer__link--next" href="../../user-manager/" rel="next">
+<a aria-label="Next: JWT" class="md-footer__link md-footer__link--next" href="../../strategies/jwt/" rel="next">
 <div class="md-footer__title">
 <div class="md-ellipsis">
 <span class="md-footer__direction">
                 Next
               </span>
-              UserManager
+              JWT
             </div>
 </div>
 <div class="md-footer__button md-icon">
@@ -561,8 +592,8 @@
 <div class="md-dialog" data-md-component="dialog">
 <div class="md-dialog__inner md-typeset"></div>
 </div>
-<script id="__config" type="application/json">{"base": "../../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.0bbba5b5.min.js"}</script>
-<script src="../../../assets/javascripts/bundle.e1a181d9.min.js"></script>
+<script id="__config" type="application/json">{"base": "../../../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../../assets/javascripts/workers/search.0bbba5b5.min.js"}</script>
+<script src="../../../../assets/javascripts/bundle.e1a181d9.min.js"></script>
 <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
 </body>
 </html>

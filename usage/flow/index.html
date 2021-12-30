@@ -212,14 +212,59 @@
         Introduction
       </a>
 </li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4_2" id="__nav_3_4_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3_4_2">
+          Transports
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Transports" class="md-nav" data-md-level="3">
+<label class="md-nav__title" for="__nav_3_4_2">
+<span class="md-nav__icon md-icon"></span>
+          Transports
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/authentication/jwt/">
+<a class="md-nav__link" href="../../configuration/authentication/transports/cookie/">
+        Cookie
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../configuration/authentication/transports/bearer/">
+        Bearer
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4_3" id="__nav_3_4_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3_4_3">
+          Strategies
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Strategies" class="md-nav" data-md-level="3">
+<label class="md-nav__title" for="__nav_3_4_3">
+<span class="md-nav__icon md-icon"></span>
+          Strategies
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../configuration/authentication/strategies/jwt/">
         JWT
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/authentication/cookie/">
-        Cookie
+<a class="md-nav__link" href="../../configuration/authentication/strategies/redis/">
+        Redis
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../configuration/authentication/backend/">
+        Create a backend
       </a>
 </li>
 </ul>
@@ -341,10 +386,10 @@
 <nav aria-label="2. Login" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#jwt-backend">
-    JWT backend
+<a class="md-nav__link" href="#bearer-jwt">
+    Bearer + JWT
   </a>
-<nav aria-label="JWT backend" class="md-nav">
+<nav aria-label="Bearer + JWT" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
 <a class="md-nav__link" href="#request_1">
@@ -360,10 +405,10 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#cookie-backend">
-    Cookie backend
+<a class="md-nav__link" href="#cookie-jwt">
+    Cookie + JWT
   </a>
-<nav aria-label="Cookie backend" class="md-nav">
+<nav aria-label="Cookie + JWT" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
 <a class="md-nav__link" href="#request_2">
@@ -592,6 +637,11 @@
         7.x.x ➡️ 8.x.x
       </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../migration/8x_to_9x/">
+        8.x.x ➡️ 9.x.x
+      </a>
+</li>
 </ul>
 </nav>
 </li>
@@ -635,10 +685,10 @@
 <nav aria-label="2. Login" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#jwt-backend">
-    JWT backend
+<a class="md-nav__link" href="#bearer-jwt">
+    Bearer + JWT
   </a>
-<nav aria-label="JWT backend" class="md-nav">
+<nav aria-label="Bearer + JWT" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
 <a class="md-nav__link" href="#request_1">
@@ -654,10 +704,10 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#cookie-backend">
-    Cookie backend
+<a class="md-nav__link" href="#cookie-jwt">
+    Cookie + JWT
   </a>
-<nav aria-label="Cookie backend" class="md-nav">
+<nav aria-label="Cookie + JWT" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
 <a class="md-nav__link" href="#request_2">
@@ -815,7 +865,9 @@
 <h2 id="1-registration">1. Registration<a class="headerlink" href="#1-registration" title="Permanent link">¶</a></h2>
 <p>First step, of course, is to register as a user.</p>
 <h3 id="request">Request<a class="headerlink" href="#request" title="Permanent link">¶</a></h3>
-<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><label for="__tabbed_1_1">cURL</label><div class="tabbed-content">
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">cURL</label><label for="__tabbed_1_2">axios</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>curl <span class="se">\</span>
 -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
 -X POST <span class="se">\</span>
@@ -823,7 +875,7 @@
 http://localhost:8000/auth/register
 </code></pre></div>
 </div>
-<input id="__tabbed_1_2" name="__tabbed_1" type="radio"><label for="__tabbed_1_2">axios</label><div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">'http://localhost:8000/auth/register'</span><span class="p">,</span> <span class="p">{</span>
     <span class="nx">email</span><span class="o">:</span> <span class="s1">'king.arthur@camelot.bt'</span><span class="p">,</span>
     <span class="nx">password</span><span class="o">:</span> <span class="s1">'guinevere'</span><span class="p">,</span>
@@ -832,15 +884,16 @@ http://localhost:8000/auth/register
 <span class="p">.</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">));</span>
 </code></pre></div>
 </div>
+</div>
 </input></input></div>
 <h3 id="response">Response<a class="headerlink" href="#response" title="Permanent link">¶</a></h3>
 <p>You'll get a JSON response looking like this:</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"id"</span><span class="p">:</span> <span class="s2">"4fd3477b-eccf-4ee3-8f7d-68ad72261476"</span><span class="p">,</span>
-    <span class="nt">"email"</span><span class="p">:</span> <span class="s2">"king.arthur@camelot.bt"</span><span class="p">,</span>
-    <span class="nt">"is_active"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-    <span class="nt">"is_superuser"</span><span class="p">:</span> <span class="kc">false</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4fd3477b-eccf-4ee3-8f7d-68ad72261476"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"king.arthur@camelot.bt"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"is_active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"is_superuser"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
@@ -854,9 +907,11 @@ http://localhost:8000/auth/register
 <h2 id="2-login">2. Login<a class="headerlink" href="#2-login" title="Permanent link">¶</a></h2>
 <p>Now, you can login as this new user.</p>
 <p>You can generate a <a href="../../configuration/routers/auth/">login route</a> for each <a href="../../configuration/authentication/">authentication backend</a>. Each backend will have a different response.</p>
-<h3 id="jwt-backend">JWT backend<a class="headerlink" href="#jwt-backend" title="Permanent link">¶</a></h3>
+<h3 id="bearer-jwt">Bearer + JWT<a class="headerlink" href="#bearer-jwt" title="Permanent link">¶</a></h3>
 <h4 id="request_1">Request<a class="headerlink" href="#request_1" title="Permanent link">¶</a></h4>
-<div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio"><label for="__tabbed_2_1">cURL</label><div class="tabbed-content">
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio"><input id="__tabbed_2_2" name="__tabbed_2" type="radio"><div class="tabbed-labels"><label for="__tabbed_2_1">cURL</label><label for="__tabbed_2_2">axios</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>curl <span class="se">\</span>
 -H <span class="s2">"Content-Type: multipart/form-data"</span> <span class="se">\</span>
 -X POST <span class="se">\</span>
@@ -865,7 +920,7 @@ http://localhost:8000/auth/register
 http://localhost:8000/auth/jwt/login
 </code></pre></div>
 </div>
-<input id="__tabbed_2_2" name="__tabbed_2" type="radio"><label for="__tabbed_2_2">axios</label><div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kd">const</span> <span class="nx">formData</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">FormData</span><span class="p">();</span>
 <span class="nx">formData</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">'username'</span><span class="p">,</span> <span class="s1">'king.arthur@camelot.bt'</span><span class="p">);</span>
 <span class="nx">formData</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">'password'</span><span class="p">,</span> <span class="s1">'guinevere'</span><span class="p">);</span>
@@ -882,6 +937,7 @@ http://localhost:8000/auth/jwt/login
 <span class="p">.</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">));</span>
 </code></pre></div>
 </div>
+</div>
 </input></input></div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -889,15 +945,17 @@ http://localhost:8000/auth/jwt/login
 </div>
 <h4 id="response_1">Response<a class="headerlink" href="#response_1" title="Permanent link">¶</a></h4>
 <p>You'll get a JSON response looking like this:</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"access_token"</span><span class="p">:</span><span class="s2">"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNGZkMzQ3N2ItZWNjZi00ZWUzLThmN2QtNjhhZDcyMjYxNDc2IiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTg3ODE4NDI5fQ.anO3JR8-WYCozZ4_2-PQ2Ov9O38RaLP2RAzQIiZhteM"</span><span class="p">,</span>
-    <span class="nt">"token_type"</span><span class="p">:</span> <span class="s2">"bearer"</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"access_token"</span><span class="p">:</span><span class="s2">"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNGZkMzQ3N2ItZWNjZi00ZWUzLThmN2QtNjhhZDcyMjYxNDc2IiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTg3ODE4NDI5fQ.anO3JR8-WYCozZ4_2-PQ2Ov9O38RaLP2RAzQIiZhteM"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"token_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bearer"</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <p>You can use this token to make authenticated requests as the user <code>king.arthur@camelot.bt</code>. We'll see how in the next section.</p>
-<h3 id="cookie-backend">Cookie backend<a class="headerlink" href="#cookie-backend" title="Permanent link">¶</a></h3>
+<h3 id="cookie-jwt">Cookie + JWT<a class="headerlink" href="#cookie-jwt" title="Permanent link">¶</a></h3>
 <h4 id="request_2">Request<a class="headerlink" href="#request_2" title="Permanent link">¶</a></h4>
-<div class="tabbed-set" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio"><label for="__tabbed_3_1">cURL</label><div class="tabbed-content">
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio"><input id="__tabbed_3_2" name="__tabbed_3" type="radio"><div class="tabbed-labels"><label for="__tabbed_3_1">cURL</label><label for="__tabbed_3_2">axios</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>curl <span class="se">\</span>
 -v <span class="se">\</span>
 -H <span class="s2">"Content-Type: multipart/form-data"</span> <span class="se">\</span>
@@ -907,7 +965,7 @@ http://localhost:8000/auth/jwt/login
 http://localhost:8000/auth/cookie/login
 </code></pre></div>
 </div>
-<input id="__tabbed_3_2" name="__tabbed_3" type="radio"><label for="__tabbed_3_2">axios</label><div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kd">const</span> <span class="nx">formData</span> <span class="o">=</span> <span class="ow">new</span> <span class="nx">FormData</span><span class="p">();</span>
 <span class="nx">formData</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">'username'</span><span class="p">,</span> <span class="s1">'king.arthur@camelot.bt'</span><span class="p">);</span>
 <span class="nx">formData</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">'password'</span><span class="p">,</span> <span class="s1">'guinevere'</span><span class="p">);</span>
@@ -923,6 +981,7 @@ http://localhost:8000/auth/cookie/login
 <span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">response</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">))</span>
 <span class="p">.</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">));</span>
 </code></pre></div>
+</div>
 </div>
 </input></input></div>
 <div class="admonition warning">
@@ -941,7 +1000,9 @@ http://localhost:8000/auth/cookie/login
 <h2 id="3-get-my-profile">3. Get my profile<a class="headerlink" href="#3-get-my-profile" title="Permanent link">¶</a></h2>
 <p>Now that we can authenticate, we can get our own profile data. Depending on your <a href="../../configuration/authentication/">authentication backend</a>, the method to authenticate the request will vary. We'll stick with JWT from now on.</p>
 <h3 id="request_3">Request<a class="headerlink" href="#request_3" title="Permanent link">¶</a></h3>
-<div class="tabbed-set" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio"><label for="__tabbed_4_1">cURL</label><div class="tabbed-content">
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio"><input id="__tabbed_4_2" name="__tabbed_4" type="radio"><div class="tabbed-labels"><label for="__tabbed_4_1">cURL</label><label for="__tabbed_4_2">axios</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="nb">export</span> <span class="nv">TOKEN</span><span class="o">=</span><span class="s2">"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNGZkMzQ3N2ItZWNjZi00ZWUzLThmN2QtNjhhZDcyMjYxNDc2IiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTg3ODE4NDI5fQ.anO3JR8-WYCozZ4_2-PQ2Ov9O38RaLP2RAzQIiZhteM"</span><span class="p">;</span>
 curl <span class="se">\</span>
 -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
@@ -950,7 +1011,7 @@ curl <span class="se">\</span>
 http://localhost:8000/users/me
 </code></pre></div>
 </div>
-<input id="__tabbed_4_2" name="__tabbed_4" type="radio"><label for="__tabbed_4_2">axios</label><div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kd">const</span> <span class="nx">TOKEN</span> <span class="o">=</span> <span class="s1">'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNGZkMzQ3N2ItZWNjZi00ZWUzLThmN2QtNjhhZDcyMjYxNDc2IiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTg3ODE4NDI5fQ.anO3JR8-WYCozZ4_2-PQ2Ov9O38RaLP2RAzQIiZhteM'</span><span class="p">;</span>
 <span class="nx">axios</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span>
     <span class="s1">'http://localhost:8000/users/me'</span><span class="p">,</span> <span class="p">{</span>
@@ -962,15 +1023,16 @@ http://localhost:8000/users/me
 <span class="p">.</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">));</span>
 </code></pre></div>
 </div>
+</div>
 </input></input></div>
 <h3 id="response_3">Response<a class="headerlink" href="#response_3" title="Permanent link">¶</a></h3>
 <p>You'll get a JSON response looking like this:</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"id"</span><span class="p">:</span> <span class="s2">"4fd3477b-eccf-4ee3-8f7d-68ad72261476"</span><span class="p">,</span>
-    <span class="nt">"email"</span><span class="p">:</span> <span class="s2">"king.arthur@camelot.bt"</span><span class="p">,</span>
-    <span class="nt">"is_active"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-    <span class="nt">"is_superuser"</span><span class="p">:</span> <span class="kc">false</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4fd3477b-eccf-4ee3-8f7d-68ad72261476"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"king.arthur@camelot.bt"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"is_active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"is_superuser"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
@@ -979,7 +1041,9 @@ http://localhost:8000/users/me
 <h2 id="4-update-my-profile">4. Update my profile<a class="headerlink" href="#4-update-my-profile" title="Permanent link">¶</a></h2>
 <p>We can also update our own profile. For example, we can change our password like this.</p>
 <h3 id="request_4">Request<a class="headerlink" href="#request_4" title="Permanent link">¶</a></h3>
-<div class="tabbed-set" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio"><label for="__tabbed_5_1">cURL</label><div class="tabbed-content">
+<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio"><input id="__tabbed_5_2" name="__tabbed_5" type="radio"><div class="tabbed-labels"><label for="__tabbed_5_1">cURL</label><label for="__tabbed_5_2">axios</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>curl <span class="se">\</span>
 -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
 -H <span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span> <span class="se">\</span>
@@ -988,7 +1052,7 @@ http://localhost:8000/users/me
 http://localhost:8000/users/me
 </code></pre></div>
 </div>
-<input id="__tabbed_5_2" name="__tabbed_5" type="radio"><label for="__tabbed_5_2">axios</label><div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="nx">axios</span><span class="p">.</span><span class="nx">patch</span><span class="p">(</span>
     <span class="s1">'http://localhost:8000/users/me'</span><span class="p">,</span>
     <span class="p">{</span>
@@ -1004,15 +1068,16 @@ http://localhost:8000/users/me
 <span class="p">.</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">));</span>
 </code></pre></div>
 </div>
+</div>
 </input></input></div>
 <h3 id="response_4">Response<a class="headerlink" href="#response_4" title="Permanent link">¶</a></h3>
 <p>You'll get a JSON response looking like this:</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"id"</span><span class="p">:</span> <span class="s2">"4fd3477b-eccf-4ee3-8f7d-68ad72261476"</span><span class="p">,</span>
-    <span class="nt">"email"</span><span class="p">:</span> <span class="s2">"king.arthur@camelot.bt"</span><span class="p">,</span>
-    <span class="nt">"is_active"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-    <span class="nt">"is_superuser"</span><span class="p">:</span> <span class="kc">false</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4fd3477b-eccf-4ee3-8f7d-68ad72261476"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"king.arthur@camelot.bt"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"is_active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"is_superuser"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
@@ -1024,7 +1089,9 @@ http://localhost:8000/users/me
 <h3 id="51-get-the-profile-of-any-user">5.1. Get the profile of any user<a class="headerlink" href="#51-get-the-profile-of-any-user" title="Permanent link">¶</a></h3>
 <p>Now that you are a superuser, you can leverage the power of <a href="../routes/#superuser">superuser routes</a>. You can for example get the profile of any user in the database given its id.</p>
 <h4 id="request_5">Request<a class="headerlink" href="#request_5" title="Permanent link">¶</a></h4>
-<div class="tabbed-set" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio"><label for="__tabbed_6_1">cURL</label><div class="tabbed-content">
+<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio"><input id="__tabbed_6_2" name="__tabbed_6" type="radio"><div class="tabbed-labels"><label for="__tabbed_6_1">cURL</label><label for="__tabbed_6_2">axios</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>curl <span class="se">\</span>
 -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
 -H <span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span> <span class="se">\</span>
@@ -1032,7 +1099,7 @@ http://localhost:8000/users/me
 http://localhost:8000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476
 </code></pre></div>
 </div>
-<input id="__tabbed_6_2" name="__tabbed_6" type="radio"><label for="__tabbed_6_2">axios</label><div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="nx">axios</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span>
     <span class="s1">'http://localhost:8000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476'</span><span class="p">,</span> <span class="p">{</span>
     <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
@@ -1043,20 +1110,23 @@ http://localhost:8000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476
 <span class="p">.</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">));</span>
 </code></pre></div>
 </div>
+</div>
 </input></input></div>
 <h4 id="response_5">Response<a class="headerlink" href="#response_5" title="Permanent link">¶</a></h4>
 <p>You'll get a JSON response looking like this:</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"id"</span><span class="p">:</span> <span class="s2">"4fd3477b-eccf-4ee3-8f7d-68ad72261476"</span><span class="p">,</span>
-    <span class="nt">"email"</span><span class="p">:</span> <span class="s2">"king.arthur@camelot.bt"</span><span class="p">,</span>
-    <span class="nt">"is_active"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-    <span class="nt">"is_superuser"</span><span class="p">:</span> <span class="kc">false</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4fd3477b-eccf-4ee3-8f7d-68ad72261476"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"king.arthur@camelot.bt"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"is_active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"is_superuser"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h3 id="51-update-any-user">5.1. Update any user<a class="headerlink" href="#51-update-any-user" title="Permanent link">¶</a></h3>
 <p>We can now update the profile of any user. For example, we can promote it as superuser.</p>
 <h4 id="request_6">Request<a class="headerlink" href="#request_6" title="Permanent link">¶</a></h4>
-<div class="tabbed-set" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio"><label for="__tabbed_7_1">cURL</label><div class="tabbed-content">
+<div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio"><input id="__tabbed_7_2" name="__tabbed_7" type="radio"><div class="tabbed-labels"><label for="__tabbed_7_1">cURL</label><label for="__tabbed_7_2">axios</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>curl <span class="se">\</span>
 -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
 -H <span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span> <span class="se">\</span>
@@ -1065,7 +1135,7 @@ http://localhost:8000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476
 http://localhost:8000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476
 </code></pre></div>
 </div>
-<input id="__tabbed_7_2" name="__tabbed_7" type="radio"/><label for="__tabbed_7_2">axios</label><div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="nx">axios</span><span class="p">.</span><span class="nx">patch</span><span class="p">(</span>
     <span class="s1">'http://localhost:8000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476'</span><span class="p">,</span>
     <span class="p">{</span>
@@ -1081,20 +1151,23 @@ http://localhost:8000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476
 <span class="p">.</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">));</span>
 </code></pre></div>
 </div>
-</input></div>
+</div>
+</input></input></div>
 <h4 id="response_6">Response<a class="headerlink" href="#response_6" title="Permanent link">¶</a></h4>
 <p>You'll get a JSON response looking like this:</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"id"</span><span class="p">:</span> <span class="s2">"4fd3477b-eccf-4ee3-8f7d-68ad72261476"</span><span class="p">,</span>
-    <span class="nt">"email"</span><span class="p">:</span> <span class="s2">"king.arthur@camelot.bt"</span><span class="p">,</span>
-    <span class="nt">"is_active"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-    <span class="nt">"is_superuser"</span><span class="p">:</span> <span class="kc">true</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4fd3477b-eccf-4ee3-8f7d-68ad72261476"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"king.arthur@camelot.bt"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"is_active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"is_superuser"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h3 id="52-delete-any-user">5.2. Delete any user<a class="headerlink" href="#52-delete-any-user" title="Permanent link">¶</a></h3>
 <p>Finally, we can delete a user.</p>
 <h4 id="request_7">Request<a class="headerlink" href="#request_7" title="Permanent link">¶</a></h4>
-<div class="tabbed-set" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio"/><label for="__tabbed_8_1">cURL</label><div class="tabbed-content">
+<div class="tabbed-set tabbed-alternate" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio"><input id="__tabbed_8_2" name="__tabbed_8" type="radio"/><div class="tabbed-labels"><label for="__tabbed_8_1">cURL</label><label for="__tabbed_8_2">axios</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>curl <span class="se">\</span>
 -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
 -H <span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span> <span class="se">\</span>
@@ -1102,7 +1175,7 @@ http://localhost:8000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476
 http://localhost:8000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476
 </code></pre></div>
 </div>
-<input id="__tabbed_8_2" name="__tabbed_8" type="radio"/><label for="__tabbed_8_2">axios</label><div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="nx">axios</span><span class="p">.</span><span class="ow">delete</span><span class="p">(</span>
     <span class="s1">'http://localhost:8000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476'</span><span class="p">,</span>
     <span class="p">{</span>
@@ -1116,12 +1189,15 @@ http://localhost:8000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476
 </code></pre></div>
 </div>
 </div>
+</input></div>
 <h4 id="response_7">Response<a class="headerlink" href="#response_7" title="Permanent link">¶</a></h4>
 <p>You'll get an empty response.</p>
 <h2 id="6-logout">6. Logout<a class="headerlink" href="#6-logout" title="Permanent link">¶</a></h2>
-<p>We can also end the session. Note that it doesn't apply to every <a href="../../configuration/authentication/">authentication backends</a>. For JWT, it doesn't make sense to end the session, the token is valid until it expires. However, for <strong>Cookie</strong> backend, the server will clear the cookie.</p>
+<p>We can also end the session.</p>
 <h3 id="request_8">Request<a class="headerlink" href="#request_8" title="Permanent link">¶</a></h3>
-<div class="tabbed-set" data-tabs="9:2"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio"/><label for="__tabbed_9_1">cURL</label><div class="tabbed-content">
+<div class="tabbed-set tabbed-alternate" data-tabs="9:2"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio"/><input id="__tabbed_9_2" name="__tabbed_9" type="radio"/><div class="tabbed-labels"><label for="__tabbed_9_1">cURL</label><label for="__tabbed_9_2">axios</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>curl <span class="se">\</span>
 -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
 -H <span class="s2">"Cookie: fastapiusersauth=</span><span class="nv">$TOKEN</span><span class="s2">"</span> <span class="se">\</span>
@@ -1129,7 +1205,7 @@ http://localhost:8000/users/4fd3477b-eccf-4ee3-8f7d-68ad72261476
 http://localhost:8000/auth/cookie/logout
 </code></pre></div>
 </div>
-<input id="__tabbed_9_2" name="__tabbed_9" type="radio"/><label for="__tabbed_9_2">axios</label><div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">'http://localhost:8000/auth/cookie/logout'</span><span class="p">,</span>
     <span class="kc">null</span><span class="p">,</span>
     <span class="p">{</span>
@@ -1141,6 +1217,7 @@ http://localhost:8000/auth/cookie/logout
 <span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">response</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">))</span>
 <span class="p">.</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">));</span>
 </code></pre></div>
+</div>
 </div>
 </div>
 <h3 id="response_8">Response<a class="headerlink" href="#response_8" title="Permanent link">¶</a></h3>

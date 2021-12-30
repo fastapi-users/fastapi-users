@@ -212,14 +212,59 @@
         Introduction
       </a>
 </li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4_2" id="__nav_3_4_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3_4_2">
+          Transports
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Transports" class="md-nav" data-md-level="3">
+<label class="md-nav__title" for="__nav_3_4_2">
+<span class="md-nav__icon md-icon"></span>
+          Transports
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/authentication/jwt/">
+<a class="md-nav__link" href="../../configuration/authentication/transports/cookie/">
+        Cookie
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../configuration/authentication/transports/bearer/">
+        Bearer
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4_3" id="__nav_3_4_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3_4_3">
+          Strategies
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Strategies" class="md-nav" data-md-level="3">
+<label class="md-nav__title" for="__nav_3_4_3">
+<span class="md-nav__icon md-icon"></span>
+          Strategies
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../configuration/authentication/strategies/jwt/">
         JWT
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/authentication/cookie/">
-        Cookie
+<a class="md-nav__link" href="../../configuration/authentication/strategies/redis/">
+        Redis
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../configuration/authentication/backend/">
+        Create a backend
       </a>
 </li>
 </ul>
@@ -478,6 +523,11 @@
         7.x.x ➡️ 8.x.x
       </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../8x_to_9x/">
+        8.x.x ➡️ 9.x.x
+      </a>
+</li>
 </ul>
 </nav>
 </li>
@@ -621,7 +671,7 @@
 </div>
 <h4 id="postgresql">PostgreSQL<a class="headerlink" href="#postgresql" title="Permanent link">¶</a></h4>
 <p>PostgreSQL supports UUID type. If not already, you should enable the <code>uuid-ossp</code> extension:</p>
-<div class="highlight"><pre><span></span><code><span class="k">CREATE</span> <span class="n">EXTENSION</span> <span class="k">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="ss">"uuid-ossp"</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="n">EXTENSION</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="ss">"uuid-ossp"</span><span class="p">;</span><span class="w"></span>
 </code></pre></div>
 <p>To convert the existing id. string column, we can:</p>
 <ol>
@@ -630,15 +680,15 @@
 <li>Drop the original id. column.</li>
 <li>Make the new column a primary key and rename it.</li>
 </ol>
-<div class="highlight"><pre><span></span><code><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="ss">"user"</span> <span class="k">ADD</span> <span class="n">uuid_id</span> <span class="n">UUID</span><span class="p">;</span>
-<span class="k">UPDATE</span> <span class="ss">"user"</span> <span class="k">SET</span> <span class="n">uuid_id</span> <span class="o">=</span> <span class="n">uuid</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
-<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="ss">"user"</span> <span class="k">DROP</span> <span class="n">id</span><span class="p">;</span>
-<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="ss">"user"</span> <span class="k">ADD</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">uuid_id</span><span class="p">);</span>
-<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="ss">"user"</span> <span class="k">RENAME</span> <span class="k">COLUMN</span> <span class="n">uuid_id</span> <span class="k">TO</span> <span class="n">id</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><code><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="ss">"user"</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="n">uuid_id</span><span class="w"> </span><span class="n">UUID</span><span class="p">;</span><span class="w"></span>
+<span class="k">UPDATE</span><span class="w"> </span><span class="ss">"user"</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">uuid_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">uuid</span><span class="p">(</span><span class="n">id</span><span class="p">);</span><span class="w"></span>
+<span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="ss">"user"</span><span class="w"> </span><span class="k">DROP</span><span class="w"> </span><span class="n">id</span><span class="p">;</span><span class="w"></span>
+<span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="ss">"user"</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">uuid_id</span><span class="p">);</span><span class="w"></span>
+<span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="ss">"user"</span><span class="w"> </span><span class="k">RENAME</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">uuid_id</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">id</span><span class="p">;</span><span class="w"></span>
 </code></pre></div>
 <h4 id="mysql">MySQL<a class="headerlink" href="#mysql" title="Permanent link">¶</a></h4>
 <p>MySQL doesn't support UUID type. We'll just convert the column to <code>CHAR(36)</code> type:</p>
-<div class="highlight"><pre><span></span><code><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="ss">"user"</span> <span class="k">MODIFY</span> <span class="n">id</span> <span class="nb">CHAR</span><span class="p">(</span><span class="mi">36</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="ss">"user"</span><span class="w"> </span><span class="k">MODIFY</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">36</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
 <h4 id="mongodb_1">MongoDB<a class="headerlink" href="#mongodb_1" title="Permanent link">¶</a></h4>
 <h5 id="mongo-shell">Mongo shell<a class="headerlink" href="#mongo-shell" title="Permanent link">¶</a></h5>

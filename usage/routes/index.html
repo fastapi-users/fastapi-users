@@ -212,14 +212,59 @@
         Introduction
       </a>
 </li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4_2" id="__nav_3_4_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3_4_2">
+          Transports
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Transports" class="md-nav" data-md-level="3">
+<label class="md-nav__title" for="__nav_3_4_2">
+<span class="md-nav__icon md-icon"></span>
+          Transports
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/authentication/jwt/">
+<a class="md-nav__link" href="../../configuration/authentication/transports/cookie/">
+        Cookie
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../configuration/authentication/transports/bearer/">
+        Bearer
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4_3" id="__nav_3_4_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3_4_3">
+          Strategies
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Strategies" class="md-nav" data-md-level="3">
+<label class="md-nav__title" for="__nav_3_4_3">
+<span class="md-nav__icon md-icon"></span>
+          Strategies
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../configuration/authentication/strategies/jwt/">
         JWT
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/authentication/cookie/">
-        Cookie
+<a class="md-nav__link" href="../../configuration/authentication/strategies/redis/">
+        Redis
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../configuration/authentication/backend/">
+        Create a backend
       </a>
 </li>
 </ul>
@@ -522,6 +567,11 @@
         7.x.x ➡️ 8.x.x
       </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../migration/8x_to_9x/">
+        8.x.x ➡️ 9.x.x
+      </a>
+</li>
 </ul>
 </nav>
 </li>
@@ -687,17 +737,17 @@
 <div class="admonition fail">
 <p class="admonition-title"><code>400 Bad Request</code></p>
 <p>Bad credentials or the user is inactive.</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"detail"</span><span class="p">:</span> <span class="s2">"LOGIN_BAD_CREDENTIALS"</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"detail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"LOGIN_BAD_CREDENTIALS"</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <div class="admonition fail">
 <p class="admonition-title"><code>400 Bad Request</code></p>
 <p>The user is not verified.</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"detail"</span><span class="p">:</span> <span class="s2">"LOGIN_USER_NOT_VERIFIED"</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"detail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"LOGIN_USER_NOT_VERIFIED"</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <h3 id="post-logout"><code>POST /logout</code><a class="headerlink" href="#post-logout" title="Permanent link">¶</a></h3>
@@ -710,29 +760,25 @@
 <p class="admonition-title"><code>200 OK</code></p>
 <p>The logout process was successful.</p>
 </div>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>Some backend (like JWT) won't produce this route.</p>
-</div>
 <h2 id="register-router">Register router<a class="headerlink" href="#register-router" title="Permanent link">¶</a></h2>
 <h3 id="post-register"><code>POST /register</code><a class="headerlink" href="#post-register" title="Permanent link">¶</a></h3>
 <p>Register a new user. Will call the <code>on_after_register</code> <a href="../../configuration/user-manager/#on_after_register">handler</a> on successful registration.</p>
 <div class="admonition abstract">
 <p class="admonition-title">Payload</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"email"</span><span class="p">:</span> <span class="s2">"king.arthur@camelot.bt"</span><span class="p">,</span>
-    <span class="nt">"password"</span><span class="p">:</span> <span class="s2">"guinevere"</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"king.arthur@camelot.bt"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"password"</span><span class="p">:</span><span class="w"> </span><span class="s2">"guinevere"</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <div class="admonition success">
 <p class="admonition-title"><code>201 Created</code></p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"id"</span><span class="p">:</span> <span class="s2">"57cbb51a-ab71-4009-8802-3f54b4f2e23"</span><span class="p">,</span>
-    <span class="nt">"email"</span><span class="p">:</span> <span class="s2">"king.arthur@camelot.bt"</span><span class="p">,</span>
-    <span class="nt">"is_active"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-    <span class="nt">"is_superuser"</span><span class="p">:</span> <span class="kc">false</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"57cbb51a-ab71-4009-8802-3f54b4f2e23"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"king.arthur@camelot.bt"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"is_active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"is_superuser"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <div class="admonition fail">
@@ -741,20 +787,20 @@
 <div class="admonition fail">
 <p class="admonition-title"><code>400 Bad Request</code></p>
 <p>A user already exists with this email.</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"detail"</span><span class="p">:</span> <span class="s2">"REGISTER_USER_ALREADY_EXISTS"</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"detail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"REGISTER_USER_ALREADY_EXISTS"</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <div class="admonition fail">
 <p class="admonition-title"><code>400 Bad Request</code></p>
 <p><a href="../../configuration/user-manager/#validate_password">Password validation</a> failed.</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"detail"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">"code"</span><span class="p">:</span> <span class="s2">"REGISTER_INVALID_PASSWORD"</span><span class="p">,</span>
-        <span class="nt">"reason"</span><span class="p">:</span> <span class="s2">"Password should be at least 3 characters"</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"detail"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"REGISTER_INVALID_PASSWORD"</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">"reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Password should be at least 3 characters"</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <h2 id="reset-password-router">Reset password router<a class="headerlink" href="#reset-password-router" title="Permanent link">¶</a></h2>
@@ -763,9 +809,9 @@
 <p>To prevent malicious users from guessing existing users in your database, the route will always return a <code>202 Accepted</code> response, even if the user requested does not exist.</p>
 <div class="admonition abstract">
 <p class="admonition-title">Payload</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"email"</span><span class="p">:</span> <span class="s2">"king.arthur@camelot.bt"</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"king.arthur@camelot.bt"</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <div class="admonition success">
@@ -775,10 +821,10 @@
 <p>Reset a password. Requires the token generated by the <code>/forgot-password</code> route.</p>
 <div class="admonition abstract">
 <p class="admonition-title">Payload</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"token"</span><span class="p">:</span> <span class="s2">"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiOTIyMWZmYzktNjQwZi00MzcyLTg2ZDMtY2U2NDJjYmE1NjAzIiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTcxNTA0MTkzfQ.M10bjOe45I5Ncu_uXvOmVV8QxnL-nZfcH96U90JaocI"</span><span class="p">,</span>
-    <span class="nt">"password"</span><span class="p">:</span> <span class="s2">"merlin"</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiOTIyMWZmYzktNjQwZi00MzcyLTg2ZDMtY2U2NDJjYmE1NjAzIiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTcxNTA0MTkzfQ.M10bjOe45I5Ncu_uXvOmVV8QxnL-nZfcH96U90JaocI"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"password"</span><span class="p">:</span><span class="w"> </span><span class="s2">"merlin"</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <div class="admonition success">
@@ -790,20 +836,20 @@
 <div class="admonition fail">
 <p class="admonition-title"><code>400 Bad Request</code></p>
 <p>Bad or expired token.</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"detail"</span><span class="p">:</span> <span class="s2">"RESET_PASSWORD_BAD_TOKEN"</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"detail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RESET_PASSWORD_BAD_TOKEN"</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <div class="admonition fail">
 <p class="admonition-title"><code>400 Bad Request</code></p>
 <p><a href="../../configuration/user-manager/#validate_password">Password validation</a> failed.</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"detail"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">"code"</span><span class="p">:</span> <span class="s2">"REGISTER_INVALID_PASSWORD"</span><span class="p">,</span>
-        <span class="nt">"reason"</span><span class="p">:</span> <span class="s2">"Password should be at least 3 characters"</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"detail"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"REGISTER_INVALID_PASSWORD"</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">"reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Password should be at least 3 characters"</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <h2 id="verify-router">Verify router<a class="headerlink" href="#verify-router" title="Permanent link">¶</a></h2>
@@ -812,9 +858,9 @@
 <p>To prevent malicious users from guessing existing users in your database, the route will always return a <code>202 Accepted</code> response, even if the user requested does not exist, not active or already verified.</p>
 <div class="admonition abstract">
 <p class="admonition-title">Payload</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"email"</span><span class="p">:</span> <span class="s2">"king.arthur@camelot.bt"</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"king.arthur@camelot.bt"</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <div class="admonition success">
@@ -824,9 +870,9 @@
 <p>Verify a user. Requires the token generated by the <code>/request-verify-token</code> route. Will call the call the <code>on_after_verify</code> <a href="../../configuration/user-manager/#on_after_verify">handler</a> on success.</p>
 <div class="admonition abstract">
 <p class="admonition-title">Payload</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"token"</span><span class="p">:</span> <span class="s2">"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiOTIyMWZmYzktNjQwZi00MzcyLTg2ZDMtY2U2NDJjYmE1NjAzIiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTcxNTA0MTkzfQ.M10bjOe45I5Ncu_uXvOmVV8QxnL-nZfcH96U90JaocI"</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiOTIyMWZmYzktNjQwZi00MzcyLTg2ZDMtY2U2NDJjYmE1NjAzIiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTcxNTA0MTkzfQ.M10bjOe45I5Ncu_uXvOmVV8QxnL-nZfcH96U90JaocI"</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <div class="admonition success">
@@ -838,17 +884,17 @@
 <div class="admonition fail">
 <p class="admonition-title"><code>400 Bad Request</code></p>
 <p>Bad token, not existing user or not the e-mail currently set for the user.</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"detail"</span><span class="p">:</span> <span class="s2">"VERIFY_USER_BAD_TOKEN"</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"detail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VERIFY_USER_BAD_TOKEN"</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <div class="admonition fail">
 <p class="admonition-title"><code>400 Bad Request</code></p>
 <p>The user is already verified.</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"detail"</span><span class="p">:</span> <span class="s2">"VERIFY_USER_ALREADY_VERIFIED"</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"detail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VERIFY_USER_ALREADY_VERIFIED"</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <h2 id="oauth-router">OAuth router<a class="headerlink" href="#oauth-router" title="Permanent link">¶</a></h2>
@@ -858,15 +904,14 @@
 <div class="admonition abstract">
 <p class="admonition-title">Query parameters</p>
 <ul>
-<li><code>authentication_backend</code>: <code>name</code> property of a defined <a href="../../configuration/authentication/">authentication method</a> to use to authenticate the user on successful callback. Usually <code>jwt</code> or <code>cookie</code>.</li>
 <li><code>scopes</code>: Optional list of scopes to ask for. Expected format: <code>scopes=a&amp;scopes=b</code>.</li>
 </ul>
 </div>
 <div class="admonition success">
 <p class="admonition-title"><code>200 OK</code></p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"authorization_url"</span><span class="p">:</span> <span class="s2">"https://www.tintagel.bt/oauth/authorize?client_id=CLIENT_ID&amp;scopes=a+b&amp;redirect_uri=https://www.camelot.bt/oauth/callback"</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"authorization_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.tintagel.bt/oauth/authorize?client_id=CLIENT_ID&amp;scopes=a+b&amp;redirect_uri=https://www.camelot.bt/oauth/callback"</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <div class="admonition fail">
@@ -908,9 +953,9 @@
 <div class="admonition fail">
 <p class="admonition-title"><code>400 Bad Request</code></p>
 <p>User is inactive.</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"detail"</span><span class="p">:</span> <span class="s2">"LOGIN_BAD_CREDENTIALS"</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"detail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"LOGIN_BAD_CREDENTIALS"</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <h2 id="users-router">Users router<a class="headerlink" href="#users-router" title="Permanent link">¶</a></h2>
@@ -918,12 +963,12 @@
 <p>Return the current authenticated active user.</p>
 <div class="admonition success">
 <p class="admonition-title"><code>200 OK</code></p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"id"</span><span class="p">:</span> <span class="s2">"57cbb51a-ab71-4009-8802-3f54b4f2e23"</span><span class="p">,</span>
-    <span class="nt">"email"</span><span class="p">:</span> <span class="s2">"king.arthur@camelot.bt"</span><span class="p">,</span>
-    <span class="nt">"is_active"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-    <span class="nt">"is_superuser"</span><span class="p">:</span> <span class="kc">false</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"57cbb51a-ab71-4009-8802-3f54b4f2e23"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"king.arthur@camelot.bt"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"is_active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"is_superuser"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <div class="admonition fail">
@@ -934,20 +979,20 @@
 <p>Update the current authenticated active user.</p>
 <div class="admonition abstract">
 <p class="admonition-title">Payload</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"email"</span><span class="p">:</span> <span class="s2">"king.arthur@tintagel.bt"</span><span class="p">,</span>
-    <span class="nt">"password"</span><span class="p">:</span> <span class="s2">"merlin"</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"king.arthur@tintagel.bt"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"password"</span><span class="p">:</span><span class="w"> </span><span class="s2">"merlin"</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <div class="admonition success">
 <p class="admonition-title"><code>200 OK</code></p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"id"</span><span class="p">:</span> <span class="s2">"57cbb51a-ab71-4009-8802-3f54b4f2e23"</span><span class="p">,</span>
-    <span class="nt">"email"</span><span class="p">:</span> <span class="s2">"king.arthur@tintagel.bt"</span><span class="p">,</span>
-    <span class="nt">"is_active"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-    <span class="nt">"is_superuser"</span><span class="p">:</span> <span class="kc">false</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"57cbb51a-ab71-4009-8802-3f54b4f2e23"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"king.arthur@tintagel.bt"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"is_active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"is_superuser"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <div class="admonition fail">
@@ -957,20 +1002,20 @@
 <div class="admonition fail">
 <p class="admonition-title"><code>400 Bad Request</code></p>
 <p><a href="../../configuration/user-manager/#validate_password">Password validation</a> failed.</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"detail"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">"code"</span><span class="p">:</span> <span class="s2">"UPDATE_USER_INVALID_PASSWORD"</span><span class="p">,</span>
-        <span class="nt">"reason"</span><span class="p">:</span> <span class="s2">"Password should be at least 3 characters"</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"detail"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"UPDATE_USER_INVALID_PASSWORD"</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">"reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Password should be at least 3 characters"</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <div class="admonition fail">
 <p class="admonition-title"><code>400 Bad Request</code></p>
 <p>A user with this email already exists.
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"detail"</span><span class="p">:</span> <span class="s2">"UPDATE_USER_EMAIL_ALREADY_EXISTS"</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"detail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"UPDATE_USER_EMAIL_ALREADY_EXISTS"</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div></p>
 </div>
 <div class="admonition fail">
@@ -980,12 +1025,12 @@
 <p>Return the user with id <code>user_id</code>.</p>
 <div class="admonition success">
 <p class="admonition-title"><code>200 OK</code></p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"id"</span><span class="p">:</span> <span class="s2">"57cbb51a-ab71-4009-8802-3f54b4f2e23"</span><span class="p">,</span>
-    <span class="nt">"email"</span><span class="p">:</span> <span class="s2">"king.arthur@camelot.bt"</span><span class="p">,</span>
-    <span class="nt">"is_active"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-    <span class="nt">"is_superuser"</span><span class="p">:</span> <span class="kc">false</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"57cbb51a-ab71-4009-8802-3f54b4f2e23"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"king.arthur@camelot.bt"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"is_active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"is_superuser"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <div class="admonition fail">
@@ -1004,22 +1049,22 @@
 <p>Update the user with id <code>user_id</code>.</p>
 <div class="admonition abstract">
 <p class="admonition-title">Payload</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"email"</span><span class="p">:</span> <span class="s2">"king.arthur@tintagel.bt"</span><span class="p">,</span>
-    <span class="nt">"password"</span><span class="p">:</span> <span class="s2">"merlin"</span><span class="p">,</span>
-    <span class="nt">"is_active"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-    <span class="nt">"is_superuser"</span><span class="p">:</span> <span class="kc">true</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"king.arthur@tintagel.bt"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"password"</span><span class="p">:</span><span class="w"> </span><span class="s2">"merlin"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"is_active"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"is_superuser"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <div class="admonition success">
 <p class="admonition-title"><code>200 OK</code></p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"id"</span><span class="p">:</span> <span class="s2">"57cbb51a-ab71-4009-8802-3f54b4f2e23"</span><span class="p">,</span>
-    <span class="nt">"email"</span><span class="p">:</span> <span class="s2">"king.arthur@camelot.bt"</span><span class="p">,</span>
-    <span class="nt">"is_active"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-    <span class="nt">"is_superuser"</span><span class="p">:</span> <span class="kc">true</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"57cbb51a-ab71-4009-8802-3f54b4f2e23"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"king.arthur@camelot.bt"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"is_active"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"is_superuser"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <div class="admonition fail">
@@ -1037,20 +1082,20 @@
 <div class="admonition fail">
 <p class="admonition-title"><code>400 Bad Request</code></p>
 <p><a href="../../configuration/user-manager/#validate_password">Password validation</a> failed.</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"detail"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">"code"</span><span class="p">:</span> <span class="s2">"UPDATE_USER_INVALID_PASSWORD"</span><span class="p">,</span>
-        <span class="nt">"reason"</span><span class="p">:</span> <span class="s2">"Password should be at least 3 characters"</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"detail"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"UPDATE_USER_INVALID_PASSWORD"</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">"reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Password should be at least 3 characters"</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <div class="admonition fail">
 <p class="admonition-title"><code>400 Bad Request</code></p>
 <p>A user with this email already exists.
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"detail"</span><span class="p">:</span> <span class="s2">"UPDATE_USER_EMAIL_ALREADY_EXISTS"</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"detail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"UPDATE_USER_EMAIL_ALREADY_EXISTS"</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div></p>
 </div>
 <h3 id="delete-user_id"><code>DELETE /{user_id}</code><a class="headerlink" href="#delete-user_id" title="Permanent link">¶</a></h3>

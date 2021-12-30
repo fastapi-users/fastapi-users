@@ -8,7 +8,7 @@
 <meta content="Ready-to-use and customizable users management for FastAPI" name="description"/>
 <link href="../../../favicon.png" rel="icon"/>
 <meta content="mkdocs-1.2.3, mkdocs-material-8.1.3" name="generator"/>
-<title>JWT - FastAPI Users</title>
+<title>Create a backend - FastAPI Users</title>
 <link href="../../../assets/stylesheets/main.edf004c2.min.css" rel="stylesheet"/>
 <link href="../../../assets/stylesheets/palette.e6a45f82.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -22,7 +22,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#jwt">
+<a class="md-skip" href="#create-a-backend">
           Skip to content
         </a>
 </div>
@@ -46,7 +46,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              JWT
+              Create a backend
             
           </span>
 </div>
@@ -212,14 +212,64 @@
         Introduction
       </a>
 </li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4_2" id="__nav_3_4_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3_4_2">
+          Transports
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Transports" class="md-nav" data-md-level="3">
+<label class="md-nav__title" for="__nav_3_4_2">
+<span class="md-nav__icon md-icon"></span>
+          Transports
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../transports/cookie/">
+        Cookie
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../transports/bearer/">
+        Bearer
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4_3" id="__nav_3_4_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3_4_3">
+          Strategies
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Strategies" class="md-nav" data-md-level="3">
+<label class="md-nav__title" for="__nav_3_4_3">
+<span class="md-nav__icon md-icon"></span>
+          Strategies
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../strategies/jwt/">
+        JWT
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../strategies/redis/">
+        Redis
+      </a>
+</li>
+</ul>
+</nav>
+</li>
 <li class="md-nav__item md-nav__item--active">
 <input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
 <label class="md-nav__link md-nav__link--active" for="__toc">
-          JWT
+          Create a backend
           <span class="md-nav__icon md-icon"></span>
 </label>
 <a class="md-nav__link md-nav__link--active" href="./">
-        JWT
+        Create a backend
       </a>
 <nav aria-label="Table of contents" class="md-nav md-nav--secondary">
 <label class="md-nav__title" for="__toc">
@@ -228,37 +278,12 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#configuration">
-    Configuration
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#login">
-    Login
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#logout">
-    Logout
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#authentication">
-    Authentication
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#tip-refresh">
-    Tip: Refresh
+<a class="md-nav__link" href="#next-steps">
+    Next steps
   </a>
 </li>
 </ul>
 </nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../cookie/">
-        Cookie
-      </a>
 </li>
 </ul>
 </nav>
@@ -423,6 +448,11 @@
         7.x.x ➡️ 8.x.x
       </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../migration/8x_to_9x/">
+        8.x.x ➡️ 9.x.x
+      </a>
+</li>
 </ul>
 </nav>
 </li>
@@ -441,28 +471,8 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#configuration">
-    Configuration
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#login">
-    Login
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#logout">
-    Logout
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#authentication">
-    Authentication
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#tip-refresh">
-    Tip: Refresh
+<a class="md-nav__link" href="#next-steps">
+    Next steps
   </a>
 </li>
 </ul>
@@ -472,63 +482,39 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1 id="jwt">JWT<a class="headerlink" href="#jwt" title="Permanent link">¶</a></h1>
-<p>JSON Web Token (JWT) is an internet standard for creating access tokens based on JSON.</p>
-<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">¶</a></h2>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi_users.authentication</span> <span class="kn">import</span> <span class="n">JWTAuthentication</span>
+<h1 id="create-a-backend">Create a backend<a class="headerlink" href="#create-a-backend" title="Permanent link">¶</a></h1>
+<p>As we said, a backend is the combination of a transport and a strategy. That way, you can create a complete strategy exactly fitting your needs.</p>
+<p>For this, you have to use the <code>AuthenticationBackend</code> class.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi_users.authentication</span> <span class="kn">import</span> <span class="n">AuthenticationBackend</span><span class="p">,</span> <span class="n">BearerTransport</span><span class="p">,</span> <span class="n">JWTStrategy</span>
 
 <span class="n">SECRET</span> <span class="o">=</span> <span class="s2">"SECRET"</span>
 
-<span class="n">jwt_authentication</span> <span class="o">=</span> <span class="n">JWTAuthentication</span><span class="p">(</span><span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span> <span class="n">tokenUrl</span><span class="o">=</span><span class="s2">"auth/jwt/login"</span><span class="p">)</span>
+<span class="n">bearer_transport</span> <span class="o">=</span> <span class="n">BearerTransport</span><span class="p">(</span><span class="n">tokenUrl</span><span class="o">=</span><span class="s2">"auth/jwt/login"</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">get_jwt_strategy</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">JWTStrategy</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">JWTStrategy</span><span class="p">(</span><span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span>
+
+<span class="n">auth_backend</span> <span class="o">=</span> <span class="n">AuthenticationBackend</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"jwt"</span><span class="p">,</span>
+    <span class="n">transport</span><span class="o">=</span><span class="n">bearer_transport</span><span class="p">,</span>
+    <span class="n">get_strategy</span><span class="o">=</span><span class="n">get_jwt_strategy</span><span class="p">,</span>
+<span class="p">)</span>
 </code></pre></div>
 <p>As you can see, instantiation is quite simple. It accepts the following arguments:</p>
 <ul>
-<li><code>secret</code> (<code>Union[str, pydantic.SecretStr]</code>): A constant secret which is used to encode the token. <strong>Use a strong passphrase and keep it secure.</strong></li>
-<li><code>lifetime_seconds</code> (<code>int</code>): The lifetime of the token in seconds.</li>
-<li><code>tokenUrl</code> (<code>Optional[str]</code>): The exact path of your login endpoint. It'll allow the interactive documentation to automatically discover it and get a working <em>Authorize</em> button. In most cases, you'll probably need a <strong>relative</strong> path, not absolute. You can read more details about this in the <a href="https://fastapi.tiangolo.com/tutorial/security/first-steps/#fastapis-oauth2passwordbearer">FastAPI documentation</a>. Defaults to <code>auth/jwt/login</code>.</li>
-<li><code>name</code> (<code>Optional[str]</code>): Name of the backend. It's useful in the case you wish to have several backends of the same class. Each backend should have a unique name. Defaults to <code>jwt</code>.</li>
+<li><code>name</code> (<code>str</code>): Name of the backend. Each backend should have a unique name.</li>
+<li><code>transport</code> (<code>Transport</code>): An instance of a <code>Transport</code> class.</li>
+<li><code>get_strategy</code> (<code>Callable[..., Strategy]</code>): A dependency callable returning an instance of a <code>Strategy</code> class.</li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="n">jwt_authentication</span> <span class="o">=</span> <span class="n">JWTAuthentication</span><span class="p">(</span>
-    <span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span>
-    <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">"my-jwt"</span><span class="p">,</span>
-<span class="p">)</span>
-</code></pre></div>
-<h2 id="login">Login<a class="headerlink" href="#login" title="Permanent link">¶</a></h2>
-<p>This method will return a JWT token upon successful login:</p>
-<div class="admonition success">
-<p class="admonition-title"><code>200 OK</code></p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"access_token"</span><span class="p">:</span> <span class="s2">"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiOTIyMWZmYzktNjQwZi00MzcyLTg2ZDMtY2U2NDJjYmE1NjAzIiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTcxNTA0MTkzfQ.M10bjOe45I5Ncu_uXvOmVV8QxnL-nZfcH96U90JaocI"</span><span class="p">,</span>
-    <span class="nt">"token_type"</span><span class="p">:</span> <span class="s2">"bearer"</span>
-<span class="p">}</span>
-</code></pre></div>
-</div>
-<blockquote>
-<p>Check documentation about <a href="../../../usage/routes/#post-loginname">login route</a>.</p>
-</blockquote>
-<h2 id="logout">Logout<a class="headerlink" href="#logout" title="Permanent link">¶</a></h2>
-<p>This backend does not provide a logout method (a JWT is valid until it expires).</p>
-<h2 id="authentication">Authentication<a class="headerlink" href="#authentication" title="Permanent link">¶</a></h2>
-<p>This method expects that you provide a <code>Bearer</code> authentication with a valid JWT.</p>
-<div class="highlight"><pre><span></span><code>curl http://localhost:9000/protected-route -H<span class="s1">'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiOTIyMWZmYzktNjQwZi00MzcyLTg2ZDMtY2U2NDJjYmE1NjAzIiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTcxNTA0MTkzfQ.M10bjOe45I5Ncu_uXvOmVV8QxnL-nZfcH96U90JaocI'</span>
-</code></pre></div>
-<h2 id="tip-refresh">Tip: Refresh<a class="headerlink" href="#tip-refresh" title="Permanent link">¶</a></h2>
-<p>The default implementation <strong>does not</strong> provide a mechanism to refresh the JWT. However, you can implement it quite easily like this:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">Response</span>
-
-
-<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/auth/jwt/refresh"</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">refresh_jwt</span><span class="p">(</span><span class="n">response</span><span class="p">:</span> <span class="n">Response</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">current_user</span><span class="p">(</span><span class="n">active</span><span class="o">=</span><span class="kc">True</span><span class="p">))):</span>
-    <span class="k">return</span> <span class="k">await</span> <span class="n">jwt_authentication</span><span class="o">.</span><span class="n">get_login_response</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
-</code></pre></div>
+<h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">¶</a></h2>
+<p>You can have as many authentication backends as you wish. You'll then have to pass those backends to your <code>FastAPIUsers</code> instance and generate an auth router for each one of them.</p>
 </article>
 </div>
 </div>
 </main>
 <footer class="md-footer">
 <nav aria-label="Footer" class="md-footer__inner md-grid">
-<a aria-label="Previous: Introduction" class="md-footer__link md-footer__link--prev" href="../" rel="prev">
+<a aria-label="Previous: Redis" class="md-footer__link md-footer__link--prev" href="../strategies/redis/" rel="prev">
 <div class="md-footer__button md-icon">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
 </div>
@@ -537,17 +523,17 @@
 <span class="md-footer__direction">
                 Previous
               </span>
-              Introduction
+              Redis
             </div>
 </div>
 </a>
-<a aria-label="Next: Cookie" class="md-footer__link md-footer__link--next" href="../cookie/" rel="next">
+<a aria-label="Next: UserManager" class="md-footer__link md-footer__link--next" href="../../user-manager/" rel="next">
 <div class="md-footer__title">
 <div class="md-ellipsis">
 <span class="md-footer__direction">
                 Next
               </span>
-              Cookie
+              UserManager
             </div>
 </div>
 <div class="md-footer__button md-icon">

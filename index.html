@@ -278,14 +278,59 @@
         Introduction
       </a>
 </li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4_2" id="__nav_3_4_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3_4_2">
+          Transports
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Transports" class="md-nav" data-md-level="3">
+<label class="md-nav__title" for="__nav_3_4_2">
+<span class="md-nav__icon md-icon"></span>
+          Transports
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="configuration/authentication/jwt/">
+<a class="md-nav__link" href="configuration/authentication/transports/cookie/">
+        Cookie
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="configuration/authentication/transports/bearer/">
+        Bearer
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4_3" id="__nav_3_4_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3_4_3">
+          Strategies
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Strategies" class="md-nav" data-md-level="3">
+<label class="md-nav__title" for="__nav_3_4_3">
+<span class="md-nav__icon md-icon"></span>
+          Strategies
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="configuration/authentication/strategies/jwt/">
         JWT
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="configuration/authentication/cookie/">
-        Cookie
+<a class="md-nav__link" href="configuration/authentication/strategies/redis/">
+        Redis
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="configuration/authentication/backend/">
+        Create a backend
       </a>
 </li>
 </ul>
@@ -451,6 +496,11 @@
         7.x.x ➡️ 8.x.x
       </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="migration/8x_to_9x/">
+        8.x.x ➡️ 9.x.x
+      </a>
+</li>
 </ul>
 </nav>
 </li>
@@ -557,23 +607,19 @@
 <li class="task-list-item"><input checked="" disabled="" type="checkbox"> Ready-to-use social OAuth2 login flow</input></li>
 <li class="task-list-item"><input checked="" disabled="" type="checkbox"> Dependency callables to inject current user in route</input></li>
 <li class="task-list-item"><input checked="" disabled="" type="checkbox"> Pluggable password validation</input></li>
-<li class="task-list-item">
-<p><input checked="" disabled="" type="checkbox"> Customizable database backend</input></p>
-<ul class="task-list">
+<li class="task-list-item"><input checked="" disabled="" type="checkbox"> Customizable database backend<ul class="task-list">
 <li class="task-list-item"><input checked="" disabled="" type="checkbox"> SQLAlchemy async backend included thanks to <a href="https://www.encode.io/databases/">encode/databases</a></input></li>
 <li class="task-list-item"><input checked="" disabled="" type="checkbox"> MongoDB async backend included thanks to <a href="https://github.com/mongodb/motor">mongodb/motor</a></input></li>
 <li class="task-list-item"><input checked="" disabled="" type="checkbox"> <a href="https://tortoise-orm.readthedocs.io/en/latest/">Tortoise ORM</a> backend included</input></li>
 <li class="task-list-item"><input checked="" disabled="" type="checkbox"> <a href="https://collerek.github.io/ormar/">ormar</a> backend included</input></li>
 </ul>
-</li>
-<li class="task-list-item">
-<p><input checked="" disabled="" type="checkbox"> Multiple customizable authentication backends</input></p>
-<ul class="task-list">
-<li class="task-list-item"><input checked="" disabled="" type="checkbox"> JWT authentication backend included</input></li>
-<li class="task-list-item"><input checked="" disabled="" type="checkbox"> Cookie authentication backend included</input></li>
+</input></li>
+<li class="task-list-item"><input checked="" disabled="" type="checkbox"> Multiple customizable authentication backends<ul class="task-list">
+<li class="task-list-item"><input checked="" disabled="" type="checkbox"> Transports: Authorization header, Cookie</input></li>
+<li class="task-list-item"><input checked="" disabled="" type="checkbox"> Strategies: JWT, Redis</input></li>
 </ul>
-</li>
-<li class="task-list-item"><input checked="" disabled="" type="checkbox"/> Full OpenAPI schema support, even with several authentication backends</li>
+</input></li>
+<li class="task-list-item"><input checked="" disabled="" type="checkbox"> Full OpenAPI schema support, even with several authentication backends</input></li>
 </ul>
 <h2 id="discover-my-book-building-data-science-applications-with-fastapi">📚 Discover my book: <em>Building Data Science Applications with FastAPI</em><a class="headerlink" href="#discover-my-book-building-data-science-applications-with-fastapi" title="Permanent link">¶</a></h2>
 <p><img align="right" alt="Building Data Science Applications with FastAPI" height="256px" src="https://static.packt-cdn.com/products/9781801079211/cover/smaller"/></p>

@@ -8,7 +8,7 @@
 <meta content="Ready-to-use and customizable users management for FastAPI" name="description"/>
 <link href="../../favicon.png" rel="icon"/>
 <meta content="mkdocs-1.2.3, mkdocs-material-8.1.3" name="generator"/>
-<title>6.x.x ➡️ 7.x.x - FastAPI Users</title>
+<title>8.x.x ➡️ 9.x.x - FastAPI Users</title>
 <link href="../../assets/stylesheets/main.edf004c2.min.css" rel="stylesheet"/>
 <link href="../../assets/stylesheets/palette.e6a45f82.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -22,7 +22,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#6xx-7xx">
+<a class="md-skip" href="#8xx-9xx">
           Skip to content
         </a>
 </div>
@@ -46,7 +46,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              6.x.x ➡️ 7.x.x
+              8.x.x ➡️ 9.x.x
             
           </span>
 </div>
@@ -420,9 +420,8 @@
         4.x.x ➡️ 5.x.x
       </a>
 </li>
-<li class="md-nav__item md-nav__item--active">
-<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
-<a class="md-nav__link md-nav__link--active" href="./">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../6x_to_7x/">
         6.x.x ➡️ 7.x.x
       </a>
 </li>
@@ -431,10 +430,61 @@
         7.x.x ➡️ 8.x.x
       </a>
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../8x_to_9x/">
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+          8.x.x ➡️ 9.x.x
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
         8.x.x ➡️ 9.x.x
       </a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#convert-the-authentication-backend">
+    Convert the authentication backend
+  </a>
+<nav aria-label="Convert the authentication backend" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#i-used-jwtauthentication">
+    I used JWTAuthentication
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#i-used-cookieauthentication">
+    I used CookieAuthentication
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#oauth-one-router-for-each-backend">
+    OAuth: one router for each backend
+  </a>
+<nav aria-label="OAuth: one router for each backend" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#authentication_backend-is-not-needed-on-authorize">
+    authentication_backend is not needed on /authorize
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#lost">
+    Lost?
+  </a>
+</li>
+</ul>
+</nav>
 </li>
 </ul>
 </nav>
@@ -448,31 +498,182 @@
 <div class="md-sidebar__scrollwrap">
 <div class="md-sidebar__inner">
 <nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#convert-the-authentication-backend">
+    Convert the authentication backend
+  </a>
+<nav aria-label="Convert the authentication backend" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#i-used-jwtauthentication">
+    I used JWTAuthentication
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#i-used-cookieauthentication">
+    I used CookieAuthentication
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#oauth-one-router-for-each-backend">
+    OAuth: one router for each backend
+  </a>
+<nav aria-label="OAuth: one router for each backend" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#authentication_backend-is-not-needed-on-authorize">
+    authentication_backend is not needed on /authorize
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#lost">
+    Lost?
+  </a>
+</li>
+</ul>
 </nav>
 </div>
 </div>
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1 id="6xx-7xx">6.x.x ➡️ 7.x.x<a class="headerlink" href="#6xx-7xx" title="Permanent link">¶</a></h1>
-<ul>
-<li>The deprecated dependencies to retrieve current user have been removed. Use the <code>current_user</code> factory instead. [<a href="https://fastapi-users.github.io/fastapi-users/usage/current-user/">Documentation</a>]</li>
-<li>When trying to authenticate a not verified user, a <strong>status code 403</strong> is raised instead of status code 401. Thanks @daanbeverdam 🎉 [<a href="https://fastapi-users.github.io/fastapi-users/usage/current-user/#current_user">Documentation</a>]</li>
-<li>Your <code>UserUpdate</code> model shouldn't inherit from the base <code>User</code> class. If you have custom fields, you should repeat them in this model. [<a href="https://fastapi-users.github.io/fastapi-users/configuration/model/#define-your-models">Documentation</a>]</li>
-</ul>
-<hr/>
-<ul>
-<li>Database adapters now live in their <a href="https://github.com/fastapi-users">own repositories and packages</a>.</li>
-<li>When upgrading to v7.0.0, the dependency for your database adapter should automatically be installed.</li>
-<li>The <code>import</code> statements remain unchanged.</li>
-</ul>
+<h1 id="8xx-9xx">8.x.x ➡️ 9.x.x<a class="headerlink" href="#8xx-9xx" title="Permanent link">¶</a></h1>
+<p>Version 9 revamps the authentication backends: we splitted the logic of a backend into two: the <strong>transport</strong>, which is how the token will be carried over the request and the <strong>strategy</strong>, which is how the token is generated and secured.</p>
+<p>The benefit of this is that we'll soon be able to propose new strategies, like database session tokens, without having to repeat the transport logic which remains the same.</p>
+<h2 id="convert-the-authentication-backend">Convert the authentication backend<a class="headerlink" href="#convert-the-authentication-backend" title="Permanent link">¶</a></h2>
+<p>You now have to generate an authentication backend with a transport and a strategy.</p>
+<h3 id="i-used-jwtauthentication">I used JWTAuthentication<a class="headerlink" href="#i-used-jwtauthentication" title="Permanent link">¶</a></h3>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">Before</label><label for="__tabbed_1_2">After</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi_users.authentication</span> <span class="kn">import</span> <span class="n">JWTAuthentication</span>
+
+<span class="n">jwt_authentication</span> <span class="o">=</span> <span class="n">JWTAuthentication</span><span class="p">(</span>
+    <span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span> <span class="n">tokenUrl</span><span class="o">=</span><span class="s2">"auth/jwt/login"</span>
+<span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi_users.authentication</span> <span class="kn">import</span> <span class="n">AuthenticationBackend</span><span class="p">,</span> <span class="n">BearerTransport</span><span class="p">,</span> <span class="n">JWTStrategy</span>
+
+<span class="n">SECRET</span> <span class="o">=</span> <span class="s2">"SECRET"</span>
+
+<span class="n">bearer_transport</span> <span class="o">=</span> <span class="n">BearerTransport</span><span class="p">(</span><span class="n">tokenUrl</span><span class="o">=</span><span class="s2">"auth/jwt/login"</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">get_jwt_strategy</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">JWTStrategy</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">JWTStrategy</span><span class="p">(</span><span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span>
+
+<span class="n">auth_backend</span> <span class="o">=</span> <span class="n">AuthenticationBackend</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"jwt"</span><span class="p">,</span>
+    <span class="n">transport</span><span class="o">=</span><span class="n">bearer_transport</span><span class="p">,</span>
+    <span class="n">get_strategy</span><span class="o">=</span><span class="n">get_jwt_strategy</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+</input></input></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>There is no default <code>name</code> anymore: you need to provide it yourself for each of your backends.</p>
+</div>
+<h3 id="i-used-cookieauthentication">I used CookieAuthentication<a class="headerlink" href="#i-used-cookieauthentication" title="Permanent link">¶</a></h3>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio"><input id="__tabbed_2_2" name="__tabbed_2" type="radio"><div class="tabbed-labels"><label for="__tabbed_2_1">Before</label><label for="__tabbed_2_2">After</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi_users.authentication</span> <span class="kn">import</span> <span class="n">CookieAuthentication</span>
+
+<span class="n">cookie_authentication</span> <span class="o">=</span> <span class="n">CookieAuthentication</span><span class="p">(</span><span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi_users.authentication</span> <span class="kn">import</span> <span class="n">AuthenticationBackend</span><span class="p">,</span> <span class="n">CookieTransport</span><span class="p">,</span> <span class="n">JWTStrategy</span>
+
+<span class="n">SECRET</span> <span class="o">=</span> <span class="s2">"SECRET"</span>
+
+<span class="n">cookie_transport</span> <span class="o">=</span> <span class="n">CookieTransport</span><span class="p">(</span><span class="n">cookie_max_age</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">get_jwt_strategy</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">JWTStrategy</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">JWTStrategy</span><span class="p">(</span><span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span>
+
+<span class="n">auth_backend</span> <span class="o">=</span> <span class="n">AuthenticationBackend</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"cookie"</span><span class="p">,</span>
+    <span class="n">transport</span><span class="o">=</span><span class="n">cookie_transport</span><span class="p">,</span>
+    <span class="n">get_strategy</span><span class="o">=</span><span class="n">get_jwt_strategy</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+</input></input></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>There is no default <code>name</code> anymore: you need to provide it yourself for each of your backends.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Notice that the strategy is the same for both authentication backends. That's the beauty of this approach: the token generation is decoupled from its transport.</p>
+</div>
+<h2 id="oauth-one-router-for-each-backend">OAuth: one router for each backend<a class="headerlink" href="#oauth-one-router-for-each-backend" title="Permanent link">¶</a></h2>
+<p>Before, a single OAuth router was enough to login with any of your authentication backend. Now, you need to generate a router for each of your backends.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio"><input id="__tabbed_3_2" name="__tabbed_3" type="radio"><div class="tabbed-labels"><label for="__tabbed_3_1">Before</label><label for="__tabbed_3_2">After</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
+    <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_oauth_router</span><span class="p">(</span><span class="n">google_oauth_client</span><span class="p">,</span> <span class="s2">"SECRET"</span><span class="p">),</span>
+    <span class="n">prefix</span><span class="o">=</span><span class="s2">"/auth/google"</span><span class="p">,</span>
+    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"auth"</span><span class="p">],</span>
+<span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
+    <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_oauth_router</span><span class="p">(</span><span class="n">google_oauth_client</span><span class="p">,</span> <span class="n">auth_backend</span><span class="p">,</span> <span class="s2">"SECRET"</span><span class="p">),</span>
+    <span class="n">prefix</span><span class="o">=</span><span class="s2">"/auth/google"</span><span class="p">,</span>
+    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"auth"</span><span class="p">],</span>
+<span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+</input></input></div>
+<h3 id="authentication_backend-is-not-needed-on-authorize"><code>authentication_backend</code> is not needed on <code>/authorize</code><a class="headerlink" href="#authentication_backend-is-not-needed-on-authorize" title="Permanent link">¶</a></h3>
+<p>The consequence of this is that you don't need to specify the authentication backend when making a request to <code>/authorize</code>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio"><input id="__tabbed_4_2" name="__tabbed_4" type="radio"><div class="tabbed-labels"><label for="__tabbed_4_1">Before</label><label for="__tabbed_4_2">After</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>curl <span class="se">\</span>
+-H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+-X GET <span class="se">\</span>
+http://localhost:8000/auth/google/authorize?authentication_backend<span class="o">=</span>jwt
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>curl <span class="se">\</span>
+-H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+-X GET <span class="se">\</span>
+http://localhost:8000/auth/google/authorize
+</code></pre></div>
+</div>
+</div>
+</input></input></div>
+<h2 id="lost">Lost?<a class="headerlink" href="#lost" title="Permanent link">¶</a></h2>
+<p>If you're unsure or a bit lost, make sure to check the <a href="../../configuration/full-example/">full working examples</a>.</p>
 </article>
 </div>
 </div>
 </main>
 <footer class="md-footer">
 <nav aria-label="Footer" class="md-footer__inner md-grid">
-<a aria-label="Previous: 4.x.x ➡️ 5.x.x" class="md-footer__link md-footer__link--prev" href="../4x_to_5x/" rel="prev">
+<a aria-label="Previous: 7.x.x ➡️ 8.x.x" class="md-footer__link md-footer__link--prev" href="../7x_to_8x/" rel="prev">
 <div class="md-footer__button md-icon">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
 </div>
@@ -481,21 +682,8 @@
 <span class="md-footer__direction">
                 Previous
               </span>
-              4.x.x ➡️ 5.x.x
-            </div>
-</div>
-</a>
-<a aria-label="Next: 7.x.x ➡️ 8.x.x" class="md-footer__link md-footer__link--next" href="../7x_to_8x/" rel="next">
-<div class="md-footer__title">
-<div class="md-ellipsis">
-<span class="md-footer__direction">
-                Next
-              </span>
               7.x.x ➡️ 8.x.x
             </div>
-</div>
-<div class="md-footer__button md-icon">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"></path></svg>
 </div>
 </a>
 </nav>

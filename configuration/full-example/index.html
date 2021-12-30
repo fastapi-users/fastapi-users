@@ -212,14 +212,59 @@
         Introduction
       </a>
 </li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4_2" id="__nav_3_4_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3_4_2">
+          Transports
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Transports" class="md-nav" data-md-level="3">
+<label class="md-nav__title" for="__nav_3_4_2">
+<span class="md-nav__icon md-icon"></span>
+          Transports
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../authentication/jwt/">
+<a class="md-nav__link" href="../authentication/transports/cookie/">
+        Cookie
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../authentication/transports/bearer/">
+        Bearer
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4_3" id="__nav_3_4_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3_4_3">
+          Strategies
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Strategies" class="md-nav" data-md-level="3">
+<label class="md-nav__title" for="__nav_3_4_3">
+<span class="md-nav__icon md-icon"></span>
+          Strategies
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../authentication/strategies/jwt/">
         JWT
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../authentication/cookie/">
-        Cookie
+<a class="md-nav__link" href="../authentication/strategies/redis/">
+        Redis
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../authentication/backend/">
+        Create a backend
       </a>
 </li>
 </ul>
@@ -303,11 +348,6 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="#tortoise-orm">
     Tortoise ORM
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#ormar">
-    Ormar
   </a>
 </li>
 <li class="md-nav__item">
@@ -423,6 +463,11 @@
         7.x.x ➡️ 8.x.x
       </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../migration/8x_to_9x/">
+        8.x.x ➡️ 9.x.x
+      </a>
+</li>
 </ul>
 </nav>
 </li>
@@ -456,11 +501,6 @@
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#ormar">
-    Ormar
-  </a>
-</li>
-<li class="md-nav__item">
 <a class="md-nav__link" href="#what-now">
     What now?
   </a>
@@ -480,17 +520,497 @@
 Insecure passwords may give attackers full access to your database.</p>
 </div>
 <h2 id="sqlalchemy">SQLAlchemy<a class="headerlink" href="#sqlalchemy" title="Permanent link">¶</a></h2>
-<p><a href="https://replit.com/@frankie567/fastapi-users-sqlalchemy">Open ↗️</a></p>
-<iframe frameborder="0" height="500px" src="https://replit.com/@frankie567/fastapi-users-sqlalchemy?embed=true" width="100%"></iframe>
+<p><a href="https://github.com/fastapi-users/fastapi-users/tree/master/examples/sqlalchemy">Open <span class="twemoji"><svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M10.604 1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.06-1.06l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1zM3.75 2A1.75 1.75 0 0 0 2 3.75v8.5c0 .966.784 1.75 1.75 1.75h8.5A1.75 1.75 0 0 0 14 12.25v-3.5a.75.75 0 0 0-1.5 0v3.5a.25.25 0 0 1-.25.25h-8.5a.25.25 0 0 1-.25-.25v-8.5a.25.25 0 0 1 .25-.25h3.5a.75.75 0 0 0 0-1.5h-3.5z" fill-rule="evenodd"></path></svg></span></a></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:6"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><input id="__tabbed_1_3" name="__tabbed_1" type="radio"><input id="__tabbed_1_4" name="__tabbed_1" type="radio"><input id="__tabbed_1_5" name="__tabbed_1" type="radio"><input id="__tabbed_1_6" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1"><span class="twemoji"><svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M4 1.75C4 .784 4.784 0 5.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 14.25 15h-9a.75.75 0 0 1 0-1.5h9a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 10 4.25V1.5H5.75a.25.25 0 0 0-.25.25v2.5a.75.75 0 0 1-1.5 0v-2.5zm7.5-.188V4.25c0 .138.112.25.25.25h2.688a.252.252 0 0 0-.011-.013l-2.914-2.914a.272.272 0 0 0-.013-.011zM5.72 6.72a.75.75 0 0 0 0 1.06l1.47 1.47-1.47 1.47a.75.75 0 1 0 1.06 1.06l2-2a.75.75 0 0 0 0-1.06l-2-2a.75.75 0 0 0-1.06 0zM3.28 7.78a.75.75 0 0 0-1.06-1.06l-2 2a.75.75 0 0 0 0 1.06l2 2a.75.75 0 0 0 1.06-1.06L1.81 9.25l1.47-1.47z" fill-rule="evenodd"></path></svg></span> requirements.txt</label><label for="__tabbed_1_2"><span class="twemoji"><svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M4 1.75C4 .784 4.784 0 5.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 14.25 15h-9a.75.75 0 0 1 0-1.5h9a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 10 4.25V1.5H5.75a.25.25 0 0 0-.25.25v2.5a.75.75 0 0 1-1.5 0v-2.5zm7.5-.188V4.25c0 .138.112.25.25.25h2.688a.252.252 0 0 0-.011-.013l-2.914-2.914a.272.272 0 0 0-.013-.011zM5.72 6.72a.75.75 0 0 0 0 1.06l1.47 1.47-1.47 1.47a.75.75 0 1 0 1.06 1.06l2-2a.75.75 0 0 0 0-1.06l-2-2a.75.75 0 0 0-1.06 0zM3.28 7.78a.75.75 0 0 0-1.06-1.06l-2 2a.75.75 0 0 0 0 1.06l2 2a.75.75 0 0 0 1.06-1.06L1.81 9.25l1.47-1.47z" fill-rule="evenodd"></path></svg></span> main.py</label><label for="__tabbed_1_3"><span class="twemoji"><svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M4 1.75C4 .784 4.784 0 5.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 14.25 15h-9a.75.75 0 0 1 0-1.5h9a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 10 4.25V1.5H5.75a.25.25 0 0 0-.25.25v2.5a.75.75 0 0 1-1.5 0v-2.5zm7.5-.188V4.25c0 .138.112.25.25.25h2.688a.252.252 0 0 0-.011-.013l-2.914-2.914a.272.272 0 0 0-.013-.011zM5.72 6.72a.75.75 0 0 0 0 1.06l1.47 1.47-1.47 1.47a.75.75 0 1 0 1.06 1.06l2-2a.75.75 0 0 0 0-1.06l-2-2a.75.75 0 0 0-1.06 0zM3.28 7.78a.75.75 0 0 0-1.06-1.06l-2 2a.75.75 0 0 0 0 1.06l2 2a.75.75 0 0 0 1.06-1.06L1.81 9.25l1.47-1.47z" fill-rule="evenodd"></path></svg></span> app/app.py</label><label for="__tabbed_1_4"><span class="twemoji"><svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M4 1.75C4 .784 4.784 0 5.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 14.25 15h-9a.75.75 0 0 1 0-1.5h9a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 10 4.25V1.5H5.75a.25.25 0 0 0-.25.25v2.5a.75.75 0 0 1-1.5 0v-2.5zm7.5-.188V4.25c0 .138.112.25.25.25h2.688a.252.252 0 0 0-.011-.013l-2.914-2.914a.272.272 0 0 0-.013-.011zM5.72 6.72a.75.75 0 0 0 0 1.06l1.47 1.47-1.47 1.47a.75.75 0 1 0 1.06 1.06l2-2a.75.75 0 0 0 0-1.06l-2-2a.75.75 0 0 0-1.06 0zM3.28 7.78a.75.75 0 0 0-1.06-1.06l-2 2a.75.75 0 0 0 0 1.06l2 2a.75.75 0 0 0 1.06-1.06L1.81 9.25l1.47-1.47z" fill-rule="evenodd"></path></svg></span> app/db.py</label><label for="__tabbed_1_5"><span class="twemoji"><svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M4 1.75C4 .784 4.784 0 5.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 14.25 15h-9a.75.75 0 0 1 0-1.5h9a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 10 4.25V1.5H5.75a.25.25 0 0 0-.25.25v2.5a.75.75 0 0 1-1.5 0v-2.5zm7.5-.188V4.25c0 .138.112.25.25.25h2.688a.252.252 0 0 0-.011-.013l-2.914-2.914a.272.272 0 0 0-.013-.011zM5.72 6.72a.75.75 0 0 0 0 1.06l1.47 1.47-1.47 1.47a.75.75 0 1 0 1.06 1.06l2-2a.75.75 0 0 0 0-1.06l-2-2a.75.75 0 0 0-1.06 0zM3.28 7.78a.75.75 0 0 0-1.06-1.06l-2 2a.75.75 0 0 0 0 1.06l2 2a.75.75 0 0 0 1.06-1.06L1.81 9.25l1.47-1.47z" fill-rule="evenodd"></path></svg></span> app/models.py</label><label for="__tabbed_1_6"><span class="twemoji"><svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M4 1.75C4 .784 4.784 0 5.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 14.25 15h-9a.75.75 0 0 1 0-1.5h9a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 10 4.25V1.5H5.75a.25.25 0 0 0-.25.25v2.5a.75.75 0 0 1-1.5 0v-2.5zm7.5-.188V4.25c0 .138.112.25.25.25h2.688a.252.252 0 0 0-.011-.013l-2.914-2.914a.272.272 0 0 0-.013-.011zM5.72 6.72a.75.75 0 0 0 0 1.06l1.47 1.47-1.47 1.47a.75.75 0 1 0 1.06 1.06l2-2a.75.75 0 0 0 0-1.06l-2-2a.75.75 0 0 0-1.06 0zM3.28 7.78a.75.75 0 0 0-1.06-1.06l-2 2a.75.75 0 0 0 0 1.06l2 2a.75.75 0 0 0 1.06-1.06L1.81 9.25l1.47-1.47z" fill-rule="evenodd"></path></svg></span> app/users.py</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>fastapi
+fastapi-users[sqlalchemy]
+uvicorn[standard]
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">uvicorn</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">"app.app:app"</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">"0.0.0.0"</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s2">"info"</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">FastAPI</span>
+
+<span class="kn">from</span> <span class="nn">app.db</span> <span class="kn">import</span> <span class="n">database</span>
+<span class="kn">from</span> <span class="nn">app.models</span> <span class="kn">import</span> <span class="n">UserDB</span>
+<span class="kn">from</span> <span class="nn">app.users</span> <span class="kn">import</span> <span class="n">auth_backend</span><span class="p">,</span> <span class="n">current_active_user</span><span class="p">,</span> <span class="n">fastapi_users</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
+
+<span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
+    <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_auth_router</span><span class="p">(</span><span class="n">auth_backend</span><span class="p">),</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">"/auth/jwt"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"auth"</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_register_router</span><span class="p">(),</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">"/auth"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"auth"</span><span class="p">])</span>
+<span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
+    <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_reset_password_router</span><span class="p">(),</span>
+    <span class="n">prefix</span><span class="o">=</span><span class="s2">"/auth"</span><span class="p">,</span>
+    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"auth"</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
+    <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_verify_router</span><span class="p">(),</span>
+    <span class="n">prefix</span><span class="o">=</span><span class="s2">"/auth"</span><span class="p">,</span>
+    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"auth"</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_users_router</span><span class="p">(),</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">"/users"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"users"</span><span class="p">])</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/authenticated-route"</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">authenticated_route</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">UserDB</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_active_user</span><span class="p">)):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">"message"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"Hello </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">!"</span><span class="p">}</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span><span class="s2">"startup"</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">startup</span><span class="p">():</span>
+    <span class="k">await</span> <span class="n">database</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span><span class="s2">"shutdown"</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">shutdown</span><span class="p">():</span>
+    <span class="k">await</span> <span class="n">database</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">databases</span>
+<span class="kn">import</span> <span class="nn">sqlalchemy</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">SQLAlchemyBaseUserTable</span><span class="p">,</span> <span class="n">SQLAlchemyUserDatabase</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.ext.declarative</span> <span class="kn">import</span> <span class="n">DeclarativeMeta</span><span class="p">,</span> <span class="n">declarative_base</span>
+
+<span class="kn">from</span> <span class="nn">app.models</span> <span class="kn">import</span> <span class="n">UserDB</span>
+
+<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">"sqlite:///./test.db"</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">databases</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">)</span>
+<span class="n">Base</span><span class="p">:</span> <span class="n">DeclarativeMeta</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">()</span>
+
+
+<span class="k">class</span> <span class="nc">UserTable</span><span class="p">(</span><span class="n">Base</span><span class="p">,</span> <span class="n">SQLAlchemyBaseUserTable</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="n">engine</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">create_engine</span><span class="p">(</span>
+    <span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">connect_args</span><span class="o">=</span><span class="p">{</span><span class="s2">"check_same_thread"</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+
+<span class="n">users</span> <span class="o">=</span> <span class="n">UserTable</span><span class="o">.</span><span class="n">__table__</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_db</span><span class="p">():</span>
+    <span class="k">yield</span> <span class="n">SQLAlchemyUserDatabase</span><span class="p">(</span><span class="n">UserDB</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">users</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">models</span>
+
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUser</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserCreate</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUserCreate</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserUpdate</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUserUpdate</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserDB</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserDB</span><span class="p">):</span>
+    <span class="k">pass</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">Request</span>
+<span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">BaseUserManager</span><span class="p">,</span> <span class="n">FastAPIUsers</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.authentication</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AuthenticationBackend</span><span class="p">,</span>
+    <span class="n">BearerTransport</span><span class="p">,</span>
+    <span class="n">JWTStrategy</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">SQLAlchemyUserDatabase</span>
+
+<span class="kn">from</span> <span class="nn">app.db</span> <span class="kn">import</span> <span class="n">get_user_db</span>
+<span class="kn">from</span> <span class="nn">app.models</span> <span class="kn">import</span> <span class="n">User</span><span class="p">,</span> <span class="n">UserCreate</span><span class="p">,</span> <span class="n">UserDB</span><span class="p">,</span> <span class="n">UserUpdate</span>
+
+<span class="n">SECRET</span> <span class="o">=</span> <span class="s2">"SECRET"</span>
+
+
+<span class="k">class</span> <span class="nc">UserManager</span><span class="p">(</span><span class="n">BaseUserManager</span><span class="p">[</span><span class="n">UserCreate</span><span class="p">,</span> <span class="n">UserDB</span><span class="p">]):</span>
+    <span class="n">user_db_model</span> <span class="o">=</span> <span class="n">UserDB</span>
+    <span class="n">reset_password_token_secret</span> <span class="o">=</span> <span class="n">SECRET</span>
+    <span class="n">verification_token_secret</span> <span class="o">=</span> <span class="n">SECRET</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">on_after_register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">UserDB</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Request</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"User </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> has registered."</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">on_after_forgot_password</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">UserDB</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Request</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"User </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> has forgot their password. Reset token: </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">on_after_request_verify</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">UserDB</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Request</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Verification requested for user </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">. Verification token: </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_manager</span><span class="p">(</span><span class="n">user_db</span><span class="p">:</span> <span class="n">SQLAlchemyUserDatabase</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_user_db</span><span class="p">)):</span>
+    <span class="k">yield</span> <span class="n">UserManager</span><span class="p">(</span><span class="n">user_db</span><span class="p">)</span>
+
+
+<span class="n">bearer_transport</span> <span class="o">=</span> <span class="n">BearerTransport</span><span class="p">(</span><span class="n">tokenUrl</span><span class="o">=</span><span class="s2">"auth/jwt/login"</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">get_jwt_strategy</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">JWTStrategy</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">JWTStrategy</span><span class="p">(</span><span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span>
+
+
+<span class="n">auth_backend</span> <span class="o">=</span> <span class="n">AuthenticationBackend</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"jwt"</span><span class="p">,</span>
+    <span class="n">transport</span><span class="o">=</span><span class="n">bearer_transport</span><span class="p">,</span>
+    <span class="n">get_strategy</span><span class="o">=</span><span class="n">get_jwt_strategy</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">fastapi_users</span> <span class="o">=</span> <span class="n">FastAPIUsers</span><span class="p">(</span>
+    <span class="n">get_user_manager</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">auth_backend</span><span class="p">],</span>
+    <span class="n">User</span><span class="p">,</span>
+    <span class="n">UserCreate</span><span class="p">,</span>
+    <span class="n">UserUpdate</span><span class="p">,</span>
+    <span class="n">UserDB</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">current_active_user</span> <span class="o">=</span> <span class="n">fastapi_users</span><span class="o">.</span><span class="n">current_user</span><span class="p">(</span><span class="n">active</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+</input></input></input></input></input></input></div>
 <h2 id="mongodb">MongoDB<a class="headerlink" href="#mongodb" title="Permanent link">¶</a></h2>
-<p><a href="https://replit.com/@frankie567/fastapi-users-mongodb">Open ↗️</a></p>
-<iframe frameborder="0" height="500px" src="https://replit.com/@frankie567/fastapi-users-mongodb?embed=true" width="100%"></iframe>
+<p><a href="https://github.com/fastapi-users/fastapi-users/tree/master/examples/mongodb">Open <span class="twemoji"><svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M10.604 1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.06-1.06l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1zM3.75 2A1.75 1.75 0 0 0 2 3.75v8.5c0 .966.784 1.75 1.75 1.75h8.5A1.75 1.75 0 0 0 14 12.25v-3.5a.75.75 0 0 0-1.5 0v3.5a.25.25 0 0 1-.25.25h-8.5a.25.25 0 0 1-.25-.25v-8.5a.25.25 0 0 1 .25-.25h3.5a.75.75 0 0 0 0-1.5h-3.5z" fill-rule="evenodd"></path></svg></span></a></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:6"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio"><input id="__tabbed_2_2" name="__tabbed_2" type="radio"><input id="__tabbed_2_3" name="__tabbed_2" type="radio"><input id="__tabbed_2_4" name="__tabbed_2" type="radio"><input id="__tabbed_2_5" name="__tabbed_2" type="radio"><input id="__tabbed_2_6" name="__tabbed_2" type="radio"><div class="tabbed-labels"><label for="__tabbed_2_1"><span class="twemoji"><svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M4 1.75C4 .784 4.784 0 5.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 14.25 15h-9a.75.75 0 0 1 0-1.5h9a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 10 4.25V1.5H5.75a.25.25 0 0 0-.25.25v2.5a.75.75 0 0 1-1.5 0v-2.5zm7.5-.188V4.25c0 .138.112.25.25.25h2.688a.252.252 0 0 0-.011-.013l-2.914-2.914a.272.272 0 0 0-.013-.011zM5.72 6.72a.75.75 0 0 0 0 1.06l1.47 1.47-1.47 1.47a.75.75 0 1 0 1.06 1.06l2-2a.75.75 0 0 0 0-1.06l-2-2a.75.75 0 0 0-1.06 0zM3.28 7.78a.75.75 0 0 0-1.06-1.06l-2 2a.75.75 0 0 0 0 1.06l2 2a.75.75 0 0 0 1.06-1.06L1.81 9.25l1.47-1.47z" fill-rule="evenodd"></path></svg></span> requirements.txt</label><label for="__tabbed_2_2"><span class="twemoji"><svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M4 1.75C4 .784 4.784 0 5.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 14.25 15h-9a.75.75 0 0 1 0-1.5h9a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 10 4.25V1.5H5.75a.25.25 0 0 0-.25.25v2.5a.75.75 0 0 1-1.5 0v-2.5zm7.5-.188V4.25c0 .138.112.25.25.25h2.688a.252.252 0 0 0-.011-.013l-2.914-2.914a.272.272 0 0 0-.013-.011zM5.72 6.72a.75.75 0 0 0 0 1.06l1.47 1.47-1.47 1.47a.75.75 0 1 0 1.06 1.06l2-2a.75.75 0 0 0 0-1.06l-2-2a.75.75 0 0 0-1.06 0zM3.28 7.78a.75.75 0 0 0-1.06-1.06l-2 2a.75.75 0 0 0 0 1.06l2 2a.75.75 0 0 0 1.06-1.06L1.81 9.25l1.47-1.47z" fill-rule="evenodd"></path></svg></span> main.py</label><label for="__tabbed_2_3"><span class="twemoji"><svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M4 1.75C4 .784 4.784 0 5.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 14.25 15h-9a.75.75 0 0 1 0-1.5h9a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 10 4.25V1.5H5.75a.25.25 0 0 0-.25.25v2.5a.75.75 0 0 1-1.5 0v-2.5zm7.5-.188V4.25c0 .138.112.25.25.25h2.688a.252.252 0 0 0-.011-.013l-2.914-2.914a.272.272 0 0 0-.013-.011zM5.72 6.72a.75.75 0 0 0 0 1.06l1.47 1.47-1.47 1.47a.75.75 0 1 0 1.06 1.06l2-2a.75.75 0 0 0 0-1.06l-2-2a.75.75 0 0 0-1.06 0zM3.28 7.78a.75.75 0 0 0-1.06-1.06l-2 2a.75.75 0 0 0 0 1.06l2 2a.75.75 0 0 0 1.06-1.06L1.81 9.25l1.47-1.47z" fill-rule="evenodd"></path></svg></span> app/app.py</label><label for="__tabbed_2_4"><span class="twemoji"><svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M4 1.75C4 .784 4.784 0 5.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 14.25 15h-9a.75.75 0 0 1 0-1.5h9a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 10 4.25V1.5H5.75a.25.25 0 0 0-.25.25v2.5a.75.75 0 0 1-1.5 0v-2.5zm7.5-.188V4.25c0 .138.112.25.25.25h2.688a.252.252 0 0 0-.011-.013l-2.914-2.914a.272.272 0 0 0-.013-.011zM5.72 6.72a.75.75 0 0 0 0 1.06l1.47 1.47-1.47 1.47a.75.75 0 1 0 1.06 1.06l2-2a.75.75 0 0 0 0-1.06l-2-2a.75.75 0 0 0-1.06 0zM3.28 7.78a.75.75 0 0 0-1.06-1.06l-2 2a.75.75 0 0 0 0 1.06l2 2a.75.75 0 0 0 1.06-1.06L1.81 9.25l1.47-1.47z" fill-rule="evenodd"></path></svg></span> app/db.py</label><label for="__tabbed_2_5"><span class="twemoji"><svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M4 1.75C4 .784 4.784 0 5.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 14.25 15h-9a.75.75 0 0 1 0-1.5h9a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 10 4.25V1.5H5.75a.25.25 0 0 0-.25.25v2.5a.75.75 0 0 1-1.5 0v-2.5zm7.5-.188V4.25c0 .138.112.25.25.25h2.688a.252.252 0 0 0-.011-.013l-2.914-2.914a.272.272 0 0 0-.013-.011zM5.72 6.72a.75.75 0 0 0 0 1.06l1.47 1.47-1.47 1.47a.75.75 0 1 0 1.06 1.06l2-2a.75.75 0 0 0 0-1.06l-2-2a.75.75 0 0 0-1.06 0zM3.28 7.78a.75.75 0 0 0-1.06-1.06l-2 2a.75.75 0 0 0 0 1.06l2 2a.75.75 0 0 0 1.06-1.06L1.81 9.25l1.47-1.47z" fill-rule="evenodd"></path></svg></span> app/models.py</label><label for="__tabbed_2_6"><span class="twemoji"><svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M4 1.75C4 .784 4.784 0 5.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 14.25 15h-9a.75.75 0 0 1 0-1.5h9a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 10 4.25V1.5H5.75a.25.25 0 0 0-.25.25v2.5a.75.75 0 0 1-1.5 0v-2.5zm7.5-.188V4.25c0 .138.112.25.25.25h2.688a.252.252 0 0 0-.011-.013l-2.914-2.914a.272.272 0 0 0-.013-.011zM5.72 6.72a.75.75 0 0 0 0 1.06l1.47 1.47-1.47 1.47a.75.75 0 1 0 1.06 1.06l2-2a.75.75 0 0 0 0-1.06l-2-2a.75.75 0 0 0-1.06 0zM3.28 7.78a.75.75 0 0 0-1.06-1.06l-2 2a.75.75 0 0 0 0 1.06l2 2a.75.75 0 0 0 1.06-1.06L1.81 9.25l1.47-1.47z" fill-rule="evenodd"></path></svg></span> app/users.py</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>fastapi
+fastapi-users[mongodb]
+uvicorn[standard]
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">uvicorn</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">"app.app:app"</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">"0.0.0.0"</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s2">"info"</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">FastAPI</span>
+
+<span class="kn">from</span> <span class="nn">app.models</span> <span class="kn">import</span> <span class="n">UserDB</span>
+<span class="kn">from</span> <span class="nn">app.users</span> <span class="kn">import</span> <span class="n">auth_backend</span><span class="p">,</span> <span class="n">current_active_user</span><span class="p">,</span> <span class="n">fastapi_users</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
+
+<span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
+    <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_auth_router</span><span class="p">(</span><span class="n">auth_backend</span><span class="p">),</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">"/auth/jwt"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"auth"</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_register_router</span><span class="p">(),</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">"/auth"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"auth"</span><span class="p">])</span>
+<span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
+    <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_reset_password_router</span><span class="p">(),</span>
+    <span class="n">prefix</span><span class="o">=</span><span class="s2">"/auth"</span><span class="p">,</span>
+    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"auth"</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
+    <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_verify_router</span><span class="p">(),</span>
+    <span class="n">prefix</span><span class="o">=</span><span class="s2">"/auth"</span><span class="p">,</span>
+    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"auth"</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_users_router</span><span class="p">(),</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">"/users"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"users"</span><span class="p">])</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/authenticated-route"</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">authenticated_route</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">UserDB</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_active_user</span><span class="p">)):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">"message"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"Hello </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">!"</span><span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">motor.motor_asyncio</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">MongoDBUserDatabase</span>
+
+<span class="kn">from</span> <span class="nn">app.models</span> <span class="kn">import</span> <span class="n">UserDB</span>
+
+<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"DATABASE_URL"</span><span class="p">]</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">motor</span><span class="o">.</span><span class="n">motor_asyncio</span><span class="o">.</span><span class="n">AsyncIOMotorClient</span><span class="p">(</span>
+    <span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">uuidRepresentation</span><span class="o">=</span><span class="s2">"standard"</span>
+<span class="p">)</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="s2">"database_name"</span><span class="p">]</span>
+<span class="n">collection</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="s2">"users"</span><span class="p">]</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_db</span><span class="p">():</span>
+    <span class="k">yield</span> <span class="n">MongoDBUserDatabase</span><span class="p">(</span><span class="n">UserDB</span><span class="p">,</span> <span class="n">collection</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">models</span>
+
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUser</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserCreate</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUserCreate</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserUpdate</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUserUpdate</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserDB</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserDB</span><span class="p">):</span>
+    <span class="k">pass</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">Request</span>
+<span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">BaseUserManager</span><span class="p">,</span> <span class="n">FastAPIUsers</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.authentication</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AuthenticationBackend</span><span class="p">,</span>
+    <span class="n">BearerTransport</span><span class="p">,</span>
+    <span class="n">JWTStrategy</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">MongoDBUserDatabase</span>
+
+<span class="kn">from</span> <span class="nn">app.db</span> <span class="kn">import</span> <span class="n">get_user_db</span>
+<span class="kn">from</span> <span class="nn">app.models</span> <span class="kn">import</span> <span class="n">User</span><span class="p">,</span> <span class="n">UserCreate</span><span class="p">,</span> <span class="n">UserDB</span><span class="p">,</span> <span class="n">UserUpdate</span>
+
+<span class="n">SECRET</span> <span class="o">=</span> <span class="s2">"SECRET"</span>
+
+
+<span class="k">class</span> <span class="nc">UserManager</span><span class="p">(</span><span class="n">BaseUserManager</span><span class="p">[</span><span class="n">UserCreate</span><span class="p">,</span> <span class="n">UserDB</span><span class="p">]):</span>
+    <span class="n">user_db_model</span> <span class="o">=</span> <span class="n">UserDB</span>
+    <span class="n">reset_password_token_secret</span> <span class="o">=</span> <span class="n">SECRET</span>
+    <span class="n">verification_token_secret</span> <span class="o">=</span> <span class="n">SECRET</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">on_after_register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">UserDB</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Request</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"User </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> has registered."</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">on_after_forgot_password</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">UserDB</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Request</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"User </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> has forgot their password. Reset token: </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">on_after_request_verify</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">UserDB</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Request</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Verification requested for user </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">. Verification token: </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_manager</span><span class="p">(</span><span class="n">user_db</span><span class="p">:</span> <span class="n">MongoDBUserDatabase</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_user_db</span><span class="p">)):</span>
+    <span class="k">yield</span> <span class="n">UserManager</span><span class="p">(</span><span class="n">user_db</span><span class="p">)</span>
+
+
+<span class="n">bearer_transport</span> <span class="o">=</span> <span class="n">BearerTransport</span><span class="p">(</span><span class="n">tokenUrl</span><span class="o">=</span><span class="s2">"auth/jwt/login"</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">get_jwt_strategy</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">JWTStrategy</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">JWTStrategy</span><span class="p">(</span><span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span>
+
+
+<span class="n">auth_backend</span> <span class="o">=</span> <span class="n">AuthenticationBackend</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"jwt"</span><span class="p">,</span>
+    <span class="n">transport</span><span class="o">=</span><span class="n">bearer_transport</span><span class="p">,</span>
+    <span class="n">get_strategy</span><span class="o">=</span><span class="n">get_jwt_strategy</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">fastapi_users</span> <span class="o">=</span> <span class="n">FastAPIUsers</span><span class="p">(</span>
+    <span class="n">get_user_manager</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">auth_backend</span><span class="p">],</span>
+    <span class="n">User</span><span class="p">,</span>
+    <span class="n">UserCreate</span><span class="p">,</span>
+    <span class="n">UserUpdate</span><span class="p">,</span>
+    <span class="n">UserDB</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">current_active_user</span> <span class="o">=</span> <span class="n">fastapi_users</span><span class="o">.</span><span class="n">current_user</span><span class="p">(</span><span class="n">active</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+</input></input></input></input></input></input></div>
 <h2 id="tortoise-orm">Tortoise ORM<a class="headerlink" href="#tortoise-orm" title="Permanent link">¶</a></h2>
-<p><a href="https://replit.com/@frankie567/fastapi-users-tortoise">Open ↗️</a></p>
-<iframe frameborder="0" height="500px" src="https://replit.com/@frankie567/fastapi-users-tortoise?embed=true" width="100%"></iframe>
-<h2 id="ormar">Ormar<a class="headerlink" href="#ormar" title="Permanent link">¶</a></h2>
-<p><a href="https://replit.com/@frankie567/fastapi-users-ormar">Open ↗️</a></p>
-<iframe frameborder="0" height="500px" src="https://replit.com/@frankie567/fastapi-users-ormar?embed=true" width="100%"></iframe>
+<p><a href="https://github.com/fastapi-users/fastapi-users/tree/master/examples/tortoise">Open <span class="twemoji"><svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M10.604 1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.06-1.06l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1zM3.75 2A1.75 1.75 0 0 0 2 3.75v8.5c0 .966.784 1.75 1.75 1.75h8.5A1.75 1.75 0 0 0 14 12.25v-3.5a.75.75 0 0 0-1.5 0v3.5a.25.25 0 0 1-.25.25h-8.5a.25.25 0 0 1-.25-.25v-8.5a.25.25 0 0 1 .25-.25h3.5a.75.75 0 0 0 0-1.5h-3.5z" fill-rule="evenodd"></path></svg></span></a></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:6"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio"><input id="__tabbed_3_2" name="__tabbed_3" type="radio"><input id="__tabbed_3_3" name="__tabbed_3" type="radio"><input id="__tabbed_3_4" name="__tabbed_3" type="radio"/><input id="__tabbed_3_5" name="__tabbed_3" type="radio"/><input id="__tabbed_3_6" name="__tabbed_3" type="radio"/><div class="tabbed-labels"><label for="__tabbed_3_1"><span class="twemoji"><svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M4 1.75C4 .784 4.784 0 5.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 14.25 15h-9a.75.75 0 0 1 0-1.5h9a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 10 4.25V1.5H5.75a.25.25 0 0 0-.25.25v2.5a.75.75 0 0 1-1.5 0v-2.5zm7.5-.188V4.25c0 .138.112.25.25.25h2.688a.252.252 0 0 0-.011-.013l-2.914-2.914a.272.272 0 0 0-.013-.011zM5.72 6.72a.75.75 0 0 0 0 1.06l1.47 1.47-1.47 1.47a.75.75 0 1 0 1.06 1.06l2-2a.75.75 0 0 0 0-1.06l-2-2a.75.75 0 0 0-1.06 0zM3.28 7.78a.75.75 0 0 0-1.06-1.06l-2 2a.75.75 0 0 0 0 1.06l2 2a.75.75 0 0 0 1.06-1.06L1.81 9.25l1.47-1.47z" fill-rule="evenodd"></path></svg></span> requirements.txt</label><label for="__tabbed_3_2"><span class="twemoji"><svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M4 1.75C4 .784 4.784 0 5.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 14.25 15h-9a.75.75 0 0 1 0-1.5h9a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 10 4.25V1.5H5.75a.25.25 0 0 0-.25.25v2.5a.75.75 0 0 1-1.5 0v-2.5zm7.5-.188V4.25c0 .138.112.25.25.25h2.688a.252.252 0 0 0-.011-.013l-2.914-2.914a.272.272 0 0 0-.013-.011zM5.72 6.72a.75.75 0 0 0 0 1.06l1.47 1.47-1.47 1.47a.75.75 0 1 0 1.06 1.06l2-2a.75.75 0 0 0 0-1.06l-2-2a.75.75 0 0 0-1.06 0zM3.28 7.78a.75.75 0 0 0-1.06-1.06l-2 2a.75.75 0 0 0 0 1.06l2 2a.75.75 0 0 0 1.06-1.06L1.81 9.25l1.47-1.47z" fill-rule="evenodd"></path></svg></span> main.py</label><label for="__tabbed_3_3"><span class="twemoji"><svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M4 1.75C4 .784 4.784 0 5.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 14.25 15h-9a.75.75 0 0 1 0-1.5h9a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 10 4.25V1.5H5.75a.25.25 0 0 0-.25.25v2.5a.75.75 0 0 1-1.5 0v-2.5zm7.5-.188V4.25c0 .138.112.25.25.25h2.688a.252.252 0 0 0-.011-.013l-2.914-2.914a.272.272 0 0 0-.013-.011zM5.72 6.72a.75.75 0 0 0 0 1.06l1.47 1.47-1.47 1.47a.75.75 0 1 0 1.06 1.06l2-2a.75.75 0 0 0 0-1.06l-2-2a.75.75 0 0 0-1.06 0zM3.28 7.78a.75.75 0 0 0-1.06-1.06l-2 2a.75.75 0 0 0 0 1.06l2 2a.75.75 0 0 0 1.06-1.06L1.81 9.25l1.47-1.47z" fill-rule="evenodd"></path></svg></span> app/app.py</label><label for="__tabbed_3_4"><span class="twemoji"><svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M4 1.75C4 .784 4.784 0 5.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 14.25 15h-9a.75.75 0 0 1 0-1.5h9a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 10 4.25V1.5H5.75a.25.25 0 0 0-.25.25v2.5a.75.75 0 0 1-1.5 0v-2.5zm7.5-.188V4.25c0 .138.112.25.25.25h2.688a.252.252 0 0 0-.011-.013l-2.914-2.914a.272.272 0 0 0-.013-.011zM5.72 6.72a.75.75 0 0 0 0 1.06l1.47 1.47-1.47 1.47a.75.75 0 1 0 1.06 1.06l2-2a.75.75 0 0 0 0-1.06l-2-2a.75.75 0 0 0-1.06 0zM3.28 7.78a.75.75 0 0 0-1.06-1.06l-2 2a.75.75 0 0 0 0 1.06l2 2a.75.75 0 0 0 1.06-1.06L1.81 9.25l1.47-1.47z" fill-rule="evenodd"></path></svg></span> app/db.py</label><label for="__tabbed_3_5"><span class="twemoji"><svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M4 1.75C4 .784 4.784 0 5.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 14.25 15h-9a.75.75 0 0 1 0-1.5h9a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 10 4.25V1.5H5.75a.25.25 0 0 0-.25.25v2.5a.75.75 0 0 1-1.5 0v-2.5zm7.5-.188V4.25c0 .138.112.25.25.25h2.688a.252.252 0 0 0-.011-.013l-2.914-2.914a.272.272 0 0 0-.013-.011zM5.72 6.72a.75.75 0 0 0 0 1.06l1.47 1.47-1.47 1.47a.75.75 0 1 0 1.06 1.06l2-2a.75.75 0 0 0 0-1.06l-2-2a.75.75 0 0 0-1.06 0zM3.28 7.78a.75.75 0 0 0-1.06-1.06l-2 2a.75.75 0 0 0 0 1.06l2 2a.75.75 0 0 0 1.06-1.06L1.81 9.25l1.47-1.47z" fill-rule="evenodd"></path></svg></span> app/models.py</label><label for="__tabbed_3_6"><span class="twemoji"><svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M4 1.75C4 .784 4.784 0 5.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 14.25 15h-9a.75.75 0 0 1 0-1.5h9a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 10 4.25V1.5H5.75a.25.25 0 0 0-.25.25v2.5a.75.75 0 0 1-1.5 0v-2.5zm7.5-.188V4.25c0 .138.112.25.25.25h2.688a.252.252 0 0 0-.011-.013l-2.914-2.914a.272.272 0 0 0-.013-.011zM5.72 6.72a.75.75 0 0 0 0 1.06l1.47 1.47-1.47 1.47a.75.75 0 1 0 1.06 1.06l2-2a.75.75 0 0 0 0-1.06l-2-2a.75.75 0 0 0-1.06 0zM3.28 7.78a.75.75 0 0 0-1.06-1.06l-2 2a.75.75 0 0 0 0 1.06l2 2a.75.75 0 0 0 1.06-1.06L1.81 9.25l1.47-1.47z" fill-rule="evenodd"></path></svg></span> app/users.py</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>fastapi
+fastapi-users[tortoise-orm]
+uvicorn[standard]
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">uvicorn</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">"app.app:app"</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">"0.0.0.0"</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s2">"info"</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">FastAPI</span>
+<span class="kn">from</span> <span class="nn">tortoise.contrib.fastapi</span> <span class="kn">import</span> <span class="n">register_tortoise</span>
+
+<span class="kn">from</span> <span class="nn">app.db</span> <span class="kn">import</span> <span class="n">DATABASE_URL</span>
+<span class="kn">from</span> <span class="nn">app.models</span> <span class="kn">import</span> <span class="n">UserDB</span>
+<span class="kn">from</span> <span class="nn">app.users</span> <span class="kn">import</span> <span class="n">auth_backend</span><span class="p">,</span> <span class="n">current_active_user</span><span class="p">,</span> <span class="n">fastapi_users</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
+
+<span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
+    <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_auth_router</span><span class="p">(</span><span class="n">auth_backend</span><span class="p">),</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">"/auth/jwt"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"auth"</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_register_router</span><span class="p">(),</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">"/auth"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"auth"</span><span class="p">])</span>
+<span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
+    <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_reset_password_router</span><span class="p">(),</span>
+    <span class="n">prefix</span><span class="o">=</span><span class="s2">"/auth"</span><span class="p">,</span>
+    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"auth"</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span>
+    <span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_verify_router</span><span class="p">(),</span>
+    <span class="n">prefix</span><span class="o">=</span><span class="s2">"/auth"</span><span class="p">,</span>
+    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"auth"</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">fastapi_users</span><span class="o">.</span><span class="n">get_users_router</span><span class="p">(),</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">"/users"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"users"</span><span class="p">])</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/authenticated-route"</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">authenticated_route</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">UserDB</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_active_user</span><span class="p">)):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">"message"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"Hello </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">!"</span><span class="p">}</span>
+
+
+<span class="n">register_tortoise</span><span class="p">(</span>
+    <span class="n">app</span><span class="p">,</span>
+    <span class="n">db_url</span><span class="o">=</span><span class="n">DATABASE_URL</span><span class="p">,</span>
+    <span class="n">modules</span><span class="o">=</span><span class="p">{</span><span class="s2">"models"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"app.models"</span><span class="p">]},</span>
+    <span class="n">generate_schemas</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">TortoiseUserDatabase</span>
+
+<span class="kn">from</span> <span class="nn">app.models</span> <span class="kn">import</span> <span class="n">UserDB</span><span class="p">,</span> <span class="n">UserModel</span>
+
+<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">"sqlite://./test.db"</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_db</span><span class="p">():</span>
+    <span class="k">yield</span> <span class="n">TortoiseUserDatabase</span><span class="p">(</span><span class="n">UserDB</span><span class="p">,</span> <span class="n">UserModel</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">TortoiseBaseUserModel</span>
+<span class="kn">from</span> <span class="nn">tortoise.contrib.pydantic</span> <span class="kn">import</span> <span class="n">PydanticModel</span>
+
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUser</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserCreate</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUserCreate</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserUpdate</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUserUpdate</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserModel</span><span class="p">(</span><span class="n">TortoiseBaseUserModel</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserDB</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserDB</span><span class="p">,</span> <span class="n">PydanticModel</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+        <span class="n">orm_mode</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">orig_model</span> <span class="o">=</span> <span class="n">UserModel</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">Request</span>
+<span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">BaseUserManager</span><span class="p">,</span> <span class="n">FastAPIUsers</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.authentication</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AuthenticationBackend</span><span class="p">,</span>
+    <span class="n">BearerTransport</span><span class="p">,</span>
+    <span class="n">JWTStrategy</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">TortoiseUserDatabase</span>
+
+<span class="kn">from</span> <span class="nn">app.db</span> <span class="kn">import</span> <span class="n">get_user_db</span>
+<span class="kn">from</span> <span class="nn">app.models</span> <span class="kn">import</span> <span class="n">User</span><span class="p">,</span> <span class="n">UserCreate</span><span class="p">,</span> <span class="n">UserDB</span><span class="p">,</span> <span class="n">UserUpdate</span>
+
+<span class="n">SECRET</span> <span class="o">=</span> <span class="s2">"SECRET"</span>
+
+
+<span class="k">class</span> <span class="nc">UserManager</span><span class="p">(</span><span class="n">BaseUserManager</span><span class="p">[</span><span class="n">UserCreate</span><span class="p">,</span> <span class="n">UserDB</span><span class="p">]):</span>
+    <span class="n">user_db_model</span> <span class="o">=</span> <span class="n">UserDB</span>
+    <span class="n">reset_password_token_secret</span> <span class="o">=</span> <span class="n">SECRET</span>
+    <span class="n">verification_token_secret</span> <span class="o">=</span> <span class="n">SECRET</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">on_after_register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">UserDB</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Request</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"User </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> has registered."</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">on_after_forgot_password</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">UserDB</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Request</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"User </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> has forgot their password. Reset token: </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">on_after_request_verify</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">UserDB</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Request</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Verification requested for user </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">. Verification token: </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_manager</span><span class="p">(</span><span class="n">user_db</span><span class="p">:</span> <span class="n">TortoiseUserDatabase</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_user_db</span><span class="p">)):</span>
+    <span class="k">yield</span> <span class="n">UserManager</span><span class="p">(</span><span class="n">user_db</span><span class="p">)</span>
+
+
+<span class="n">bearer_transport</span> <span class="o">=</span> <span class="n">BearerTransport</span><span class="p">(</span><span class="n">tokenUrl</span><span class="o">=</span><span class="s2">"auth/jwt/login"</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">get_jwt_strategy</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">JWTStrategy</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">JWTStrategy</span><span class="p">(</span><span class="n">secret</span><span class="o">=</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span>
+
+
+<span class="n">auth_backend</span> <span class="o">=</span> <span class="n">AuthenticationBackend</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"jwt"</span><span class="p">,</span>
+    <span class="n">transport</span><span class="o">=</span><span class="n">bearer_transport</span><span class="p">,</span>
+    <span class="n">get_strategy</span><span class="o">=</span><span class="n">get_jwt_strategy</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">fastapi_users</span> <span class="o">=</span> <span class="n">FastAPIUsers</span><span class="p">(</span>
+    <span class="n">get_user_manager</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">auth_backend</span><span class="p">],</span>
+    <span class="n">User</span><span class="p">,</span>
+    <span class="n">UserCreate</span><span class="p">,</span>
+    <span class="n">UserUpdate</span><span class="p">,</span>
+    <span class="n">UserDB</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">current_active_user</span> <span class="o">=</span> <span class="n">fastapi_users</span><span class="o">.</span><span class="n">current_user</span><span class="p">(</span><span class="n">active</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+</input></input></input></div>
 <h2 id="what-now">What now?<a class="headerlink" href="#what-now" title="Permanent link">¶</a></h2>
 <p>You're ready to go! Be sure to check the <a href="../../usage/routes/">Usage</a> section to understand how to work with <strong>FastAPI Users</strong>.</p>
 </article>
