@@ -13,11 +13,9 @@ from fastapi_users import FastAPIUsers
 
 SECRET = "SECRET"
 
-jwt_authentication = JWTAuthentication(secret=SECRET, lifetime_seconds=3600)
-
 fastapi_users = FastAPIUsers(
     get_user_manager,
-    [jwt_authentication],
+    [auth_backend],
     User,
     UserCreate,
     UserUpdate,

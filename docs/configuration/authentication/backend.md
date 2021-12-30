@@ -6,7 +6,6 @@ For this, you have to use the `AuthenticationBackend` class.
 
 ```py
 from fastapi_users.authentication import AuthenticationBackend, BearerTransport, JWTStrategy
-from fastapi_users.authentication import BearerTransport
 
 SECRET = "SECRET"
 
