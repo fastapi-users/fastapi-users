@@ -70,6 +70,7 @@ nav:
         - configuration/authentication/transports/bearer.md
       - Strategies:
         - configuration/authentication/strategies/jwt.md
+        - configuration/authentication/strategies/redis-session.md
       - configuration/authentication/backend.md
     - configuration/user-manager.md
     - Routers:

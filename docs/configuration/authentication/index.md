@@ -44,7 +44,7 @@ The token will be send through a cookie.
 
 ### Strategy
 
-It manages how the token is generated and secured. We currently provide one method:
+It manages how the token is generated and secured. We currently provide two methods:
 
 #### [JWT](strategy/jwt.md)
 
@@ -56,3 +56,15 @@ The token is self-contained in a JSON Web Token.
     * ❌ Can't be invalidated on the server-side: it's valid until it expires.
 
     ➡️ Use it if you want to get up-and-running quickly.
+
+#### [Redis Session](strategy/redis-session.md)
+
+The token is stored in a Redis key-store.
+
+!!! tip "Pros and cons"
+
+    * ✅ Secure and performant.
+    * ✅ Sessions can be invalidated server-side by removing tokens from Redis.
+    * ❌ A Redis server is needed.
+
+    ➡️ Use it if you want maximum performance while being able to invalidate sessions.

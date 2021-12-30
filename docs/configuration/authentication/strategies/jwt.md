@@ -1,6 +1,6 @@
 # JWT
 
-JSON Web Token (JWT) is an internet standard for creating access tokens based on JSON. They don't need to be stored in a database: the data is self-contained inside and cryptographically signed.
+[JSON Web Token (JWT)](https://jwt.io/introduction) is an internet standard for creating access tokens based on JSON. They don't need to be stored in a database: the data is self-contained inside and cryptographically signed.
 
 ## Configuration
 
