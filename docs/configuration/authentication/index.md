@@ -10,7 +10,19 @@ When checking authentication, each method is run one after the other. The first 
 
 For each backend, you'll be able to add a router with the corresponding `/login` and `/logout` (if applicable routes). More on this in the [routers documentation](../routers/index.md).
 
-## Provided methods
+## Transport + Strategy = Authentication backend
 
-* [JWT authentication](jwt.md)
-* [Cookie authentication](cookie.md)
+An authentication backend is composed of two parts:
+
+### Transport
+
+It manages how the token will be carried over the request. We currently provide two methods:
+
+* [Cookie](transports/cookie.md): the token will be send through a cookie.
+* [Bearer](transports/bearer.md): the token will be send through an `Authorization: Bearer` header.
+
+### Strategy
+
+It manages how the token is generated and secured. We currently provide one method:
+
+* [JWT](strategy/jwt.md): the token is self-contained in a JSON Web Token.

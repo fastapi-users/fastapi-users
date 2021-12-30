@@ -62,8 +62,12 @@ nav:
       - configuration/databases/ormar.md
     - Authentication backends:
       - Introduction: configuration/authentication/index.md
-      - configuration/authentication/jwt.md
-      - configuration/authentication/cookie.md
+      - Transports:
+        - configuration/authentication/transports/cookie.md
+        - configuration/authentication/transports/bearer.md
+      - Strategies:
+        - configuration/authentication/strategies/jwt.md
+      - configuration/authentication/backend.md
     - configuration/user-manager.md
     - Routers:
       - Introduction: configuration/routers/index.md

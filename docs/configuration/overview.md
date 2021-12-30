@@ -26,17 +26,25 @@ flowchart LR
     end
     subgraph ROUTERS[Routers]
         direction RL
+        AUTH[[get_auth_router]]
+        OAUTH[[get_oauth_router]]
         REGISTER[[get_register_router]]
         VERIFY[[get_verify_router]]
         RESET[[get_reset_password_router]]
-        AUTH[[get_auth_router]]
-        OAUTH[[get_oauth_router]]
         USERS[[get_users_router]]
     end
-    subgraph AUTH_BACKENDS[Authentication backends]
+    subgraph AUTH_BACKENDS[Authentication]
         direction RL
-        COOKIE[CookieAuthentication]
-        JWT[JWTAuthentication]
+        subgraph TRANSPORTS[Transports]
+            direction RL
+            COOKIE[CookieTransport]
+            BEARER[BearerTransport]
+        end
+        subgraph STRATEGIES[Strategies]
+            direction RL
+            JWT[JWTStrategy]
+        end
+        AUTH_BACKEND{AuthenticationBackend}
     end
     DATABASE --> DATABASE_DEPENDENCY
     DATABASE_DEPENDENCY --> USER_MANAGER
@@ -49,8 +57,12 @@ flowchart LR
 
     FASTAPI_USERS --> ROUTERS
 
-    AUTH_BACKENDS --> AUTH
-    AUTH_BACKENDS --> FASTAPI_USERS
+    TRANSPORTS --> AUTH_BACKEND
+    STRATEGIES --> AUTH_BACKEND
+
+    AUTH_BACKEND --> AUTH
+    AUTH_BACKEND --> OAUTH
+    AUTH_BACKEND --> FASTAPI_USERS
 
     FASTAPI_USERS --> CURRENT_USER
 ```
@@ -76,6 +88,8 @@ FastAPI Users is compatible with various databases and ORM. To build the interfa
 ## Authentication backends
 
 Authentication backends define the way users sessions are managed in your app, like access tokens or cookies.
+
+They are composed of two parts: a **transport**, which is how the token will be carried over the requests (e.g. cookies, headers...) and a **strategy**, which is how the token will be generated and secured (e.g. a JWT, a token in database...).
 
 ➡️ [Configure the authentication backends](./authentication/index.md)
 
