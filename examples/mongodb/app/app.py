@@ -1,8 +1,7 @@
 from fastapi import Depends, FastAPI
 
 from app.models import UserDB
-from app.users import current_active_user, fastapi_users, auth_backend
-
+from app.users import auth_backend, current_active_user, fastapi_users
 
 app = FastAPI()
 

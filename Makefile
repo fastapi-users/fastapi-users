@@ -4,7 +4,10 @@ isort-src:
 isort-docs:
 	isort ./docs/src -o fastapi_users
 
-format: isort-src isort-docs
+isort-examples:
+	isort ./examples -o fastapi_users -p app
+
+format: isort-src isort-docs isort-examples
 	black .
 
 isort-src-check:
@@ -13,7 +16,10 @@ isort-src-check:
 isort-docs-check:
 	isort --check-only ./docs/src -o fastapi_users
 
-format-check: isort-src-check isort-docs-check
+isort-examples-check:
+	isort --check-only ./examples -o fastapi_users -p app
+
+format-check: isort-src-check isort-docs-check isort-examples-check
 	black --check .
 
 lint:
