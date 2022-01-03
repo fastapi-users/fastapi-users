@@ -59,7 +59,7 @@ def get_oauth_router(
             authorize_redirect_url = request.url_for(callback_route_name)
 
         state_data = {
-            "authentication_backend": str(authentication_backend),
+            "authentication_backend": authentication_backend.name,
         }
         state = generate_state_token(state_data, state_secret)
         authorization_url = await oauth_client.get_authorization_url(
