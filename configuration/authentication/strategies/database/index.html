@@ -8,7 +8,7 @@
 <meta content="Ready-to-use and customizable users management for FastAPI" name="description"/>
 <link href="../../../../favicon.png" rel="icon"/>
 <meta content="mkdocs-1.2.3, mkdocs-material-8.1.4" name="generator"/>
-<title>Bearer - FastAPI Users</title>
+<title>Database - FastAPI Users</title>
 <link href="../../../../assets/stylesheets/main.bb3983ee.min.css" rel="stylesheet"/>
 <link href="../../../../assets/stylesheets/palette.e6a45f82.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -22,7 +22,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#bearer">
+<a class="md-skip" href="#database">
           Skip to content
         </a>
 </div>
@@ -46,7 +46,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              Bearer
+              Database
             
           </span>
 </div>
@@ -212,8 +212,8 @@
         Introduction
       </a>
 </li>
-<li class="md-nav__item md-nav__item--active md-nav__item--nested">
-<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4_2" id="__nav_3_4_2" type="checkbox"/>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4_2" id="__nav_3_4_2" type="checkbox"/>
 <label class="md-nav__link" for="__nav_3_4_2">
           Transports
           <span class="md-nav__icon md-icon"></span>
@@ -225,18 +225,38 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../cookie/">
+<a class="md-nav__link" href="../../transports/cookie/">
         Cookie
       </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../transports/bearer/">
+        Bearer
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4_3" id="__nav_3_4_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3_4_3">
+          Strategies
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Strategies" class="md-nav" data-md-level="3">
+<label class="md-nav__title" for="__nav_3_4_3">
+<span class="md-nav__icon md-icon"></span>
+          Strategies
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item md-nav__item--active">
 <input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
 <label class="md-nav__link md-nav__link--active" for="__toc">
-          Bearer
+          Database
           <span class="md-nav__icon md-icon"></span>
 </label>
 <a class="md-nav__link md-nav__link--active" href="./">
-        Bearer
+        Database
       </a>
 <nav aria-label="Table of contents" class="md-nav md-nav--secondary">
 <label class="md-nav__title" for="__toc">
@@ -248,52 +268,41 @@
 <a class="md-nav__link" href="#configuration">
     Configuration
   </a>
+<nav aria-label="Configuration" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#model">
+    Model
+  </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#login">
-    Login
+<a class="md-nav__link" href="#database-adapter">
+    Database adapter
   </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#strategy">
+    Strategy
+  </a>
+</li>
+</ul>
+</nav>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="#logout">
     Logout
   </a>
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#authentication">
-    Authentication
-  </a>
-</li>
 </ul>
 </nav>
 </li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4_3" id="__nav_3_4_3" type="checkbox"/>
-<label class="md-nav__link" for="__nav_3_4_3">
-          Strategies
-          <span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-label="Strategies" class="md-nav" data-md-level="3">
-<label class="md-nav__title" for="__nav_3_4_3">
-<span class="md-nav__icon md-icon"></span>
-          Strategies
-        </label>
-<ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../strategies/database/">
-        Database
-      </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../strategies/jwt/">
+<a class="md-nav__link" href="../jwt/">
         JWT
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../strategies/redis/">
+<a class="md-nav__link" href="../redis/">
         Redis
       </a>
 </li>
@@ -494,20 +503,29 @@
 <a class="md-nav__link" href="#configuration">
     Configuration
   </a>
+<nav aria-label="Configuration" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#model">
+    Model
+  </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#login">
-    Login
+<a class="md-nav__link" href="#database-adapter">
+    Database adapter
   </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#strategy">
+    Strategy
+  </a>
+</li>
+</ul>
+</nav>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="#logout">
     Logout
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#authentication">
-    Authentication
   </a>
 </li>
 </ul>
@@ -517,43 +535,191 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1 id="bearer">Bearer<a class="headerlink" href="#bearer" title="Permanent link">¶</a></h1>
-<p>With this transport, the token is expected inside the <code>Authorization</code> header of the HTTP request with the <code>Bearer</code> scheme. It's particularly suited for pure API interaction or mobile apps.</p>
+<h1 id="database">Database<a class="headerlink" href="#database" title="Permanent link">¶</a></h1>
+<p>The most natural way for storing tokens is of course the very same database you're using for your application. In this strategy, we set up a table (or collection) for storing those tokens with the associated user id. On each request, we try to retrive this token from the database to get the corresponding user id.</p>
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">¶</a></h2>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi_users.authentication</span> <span class="kn">import</span> <span class="n">BearerTransport</span>
+<p>The configuration of this strategy is a bit more complex than the others as it requires you to configure models and a database adapter, <a href="../../../overview/#database-adapters">exactly like we did for users</a>.</p>
+<h3 id="model">Model<a class="headerlink" href="#model" title="Permanent link">¶</a></h3>
+<p>You should define an <code>AccessToken</code> Pydantic model inheriting from <code>BaseAccessToken</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi_users.authentication.strategy.db</span> <span class="kn">import</span> <span class="n">BaseAccessToken</span>
 
-<span class="n">bearer_transport</span> <span class="o">=</span> <span class="n">BearerTransport</span><span class="p">(</span><span class="n">tokenUrl</span><span class="o">=</span><span class="s2">"auth/jwt/login"</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">AccessToken</span><span class="p">(</span><span class="n">BaseAccessToken</span><span class="p">):</span>
+        <span class="k">pass</span>
+</code></pre></div>
+<p>It is structured like this:</p>
+<ul>
+<li><code>token</code> (<code>str</code>) – Unique identifier of the token. It's generated automatically upon login by the strategy.</li>
+<li><code>user_id</code> (<code>UUID4</code>) – User id. of the user associated to this token.</li>
+<li><code>created_at</code> (<code>datetime</code>) – Date and time of creation of the token. It's used to determine if the token is expired or not.</li>
+</ul>
+<h3 id="database-adapter">Database adapter<a class="headerlink" href="#database-adapter" title="Permanent link">¶</a></h3>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><input id="__tabbed_1_3" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">SQLAlchemy</label><label for="__tabbed_1_2">Tortoise ORM</label><label for="__tabbed_1_3">MongoDB</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">databases</span>
+<span class="kn">import</span> <span class="nn">sqlalchemy</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">SQLAlchemyBaseUserTable</span><span class="p">,</span> <span class="n">SQLAlchemyUserDatabase</span>
+<span class="hll"><span class="kn">from</span> <span class="nn">fastapi_users_db_sqlalchemy.access_token</span> <span class="kn">import</span> <span class="p">(</span>
+</span><span class="hll">    <span class="n">SQLAlchemyAccessTokenDatabase</span><span class="p">,</span>
+</span><span class="hll">    <span class="n">SQLAlchemyBaseAccessTokenTable</span><span class="p">,</span>
+</span><span class="hll"><span class="p">)</span>
+</span><span class="kn">from</span> <span class="nn">sqlalchemy.ext.declarative</span> <span class="kn">import</span> <span class="n">DeclarativeMeta</span><span class="p">,</span> <span class="n">declarative_base</span>
+
+<span class="hll"><span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">AccessToken</span><span class="p">,</span> <span class="n">UserDB</span>
+</span>
+<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">"sqlite:///./test.db"</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">databases</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">)</span>
+<span class="n">Base</span><span class="p">:</span> <span class="n">DeclarativeMeta</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">()</span>
+
+
+<span class="k">class</span> <span class="nc">UserTable</span><span class="p">(</span><span class="n">Base</span><span class="p">,</span> <span class="n">SQLAlchemyBaseUserTable</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="hll"><span class="k">class</span> <span class="nc">AccessTokenTable</span><span class="p">(</span><span class="n">SQLAlchemyBaseAccessTokenTable</span><span class="p">,</span> <span class="n">Base</span><span class="p">):</span>
+</span><span class="hll">    <span class="k">pass</span>
+</span>
+
+<span class="n">engine</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">create_engine</span><span class="p">(</span>
+    <span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">connect_args</span><span class="o">=</span><span class="p">{</span><span class="s2">"check_same_thread"</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+
+<span class="n">users</span> <span class="o">=</span> <span class="n">UserTable</span><span class="o">.</span><span class="n">__table__</span>
+<span class="hll"><span class="n">access_tokens</span> <span class="o">=</span> <span class="n">AccessTokenTable</span><span class="o">.</span><span class="n">__table__</span>
+</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_db</span><span class="p">():</span>
+    <span class="k">yield</span> <span class="n">SQLAlchemyUserDatabase</span><span class="p">(</span><span class="n">UserDB</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">users</span><span class="p">)</span>
+
+
+<span class="hll"><span class="k">async</span> <span class="k">def</span> <span class="nf">get_access_token_db</span><span class="p">():</span>
+</span><span class="hll">    <span class="k">yield</span> <span class="n">SQLAlchemyAccessTokenDatabase</span><span class="p">(</span><span class="n">AccessToken</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">access_tokens</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>With Tortoise ORM, you need to define a proper Tortoise model for <code>AccessToken</code> and manually specify the user foreign key. Besides, you need to modify the Pydantic model a bit so that it works well with this Tortoise model.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio"><input id="__tabbed_2_2" name="__tabbed_2" type="radio"><div class="tabbed-labels"><label for="__tabbed_2_1"><span class="twemoji"><svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M4 1.75C4 .784 4.784 0 5.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 14.25 15h-9a.75.75 0 0 1 0-1.5h9a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 10 4.25V1.5H5.75a.25.25 0 0 0-.25.25v2.5a.75.75 0 0 1-1.5 0v-2.5zm7.5-.188V4.25c0 .138.112.25.25.25h2.688a.252.252 0 0 0-.011-.013l-2.914-2.914a.272.272 0 0 0-.013-.011zM5.72 6.72a.75.75 0 0 0 0 1.06l1.47 1.47-1.47 1.47a.75.75 0 1 0 1.06 1.06l2-2a.75.75 0 0 0 0-1.06l-2-2a.75.75 0 0 0-1.06 0zM3.28 7.78a.75.75 0 0 0-1.06-1.06l-2 2a.75.75 0 0 0 0 1.06l2 2a.75.75 0 0 0 1.06-1.06L1.81 9.25l1.47-1.47z" fill-rule="evenodd"></path></svg></span> model.py</label><label for="__tabbed_2_2"><span class="twemoji"><svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M4 1.75C4 .784 4.784 0 5.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 14.25 15h-9a.75.75 0 0 1 0-1.5h9a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 10 4.25V1.5H5.75a.25.25 0 0 0-.25.25v2.5a.75.75 0 0 1-1.5 0v-2.5zm7.5-.188V4.25c0 .138.112.25.25.25h2.688a.252.252 0 0 0-.011-.013l-2.914-2.914a.272.272 0 0 0-.013-.011zM5.72 6.72a.75.75 0 0 0 0 1.06l1.47 1.47-1.47 1.47a.75.75 0 1 0 1.06 1.06l2-2a.75.75 0 0 0 0-1.06l-2-2a.75.75 0 0 0-1.06 0zM3.28 7.78a.75.75 0 0 0-1.06-1.06l-2 2a.75.75 0 0 0 0 1.06l2 2a.75.75 0 0 0 1.06-1.06L1.81 9.25l1.47-1.47z" fill-rule="evenodd"></path></svg></span> adapter.py</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="hll"><span class="kn">from</span> <span class="nn">fastapi_users.authentication.strategy.db.models</span> <span class="kn">import</span> <span class="n">BaseAccessToken</span>
+</span><span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">TortoiseBaseUserModel</span>
+<span class="hll"><span class="kn">from</span> <span class="nn">fastapi_users_db_tortoise.access_token</span> <span class="kn">import</span> <span class="n">TortoiseBaseAccessTokenModel</span>
+</span><span class="kn">from</span> <span class="nn">tortoise</span> <span class="kn">import</span> <span class="n">fields</span>
+<span class="kn">from</span> <span class="nn">tortoise.contrib.pydantic</span> <span class="kn">import</span> <span class="n">PydanticModel</span>
+
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUser</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserCreate</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUserCreate</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserUpdate</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUserUpdate</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserModel</span><span class="p">(</span><span class="n">TortoiseBaseUserModel</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">UserDB</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserDB</span><span class="p">,</span> <span class="n">PydanticModel</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+        <span class="n">orm_mode</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">orig_model</span> <span class="o">=</span> <span class="n">UserModel</span>
+
+
+<span class="hll"><span class="k">class</span> <span class="nc">AccessTokenModel</span><span class="p">(</span><span class="n">TortoiseBaseAccessTokenModel</span><span class="p">):</span>
+</span><span class="hll">    <span class="n">user</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ForeignKeyField</span><span class="p">(</span><span class="s2">"models.UserModel"</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s2">"access_tokens"</span><span class="p">)</span>
+</span><span class="hll">
+</span><span class="hll">
+</span><span class="hll"><span class="k">class</span> <span class="nc">AccessToken</span><span class="p">(</span><span class="n">BaseAccessToken</span><span class="p">,</span> <span class="n">PydanticModel</span><span class="p">):</span>
+</span><span class="hll">    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+</span><span class="hll">        <span class="n">orm_mode</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span class="hll">        <span class="n">orig_model</span> <span class="o">=</span> <span class="n">AccessTokenModel</span>
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">TortoiseUserDatabase</span>
+<span class="hll"><span class="kn">from</span> <span class="nn">fastapi_users_db_tortoise.access_token</span> <span class="kn">import</span> <span class="n">TortoiseAccessTokenDatabase</span>
+</span>
+<span class="hll"><span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">AccessToken</span><span class="p">,</span> <span class="n">AccessTokenModel</span><span class="p">,</span> <span class="n">UserDB</span><span class="p">,</span> <span class="n">UserModel</span>
+</span>
+<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">"sqlite://./test.db"</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_db</span><span class="p">():</span>
+    <span class="k">yield</span> <span class="n">TortoiseUserDatabase</span><span class="p">(</span><span class="n">UserDB</span><span class="p">,</span> <span class="n">UserModel</span><span class="p">)</span>
+
+
+<span class="hll"><span class="k">async</span> <span class="k">def</span> <span class="nf">get_access_token_db</span><span class="p">():</span>
+</span><span class="hll">    <span class="k">yield</span> <span class="n">TortoiseAccessTokenDatabase</span><span class="p">(</span><span class="n">AccessToken</span><span class="p">,</span> <span class="n">AccessTokenModel</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+</div>
+</input></input></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">motor.motor_asyncio</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">MongoDBUserDatabase</span>
+<span class="hll"><span class="kn">from</span> <span class="nn">fastapi_users_db_mongodb.access_token</span> <span class="kn">import</span> <span class="n">MongoDBAccessTokenDatabase</span>
+</span>
+<span class="hll"><span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">AccessToken</span><span class="p">,</span> <span class="n">UserDB</span>
+</span>
+<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">"mongodb://localhost:27017"</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">motor</span><span class="o">.</span><span class="n">motor_asyncio</span><span class="o">.</span><span class="n">AsyncIOMotorClient</span><span class="p">(</span>
+    <span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">uuidRepresentation</span><span class="o">=</span><span class="s2">"standard"</span>
+<span class="p">)</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="s2">"database_name"</span><span class="p">]</span>
+<span class="n">users_collection</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="s2">"users"</span><span class="p">]</span>
+<span class="hll"><span class="n">access_tokens_collection</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="s2">"access_tokens"</span><span class="p">]</span>
+</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_db</span><span class="p">():</span>
+    <span class="k">yield</span> <span class="n">MongoDBUserDatabase</span><span class="p">(</span><span class="n">UserDB</span><span class="p">,</span> <span class="n">users_collection</span><span class="p">)</span>
+
+
+<span class="hll"><span class="k">async</span> <span class="k">def</span> <span class="nf">get_access_token_db</span><span class="p">():</span>
+</span><span class="hll">    <span class="k">yield</span> <span class="n">MongoDBAccessTokenDatabase</span><span class="p">(</span><span class="n">AccessToken</span><span class="p">,</span> <span class="n">access_tokens_collection</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+</div>
+</input></input></input></div>
+<h3 id="strategy">Strategy<a class="headerlink" href="#strategy" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">Depends</span>
+<span class="kn">from</span> <span class="nn">fastapi_users.authentication.db</span> <span class="kn">import</span> <span class="n">AccessTokenDatabase</span><span class="p">,</span> <span class="n">DatabaseStrategy</span>
+
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">AccessToken</span><span class="p">,</span> <span class="n">UserCreate</span><span class="p">,</span> <span class="n">UserDB</span>
+
+
+<span class="k">def</span> <span class="nf">get_database_strategy</span><span class="p">(</span>
+    <span class="n">access_token_db</span><span class="p">:</span> <span class="n">AccessTokenDatabase</span><span class="p">[</span><span class="n">AccessToken</span><span class="p">]</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_access_token_db</span><span class="p">),</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatabaseStrategy</span><span class="p">[</span><span class="n">UserCreate</span><span class="p">,</span> <span class="n">UserDB</span><span class="p">,</span> <span class="n">AccessToken</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="n">DatabaseStrategy</span><span class="p">(</span><span class="n">access_token_db</span><span class="p">,</span> <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span>
 </code></pre></div>
 <p>As you can see, instantiation is quite simple. It accepts the following arguments:</p>
 <ul>
-<li><code>tokenUrl</code> (<code>str</code>): The exact path of your login endpoint. It'll allow the interactive documentation to automatically discover it and get a working <em>Authorize</em> button. In most cases, you'll probably need a <strong>relative</strong> path, not absolute. You can read more details about this in the <a href="https://fastapi.tiangolo.com/tutorial/security/first-steps/#fastapis-oauth2passwordbearer">FastAPI documentation</a>.</li>
+<li><code>database</code> (<code>AccessTokenDatabase</code>): A database adapter instance for <code>AccessToken</code> table, like we defined above.</li>
+<li><code>lifetime_seconds</code> (<code>int</code>): The lifetime of the token in seconds.</li>
 </ul>
-<h2 id="login">Login<a class="headerlink" href="#login" title="Permanent link">¶</a></h2>
-<p>This method will return the in the following form upon successful login:</p>
-<div class="admonition success">
-<p class="admonition-title"><code>200 OK</code></p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nt">"access_token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiOTIyMWZmYzktNjQwZi00MzcyLTg2ZDMtY2U2NDJjYmE1NjAzIiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTcxNTA0MTkzfQ.M10bjOe45I5Ncu_uXvOmVV8QxnL-nZfcH96U90JaocI"</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">"token_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bearer"</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Why it's inside a function?</p>
+<p>To allow strategies to be instantiated dynamically with other dependencies, they have to be provided as a callable to the authentication backend.</p>
+<p>As you can see here, this pattern allows us to dynamically inject a connection to the database.</p>
 </div>
-<blockquote>
-<p>Check documentation about <a href="../../../../usage/routes/#post-login">login route</a>.</p>
-</blockquote>
 <h2 id="logout">Logout<a class="headerlink" href="#logout" title="Permanent link">¶</a></h2>
-<p>The logout method with this transport returns nothing.</p>
-<h2 id="authentication">Authentication<a class="headerlink" href="#authentication" title="Permanent link">¶</a></h2>
-<p>This method expects that you provide a <code>Bearer</code> authentication with a valid token corresponding to your strategy.</p>
-<div class="highlight"><pre><span></span><code>curl http://localhost:9000/protected-route -H<span class="s1">'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiOTIyMWZmYzktNjQwZi00MzcyLTg2ZDMtY2U2NDJjYmE1NjAzIiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTcxNTA0MTkzfQ.M10bjOe45I5Ncu_uXvOmVV8QxnL-nZfcH96U90JaocI'</span>
-</code></pre></div>
+<p>On logout, this strategy will delete the token from the database.</p>
 </article>
 </div>
 </div>
 </main>
 <footer class="md-footer">
 <nav aria-label="Footer" class="md-footer__inner md-grid">
-<a aria-label="Previous: Cookie" class="md-footer__link md-footer__link--prev" href="../cookie/" rel="prev">
+<a aria-label="Previous: Bearer" class="md-footer__link md-footer__link--prev" href="../../transports/bearer/" rel="prev">
 <div class="md-footer__button md-icon">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
 </div>
@@ -562,17 +728,17 @@
 <span class="md-footer__direction">
                 Previous
               </span>
-              Cookie
+              Bearer
             </div>
 </div>
 </a>
-<a aria-label="Next: Database" class="md-footer__link md-footer__link--next" href="../../strategies/database/" rel="next">
+<a aria-label="Next: JWT" class="md-footer__link md-footer__link--next" href="../jwt/" rel="next">
 <div class="md-footer__title">
 <div class="md-ellipsis">
 <span class="md-footer__direction">
                 Next
               </span>
-              Database
+              JWT
             </div>
 </div>
 <div class="md-footer__button md-icon">
