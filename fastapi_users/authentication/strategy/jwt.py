@@ -16,7 +16,7 @@ class JWTStrategy(Strategy, Generic[models.UC, models.UD]):
     def __init__(
         self,
         secret: SecretType,
-        lifetime_seconds: int,
+        lifetime_seconds: Optional[int],
         token_audience: List[str] = ["fastapi-users:auth"],
     ):
         self.secret = secret

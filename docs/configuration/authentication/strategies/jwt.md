@@ -16,7 +16,7 @@ def get_jwt_strategy() -> JWTStrategy:
 As you can see, instantiation is quite simple. It accepts the following arguments:
 
 * `secret` (`Union[str, pydantic.SecretStr]`): A constant secret which is used to encode the token. **Use a strong passphrase and keep it secure.**
-* `lifetime_seconds` (`int`): The lifetime of the token in seconds.
+* `lifetime_seconds` (`Optional[int]`): The lifetime of the token in seconds. Can be set to `None` but in this case the token will be valid **forever**; which may raise serious security concerns.
 * `token_audience` (`Optional[List[str]]`): A list of valid audiences for the JWT token. Defaults to `["fastapi-users:auth"]`.
 
 !!! tip "Why it's inside a function?"
