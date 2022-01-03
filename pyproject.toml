@@ -34,13 +34,13 @@ requires = [
 
 [tool.flit.metadata.requires-extra]
 sqlalchemy = [
-    "fastapi-users-db-sqlalchemy >=1.0.0",
+    "fastapi-users-db-sqlalchemy >=1.1.0",
 ]
 mongodb = [
-    "fastapi-users-db-mongodb >=1.0.0",
+    "fastapi-users-db-mongodb >=1.1.0",
 ]
 tortoise-orm = [
-    "fastapi-users-db-tortoise >=1.0.0",
+    "fastapi-users-db-tortoise >=1.1.0",
 ]
 ormar = [
     "fastapi-users-db-ormar >=1.0.0",

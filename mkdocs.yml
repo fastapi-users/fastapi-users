@@ -69,6 +69,7 @@ nav:
         - configuration/authentication/transports/cookie.md
         - configuration/authentication/transports/bearer.md
       - Strategies:
+        - configuration/authentication/strategies/database.md
         - configuration/authentication/strategies/jwt.md
         - configuration/authentication/strategies/redis.md
       - configuration/authentication/backend.md

@@ -43,7 +43,7 @@ Add quickly a registration and authentication system to your [FastAPI](https://f
     * [X] [ormar](https://collerek.github.io/ormar/) backend included
 * [X] Multiple customizable authentication backends
     * [X] Transports: Authorization header, Cookie
-    * [X] Strategies: JWT, Redis
+    * [X] Strategies: JWT, Database, Redis
 * [X] Full OpenAPI schema support, even with several authentication backends
 
 ## 📚 Discover my book: *Building Data Science Applications with FastAPI*

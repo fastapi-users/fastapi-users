@@ -57,6 +57,19 @@ The token is self-contained in a JSON Web Token.
 
     ➡️ Use it if you want to get up-and-running quickly.
 
+#### [Database](strategies/database.md)
+
+The token is stored in a table (or collection) in your database.
+
+!!! tip "Pros and cons"
+
+    * ✅ Secure and performant.
+    * ✅ Tokens can be invalidated server-side by removing them from the database.
+    * ✅ Highly customizable: add your own fields, create an API to retrieve the active sessions of your users, etc.
+    * ❌ Configuration is a bit more complex.
+
+    ➡️ Use it if you want maximum flexibility in your token management.
+
 #### [Redis](strategies/redis.md)
 
 The token is stored in a Redis key-store.
@@ -64,7 +77,7 @@ The token is stored in a Redis key-store.
 !!! tip "Pros and cons"
 
     * ✅ Secure and performant.
-    * ✅ Tokens can be invalidated server-side by removing tokens from Redis.
+    * ✅ Tokens can be invalidated server-side by removing them from Redis.
     * ❌ A Redis server is needed.
 
     ➡️ Use it if you want maximum performance while being able to invalidate tokens.
