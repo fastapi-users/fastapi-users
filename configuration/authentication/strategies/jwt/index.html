@@ -510,7 +510,7 @@
 <p>As you can see, instantiation is quite simple. It accepts the following arguments:</p>
 <ul>
 <li><code>secret</code> (<code>Union[str, pydantic.SecretStr]</code>): A constant secret which is used to encode the token. <strong>Use a strong passphrase and keep it secure.</strong></li>
-<li><code>lifetime_seconds</code> (<code>int</code>): The lifetime of the token in seconds.</li>
+<li><code>lifetime_seconds</code> (<code>Optional[int]</code>): The lifetime of the token in seconds. Can be set to <code>None</code> but in this case the token will be valid <strong>forever</strong>; which may raise serious security concerns.</li>
 <li><code>token_audience</code> (<code>Optional[List[str]]</code>): A list of valid audiences for the JWT token. Defaults to <code>["fastapi-users:auth"]</code>.</li>
 </ul>
 <div class="admonition tip">
