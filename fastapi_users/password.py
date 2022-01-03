@@ -3,7 +3,7 @@ from typing import Tuple
 from passlib import pwd
 from passlib.context import CryptContext
 
-pwd_context = CryptContext(schemes=["argon2", "bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def verify_and_update_password(
