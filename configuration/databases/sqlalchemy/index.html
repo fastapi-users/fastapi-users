@@ -188,8 +188,8 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#installation">
-    Installation
+<a class="md-nav__link" href="#asynchronous-driver">
+    Asynchronous driver
   </a>
 </li>
 <li class="md-nav__item">
@@ -198,18 +198,13 @@
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#create-the-tables">
-    Create the tables
+<a class="md-nav__link" href="#implement-a-function-to-create-the-tables">
+    Implement a function to create the tables
   </a>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="#create-the-database-adapter-dependency">
     Create the database adapter dependency
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#what-about-sqlalchemy-orm">
-    What about SQLAlchemy ORM?
   </a>
 </li>
 </ul>
@@ -496,8 +491,8 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#installation">
-    Installation
+<a class="md-nav__link" href="#asynchronous-driver">
+    Asynchronous driver
   </a>
 </li>
 <li class="md-nav__item">
@@ -506,18 +501,13 @@
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#create-the-tables">
-    Create the tables
+<a class="md-nav__link" href="#implement-a-function-to-create-the-tables">
+    Implement a function to create the tables
   </a>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="#create-the-database-adapter-dependency">
     Create the database adapter dependency
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#what-about-sqlalchemy-orm">
-    What about SQLAlchemy ORM?
   </a>
 </li>
 </ul>
@@ -528,27 +518,31 @@
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
 <h1 id="sqlalchemy">SQLAlchemy<a class="headerlink" href="#sqlalchemy" title="Permanent link">¶</a></h1>
-<p><strong>FastAPI Users</strong> provides the necessary tools to work with SQL databases thanks to <a href="https://docs.sqlalchemy.org/en/13/core/">SQLAlchemy Core</a> and <a href="https://www.encode.io/databases/">encode/databases</a> package for full async support.</p>
-<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">¶</a></h2>
-<p>Install the database driver that corresponds to your DBMS:</p>
-<div class="highlight"><pre><span></span><code>pip install <span class="s1">'databases[postgresql]'</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>pip install <span class="s1">'databases[mysql]'</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>pip install <span class="s1">'databases[sqlite]'</span>
-</code></pre></div>
+<p><strong>FastAPI Users</strong> provides the necessary tools to work with SQL databases thanks to <a href="https://docs.sqlalchemy.org/en/14/orm/extensions/asyncio.html">SQLAlchemy ORM with asyncio</a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The previous adapter using <code>encode/databases</code> is now deprecated but can still be installed using <code>fastapi-users[sqlalchemy]</code>.</p>
+</div>
+<h2 id="asynchronous-driver">Asynchronous driver<a class="headerlink" href="#asynchronous-driver" title="Permanent link">¶</a></h2>
+<p>To work with your DBMS, you'll need to install the corresponding asyncio driver. The common choices are:</p>
+<ul>
+<li>For PostgreSQL: <code>pip install asyncpg</code></li>
+<li>For SQLite: <code>pip install aiosqlite</code></li>
+</ul>
 <p>For the sake of this tutorial from now on, we'll use a simple SQLite databse.</p>
 <h2 id="setup-user-table">Setup User table<a class="headerlink" href="#setup-user-table" title="Permanent link">¶</a></h2>
 <p>Let's declare our SQLAlchemy <code>User</code> table.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">databases</span>
-<span class="kn">import</span> <span class="nn">sqlalchemy</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">AsyncGenerator</span>
+
+<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">Depends</span>
 <span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">SQLAlchemyBaseUserTable</span><span class="p">,</span> <span class="n">SQLAlchemyUserDatabase</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.ext.asyncio</span> <span class="kn">import</span> <span class="n">AsyncSession</span><span class="p">,</span> <span class="n">create_async_engine</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy.ext.declarative</span> <span class="kn">import</span> <span class="n">DeclarativeMeta</span><span class="p">,</span> <span class="n">declarative_base</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">sessionmaker</span>
 
 <span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">UserDB</span>
 
-<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">"sqlite:///./test.db"</span>
-<span class="n">database</span> <span class="o">=</span> <span class="n">databases</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">)</span>
+<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">"sqlite+aiosqlite:///./test.db"</span>
 <span class="n">Base</span><span class="p">:</span> <span class="n">DeclarativeMeta</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">()</span>
 
 
@@ -556,29 +550,37 @@
 </span><span class="hll">    <span class="k">pass</span>
 </span>
 
-<span class="n">engine</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">create_engine</span><span class="p">(</span>
-    <span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">connect_args</span><span class="o">=</span><span class="p">{</span><span class="s2">"check_same_thread"</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
-<span class="p">)</span>
-<span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
-
-<span class="n">users</span> <span class="o">=</span> <span class="n">UserTable</span><span class="o">.</span><span class="n">__table__</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">create_async_engine</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">connect_args</span><span class="o">=</span><span class="p">{</span><span class="s2">"check_same_thread"</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+<span class="n">async_session_maker</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">expire_on_commit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 
-<span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_db</span><span class="p">():</span>
-    <span class="k">yield</span> <span class="n">SQLAlchemyUserDatabase</span><span class="p">(</span><span class="n">UserDB</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">users</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">create_db_and_tables</span><span class="p">():</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">run_sync</span><span class="p">(</span><span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">)</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_async_session</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">AsyncGenerator</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">async_session_maker</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">session</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_db</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_session</span><span class="p">)):</span>
+    <span class="k">yield</span> <span class="n">SQLAlchemyUserDatabase</span><span class="p">(</span><span class="n">UserDB</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">UserTable</span><span class="p">)</span>
 </code></pre></div>
 <p>As you can see, <strong>FastAPI Users</strong> provides a mixin that will include base fields for our <code>User</code> table. You can of course add you own fields there to fit to your needs!</p>
-<h2 id="create-the-tables">Create the tables<a class="headerlink" href="#create-the-tables" title="Permanent link">¶</a></h2>
-<p>We'll now create an SQLAlchemy engine and ask it to create all the defined tables.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">databases</span>
-<span class="kn">import</span> <span class="nn">sqlalchemy</span>
+<h2 id="implement-a-function-to-create-the-tables">Implement a function to create the tables<a class="headerlink" href="#implement-a-function-to-create-the-tables" title="Permanent link">¶</a></h2>
+<p>We'll now create an utility function to create all the defined tables.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">AsyncGenerator</span>
+
+<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">Depends</span>
 <span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">SQLAlchemyBaseUserTable</span><span class="p">,</span> <span class="n">SQLAlchemyUserDatabase</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.ext.asyncio</span> <span class="kn">import</span> <span class="n">AsyncSession</span><span class="p">,</span> <span class="n">create_async_engine</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy.ext.declarative</span> <span class="kn">import</span> <span class="n">DeclarativeMeta</span><span class="p">,</span> <span class="n">declarative_base</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">sessionmaker</span>
 
 <span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">UserDB</span>
 
-<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">"sqlite:///./test.db"</span>
-<span class="n">database</span> <span class="o">=</span> <span class="n">databases</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">)</span>
+<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">"sqlite+aiosqlite:///./test.db"</span>
 <span class="n">Base</span><span class="p">:</span> <span class="n">DeclarativeMeta</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">()</span>
 
 
@@ -586,32 +588,41 @@
     <span class="k">pass</span>
 
 
-<span class="hll"><span class="n">engine</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">create_engine</span><span class="p">(</span>
-</span><span class="hll">    <span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">connect_args</span><span class="o">=</span><span class="p">{</span><span class="s2">"check_same_thread"</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
-</span><span class="hll"><span class="p">)</span>
-</span><span class="hll"><span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">create_async_engine</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">connect_args</span><span class="o">=</span><span class="p">{</span><span class="s2">"check_same_thread"</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+<span class="n">async_session_maker</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">expire_on_commit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+
+<span class="hll"><span class="k">async</span> <span class="k">def</span> <span class="nf">create_db_and_tables</span><span class="p">():</span>
+</span><span class="hll">    <span class="k">async</span> <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+</span><span class="hll">        <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">run_sync</span><span class="p">(</span><span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">)</span>
 </span>
-<span class="n">users</span> <span class="o">=</span> <span class="n">UserTable</span><span class="o">.</span><span class="n">__table__</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_async_session</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">AsyncGenerator</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">async_session_maker</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">session</span>
 
 
-<span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_db</span><span class="p">():</span>
-    <span class="k">yield</span> <span class="n">SQLAlchemyUserDatabase</span><span class="p">(</span><span class="n">UserDB</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">users</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_db</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_session</span><span class="p">)):</span>
+    <span class="k">yield</span> <span class="n">SQLAlchemyUserDatabase</span><span class="p">(</span><span class="n">UserDB</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">UserTable</span><span class="p">)</span>
 </code></pre></div>
+<p>This function can be called, for example, during the initialization of your FastAPI app.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>In production, it's strongly recommended to setup a migration system to update your SQL schemas. See <a href="https://alembic.sqlalchemy.org/en/latest/">Alembic</a>.</p>
 </div>
 <h2 id="create-the-database-adapter-dependency">Create the database adapter dependency<a class="headerlink" href="#create-the-database-adapter-dependency" title="Permanent link">¶</a></h2>
 <p>The database adapter of <strong>FastAPI Users</strong> makes the link between your database configuration and the users logic. It should be generated by a FastAPI dependency.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">databases</span>
-<span class="kn">import</span> <span class="nn">sqlalchemy</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">AsyncGenerator</span>
+
+<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">Depends</span>
 <span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">SQLAlchemyBaseUserTable</span><span class="p">,</span> <span class="n">SQLAlchemyUserDatabase</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.ext.asyncio</span> <span class="kn">import</span> <span class="n">AsyncSession</span><span class="p">,</span> <span class="n">create_async_engine</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy.ext.declarative</span> <span class="kn">import</span> <span class="n">DeclarativeMeta</span><span class="p">,</span> <span class="n">declarative_base</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">sessionmaker</span>
 
 <span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">UserDB</span>
 
-<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">"sqlite:///./test.db"</span>
-<span class="n">database</span> <span class="o">=</span> <span class="n">databases</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">)</span>
+<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">"sqlite+aiosqlite:///./test.db"</span>
 <span class="n">Base</span><span class="p">:</span> <span class="n">DeclarativeMeta</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">()</span>
 
 
@@ -619,25 +630,30 @@
     <span class="k">pass</span>
 
 
-<span class="n">engine</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">create_engine</span><span class="p">(</span>
-    <span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">connect_args</span><span class="o">=</span><span class="p">{</span><span class="s2">"check_same_thread"</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
-<span class="p">)</span>
-<span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
-
-<span class="n">users</span> <span class="o">=</span> <span class="n">UserTable</span><span class="o">.</span><span class="n">__table__</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">create_async_engine</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">connect_args</span><span class="o">=</span><span class="p">{</span><span class="s2">"check_same_thread"</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+<span class="n">async_session_maker</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">expire_on_commit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 
-<span class="hll"><span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_db</span><span class="p">():</span>
-</span><span class="hll">    <span class="k">yield</span> <span class="n">SQLAlchemyUserDatabase</span><span class="p">(</span><span class="n">UserDB</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">users</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">create_db_and_tables</span><span class="p">():</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">run_sync</span><span class="p">(</span><span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">)</span>
+
+
+<span class="hll"><span class="k">async</span> <span class="k">def</span> <span class="nf">get_async_session</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">AsyncGenerator</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+</span><span class="hll">    <span class="k">async</span> <span class="k">with</span> <span class="n">async_session_maker</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+</span><span class="hll">        <span class="k">yield</span> <span class="n">session</span>
+</span><span class="hll">
+</span><span class="hll">
+</span><span class="hll"><span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_db</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_async_session</span><span class="p">)):</span>
+</span><span class="hll">    <span class="k">yield</span> <span class="n">SQLAlchemyUserDatabase</span><span class="p">(</span><span class="n">UserDB</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">UserTable</span><span class="p">)</span>
 </span></code></pre></div>
-<p>Notice that we pass it three things:</p>
+<p>Notice that we define first a <code>get_async_session</code> dependency returning us a fresh SQLAlchemy session to interact with the database.</p>
+<p>It's then used inside the <code>get_user_db</code> dependency to generate our adapter. Notice that we pass it three things:</p>
 <ul>
 <li>A reference to your <a href="../../models/"><code>UserDB</code> model</a>.</li>
-<li>A <code>database</code> instance, which allows us to do asynchronous request to the database.</li>
-<li>The <code>users</code> variable, which is the actual SQLAlchemy table behind the table class.</li>
+<li>The <code>session</code> instance we just injected.</li>
+<li>The <code>UserTable</code> variable, which is the actual SQLAlchemy model.</li>
 </ul>
-<h2 id="what-about-sqlalchemy-orm">What about SQLAlchemy ORM?<a class="headerlink" href="#what-about-sqlalchemy-orm" title="Permanent link">¶</a></h2>
-<p>The primary objective was to use pure async approach as much as possible. However, we understand that ORM is convenient and useful for many developers. If this feature becomes very demanded, we will add a database adapter for SQLAlchemy ORM.</p>
 </article>
 </div>
 </div>
