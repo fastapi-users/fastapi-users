@@ -37,7 +37,7 @@ Add quickly a registration and authentication system to your [FastAPI](https://f
 * [X] Dependency callables to inject current user in route
 * [X] Pluggable password validation
 * [X] Customizable database backend
-    * [X] SQLAlchemy async backend included thanks to [encode/databases](https://www.encode.io/databases/)
+    * [X] [SQLAlchemy ORM async](https://docs.sqlalchemy.org/en/14/orm/extensions/asyncio.html) backend included
     * [X] MongoDB async backend included thanks to [mongodb/motor](https://github.com/mongodb/motor)
     * [X] [Tortoise ORM](https://tortoise-orm.readthedocs.io/en/latest/) backend included
     * [X] [ormar](https://collerek.github.io/ormar/) backend included
