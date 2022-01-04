@@ -29,7 +29,7 @@ It is structured like this:
 
 === "SQLAlchemy"
 
-    ```py hl_lines="4-7 10 21-22 31 38-39"
+    ```py hl_lines="5-8 13 23-24 45-46"
     --8<-- "docs/src/db_sqlalchemy_access_tokens.py"
     ```
 

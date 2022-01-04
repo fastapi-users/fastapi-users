@@ -5,7 +5,7 @@ You can add **FastAPI Users** to your FastAPI project in a few easy steps. First
 ## With SQLAlchemy support
 
 ```sh
-pip install 'fastapi-users[sqlalchemy]'
+pip install 'fastapi-users[sqlalchemy2]'
 ```
 
 ## With MongoDB support

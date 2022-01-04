@@ -34,7 +34,10 @@ requires = [
 
 [tool.flit.metadata.requires-extra]
 sqlalchemy = [
-    "fastapi-users-db-sqlalchemy >=1.1.0",
+    "fastapi-users-db-sqlalchemy >=1.1.0,<2.0.0",
+]
+sqlalchemy2 = [
+    "fastapi-users-db-sqlalchemy >=2.0.0",
 ]
 mongodb = [
     "fastapi-users-db-mongodb >=1.1.0",

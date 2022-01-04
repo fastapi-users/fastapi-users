@@ -1,16 +1,18 @@
-import databases
-import sqlalchemy
+from typing import AsyncGenerator
+
+from fastapi import Depends
 from fastapi_users.db import SQLAlchemyBaseUserTable, SQLAlchemyUserDatabase
 from fastapi_users_db_sqlalchemy.access_token import (
     SQLAlchemyAccessTokenDatabase,
     SQLAlchemyBaseAccessTokenTable,
 )
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
+from sqlalchemy.orm import sessionmaker
 
 from .models import AccessToken, UserDB
 
-DATABASE_URL = "sqlite:///./test.db"
-database = databases.Database(DATABASE_URL)
+DATABASE_URL = "sqlite+aiosqlite:///./test.db"
 Base: DeclarativeMeta = declarative_base()
 
 
@@ -22,18 +24,23 @@ class AccessTokenTable(SQLAlchemyBaseAccessTokenTable, Base):
     pass
 
 
-engine = sqlalchemy.create_engine(
-    DATABASE_URL, connect_args={"check_same_thread": False}
-)
-Base.metadata.create_all(engine)
-
-users = UserTable.__table__
-access_tokens = AccessTokenTable.__table__
+engine = create_async_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+async_session_maker = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 
-async def get_user_db():
-    yield SQLAlchemyUserDatabase(UserDB, database, users)
+async def create_db_and_tables():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
 
 
-async def get_access_token_db():
-    yield SQLAlchemyAccessTokenDatabase(AccessToken, database, access_tokens)
+async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
+    async with async_session_maker() as session:
+        yield session
+
+
+async def get_user_db(session: AsyncSession = Depends(get_async_session)):
+    yield SQLAlchemyUserDatabase(UserDB, session, UserTable)
+
+
+async def get_access_token_db(session: AsyncSession = Depends(get_async_session)):
+    yield SQLAlchemyAccessTokenDatabase(AccessToken, session, AccessTokenTable)

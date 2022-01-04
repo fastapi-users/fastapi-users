@@ -7,7 +7,7 @@ FastAPI Users provides an optional OAuth2 authentication support. It relies on [
 You should install the library with the optional dependencies for OAuth:
 
 ```sh
-pip install 'fastapi-users[sqlalchemy,oauth]'
+pip install 'fastapi-users[sqlalchemy2,oauth]'
 ```
 
 ```sh
@@ -68,15 +68,17 @@ Notice that we inherit from the `BaseOAuthAccountMixin`, which adds a `List` of 
 
 #### SQLAlchemy
 
-You'll need to define the table for storing the OAuth account model. We provide a base one for this:
+You'll need to define the SQLAlchemy model for storing OAuth accounts. We provide a base one for this:
 
-```py hl_lines="21 22"
+```py hl_lines="19-24"
 --8<-- "docs/src/db_sqlalchemy_oauth.py"
 ```
 
-When instantiating the database adapter, you should pass this table in argument::
+Notice that we also manually added a `relationship` on the `UserTable` so that SQLAlchemy can properly retrieve the OAuth accounts of the user.
 
-```py hl_lines="31 34 35"
+When instantiating the database adapter, you should pass this SQLAlchemy model:
+
+```py hl_lines="41-42"
 --8<-- "docs/src/db_sqlalchemy_oauth.py"
 ```
 
