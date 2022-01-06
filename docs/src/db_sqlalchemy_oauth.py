@@ -17,7 +17,7 @@ Base: DeclarativeMeta = declarative_base()
 
 
 class UserTable(Base, SQLAlchemyBaseUserTable):
-    oauth_accounts = relationship("OAuthAccount")
+    oauth_accounts = relationship("OAuthAccountTable")
 
 
 class OAuthAccountTable(SQLAlchemyBaseOAuthAccountTable, Base):
