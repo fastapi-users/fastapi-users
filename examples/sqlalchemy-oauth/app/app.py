@@ -1,6 +1,5 @@
 from fastapi import Depends, FastAPI
 
-from app.db import database
 from app.models import UserDB
 from app.users import (
     auth_backend,
@@ -36,13 +35,3 @@ app.include_router(
 @app.get("/authenticated-route")
 async def authenticated_route(user: UserDB = Depends(current_active_user)):
     return {"message": f"Hello {user.email}!"}
-
-
-@app.on_event("startup")
-async def startup():
-    await database.connect()
-
-
-@app.on_event("shutdown")
-async def shutdown():
-    await database.disconnect()
