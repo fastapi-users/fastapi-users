@@ -707,7 +707,7 @@
 </span><span class="hll">    <span class="k">pass</span>
 </span>
 
-<span class="n">engine</span> <span class="o">=</span> <span class="n">create_async_engine</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">connect_args</span><span class="o">=</span><span class="p">{</span><span class="s2">"check_same_thread"</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">create_async_engine</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">)</span>
 <span class="n">async_session_maker</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">expire_on_commit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 
@@ -752,7 +752,7 @@
     <span class="k">pass</span>
 
 
-<span class="n">engine</span> <span class="o">=</span> <span class="n">create_async_engine</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">connect_args</span><span class="o">=</span><span class="p">{</span><span class="s2">"check_same_thread"</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">create_async_engine</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">)</span>
 <span class="n">async_session_maker</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">expire_on_commit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 
@@ -853,7 +853,6 @@ uvicorn[standard]
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">FastAPI</span>
 
-<span class="kn">from</span> <span class="nn">app.db</span> <span class="kn">import</span> <span class="n">database</span>
 <span class="kn">from</span> <span class="nn">app.models</span> <span class="kn">import</span> <span class="n">UserDB</span>
 <span class="kn">from</span> <span class="nn">app.users</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">auth_backend</span><span class="p">,</span>
@@ -889,16 +888,6 @@ uvicorn[standard]
 <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/authenticated-route"</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">authenticated_route</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">UserDB</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_active_user</span><span class="p">)):</span>
     <span class="k">return</span> <span class="p">{</span><span class="s2">"message"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"Hello </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">!"</span><span class="p">}</span>
-
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span><span class="s2">"startup"</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">startup</span><span class="p">():</span>
-    <span class="k">await</span> <span class="n">database</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
-
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span><span class="s2">"shutdown"</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">shutdown</span><span class="p">():</span>
-    <span class="k">await</span> <span class="n">database</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
@@ -928,7 +917,7 @@ uvicorn[standard]
     <span class="k">pass</span>
 
 
-<span class="n">engine</span> <span class="o">=</span> <span class="n">create_async_engine</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">connect_args</span><span class="o">=</span><span class="p">{</span><span class="s2">"check_same_thread"</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">create_async_engine</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">)</span>
 <span class="n">async_session_maker</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">expire_on_commit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 

@@ -16,7 +16,7 @@ class UserTable(Base, SQLAlchemyBaseUserTable):
     pass
 
 
-engine = create_async_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+engine = create_async_engine(DATABASE_URL)
 async_session_maker = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 

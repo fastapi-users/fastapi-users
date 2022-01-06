@@ -583,7 +583,7 @@
 </span><span class="hll">    <span class="k">pass</span>
 </span>
 
-<span class="n">engine</span> <span class="o">=</span> <span class="n">create_async_engine</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">connect_args</span><span class="o">=</span><span class="p">{</span><span class="s2">"check_same_thread"</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">create_async_engine</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">)</span>
 <span class="n">async_session_maker</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">expire_on_commit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 
