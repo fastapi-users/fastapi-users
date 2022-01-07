@@ -4,7 +4,7 @@ Sometimes, you'll need to create a user programmatically in the code rather than
 
 In this context, we are outside the dependency injection mechanism of FastAPI, so we have to take care of instantiating the [`UserManager` class](../configuration/user-manager.md) and all other dependent objects **manually**.
 
-For this cookbook, we'll consider you are starting from one of the [full example](../configuration/full-example.md).
+For this cookbook, we'll consider you are starting from the [SQLAlchemy full example](../configuration/full-example.md), but it'll be rather similar for other DBMS.
 
 ## 1. Define dependencies as context managers
 
@@ -19,7 +19,7 @@ In Python, when we want to use a generator, we have to use a `for` loop, which w
 
 In the following sample, we import our dependencies and create a context manager version using `contextlib.asynccontextmanager`:
 
-```py hl_lines="8 9"
+```py hl_lines="8-10"
 --8<-- "docs/src/cookbook_create_user_programmatically.py"
 ```
 
@@ -30,7 +30,7 @@ In the following sample, we import our dependencies and create a context manager
 
 We are now ready to write a function. The example below shows you a basic example but you can of course adapt it to your own needs. The key part here is once again to **take care of opening every context managers and pass them every required arguments**, as the dependency manager would do.
 
-```py hl_lines="12-23"
+```py hl_lines="13-25"
 --8<-- "docs/src/cookbook_create_user_programmatically.py"
 ```
 
