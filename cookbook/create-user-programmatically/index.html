@@ -510,7 +510,7 @@
 <h1 id="create-a-user-programmatically">Create a user programmatically<a class="headerlink" href="#create-a-user-programmatically" title="Permanent link">¶</a></h1>
 <p>Sometimes, you'll need to create a user programmatically in the code rather than passing by the REST API endpoint. To do this, we'll create a function that you can call from your code.</p>
 <p>In this context, we are outside the dependency injection mechanism of FastAPI, so we have to take care of instantiating the <a href="../../configuration/user-manager/"><code>UserManager</code> class</a> and all other dependent objects <strong>manually</strong>.</p>
-<p>For this cookbook, we'll consider you are starting from one of the <a href="../../configuration/full-example/">full example</a>.</p>
+<p>For this cookbook, we'll consider you are starting from the <a href="../../configuration/full-example/">SQLAlchemy full example</a>, but it'll be rather similar for other DBMS.</p>
 <h2 id="1-define-dependencies-as-context-managers">1. Define dependencies as context managers<a class="headerlink" href="#1-define-dependencies-as-context-managers" title="Permanent link">¶</a></h2>
 <p>Generally, FastAPI dependencies are defined as <strong>generators</strong>, using the <code>yield</code> keyword. FastAPI knows very well to handle them inside its dependency injection system. For example, here is the definition of the <code>get_user_manager</code> dependency:</p>
 <div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_manager</span><span class="p">(</span><span class="n">user_db</span><span class="p">:</span> <span class="n">SQLAlchemyUserDatabase</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_user_db</span><span class="p">)):</span>
@@ -520,25 +520,27 @@
 <p>In the following sample, we import our dependencies and create a context manager version using <code>contextlib.asynccontextmanager</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">contextlib</span>
 
-<span class="kn">from</span> <span class="nn">app.db</span> <span class="kn">import</span> <span class="n">get_user_db</span>
+<span class="kn">from</span> <span class="nn">app.db</span> <span class="kn">import</span> <span class="n">get_async_session</span><span class="p">,</span> <span class="n">get_user_db</span>
 <span class="kn">from</span> <span class="nn">app.models</span> <span class="kn">import</span> <span class="n">UserCreate</span>
 <span class="kn">from</span> <span class="nn">app.users</span> <span class="kn">import</span> <span class="n">get_user_manager</span>
 <span class="kn">from</span> <span class="nn">fastapi_users.manager</span> <span class="kn">import</span> <span class="n">UserAlreadyExists</span>
 
-<span class="hll"><span class="n">get_user_db_context</span> <span class="o">=</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">asynccontextmanager</span><span class="p">(</span><span class="n">get_user_db</span><span class="p">)</span>
+<span class="hll"><span class="n">get_async_session_context</span> <span class="o">=</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">asynccontextmanager</span><span class="p">(</span><span class="n">get_async_session</span><span class="p">)</span>
+</span><span class="hll"><span class="n">get_user_db_context</span> <span class="o">=</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">asynccontextmanager</span><span class="p">(</span><span class="n">get_user_db</span><span class="p">)</span>
 </span><span class="hll"><span class="n">get_user_manager_context</span> <span class="o">=</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">asynccontextmanager</span><span class="p">(</span><span class="n">get_user_manager</span><span class="p">)</span>
 </span>
 
 <span class="k">async</span> <span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">is_superuser</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">async</span> <span class="k">with</span> <span class="n">get_user_db_context</span><span class="p">()</span> <span class="k">as</span> <span class="n">user_db</span><span class="p">:</span>
-            <span class="k">async</span> <span class="k">with</span> <span class="n">get_user_manager_context</span><span class="p">(</span><span class="n">user_db</span><span class="p">)</span> <span class="k">as</span> <span class="n">user_manager</span><span class="p">:</span>
-                <span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">user_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-                    <span class="n">UserCreate</span><span class="p">(</span>
-                        <span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span> <span class="n">is_superuser</span><span class="o">=</span><span class="n">is_superuser</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">get_async_session_context</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="n">get_user_db_context</span><span class="p">(</span><span class="n">session</span><span class="p">)</span> <span class="k">as</span> <span class="n">user_db</span><span class="p">:</span>
+                <span class="k">async</span> <span class="k">with</span> <span class="n">get_user_manager_context</span><span class="p">(</span><span class="n">user_db</span><span class="p">)</span> <span class="k">as</span> <span class="n">user_manager</span><span class="p">:</span>
+                    <span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">user_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+                        <span class="n">UserCreate</span><span class="p">(</span>
+                            <span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span> <span class="n">is_superuser</span><span class="o">=</span><span class="n">is_superuser</span>
+                        <span class="p">)</span>
                     <span class="p">)</span>
-                <span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"User created </span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"User created </span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="k">except</span> <span class="n">UserAlreadyExists</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"User </span><span class="si">{</span><span class="n">email</span><span class="si">}</span><span class="s2"> already exists"</span><span class="p">)</span>
 </code></pre></div>
@@ -550,25 +552,27 @@
 <p>We are now ready to write a function. The example below shows you a basic example but you can of course adapt it to your own needs. The key part here is once again to <strong>take care of opening every context managers and pass them every required arguments</strong>, as the dependency manager would do.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">contextlib</span>
 
-<span class="kn">from</span> <span class="nn">app.db</span> <span class="kn">import</span> <span class="n">get_user_db</span>
+<span class="kn">from</span> <span class="nn">app.db</span> <span class="kn">import</span> <span class="n">get_async_session</span><span class="p">,</span> <span class="n">get_user_db</span>
 <span class="kn">from</span> <span class="nn">app.models</span> <span class="kn">import</span> <span class="n">UserCreate</span>
 <span class="kn">from</span> <span class="nn">app.users</span> <span class="kn">import</span> <span class="n">get_user_manager</span>
 <span class="kn">from</span> <span class="nn">fastapi_users.manager</span> <span class="kn">import</span> <span class="n">UserAlreadyExists</span>
 
+<span class="n">get_async_session_context</span> <span class="o">=</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">asynccontextmanager</span><span class="p">(</span><span class="n">get_async_session</span><span class="p">)</span>
 <span class="n">get_user_db_context</span> <span class="o">=</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">asynccontextmanager</span><span class="p">(</span><span class="n">get_user_db</span><span class="p">)</span>
 <span class="n">get_user_manager_context</span> <span class="o">=</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">asynccontextmanager</span><span class="p">(</span><span class="n">get_user_manager</span><span class="p">)</span>
 
 
 <span class="hll"><span class="k">async</span> <span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">is_superuser</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
 </span><span class="hll">    <span class="k">try</span><span class="p">:</span>
-</span><span class="hll">        <span class="k">async</span> <span class="k">with</span> <span class="n">get_user_db_context</span><span class="p">()</span> <span class="k">as</span> <span class="n">user_db</span><span class="p">:</span>
-</span><span class="hll">            <span class="k">async</span> <span class="k">with</span> <span class="n">get_user_manager_context</span><span class="p">(</span><span class="n">user_db</span><span class="p">)</span> <span class="k">as</span> <span class="n">user_manager</span><span class="p">:</span>
-</span><span class="hll">                <span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">user_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-</span><span class="hll">                    <span class="n">UserCreate</span><span class="p">(</span>
-</span><span class="hll">                        <span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span> <span class="n">is_superuser</span><span class="o">=</span><span class="n">is_superuser</span>
+</span><span class="hll">        <span class="k">async</span> <span class="k">with</span> <span class="n">get_async_session_context</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+</span><span class="hll">            <span class="k">async</span> <span class="k">with</span> <span class="n">get_user_db_context</span><span class="p">(</span><span class="n">session</span><span class="p">)</span> <span class="k">as</span> <span class="n">user_db</span><span class="p">:</span>
+</span><span class="hll">                <span class="k">async</span> <span class="k">with</span> <span class="n">get_user_manager_context</span><span class="p">(</span><span class="n">user_db</span><span class="p">)</span> <span class="k">as</span> <span class="n">user_manager</span><span class="p">:</span>
+</span><span class="hll">                    <span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">user_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+</span><span class="hll">                        <span class="n">UserCreate</span><span class="p">(</span>
+</span><span class="hll">                            <span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span> <span class="n">is_superuser</span><span class="o">=</span><span class="n">is_superuser</span>
+</span><span class="hll">                        <span class="p">)</span>
 </span><span class="hll">                    <span class="p">)</span>
-</span><span class="hll">                <span class="p">)</span>
-</span><span class="hll">                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"User created </span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</span><span class="hll">                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"User created </span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </span><span class="hll">    <span class="k">except</span> <span class="n">UserAlreadyExists</span><span class="p">:</span>
 </span><span class="hll">        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"User </span><span class="si">{</span><span class="n">email</span><span class="si">}</span><span class="s2"> already exists"</span><span class="p">)</span>
 </span></code></pre></div>
