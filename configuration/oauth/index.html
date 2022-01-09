@@ -700,7 +700,7 @@
 
 
 <span class="hll"><span class="k">class</span> <span class="nc">UserTable</span><span class="p">(</span><span class="n">Base</span><span class="p">,</span> <span class="n">SQLAlchemyBaseUserTable</span><span class="p">):</span>
-</span><span class="hll">    <span class="n">oauth_accounts</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">"OAuthAccount"</span><span class="p">)</span>
+</span><span class="hll">    <span class="n">oauth_accounts</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">"OAuthAccountTable"</span><span class="p">)</span>
 </span><span class="hll">
 </span><span class="hll">
 </span><span class="hll"><span class="k">class</span> <span class="nc">OAuthAccountTable</span><span class="p">(</span><span class="n">SQLAlchemyBaseOAuthAccountTable</span><span class="p">,</span> <span class="n">Base</span><span class="p">):</span>
@@ -745,7 +745,7 @@
 
 
 <span class="k">class</span> <span class="nc">UserTable</span><span class="p">(</span><span class="n">Base</span><span class="p">,</span> <span class="n">SQLAlchemyBaseUserTable</span><span class="p">):</span>
-    <span class="n">oauth_accounts</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">"OAuthAccount"</span><span class="p">)</span>
+    <span class="n">oauth_accounts</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">"OAuthAccountTable"</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">OAuthAccountTable</span><span class="p">(</span><span class="n">SQLAlchemyBaseOAuthAccountTable</span><span class="p">,</span> <span class="n">Base</span><span class="p">):</span>
