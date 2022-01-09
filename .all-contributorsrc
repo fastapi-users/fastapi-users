@@ -443,6 +443,15 @@
         "bug",
         "doc"
       ]
+    },
+    {
+      "login": "luisroel91",
+      "name": "Luis Roel",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44761184?v=4",
+      "profile": "https://github.com/luisroel91",
+      "contributions": [
+        "financial"
+      ]
     }
   ],
   "contributorsPerLine": 7,
