@@ -24,12 +24,12 @@ classifiers = [
 description-file = "README.md"
 requires-python = ">=3.7"
 requires = [
-    "fastapi >=0.65.2,<0.71.0",
+    "fastapi >=0.65.2,<0.72.0",
     "passlib[bcrypt] ==1.7.4",
     "email-validator >=1.1.0,<1.2",
     "pyjwt ==2.3.0",
     "python-multipart ==0.0.5",
-    "makefun >=1.9.2,<1.13",
+    "makefun >=1.11.2,<1.14",
 ]
 
 [tool.flit.metadata.requires-extra]
