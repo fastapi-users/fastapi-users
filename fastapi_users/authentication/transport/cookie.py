@@ -48,7 +48,7 @@ class CookieTransport(Transport):
     async def get_logout_response(self, response: Response) -> Any:
         response.set_cookie(
             self.cookie_name,
-            '',
+            "",
             max_age=0,
             path=self.cookie_path,
             domain=self.cookie_domain,
