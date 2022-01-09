@@ -433,6 +433,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Hazedd",
+      "name": "Hazedd",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20663495?v=4",
+      "profile": "https://github.com/Hazedd",
+      "contributions": [
+        "bug",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
