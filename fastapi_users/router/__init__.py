@@ -14,7 +14,7 @@ __all__ = [
     "get_verify_router",
 ]
 
-try:
+try:  # pragma: no cover
     from fastapi_users.router.oauth import get_oauth_router  # noqa: F401
 
     __all__.append("get_oauth_router")

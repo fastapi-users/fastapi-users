@@ -5,14 +5,14 @@ __all__ = [
     "UserDatabaseDependency",
 ]
 
-try:
+try:  # pragma: no cover
     from fastapi_users_db_mongodb import MongoDBUserDatabase  # noqa: F401
 
     __all__.append("MongoDBUserDatabase")
 except ImportError:  # pragma: no cover
     pass
 
-try:
+try:  # pragma: no cover
     from fastapi_users_db_sqlalchemy import (  # noqa: F401
         SQLAlchemyBaseOAuthAccountTable,
         SQLAlchemyBaseUserTable,
@@ -25,7 +25,7 @@ try:
 except ImportError:  # pragma: no cover
     pass
 
-try:
+try:  # pragma: no cover
     from fastapi_users_db_tortoise import (  # noqa: F401
         TortoiseBaseOAuthAccountModel,
         TortoiseBaseUserModel,
@@ -38,7 +38,7 @@ try:
 except ImportError:  # pragma: no cover
     pass
 
-try:
+try:  # pragma: no cover
     from fastapi_users_db_ormar import (  # noqa: F401
         OrmarBaseOAuthAccountModel,
         OrmarBaseUserModel,
