@@ -8,3 +8,10 @@ from fastapi_users.manager import (  # noqa: F401
     BaseUserManager,
     InvalidPasswordException,
 )
+
+__all__ = [
+    "models",
+    "FastAPIUsers",
+    "BaseUserManager",
+    "InvalidPasswordException",
+]
