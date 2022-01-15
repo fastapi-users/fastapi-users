@@ -1,4 +1,4 @@
-from typing import Any, Callable, Dict, Generic, Optional, Type, Union
+from typing import Any, Dict, Generic, Optional, Type, Union
 
 import jwt
 from fastapi import Request
@@ -9,6 +9,7 @@ from fastapi_users import models, password
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.password import generate_password, get_password_hash
+from fastapi_users.types import DependencyCallable
 
 RESET_PASSWORD_TOKEN_AUDIENCE = "fastapi-users:reset"
 VERIFY_USER_TOKEN_AUDIENCE = "fastapi-users:verify"
@@ -555,4 +556,4 @@ class BaseUserManager(Generic[models.UC, models.UD]):
         return await self.user_db.update(user)
 
 
-UserManagerDependency = Callable[..., BaseUserManager[models.UC, models.UD]]
+UserManagerDependency = DependencyCallable[BaseUserManager[models.UC, models.UD]]

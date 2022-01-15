@@ -1,4 +1,4 @@
-from typing import Any, Callable, Generic
+from typing import Any, Generic
 
 from fastapi import Response
 
@@ -11,6 +11,7 @@ from fastapi_users.authentication.transport import (
     Transport,
     TransportLogoutNotSupportedError,
 )
+from fastapi_users.types import DependencyCallable
 
 
 class AuthenticationBackend(Generic[models.UC, models.UD]):
@@ -32,7 +33,7 @@ class AuthenticationBackend(Generic[models.UC, models.UD]):
         self,
         name: str,
         transport: Transport,
-        get_strategy: Callable[..., Strategy[models.UC, models.UD]],
+        get_strategy: DependencyCallable[Strategy[models.UC, models.UD]],
     ):
         self.name = name
         self.transport = transport

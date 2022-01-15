@@ -9,6 +9,7 @@ from fastapi_users import models
 from fastapi_users.authentication.backend import AuthenticationBackend
 from fastapi_users.authentication.strategy import Strategy
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
+from fastapi_users.types import DependencyCallable
 
 INVALID_CHARS_PATTERN = re.compile(r"[^0-9a-zA-Z_]")
 INVALID_LEADING_CHARS_PATTERN = re.compile(r"^[^a-zA-Z_]+")
@@ -30,7 +31,7 @@ class DuplicateBackendNamesError(Exception):
     pass
 
 
-EnabledBackendsDependency = Callable[..., Sequence[AuthenticationBackend]]
+EnabledBackendsDependency = DependencyCallable[Sequence[AuthenticationBackend]]
 
 
 class Authenticator:

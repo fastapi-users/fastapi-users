@@ -1,8 +1,9 @@
-from typing import Callable, Generic, Optional, Type
+from typing import Generic, Optional, Type
 
 from pydantic import UUID4
 
 from fastapi_users.models import UD
+from fastapi_users.types import DependencyCallable
 
 
 class BaseUserDatabase(Generic[UD]):
@@ -42,4 +43,4 @@ class BaseUserDatabase(Generic[UD]):
         raise NotImplementedError()
 
 
-UserDatabaseDependency = Callable[..., BaseUserDatabase[UD]]
+UserDatabaseDependency = DependencyCallable[BaseUserDatabase[UD]]

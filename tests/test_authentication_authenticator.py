@@ -1,4 +1,4 @@
-from typing import AsyncGenerator, Callable, Generic, List, Optional, Sequence
+from typing import AsyncGenerator, Generic, List, Optional, Sequence
 
 import httpx
 import pytest
@@ -11,6 +11,7 @@ from fastapi_users.authentication.authenticator import DuplicateBackendNamesErro
 from fastapi_users.authentication.strategy import Strategy
 from fastapi_users.authentication.transport import Transport
 from fastapi_users.manager import BaseUserManager
+from fastapi_users.types import DependencyCallable
 from tests.conftest import UserDB
 
 
@@ -71,7 +72,7 @@ def get_test_auth_client(get_user_manager, get_test_client):
     async def _get_test_auth_client(
         backends: List[AuthenticationBackend],
         get_enabled_backends: Optional[
-            Callable[..., Sequence[AuthenticationBackend]]
+            DependencyCallable[Sequence[AuthenticationBackend]]
         ] = None,
     ) -> AsyncGenerator[httpx.AsyncClient, None]:
         app = FastAPI()

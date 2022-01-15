@@ -1,4 +1,4 @@
-from typing import Callable, Generic, Optional, Type
+from typing import Callable, Generic, Optional, Type, cast
 
 import pytest
 from fastapi import Response
@@ -56,5 +56,6 @@ def backend(
 @pytest.mark.asyncio
 @pytest.mark.authentication
 async def test_logout(backend: AuthenticationBackend, user: UserDB):
-    result = await backend.logout(backend.get_strategy(), user, "TOKEN", Response())
+    strategy = cast(Strategy, backend.get_strategy())
+    result = await backend.logout(strategy, user, "TOKEN", Response())
     assert result is None
