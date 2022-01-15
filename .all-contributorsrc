@@ -452,6 +452,16 @@
       "contributions": [
         "financial"
       ]
+    },
+    {
+      "login": "Ae-Mc",
+      "name": "Alexandr Makurin",
+      "avatar_url": "https://avatars.githubusercontent.com/u/43097289?v=4",
+      "profile": "https://ae-mc.ru",
+      "contributions": [
+        "code",
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
