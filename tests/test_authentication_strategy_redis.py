@@ -22,9 +22,8 @@ class RedisMock:
             return None
 
     async def set(self, key: str, value: str, ex: Optional[int] = None):
-        expiration = None
-        if ex is not None:
-            expiration = int(datetime.now().timestamp() + ex)
+        expiration = int(datetime.now().timestamp() + ex) if ex is not None else None
+
         self.store[key] = (value, expiration)
 
     async def delete(self, key: str):

@@ -9,9 +9,7 @@ JWT_ALGORITHM = "HS256"
 
 
 def _get_secret_value(secret: SecretType) -> str:
-    if isinstance(secret, SecretStr):
-        return secret.get_secret_value()
-    return secret
+    return secret.get_secret_value() if isinstance(secret, SecretStr) else secret
 
 
 def generate_jwt(
