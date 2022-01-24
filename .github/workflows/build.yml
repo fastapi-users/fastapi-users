@@ -32,7 +32,7 @@ jobs:
         codecov
     - name: Build and install it on system host
       run: |
-        flit build
+        flit build --setup-py
         flit install --deps none --python $(which python)
         python test_build.py
 
@@ -56,4 +56,4 @@ jobs:
         FLIT_USERNAME: ${{ secrets.FLIT_USERNAME }}
         FLIT_PASSWORD: ${{ secrets.FLIT_PASSWORD }}
       run: |
-        flit publish
+        flit publish --setup-py
