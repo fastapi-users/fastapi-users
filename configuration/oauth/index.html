@@ -839,20 +839,22 @@ Insecure passwords may give attackers full access to your database.</p>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>fastapi
-fastapi-users[sqlalchemy,oauth]
+fastapi-users[sqlalchemy2,oauth]
 uvicorn[standard]
+aiosqlite
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">uvicorn</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
-    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">"app.app:app"</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">"0.0.0.0"</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s2">"info"</span><span class="p">)</span>
+    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">"app.app:app"</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">"0.0.0.0"</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s2">"info"</span><span class="p">)</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">FastAPI</span>
 
+<span class="kn">from</span> <span class="nn">app.db</span> <span class="kn">import</span> <span class="n">create_db_and_tables</span>
 <span class="kn">from</span> <span class="nn">app.models</span> <span class="kn">import</span> <span class="n">UserDB</span>
 <span class="kn">from</span> <span class="nn">app.users</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">auth_backend</span><span class="p">,</span>
@@ -888,6 +890,12 @@ uvicorn[standard]
 <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/authenticated-route"</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">authenticated_route</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">UserDB</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_active_user</span><span class="p">)):</span>
     <span class="k">return</span> <span class="p">{</span><span class="s2">"message"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"Hello </span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">!"</span><span class="p">}</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span><span class="s2">"startup"</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">on_startup</span><span class="p">():</span>
+    <span class="c1"># Not needed if you setup a migration system like Alembic</span>
+    <span class="k">await</span> <span class="n">create_db_and_tables</span><span class="p">()</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
@@ -910,7 +918,7 @@ uvicorn[standard]
 
 
 <span class="k">class</span> <span class="nc">UserTable</span><span class="p">(</span><span class="n">Base</span><span class="p">,</span> <span class="n">SQLAlchemyBaseUserTable</span><span class="p">):</span>
-    <span class="n">oauth_accounts</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">"OAuthAccount"</span><span class="p">)</span>
+    <span class="n">oauth_accounts</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">"OAuthAccountTable"</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">OAuthAccountTable</span><span class="p">(</span><span class="n">SQLAlchemyBaseOAuthAccountTable</span><span class="p">,</span> <span class="n">Base</span><span class="p">):</span>
@@ -976,8 +984,8 @@ uvicorn[standard]
 
 
 <span class="n">google_oauth_client</span> <span class="o">=</span> <span class="n">GoogleOAuth2</span><span class="p">(</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"GOOGLE_OAUTH_CLIENT_ID"</span><span class="p">],</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"GOOGLE_OAUTH_CLIENT_SECRET"</span><span class="p">],</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">"GOOGLE_OAUTH_CLIENT_ID"</span><span class="p">,</span> <span class="s2">""</span><span class="p">),</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">"GOOGLE_OAUTH_CLIENT_SECRET"</span><span class="p">,</span> <span class="s2">""</span><span class="p">),</span>
 <span class="p">)</span>
 
 
