@@ -173,9 +173,7 @@ You can run all the tests with:
 make test
 ```
 
-The command will start a MongoDB container for the related unit tests. So you should have [Docker](https://www.docker.com/get-started) installed.
-
-Alternatively, you can run `pytest` yourself. The MongoDB unit tests will be skipped if no server is available on your local machine:
+Alternatively, you can run `pytest` yourself.
 
 ```bash
 pytest
