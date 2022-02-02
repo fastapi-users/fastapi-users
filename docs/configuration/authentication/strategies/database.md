@@ -58,7 +58,7 @@ It is structured like this:
 
 ```py
 from fastapi import Depends
-from fastapi_users.authentication.db import AccessTokenDatabase, DatabaseStrategy
+from fastapi_users.authentication.strategy.db import AccessTokenDatabase, DatabaseStrategy
 
 from .models import AccessToken, UserCreate, UserDB
 
