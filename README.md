@@ -13,7 +13,7 @@
 [![PyPI version](https://badge.fury.io/py/fastapi-users.svg)](https://badge.fury.io/py/fastapi-users)
 [![Downloads](https://pepy.tech/badge/fastapi-users)](https://pepy.tech/project/fastapi-users)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-49-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-50-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <p align="center">
 <a href="https://www.buymeacoffee.com/frankie567"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=frankie567&button_colour=FF5F5F&font_colour=ffffff&font_family=Arial&outline_colour=000000&coffee_colour=FFDD00"></a>
@@ -135,6 +135,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/Hazedd"><img src="https://avatars.githubusercontent.com/u/20663495?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Hazedd</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/issues?q=author%3AHazedd" title="Bug reports">🐛</a> <a href="https://github.com/fastapi-users/fastapi-users/commits?author=Hazedd" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/luisroel91"><img src="https://avatars.githubusercontent.com/u/44761184?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Luis Roel</b></sub></a><br /><a href="#financial-luisroel91" title="Financial">💵</a></td>
     <td align="center"><a href="https://ae-mc.ru"><img src="https://avatars.githubusercontent.com/u/43097289?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Alexandr Makurin</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=Ae-Mc" title="Code">💻</a> <a href="https://github.com/fastapi-users/fastapi-users/issues?q=author%3AAe-Mc" title="Bug reports">🐛</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="http://www.retoflow.de"><img src="https://avatars.githubusercontent.com/u/23637821?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Leon Thurner</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=lthurner" title="Documentation">📖</a></td>
   </tr>
 </table>
 
