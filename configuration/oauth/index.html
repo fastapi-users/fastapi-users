@@ -1119,7 +1119,7 @@ uvicorn[standard]
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">models</span>
 
 
-<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUser</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUser</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseOAuthAccountMixin</span><span class="p">):</span>
     <span class="k">pass</span>
 
 
