@@ -1,7 +1,7 @@
 from fastapi_users import models
 
 
-class User(models.BaseUser):
+class User(models.BaseUser, models.BaseOAuthAccountMixin):
     pass
 
 
