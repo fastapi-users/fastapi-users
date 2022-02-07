@@ -24,15 +24,21 @@ markers = [
 ]
 
 [build-system]
-requires = ["flit_core >=2,<3"]
+requires = ["flit_core >=3.2,<4"]
 build-backend = "flit_core.buildapi"
 
-[tool.flit.metadata]
-module = "fastapi_users"
-dist-name = "fastapi-users"
-author = "François Voron"
-author-email = "fvoron@gmail.com"
-home-page = "https://github.com/fastapi-users/fastapi-users"
+
+[tool.flit.module]
+name = "fastapi_users"
+
+[project]
+name = "fastapi-users"
+authors = [
+  { name = "François Voron", email = "fvoron@gmail.com" }
+]
+description = "Ready-to-use and customizable users management for FastAPI"
+readme = "README.md"
+dynamic = ["version"]
 classifiers = [
     "License :: OSI Approved :: MIT License",
     "Development Status :: 5 - Production/Stable",
@@ -46,9 +52,8 @@ classifiers = [
     "Programming Language :: Python :: 3 :: Only",
     "Topic :: Internet :: WWW/HTTP :: Session",
 ]
-description-file = "README.md"
 requires-python = ">=3.7"
-requires = [
+dependencies = [
     "fastapi >=0.65.2,<0.74.0",
     "passlib[bcrypt] ==1.7.4",
     "email-validator >=1.1.0,<1.2",
@@ -57,7 +62,7 @@ requires = [
     "makefun >=1.11.2,<1.14",
 ]
 
-[tool.flit.metadata.requires-extra]
+[project.optional-dependencies]
 sqlalchemy = [
     "fastapi-users-db-sqlalchemy >=1.1.0,<2.0.0",
 ]
@@ -81,5 +86,5 @@ redis = [
     "hiredis >=2.0.0,<2.1.0",
 ]
 
-[tool.flit.metadata.urls]
+[project.urls]
 Documentation = "https://fastapi-users.github.io/fastapi-users/"
