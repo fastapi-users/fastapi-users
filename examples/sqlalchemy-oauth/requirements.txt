@@ -1,3 +1,4 @@
 fastapi
-fastapi-users[sqlalchemy,oauth]
+fastapi-users[sqlalchemy2,oauth]
 uvicorn[standard]
+aiosqlite
