@@ -1,3 +1,28 @@
+[tool.isort]
+profile = "black"
+
+[[tool.mypy.overrides]]
+module = "motor.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "passlib.*"
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+addopts = "--ignore=test_build.py"
+markers = [
+	"authentication",
+	"db",
+	"fastapi_users",
+	"jwt",
+	"manager",
+	"oauth",
+	"openapi",
+	"router",
+]
+
 [build-system]
 requires = ["flit_core >=2,<3"]
 build-backend = "flit_core.buildapi"
