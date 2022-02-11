@@ -480,6 +480,15 @@
       "contributions": [
         "platform"
       ]
+    },
+    {
+      "login": "gaganpreet",
+      "name": "Gaganpreet",
+      "avatar_url": "https://avatars.githubusercontent.com/u/815873?v=4",
+      "profile": "https://gaganpreet.in/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
