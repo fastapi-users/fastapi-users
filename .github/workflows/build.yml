@@ -21,9 +21,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.dev.txt
     - name: Check codestyle
-      run: make format-check
-    - name: Lint
-      run: make lint
+      run: |
+        make format-check
+        make lint
+    - name: Typecheck
+      run: |
+        make typecheck
     - name: Test with pytest
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

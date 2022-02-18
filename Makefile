@@ -25,6 +25,9 @@ format-check: isort-src-check isort-docs-check isort-examples-check
 lint:
 	flake8 ./fastapi_users ./tests
 
+typecheck:
+	mypy fastapi_users/
+
 test:
 	pytest --cov=fastapi_users/ --cov-report=term-missing --cov-fail-under=100
 

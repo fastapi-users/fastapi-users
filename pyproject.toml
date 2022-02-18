@@ -9,6 +9,22 @@ ignore_missing_imports = true
 module = "passlib.*"
 ignore_missing_imports = true
 
+[[tool.mypy.overrides]]
+module = "fastapi_users_db_mongodb.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "fastapi_users_db_sqlalchemy.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "fastapi_users_db_tortoise.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "fastapi_users_db_ormar.*"
+ignore_missing_imports = true
+
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 addopts = "--ignore=test_build.py"
