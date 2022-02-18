@@ -1,4 +1,4 @@
-fastapi >=0.65.2,<0.74.0
+fastapi >=0.65.2,<0.75.0
 passlib[bcrypt] ==1.7.4
 email-validator >=1.1.2,<1.2
 pyjwt ==2.3.0
