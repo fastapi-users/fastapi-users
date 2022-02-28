@@ -211,7 +211,7 @@ class BaseUserManager(Generic[models.UC, models.UD]):
 
     async def request_verify(
         self, user: models.UD, request: Optional[Request] = None
-    ) -> None:
+    ) -> str:
         """
         Start a verification request.
 
@@ -239,6 +239,8 @@ class BaseUserManager(Generic[models.UC, models.UD]):
             self.verification_token_lifetime_seconds,
         )
         await self.on_after_request_verify(user, token, request)
+
+        return token 
 
     async def verify(self, token: str, request: Optional[Request] = None) -> models.UD:
         """
@@ -294,7 +296,7 @@ class BaseUserManager(Generic[models.UC, models.UD]):
 
     async def forgot_password(
         self, user: models.UD, request: Optional[Request] = None
-    ) -> None:
+    ) -> str:
         """
         Start a forgot password request.
 
@@ -318,6 +320,8 @@ class BaseUserManager(Generic[models.UC, models.UD]):
             self.reset_password_token_lifetime_seconds,
         )
         await self.on_after_forgot_password(user, token, request)
+        
+        return token
 
     async def reset_password(
         self, token: str, password: str, request: Optional[Request] = None
