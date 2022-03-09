@@ -1,5 +1,5 @@
 import asyncio
-from typing import Any, AsyncGenerator, Callable, Generic, Optional, Type, Union
+from typing import Any, AsyncGenerator, Callable, Generic, Optional, Type, Union, Tuple
 from unittest.mock import MagicMock
 
 import httpx
@@ -9,6 +9,7 @@ from fastapi import FastAPI, Response
 from httpx_oauth.oauth2 import OAuth2
 from pydantic import UUID4, SecretStr
 from pytest_mock import MockerFixture
+from Crypto.PublicKey import RSA
 
 from fastapi_users import models
 from fastapi_users.authentication import AuthenticationBackend, BearerTransport
@@ -127,6 +128,14 @@ def async_method_mocker(mocker: MockerFixture) -> AsyncMethodMocker:
 @pytest.fixture(params=["SECRET", SecretStr("SECRET")])
 def secret(request) -> SecretType:
     return request.param
+
+
+@pytest.fixture(scope="session")
+def rsa_key_pair() -> Tuple[SecretType, SecretType]:
+    key = RSA.generate(2048)
+    private_key = key.export_key().decode("ascii")
+    public_key = key.publickey().export_key().decode("ascii")
+    return (private_key, public_key)
 
 
 @pytest.fixture
