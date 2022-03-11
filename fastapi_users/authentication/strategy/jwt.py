@@ -19,7 +19,7 @@ class JWTStrategy(Strategy, Generic[models.UC, models.UD]):
         lifetime_seconds: Optional[int],
         token_audience: List[str] = ["fastapi-users:auth"],
         algorithm: str = "HS256",
-        public_key: Optional[SecretType] = None
+        public_key: Optional[SecretType] = None,
     ):
         self.secret = secret
         self.lifetime_seconds = lifetime_seconds
@@ -42,7 +42,9 @@ class JWTStrategy(Strategy, Generic[models.UC, models.UD]):
             return None
 
         try:
-            data = decode_jwt(token, self.decode_key, self.token_audience, algorithms=[self.algorithm])
+            data = decode_jwt(
+                token, self.decode_key, self.token_audience, algorithms=[self.algorithm]
+            )
             user_id = data.get("user_id")
             if user_id is None:
                 return None
@@ -59,7 +61,9 @@ class JWTStrategy(Strategy, Generic[models.UC, models.UD]):
 
     async def write_token(self, user: models.UD) -> str:
         data = {"user_id": str(user.id), "aud": self.token_audience}
-        return generate_jwt(data, self.encode_key, self.lifetime_seconds, algorithm=self.algorithm)
+        return generate_jwt(
+            data, self.encode_key, self.lifetime_seconds, algorithm=self.algorithm
+        )
 
     async def destroy_token(self, token: str, user: models.UD) -> None:
         raise StrategyDestroyNotSupportedError(

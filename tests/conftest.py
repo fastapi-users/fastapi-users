@@ -1,15 +1,15 @@
 import asyncio
-from typing import Any, AsyncGenerator, Callable, Generic, Optional, Type, Union, Tuple
+from typing import Any, AsyncGenerator, Callable, Generic, Optional, Tuple, Type, Union
 from unittest.mock import MagicMock
 
 import httpx
 import pytest
 from asgi_lifespan import LifespanManager
+from Crypto.PublicKey import ECC, RSA
 from fastapi import FastAPI, Response
 from httpx_oauth.oauth2 import OAuth2
 from pydantic import UUID4, SecretStr
 from pytest_mock import MockerFixture
-from Crypto.PublicKey import RSA, ECC
 
 from fastapi_users import models
 from fastapi_users.authentication import AuthenticationBackend, BearerTransport
@@ -132,9 +132,9 @@ def secret(request) -> SecretType:
 
 @pytest.fixture(scope="session")
 def ecc_key_pair() -> Tuple[SecretType, SecretType]:
-    key = ECC.generate(curve='P-256')
-    private_key = key.export_key(format='PEM')
-    public_key = key.public_key().export_key(format='PEM')
+    key = ECC.generate(curve="P-256")
+    private_key = key.export_key(format="PEM")
+    public_key = key.public_key().export_key(format="PEM")
     return (private_key, public_key)
 
 
