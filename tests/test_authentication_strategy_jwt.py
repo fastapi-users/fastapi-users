@@ -12,12 +12,20 @@ LIFETIME = 3600
 
 
 @pytest.fixture
-def jwt_strategy(request, secret: SecretType, rsa_key_pair: Tuple[SecretType, SecretType]):
+def jwt_strategy(
+    request, 
+    secret: SecretType, 
+    rsa_key_pair: Tuple[SecretType, SecretType],
+    ecc_key_pair: Tuple[SecretType, SecretType],
+):
     if request.param == "HS256":
         return JWTStrategy(secret, LIFETIME)
     elif request.param == "RS256":
         private_key, public_key = rsa_key_pair
         return JWTStrategy(private_key, LIFETIME, algorithm="RS256", public_key=public_key)
+    elif request.param == "ES256":
+        private_key, public_key = ecc_key_pair
+        return JWTStrategy(private_key, LIFETIME, algorithm="ES256", public_key=public_key)
     raise ValueError(f"Unrecognized algorithm: {request.param}")
 
 
@@ -33,7 +41,7 @@ def token(jwt_strategy: JWTStrategy):
     return _token
 
 
-@pytest.mark.parametrize("jwt_strategy", ["HS256", "RS256"], indirect=True)
+@pytest.mark.parametrize("jwt_strategy", ["HS256", "RS256", "ES256"], indirect=True)
 @pytest.mark.authentication
 class TestReadToken:
     @pytest.mark.asyncio
@@ -78,7 +86,7 @@ class TestReadToken:
         assert authenticated_user.id == user.id
 
 
-@pytest.mark.parametrize("jwt_strategy", ["HS256", "RS256"], indirect=True)
+@pytest.mark.parametrize("jwt_strategy", ["HS256", "RS256", "ES256"], indirect=True)
 @pytest.mark.authentication
 @pytest.mark.asyncio
 async def test_write_token(jwt_strategy: JWTStrategy, user):
@@ -93,7 +101,7 @@ async def test_write_token(jwt_strategy: JWTStrategy, user):
     assert decoded["user_id"] == str(user.id)
 
 
-@pytest.mark.parametrize("jwt_strategy", ["HS256", "RS256"], indirect=True)
+@pytest.mark.parametrize("jwt_strategy", ["HS256", "RS256", "ES256"], indirect=True)
 @pytest.mark.authentication
 @pytest.mark.asyncio
 async def test_destroy_token(jwt_strategy: JWTStrategy, user):

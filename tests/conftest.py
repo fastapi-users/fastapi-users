@@ -9,7 +9,7 @@ from fastapi import FastAPI, Response
 from httpx_oauth.oauth2 import OAuth2
 from pydantic import UUID4, SecretStr
 from pytest_mock import MockerFixture
-from Crypto.PublicKey import RSA
+from Crypto.PublicKey import RSA, ECC
 
 from fastapi_users import models
 from fastapi_users.authentication import AuthenticationBackend, BearerTransport
@@ -128,6 +128,14 @@ def async_method_mocker(mocker: MockerFixture) -> AsyncMethodMocker:
 @pytest.fixture(params=["SECRET", SecretStr("SECRET")])
 def secret(request) -> SecretType:
     return request.param
+
+
+@pytest.fixture(scope="session")
+def ecc_key_pair() -> Tuple[SecretType, SecretType]:
+    key = ECC.generate(curve='P-256')
+    private_key = key.export_key(format='PEM')
+    public_key = key.public_key().export_key(format='PEM')
+    return (private_key, public_key)
 
 
 @pytest.fixture(scope="session")
