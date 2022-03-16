@@ -5,7 +5,6 @@ from unittest.mock import MagicMock
 import httpx
 import pytest
 from asgi_lifespan import LifespanManager
-from Crypto.PublicKey import ECC, RSA
 from fastapi import FastAPI, Response
 from httpx_oauth.oauth2 import OAuth2
 from pydantic import UUID4, SecretStr
@@ -128,22 +127,6 @@ def async_method_mocker(mocker: MockerFixture) -> AsyncMethodMocker:
 @pytest.fixture(params=["SECRET", SecretStr("SECRET")])
 def secret(request) -> SecretType:
     return request.param
-
-
-@pytest.fixture(scope="session")
-def ecc_key_pair() -> Tuple[SecretType, SecretType]:
-    key = ECC.generate(curve="P-256")
-    private_key = key.export_key(format="PEM")
-    public_key = key.public_key().export_key(format="PEM")
-    return (private_key, public_key)
-
-
-@pytest.fixture(scope="session")
-def rsa_key_pair() -> Tuple[SecretType, SecretType]:
-    key = RSA.generate(2048)
-    private_key = key.export_key().decode("ascii")
-    public_key = key.publickey().export_key().decode("ascii")
-    return (private_key, public_key)
 
 
 @pytest.fixture

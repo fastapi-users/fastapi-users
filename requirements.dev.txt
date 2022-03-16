@@ -23,4 +23,3 @@ httpx-oauth
 httpx
 asgi_lifespan
 uvicorn
-pycryptodome
