@@ -1,5 +1,5 @@
 import asyncio
-from typing import Any, AsyncGenerator, Callable, Generic, Optional, Tuple, Type, Union
+from typing import Any, AsyncGenerator, Callable, Generic, Optional, Type, Union
 from unittest.mock import MagicMock
 
 import httpx
