@@ -33,27 +33,27 @@ def test_app(app_factory):
 
 
 @pytest.fixture
-def test_app_redirect_url(app_factory):
-    return app_factory("http://www.tintagel.bt/callback")
+def test_app_redirect_url(request: pytest.FixtureRequest, app_factory):
+    redirect_url: Optional[str] = request.param  # type: ignore
+    return app_factory(redirect_url), redirect_url
 
 
 @pytest.fixture
 @pytest.mark.asyncio
-async def test_app_client(test_app, get_test_client):
-    async for client in get_test_client(test_app):
+async def test_app_client(test_app_redirect_url, get_test_client):
+    app_factory, redirect_url = test_app_redirect_url
+    async for client in get_test_client(app_factory):
+        client.test_app_redirect_url = redirect_url
         yield client
 
 
-@pytest.fixture
-@pytest.mark.asyncio
-async def test_app_client_redirect_url(test_app_redirect_url, get_test_client):
-    async for client in get_test_client(test_app_redirect_url):
-        yield client
-
-
-@pytest.mark.router
 @pytest.mark.oauth
 @pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "test_app_redirect_url",
+    [None, "http://www.tintagel.bt/callback"],
+    indirect=True,
+)
 class TestAuthorize:
     async def test_success(
         self,
@@ -75,30 +75,48 @@ class TestAuthorize:
         data = response.json()
         assert "authorization_url" in data
 
-    async def test_with_redirect_url(
+    async def test_oauth_authorize_endpoint(
         self,
         async_method_mocker: AsyncMethodMocker,
-        test_app_client_redirect_url: httpx.AsyncClient,
+        test_app_client: httpx.AsyncClient,
         oauth_client: BaseOAuth2,
     ):
+        state_jwt = generate_state_token({}, "SECRET")
         get_authorization_url_mock = async_method_mocker(
-            oauth_client, "get_authorization_url", return_value="AUTHORIZATION_URL"
+            oauth_client,
+            "get_authorization_url",
+            return_value="AUTHORIZATION_URL",
         )
 
-        response = await test_app_client_redirect_url.get(
-            "/authorize", params={"scopes": ["scope1", "scope2"]}
+        response = await test_app_client.get(
+            "/oauth-authorize",
+            params={
+                "response_type": "code",
+                "client_id": "CLIENTID",
+                "redirect_uri": test_app_client.test_app_redirect_url,
+                "scope": "scope1 scope2",
+                "state": state_jwt,
+            },
         )
 
-        assert response.status_code == status.HTTP_200_OK
-        get_authorization_url_mock.assert_called_once()
+        assert response.status_code == status.HTTP_302_FOUND
+        get_authorization_url_mock.assert_called_once_with(
+            test_app_client.test_app_redirect_url or "",
+            state_jwt,
+            ["scope1", "scope2"],
+        )
 
-        data = response.json()
-        assert "authorization_url" in data
+        assert response.headers["Location"] == "AUTHORIZATION_URL"
 
 
 @pytest.mark.router
 @pytest.mark.oauth
 @pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "test_app_redirect_url",
+    [None, "http://www.tintagel.bt/callback"],
+    indirect=True,
+)
 @pytest.mark.parametrize(
     "access_token",
     [
@@ -112,21 +130,15 @@ class TestCallback:
         async_method_mocker: AsyncMethodMocker,
         test_app_client: httpx.AsyncClient,
         oauth_client: BaseOAuth2,
-        user_oauth: UserDB,
         access_token: str,
     ):
         async_method_mocker(oauth_client, "get_access_token", return_value=access_token)
-        get_id_email_mock = async_method_mocker(
-            oauth_client, "get_id_email", return_value=("user_oauth1", user_oauth.email)
-        )
 
         response = await test_app_client.get(
             "/callback",
             params={"code": "CODE", "state": "STATE"},
         )
         assert response.status_code == status.HTTP_400_BAD_REQUEST
-
-        get_id_email_mock.assert_called_once_with("TOKEN")
 
     async def test_active_user(
         self,
@@ -138,7 +150,9 @@ class TestCallback:
         access_token: str,
     ):
         state_jwt = generate_state_token({}, "SECRET")
-        async_method_mocker(oauth_client, "get_access_token", return_value=access_token)
+        get_access_token_mock = async_method_mocker(
+            oauth_client, "get_access_token", return_value=access_token
+        )
         async_method_mocker(
             oauth_client, "get_id_email", return_value=("user_oauth1", user_oauth.email)
         )
@@ -152,6 +166,47 @@ class TestCallback:
         )
 
         assert response.status_code == status.HTTP_200_OK
+
+        if test_app_client.test_app_redirect_url:
+            get_access_token_mock.assert_called_once_with(
+                "CODE", "http://www.tintagel.bt/callback"
+            )
+
+        data = cast(Dict[str, Any], response.json())
+        assert data["access_token"] == str(user_oauth.id)
+
+    async def test_oauth_token_endpoint(
+        self,
+        async_method_mocker: AsyncMethodMocker,
+        test_app_client: httpx.AsyncClient,
+        oauth_client: BaseOAuth2,
+        user_oauth: UserDB,
+        user_manager_oauth: UserManagerMock,
+        access_token: str,
+    ):
+        get_access_token_mock = async_method_mocker(
+            oauth_client, "get_access_token", return_value=access_token
+        )
+        async_method_mocker(
+            oauth_client, "get_id_email", return_value=("user_oauth1", user_oauth.email)
+        )
+        async_method_mocker(
+            user_manager_oauth, "oauth_callback", return_value=user_oauth
+        )
+
+        response = await test_app_client.post(
+            "/oauth-token",
+            data={
+                "code": "CODE",
+                "redirect_uri": test_app_client.test_app_redirect_url,
+            },
+        )
+
+        assert response.status_code == status.HTTP_200_OK
+
+        get_access_token_mock.assert_called_once_with(
+            "CODE", test_app_client.test_app_redirect_url
+        )
 
         data = cast(Dict[str, Any], response.json())
         assert data["access_token"] == str(user_oauth.id)
@@ -183,40 +238,6 @@ class TestCallback:
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
-    async def test_redirect_url_router(
-        self,
-        async_method_mocker: AsyncMethodMocker,
-        test_app_client_redirect_url: httpx.AsyncClient,
-        oauth_client: BaseOAuth2,
-        user_oauth: UserDB,
-        user_manager_oauth: UserManagerMock,
-        access_token: str,
-    ):
-        state_jwt = generate_state_token({}, "SECRET")
-        get_access_token_mock = async_method_mocker(
-            oauth_client, "get_access_token", return_value=access_token
-        )
-        async_method_mocker(
-            oauth_client, "get_id_email", return_value=("user_oauth1", user_oauth.email)
-        )
-        async_method_mocker(
-            user_manager_oauth, "oauth_callback", return_value=user_oauth
-        )
-
-        response = await test_app_client_redirect_url.get(
-            "/callback",
-            params={"code": "CODE", "state": state_jwt},
-        )
-
-        assert response.status_code == status.HTTP_200_OK
-
-        get_access_token_mock.assert_called_once_with(
-            "CODE", "http://www.tintagel.bt/callback"
-        )
-
-        data = cast(Dict[str, Any], response.json())
-        assert data["access_token"] == str(user_oauth.id)
-
 
 @pytest.mark.asyncio
 @pytest.mark.oauth
@@ -233,3 +254,13 @@ async def test_route_names(
         f"oauth:{oauth_client.name}.{mock_authentication.name}.callback"
     )
     assert test_app.url_path_for(callback_route_name) == "/callback"
+
+    callback_route_name = (
+        f"oauth:{oauth_client.name}.{mock_authentication.name}.oauth-authorize"
+    )
+    assert test_app.url_path_for(callback_route_name) == "/oauth-authorize"
+
+    callback_route_name = (
+        f"oauth:{oauth_client.name}.{mock_authentication.name}.oauth-token"
+    )
+    assert test_app.url_path_for(callback_route_name) == "/oauth-token"

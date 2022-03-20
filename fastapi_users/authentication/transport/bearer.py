@@ -1,7 +1,7 @@
-from typing import Any
+from typing import Any, Dict, Optional
 
 from fastapi import Response, status
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import OAuth2, OAuth2AuthorizationCodeBearer, OAuth2PasswordBearer
 from pydantic import BaseModel
 
 from fastapi_users.authentication.transport.base import (
@@ -17,10 +17,40 @@ class BearerResponse(BaseModel):
 
 
 class BearerTransport(Transport):
-    scheme: OAuth2PasswordBearer
+    scheme: OAuth2
 
-    def __init__(self, tokenUrl: str):
-        self.scheme = OAuth2PasswordBearer(tokenUrl, auto_error=False)
+    def __init__(
+        self,
+        tokenUrl: str,
+        authorizationUrl: Optional[str] = None,
+        refreshUrl: Optional[str] = None,
+        scheme_name: Optional[str] = None,
+        scopes: Optional[Dict[str, str]] = None,
+        description: Optional[str] = None,
+        auto_error: bool = False,
+        grant_type: str = "password",
+    ):
+        if grant_type == "password":
+            self.scheme = OAuth2PasswordBearer(
+                tokenUrl,
+                scheme_name,
+                scopes,
+                description,
+                auto_error,
+            )
+        elif grant_type == "authorization_code":
+            assert authorizationUrl
+            self.scheme = OAuth2AuthorizationCodeBearer(
+                authorizationUrl,
+                tokenUrl,
+                refreshUrl,
+                scheme_name,
+                scopes,
+                description,
+                auto_error,
+            )
+        else:
+            raise ValueError(f"Unsupported grant type: {grant_type}")
 
     async def get_login_response(self, token: str, response: Response) -> Any:
         return BearerResponse(access_token=token, token_type="bearer")
