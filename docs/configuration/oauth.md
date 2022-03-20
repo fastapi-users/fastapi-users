@@ -56,13 +56,13 @@ class UserDB(User, models.BaseUserDB):
 
 Notice that we inherit from the `BaseOAuthAccountMixin`, which adds a `List` of `BaseOAuthAccount` objects. This object is structured like this:
 
-* `id` (`UUID4`) – Unique identifier of the OAuth account information. Defaults to a **UUID4**.
-* `oauth_name` (`str`) – Name of the OAuth service. It corresponds to the `name` property of the OAuth client.
-* `access_token` (`str`) – Access token.
-* `expires_at` (`Optional[int]`) - Timestamp at which the access token is expired.
-* `refresh_token` (`Optional[str]`) – On services that support it, a token to get a fresh access token.
-* `account_id` (`str`) - Identifier of the OAuth account on the corresponding service.
-* `account_email` (`str`) - Email address of the OAuth account on the corresponding service.
+-   `id` (`UUID4`) – Unique identifier of the OAuth account information. Defaults to a **UUID4**.
+-   `oauth_name` (`str`) – Name of the OAuth service. It corresponds to the `name` property of the OAuth client.
+-   `access_token` (`str`) – Access token.
+-   `expires_at` (`Optional[int]`) - Timestamp at which the access token is expired.
+-   `refresh_token` (`Optional[str]`) – On services that support it, a token to get a fresh access token.
+-   `account_id` (`str`) - Identifier of the OAuth account on the corresponding service.
+-   `account_email` (`str`) - Email address of the OAuth account on the corresponding service.
 
 ### Setup the database adapter
 
@@ -95,12 +95,44 @@ You'll need to define the Tortoise model for storing the OAuth account model. We
 ```
 
 !!! warning
-    Note that you should define the foreign key yourself, so that you can point it the user model in your namespace.
+Note that you should define the foreign key yourself, so that you can point it the user model in your namespace.
 
 Then, you should declare it on the database adapter:
 
 ```py hl_lines="8 9"
 --8<-- "docs/src/db_tortoise_oauth_adapter.py"
+```
+
+### Create authentication backend
+
+To enable the OAuth2 authorization code flow in the Swagger UI, you will also need
+to create an authentication backend and include it in the `auth_backends` parameter
+of the `FastAPIUsers` class.
+
+```py
+authorization_code_bearer_transport = BearerTransport(
+    authorizationUrl="/auth/google/oauth-authorize",
+    tokenUrl="/auth/google/oauth-token",
+    grant_type="authorization_code",
+)
+
+
+def get_jwt_strategy() -> JWTStrategy:
+    return JWTStrategy(secret=SECRET, lifetime_seconds=3600)
+
+
+authorization_code_auth_backend = AuthenticationBackend(
+    name="jwt_authorization_code",
+    transport=password_bearer_transport,
+    get_strategy=get_jwt_strategy,
+)
+
+
+fastapi_users = FastAPIUsers(
+    ...,
+    [..., authorization_code_auth_backend],
+    ...
+)
 ```
 
 ### Generate a router
@@ -109,17 +141,19 @@ Once you have a `FastAPIUsers` instance, you can make it generate a single OAuth
 
 ```py
 app.include_router(
-  fastapi_users.get_oauth_router(google_oauth_client, auth_backend, "SECRET"),
-  prefix="/auth/google",
-  tags=["auth"],
+    fastapi_users.get_oauth_router(
+        google_oauth_client, authorization_code_auth_backend, "SECRET"
+    ),
+    prefix="/auth/google",
+    tags=["auth"],
 )
 ```
 
 ### Full example
 
 !!! warning
-    Notice that **SECRET** should be changed to a strong passphrase.
-    Insecure passwords may give attackers full access to your database.
+Notice that **SECRET** should be changed to a strong passphrase.
+Insecure passwords may give attackers full access to your database.
 
 #### SQLAlchemy
 

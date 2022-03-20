@@ -46,21 +46,34 @@ async def get_user_manager(user_db: MongoDBUserDatabase = Depends(get_user_db)):
     yield UserManager(user_db)
 
 
-bearer_transport = BearerTransport(tokenUrl="auth/jwt/login")
+password_bearer_transport = BearerTransport(tokenUrl="auth/jwt/login")
+
+authorization_code_bearer_transport = BearerTransport(
+    authorizationUrl="/auth/google/oauth-authorize",
+    tokenUrl="/auth/google/oauth-token",
+    grant_type="authorization_code",
+)
 
 
 def get_jwt_strategy() -> JWTStrategy:
     return JWTStrategy(secret=SECRET, lifetime_seconds=3600)
 
 
-auth_backend = AuthenticationBackend(
-    name="jwt",
-    transport=bearer_transport,
+password_auth_backend = AuthenticationBackend(
+    name="jwt_password",
+    transport=password_bearer_transport,
     get_strategy=get_jwt_strategy,
 )
+
+authorization_code_auth_backend = AuthenticationBackend(
+    name="jwt_authorization_code",
+    transport=password_bearer_transport,
+    get_strategy=get_jwt_strategy,
+)
+
 fastapi_users = FastAPIUsers(
     get_user_manager,
-    [auth_backend],
+    [password_auth_backend, authorization_code_auth_backend],
     User,
     UserCreate,
     UserUpdate,

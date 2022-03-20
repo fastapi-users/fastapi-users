@@ -4,16 +4,19 @@ from tortoise.contrib.fastapi import register_tortoise
 from app.db import DATABASE_URL
 from app.models import UserDB
 from app.users import (
-    auth_backend,
+    authorization_code_auth_backend,
     current_active_user,
     fastapi_users,
     google_oauth_client,
+    password_auth_backend,
 )
 
 app = FastAPI()
 
 app.include_router(
-    fastapi_users.get_auth_router(auth_backend), prefix="/auth/jwt", tags=["auth"]
+    fastapi_users.get_auth_router(password_auth_backend),
+    prefix="/auth/jwt",
+    tags=["auth"],
 )
 app.include_router(fastapi_users.get_register_router(), prefix="/auth", tags=["auth"])
 app.include_router(
@@ -28,7 +31,9 @@ app.include_router(
 )
 app.include_router(fastapi_users.get_users_router(), prefix="/users", tags=["users"])
 app.include_router(
-    fastapi_users.get_oauth_router(google_oauth_client, auth_backend, "SECRET"),
+    fastapi_users.get_oauth_router(
+        google_oauth_client, authorization_code_auth_backend, "SECRET"
+    ),
     prefix="/auth/google",
     tags=["auth"],
 )
