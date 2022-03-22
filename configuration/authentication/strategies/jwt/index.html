@@ -275,6 +275,11 @@
   </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="#rs256-example">
+    RS256 example
+  </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#logout">
     Logout
   </a>
@@ -486,6 +491,11 @@
   </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="#rs256-example">
+    RS256 example
+  </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#logout">
     Logout
   </a>
@@ -512,12 +522,33 @@
 <li><code>secret</code> (<code>Union[str, pydantic.SecretStr]</code>): A constant secret which is used to encode the token. <strong>Use a strong passphrase and keep it secure.</strong></li>
 <li><code>lifetime_seconds</code> (<code>Optional[int]</code>): The lifetime of the token in seconds. Can be set to <code>None</code> but in this case the token will be valid <strong>forever</strong>; which may raise serious security concerns.</li>
 <li><code>token_audience</code> (<code>Optional[List[str]]</code>): A list of valid audiences for the JWT token. Defaults to <code>["fastapi-users:auth"]</code>.</li>
+<li><code>algorithm</code> (<code>Optional[str]</code>): The JWT encryption algorithm. See <a href="https://datatracker.ietf.org/doc/html/rfc7519#section-8">RFC 7519, section 8</a>. Defaults to <code>"HS256"</code>.</li>
+<li><code>public_key</code> (<code>Optional[Union[str, pydantic.SecretStr]]</code>): If the JWT encryption algorithm requires a key pair instead of a simple secret, the key to <strong>decrypt</strong> the JWT may be provided here. The <code>secret</code> parameter will always be used to <strong>encrypt</strong> the JWT.</li>
 </ul>
 <div class="admonition tip">
 <p class="admonition-title">Why it's inside a function?</p>
 <p>To allow strategies to be instantiated dynamically with other dependencies, they have to be provided as a callable to the authentication backend.</p>
 <p>For <code>JWTStrategy</code>, since it doesn't require dependencies, it can be as simple as the function above.</p>
 </div>
+<h2 id="rs256-example">RS256 example<a class="headerlink" href="#rs256-example" title="Permanent link">¶</a></h2>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi_users.authentication</span> <span class="kn">import</span> <span class="n">JWTStrategy</span>
+
+<span class="n">PUBLIC_KEY</span> <span class="o">=</span> <span class="s2">"""-----BEGIN PUBLIC KEY-----</span>
+<span class="s2"># Your RSA public key in PEM format goes here</span>
+<span class="s2">-----END PUBLIC KEY-----"""</span>
+
+<span class="n">PRIVATE_KEY</span> <span class="o">=</span> <span class="s2">"""-----BEGIN RSA PRIVATE KEY-----</span>
+<span class="s2"># Your RSA private key in PEM format goes here</span>
+<span class="s2">-----END RSA PRIVATE KEY-----"""</span>
+
+<span class="k">def</span> <span class="nf">get_jwt_strategy</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">JWTStrategy</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">JWTStrategy</span><span class="p">(</span>
+        <span class="n">secret</span><span class="o">=</span><span class="n">PRIVATE_KEY</span><span class="p">,</span> 
+        <span class="n">lifetime_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span>
+        <span class="n">algorithm</span><span class="o">=</span><span class="s2">"RS256"</span><span class="p">,</span>
+        <span class="n">public_key</span><span class="o">=</span><span class="n">PUBLIC_KEY</span><span class="p">,</span>
+    <span class="p">)</span>
+</code></pre></div>
 <h2 id="logout">Logout<a class="headerlink" href="#logout" title="Permanent link">¶</a></h2>
 <p>On logout, this strategy <strong>won't do anything</strong>. Indeed, a JWT can't be invalidated on the server-side: it's valid until it expires.</p>
 </article>
