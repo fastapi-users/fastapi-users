@@ -8,7 +8,7 @@
 <meta content="Ready-to-use and customizable users management for FastAPI" name="description"/>
 <link href="../../favicon.png" rel="icon"/>
 <meta content="mkdocs-1.2.3, mkdocs-material-8.2.5" name="generator"/>
-<title>7.x.x ➡️ 8.x.x - FastAPI Users</title>
+<title>Password hash - FastAPI Users</title>
 <link href="../../assets/stylesheets/main.2d9f7617.min.css" rel="stylesheet"/>
 <link href="../../assets/stylesheets/palette.e6a45f82.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -22,7 +22,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#7xx-8xx">
+<a class="md-skip" href="#password-hash">
           Skip to content
         </a>
 </div>
@@ -46,7 +46,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              7.x.x ➡️ 8.x.x
+              Password hash
             
           </span>
 </div>
@@ -138,8 +138,8 @@
         Installation
       </a>
 </li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" id="__nav_3" type="checkbox"/>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" id="__nav_3" type="checkbox"/>
 <label class="md-nav__link" for="__nav_3">
           Configuration
           <span class="md-nav__icon md-icon"></span>
@@ -151,12 +151,12 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/overview/">
+<a class="md-nav__link" href="../overview/">
         Overview
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/models/">
+<a class="md-nav__link" href="../models/">
         Models
       </a>
 </li>
@@ -173,22 +173,22 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/databases/sqlalchemy/">
+<a class="md-nav__link" href="../databases/sqlalchemy/">
         SQLAlchemy
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/databases/mongodb/">
+<a class="md-nav__link" href="../databases/mongodb/">
         MongoDB
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/databases/tortoise/">
+<a class="md-nav__link" href="../databases/tortoise/">
         Tortoise ORM
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/databases/ormar/">
+<a class="md-nav__link" href="../databases/ormar/">
         Ormar
       </a>
 </li>
@@ -208,7 +208,7 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/authentication/">
+<a class="md-nav__link" href="../authentication/">
         Introduction
       </a>
 </li>
@@ -225,12 +225,12 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/authentication/transports/cookie/">
+<a class="md-nav__link" href="../authentication/transports/cookie/">
         Cookie
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/authentication/transports/bearer/">
+<a class="md-nav__link" href="../authentication/transports/bearer/">
         Bearer
       </a>
 </li>
@@ -250,17 +250,17 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/authentication/strategies/database/">
+<a class="md-nav__link" href="../authentication/strategies/database/">
         Database
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/authentication/strategies/jwt/">
+<a class="md-nav__link" href="../authentication/strategies/jwt/">
         JWT
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/authentication/strategies/redis/">
+<a class="md-nav__link" href="../authentication/strategies/redis/">
         Redis
       </a>
 </li>
@@ -268,7 +268,7 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/authentication/backend/">
+<a class="md-nav__link" href="../authentication/backend/">
         Create a backend
       </a>
 </li>
@@ -276,7 +276,7 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/user-manager/">
+<a class="md-nav__link" href="../user-manager/">
         UserManager
       </a>
 </li>
@@ -293,32 +293,32 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/routers/">
+<a class="md-nav__link" href="../routers/">
         Introduction
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/routers/auth/">
+<a class="md-nav__link" href="../routers/auth/">
         Auth router
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/routers/register/">
+<a class="md-nav__link" href="../routers/register/">
         Register routes
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/routers/verify/">
+<a class="md-nav__link" href="../routers/verify/">
         Verify router
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/routers/reset/">
+<a class="md-nav__link" href="../routers/reset/">
         Reset password router
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/routers/users/">
+<a class="md-nav__link" href="../routers/users/">
         Users router
       </a>
 </li>
@@ -326,19 +326,42 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/full-example/">
+<a class="md-nav__link" href="../full-example/">
         Full example
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/oauth/">
+<a class="md-nav__link" href="../oauth/">
         OAuth2
       </a>
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../configuration/password-hash/">
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+          Password hash
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
         Password hash
       </a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#customize-cryptcontext">
+    Customize CryptContext
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#full-customization">
+    Full customization
+  </a>
+</li>
+</ul>
+</nav>
 </li>
 </ul>
 </nav>
@@ -393,8 +416,8 @@
 </ul>
 </nav>
 </li>
-<li class="md-nav__item md-nav__item--active md-nav__item--nested">
-<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" id="__nav_6" type="checkbox"/>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" id="__nav_6" type="checkbox"/>
 <label class="md-nav__link" for="__nav_6">
           Migration
           <span class="md-nav__icon md-icon"></span>
@@ -406,90 +429,42 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../08_to_1x/">
+<a class="md-nav__link" href="../../migration/08_to_1x/">
         0.8.x ➡️ 1.x.x
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../1x_to_2x/">
+<a class="md-nav__link" href="../../migration/1x_to_2x/">
         1.x.x ➡️ 2.x.x
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../2x_to_3x/">
+<a class="md-nav__link" href="../../migration/2x_to_3x/">
         2.x.x ➡️ 3.x.x
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../3x_to_4x/">
+<a class="md-nav__link" href="../../migration/3x_to_4x/">
         3.x.x ➡️ 4.x.x
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../4x_to_5x/">
+<a class="md-nav__link" href="../../migration/4x_to_5x/">
         4.x.x ➡️ 5.x.x
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../6x_to_7x/">
+<a class="md-nav__link" href="../../migration/6x_to_7x/">
         6.x.x ➡️ 7.x.x
       </a>
 </li>
-<li class="md-nav__item md-nav__item--active">
-<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
-<label class="md-nav__link md-nav__link--active" for="__toc">
-          7.x.x ➡️ 8.x.x
-          <span class="md-nav__icon md-icon"></span>
-</label>
-<a class="md-nav__link md-nav__link--active" href="./">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../migration/7x_to_8x/">
         7.x.x ➡️ 8.x.x
       </a>
-<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
-<label class="md-nav__title" for="__toc">
-<span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#event-handlers-should-live-in-the-usermanager">
-    Event handlers should live in the UserManager
-  </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#password-validation-should-live-in-the-usermanager">
-    Password validation should live in the UserManager
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#verify-token-secret-and-lifetime-parameters-are-attributes-of-usermanager">
-    Verify token secret and lifetime parameters are attributes of UserManager
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#reset-password-token-secret-and-lifetime-parameters-are-attributes-of-usermanager">
-    Reset password token secret and lifetime parameters are attributes of UserManager
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#database-adapter-should-be-provided-in-a-dependency">
-    Database adapter should be provided in a dependency
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#fastapiusers-now-expect-a-get_user_manager-dependency">
-    FastAPIUsers now expect a get_user_manager dependency
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#lost">
-    Lost?
-  </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../8x_to_9x/">
+<a class="md-nav__link" href="../../migration/8x_to_9x/">
         8.x.x ➡️ 9.x.x
       </a>
 </li>
@@ -511,38 +486,13 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#event-handlers-should-live-in-the-usermanager">
-    Event handlers should live in the UserManager
+<a class="md-nav__link" href="#customize-cryptcontext">
+    Customize CryptContext
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#password-validation-should-live-in-the-usermanager">
-    Password validation should live in the UserManager
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#verify-token-secret-and-lifetime-parameters-are-attributes-of-usermanager">
-    Verify token secret and lifetime parameters are attributes of UserManager
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#reset-password-token-secret-and-lifetime-parameters-are-attributes-of-usermanager">
-    Reset password token secret and lifetime parameters are attributes of UserManager
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#database-adapter-should-be-provided-in-a-dependency">
-    Database adapter should be provided in a dependency
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#fastapiusers-now-expect-a-get_user_manager-dependency">
-    FastAPIUsers now expect a get_user_manager dependency
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#lost">
-    Lost?
+<a class="md-nav__link" href="#full-customization">
+    Full customization
   </a>
 </li>
 </ul>
@@ -552,45 +502,57 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1 id="7xx-8xx">7.x.x ➡️ 8.x.x<a class="headerlink" href="#7xx-8xx" title="Permanent link">¶</a></h1>
-<p>Version 8 includes the biggest code changes since version 1. We reorganized lot of parts of the code to make it even more modular and integrate more into the dependency injection system of FastAPI.</p>
-<p>Most importantly, you need now to implement a <code>UserManager</code> class and a associated dependency to create an instance of this class.</p>
-<h2 id="event-handlers-should-live-in-the-usermanager">Event handlers should live in the <code>UserManager</code><a class="headerlink" href="#event-handlers-should-live-in-the-usermanager" title="Permanent link">¶</a></h2>
-<p>Before, event handlers like <code>on_after_register</code> or <code>on_after_forgot_password</code> were defined in their own functions that were passed as arguments of router generators.</p>
-<p>Now, they should be <strong>methods</strong> of the <code>UserManager</code> class.</p>
-<p>You can read more in the <a href="../../configuration/user-manager/"><code>UserManager</code> documentation</a>.</p>
-<h2 id="password-validation-should-live-in-the-usermanager">Password validation should live in the <code>UserManager</code><a class="headerlink" href="#password-validation-should-live-in-the-usermanager" title="Permanent link">¶</a></h2>
-<p>Before, password validation was defined in its own function that was passed as argument of <code>FastAPIUsers</code>.</p>
-<p>Now, it should be a method of the <code>UserManager</code> class.</p>
-<p>You can read more in the <a href="../../configuration/user-manager/"><code>UserManager</code> documentation</a>.</p>
-<h2 id="verify-token-secret-and-lifetime-parameters-are-attributes-of-usermanager">Verify token secret and lifetime parameters are attributes of <code>UserManager</code><a class="headerlink" href="#verify-token-secret-and-lifetime-parameters-are-attributes-of-usermanager" title="Permanent link">¶</a></h2>
-<p>Before, verify token and lifetime parameters were passed as argument of <code>get_verify_router</code>.</p>
-<p>Now, they should be defined as attributes of the <code>UserManager</code> class.</p>
-<p>You can read more in the <a href="../../configuration/user-manager/"><code>UserManager</code> documentation</a>.</p>
-<h2 id="reset-password-token-secret-and-lifetime-parameters-are-attributes-of-usermanager">Reset password token secret and lifetime parameters are attributes of <code>UserManager</code><a class="headerlink" href="#reset-password-token-secret-and-lifetime-parameters-are-attributes-of-usermanager" title="Permanent link">¶</a></h2>
-<p>Before, reset password token and lifetime parameters were passed as argument of <code>get_verify_router</code>.</p>
-<p>Now, they should be defined as attributes of the <code>UserManager</code> class.</p>
-<p>You can read more in the <a href="../../configuration/user-manager/"><code>UserManager</code> documentation</a>.</p>
-<h2 id="database-adapter-should-be-provided-in-a-dependency">Database adapter should be provided in a dependency<a class="headerlink" href="#database-adapter-should-be-provided-in-a-dependency" title="Permanent link">¶</a></h2>
-<p>Before, we advised to directly instantiate the database adapter class.</p>
-<p>Now, it should be instantiated inside a dependency that you define yourself. The benefit of this is that it lives in the dependency injection system of FastAPI, allowing you to have more dynamic logic to create your instance.</p>
-<p>➡️ <a href="../../configuration/databases/sqlalchemy/">I'm using SQLAlchemy</a></p>
-<p>➡️ <a href="../../configuration/databases/mongodb/">I'm using MongoDB</a></p>
-<p>➡️ <a href="../../configuration/databases/tortoise/">I'm using Tortoise ORM</a></p>
-<p>➡️ <a href="../../configuration/databases/ormar/">I'm using ormar</a></p>
-<h2 id="fastapiusers-now-expect-a-get_user_manager-dependency">FastAPIUsers now expect a <code>get_user_manager</code> dependency<a class="headerlink" href="#fastapiusers-now-expect-a-get_user_manager-dependency" title="Permanent link">¶</a></h2>
-<p>Before, the database adapter instance was passed as argument of <code>FastAPIUsers</code>.</p>
-<p>Now, you should define a <code>get_user_manager</code> dependency returning an instance of your <code>UserManager</code> class. This dependency will be dependent of the database adapter dependency.</p>
-<p>You can read more in the <a href="../../configuration/user-manager/"><code>UserManager</code> documentation</a> and <a href="http://localhost:8000/configuration/routers/"><code>FastAPIUsers</code> documentation</a></p>
-<h2 id="lost">Lost?<a class="headerlink" href="#lost" title="Permanent link">¶</a></h2>
-<p>If you're unsure or a bit lost, make sure to check the <a href="../../configuration/full-example/">full working examples</a>.</p>
+<h1 id="password-hash">Password hash<a class="headerlink" href="#password-hash" title="Permanent link">¶</a></h1>
+<p>By default, FastAPI Users will use the <a href="https://en.wikipedia.org/wiki/Bcrypt">BCrypt algorithm</a> to <strong>hash and salt</strong> passwords before storing them in the database.</p>
+<p>The implementation is provided by <a href="https://passlib.readthedocs.io/en/stable/index.html">Passlib</a>, a battle-tested Python library for password hashing.</p>
+<h2 id="customize-cryptcontext">Customize <code>CryptContext</code><a class="headerlink" href="#customize-cryptcontext" title="Permanent link">¶</a></h2>
+<p>If you need to support other hashing algorithms, you can customize the <a href="https://passlib.readthedocs.io/en/stable/lib/passlib.context.html#the-cryptcontext-class"><code>CryptContext</code> object of Passlib</a>.</p>
+<p>For this, you'll need to instantiate the <code>PasswordHelper</code> class and pass it your <code>CryptContext</code>. The example below shows you how you can create a <code>CryptContext</code> to add support for the Argon2 algorithm while deprecating BCrypt.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">fastapi_users.password</span> <span class="kn">import</span> <span class="n">PasswordHelper</span>
+<span class="kn">from</span> <span class="nn">passlib.context</span> <span class="kn">import</span> <span class="n">CryptContext</span>
+
+<span class="n">context</span> <span class="o">=</span> <span class="n">CryptContext</span><span class="p">(</span><span class="n">schemes</span><span class="o">=</span><span class="p">[</span><span class="s2">"argon2"</span><span class="p">,</span> <span class="s2">"bcrypt"</span><span class="p">],</span> <span class="n">deprecated</span><span class="o">=</span><span class="s2">"auto"</span><span class="p">)</span>
+<span class="n">password_helper</span> <span class="o">=</span> <span class="n">PasswordHelper</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+</code></pre></div>
+<p>Finally, pass the <code>password_helper</code> variable while instantiating your <code>UserManager</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_manager</span><span class="p">(</span><span class="n">user_db</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">get_user_db</span><span class="p">)):</span>
+    <span class="k">yield</span> <span class="n">UserManager</span><span class="p">(</span><span class="n">user_db</span><span class="p">,</span> <span class="n">password_helper</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">Password hashes are automatically upgraded</p>
+<p>FastAPI Users takes care of upgrading the password hash to a more recent algorithm when needed.</p>
+<p>Typically, when a user logs in, we'll check if the password hash algorithm is deprecated.</p>
+<p>If it is, we take the opportunity of having the password in plain-text at hand (since the user just logged in!) to hash it with a better algorithm and update it in database.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Dependencies for alternative algorithms are not included by default</p>
+<p>FastAPI Users won't install required dependencies to make other algorithms like Argon2 work. It's up to you to install them.</p>
+</div>
+<h2 id="full-customization">Full customization<a class="headerlink" href="#full-customization" title="Permanent link">¶</a></h2>
+<p>If you don't wist to use Passlib at all – <strong>which we don't recommend unless you're absolutely sure of what you're doing</strong> — you can implement your own <code>PasswordHelper</code> class as long as it implements the <code>PasswordHelperProtocol</code> and its methods.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+
+<span class="kn">from</span> <span class="nn">fastapi_users.password</span> <span class="kn">import</span> <span class="n">PasswordHelperProtocol</span>
+
+<span class="k">class</span> <span class="nc">PasswordHelper</span><span class="p">(</span><span class="n">PasswordHelperProtocol</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">verify_and_update</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">plain_password</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">hashed_password</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">hash</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="o">...</span>
+</code></pre></div>
 </article>
 </div>
 </div>
 </main>
 <footer class="md-footer">
 <nav aria-label="Footer" class="md-footer__inner md-grid">
-<a aria-label="Previous: 6.x.x ➡️ 7.x.x" class="md-footer__link md-footer__link--prev" href="../6x_to_7x/" rel="prev">
+<a aria-label="Previous: OAuth2" class="md-footer__link md-footer__link--prev" href="../oauth/" rel="prev">
 <div class="md-footer__button md-icon">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
 </div>
@@ -599,17 +561,17 @@
 <span class="md-footer__direction">
                 Previous
               </span>
-              6.x.x ➡️ 7.x.x
+              OAuth2
             </div>
 </div>
 </a>
-<a aria-label="Next: 8.x.x ➡️ 9.x.x" class="md-footer__link md-footer__link--next" href="../8x_to_9x/" rel="next">
+<a aria-label="Next: Flow" class="md-footer__link md-footer__link--next" href="../../usage/flow/" rel="next">
 <div class="md-footer__title">
 <div class="md-ellipsis">
 <span class="md-footer__direction">
                 Next
               </span>
-              8.x.x ➡️ 9.x.x
+              Flow
             </div>
 </div>
 <div class="md-footer__button md-icon">
