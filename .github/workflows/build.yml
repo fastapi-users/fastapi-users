@@ -19,7 +19,8 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.dev.txt
+        pip install flit
+        flit install --deps develop --extras oauth,redis
     - name: Check codestyle
       run: |
         make format-check
@@ -53,7 +54,8 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.dev.txt
+        pip install flit
+        flit install --deps develop --extras oauth,redis
     - name: Release on PyPI
       env:
         FLIT_USERNAME: ${{ secrets.FLIT_USERNAME }}

@@ -43,7 +43,6 @@ markers = [
 requires = ["flit_core >=3.2,<4"]
 build-backend = "flit_core.buildapi"
 
-
 [tool.flit.module]
 name = "fastapi_users"
 
@@ -79,6 +78,31 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+dev = [
+    "flake8",
+    "pytest",
+    "requests",
+    "isort",
+    "pytest-asyncio",
+    "flake8-docstrings",
+    "mkdocs",
+    "mkdocs-material",
+    "mkdocs-mermaid2-plugin",
+    "black",
+    "mypy",
+    "codecov",
+    "pytest-cov",
+    "pytest-mock",
+    "flit",
+    "markdown-include",
+    "pygments",
+    "pymdown-extensions",
+    "bumpversion",
+    "httpx-oauth",
+    "httpx",
+    "asgi_lifespan",
+    "uvicorn",
+]
 sqlalchemy = [
     "fastapi-users-db-sqlalchemy >=1.1.0,<2.0.0",
 ]

@@ -1,3 +1,8 @@
+install:
+	python -m pip install --upgrade pip
+	pip install flit
+	flit install --deps develop --extras oauth,redis
+
 isort-src:
 	isort ./fastapi_users ./tests
 

@@ -1,9 +1,0 @@
-fastapi >=0.65.2,<0.76.0
-passlib[bcrypt] ==1.7.4
-email-validator >=1.1.2,<1.2
-pyjwt[crypto] ==2.3.0
-python-multipart ==0.0.5
-makefun >=1.11.2,<1.14
-
-aioredis >=2.0.1,<2.1.0
-hiredis >=2.0.0,<2.1.0
