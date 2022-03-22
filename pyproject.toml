@@ -75,6 +75,7 @@ dependencies = [
     "pyjwt[crypto] ==2.3.0",
     "python-multipart ==0.0.5",
     "makefun >=1.11.2,<1.14",
+    "typing-extensions >=4.1.1; python_version < '3.8'",
 ]
 
 [project.optional-dependencies]

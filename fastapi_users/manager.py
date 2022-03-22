@@ -5,10 +5,10 @@ from fastapi import Request
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import UUID4
 
-from fastapi_users import models, password
+from fastapi_users import models
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
-from fastapi_users.password import generate_password, get_password_hash
+from fastapi_users.password import PasswordHelper, PasswordHelperProtocol
 from fastapi_users.types import DependencyCallable
 
 RESET_PASSWORD_TOKEN_AUDIENCE = "fastapi-users:reset"
@@ -73,9 +73,18 @@ class BaseUserManager(Generic[models.UC, models.UD]):
     verification_token_audience: str = VERIFY_USER_TOKEN_AUDIENCE
 
     user_db: BaseUserDatabase[models.UD]
+    password_helper: PasswordHelperProtocol
 
-    def __init__(self, user_db: BaseUserDatabase[models.UD]):
+    def __init__(
+        self,
+        user_db: BaseUserDatabase[models.UD],
+        password_helper: Optional[PasswordHelperProtocol] = None,
+    ):
         self.user_db = user_db
+        if password_helper is None:
+            self.password_helper = PasswordHelper()
+        else:
+            self.password_helper = password_helper  # pragma: no cover
 
     async def get(self, id: UUID4) -> models.UD:
         """
@@ -145,7 +154,7 @@ class BaseUserManager(Generic[models.UC, models.UD]):
         if existing_user is not None:
             raise UserAlreadyExists()
 
-        hashed_password = get_password_hash(user.password)
+        hashed_password = self.password_helper.hash(user.password)
         user_dict = (
             user.create_update_dict() if safe else user.create_update_dict_superuser()
         )
@@ -188,10 +197,10 @@ class BaseUserManager(Generic[models.UC, models.UD]):
                 await self.user_db.update(user)
             except UserNotExists:
                 # Create account
-                password = generate_password()
+                password = self.password_helper.generate()
                 user = self.user_db_model(
                     email=oauth_account.account_email,
-                    hashed_password=get_password_hash(password),
+                    hashed_password=self.password_helper.hash(password),
                     oauth_accounts=[oauth_account],
                 )
                 await self.user_db.create(user)
@@ -523,10 +532,10 @@ class BaseUserManager(Generic[models.UC, models.UD]):
         except UserNotExists:
             # Run the hasher to mitigate timing attack
             # Inspired from Django: https://code.djangoproject.com/ticket/20760
-            password.get_password_hash(credentials.password)
+            self.password_helper.hash(credentials.password)
             return None
 
-        verified, updated_password_hash = password.verify_and_update_password(
+        verified, updated_password_hash = self.password_helper.verify_and_update(
             credentials.password, user.hashed_password
         )
         if not verified:
@@ -549,7 +558,7 @@ class BaseUserManager(Generic[models.UC, models.UD]):
                     user.is_verified = False
             elif field == "password":
                 await self.validate_password(value, user)
-                hashed_password = get_password_hash(value)
+                hashed_password = self.password_helper.hash(value)
                 user.hashed_password = hashed_password
             else:
                 setattr(user, field, value)

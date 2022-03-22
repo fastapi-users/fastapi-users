@@ -22,13 +22,14 @@ from fastapi_users.manager import (
 )
 from fastapi_users.models import BaseOAuthAccount, BaseOAuthAccountMixin
 from fastapi_users.openapi import OpenAPIResponseType
-from fastapi_users.password import get_password_hash
+from fastapi_users.password import PasswordHelper
 
-guinevere_password_hash = get_password_hash("guinevere")
-angharad_password_hash = get_password_hash("angharad")
-viviane_password_hash = get_password_hash("viviane")
-lancelot_password_hash = get_password_hash("lancelot")
-excalibur_password_hash = get_password_hash("excalibur")
+password_helper = PasswordHelper()
+guinevere_password_hash = password_helper.hash("guinevere")
+angharad_password_hash = password_helper.hash("angharad")
+viviane_password_hash = password_helper.hash("viviane")
+lancelot_password_hash = password_helper.hash("lancelot")
+excalibur_password_hash = password_helper.hash("excalibur")
 
 
 class User(models.BaseUser):

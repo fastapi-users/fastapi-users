@@ -536,8 +536,8 @@ class TestAuthenticate:
         ],
         user_manager: UserManagerMock,
     ):
-        verify_and_update_password_patch = mocker.patch(
-            "fastapi_users.password.verify_and_update_password"
+        verify_and_update_password_patch = mocker.patch.object(
+            user_manager.password_helper, "verify_and_update"
         )
         verify_and_update_password_patch.return_value = (True, "updated_hash")
         update_spy = mocker.spy(user_manager.user_db, "update")
