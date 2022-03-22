@@ -1,6 +1,7 @@
 from typing import Any, Dict, Generic, Optional, Type, Union
 
 import jwt
+
 from fastapi import Request
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import UUID4
@@ -8,7 +9,7 @@ from pydantic import UUID4
 from fastapi_users import models, password
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
-from fastapi_users.password import generate_password, get_password_hash
+from fastapi_users.password import generate_password, get_password_hash, get_crypt_context
 from fastapi_users.types import DependencyCallable
 
 RESET_PASSWORD_TOKEN_AUDIENCE = "fastapi-users:reset"
@@ -71,6 +72,8 @@ class BaseUserManager(Generic[models.UC, models.UD]):
     verification_token_secret: SecretType
     verification_token_lifetime_seconds: int = 3600
     verification_token_audience: str = VERIFY_USER_TOKEN_AUDIENCE
+
+    crypt_context_kwargs: Optional[dict[str, Any]] = None
 
     user_db: BaseUserDatabase[models.UD]
 
@@ -145,7 +148,7 @@ class BaseUserManager(Generic[models.UC, models.UD]):
         if existing_user is not None:
             raise UserAlreadyExists()
 
-        hashed_password = get_password_hash(user.password)
+        hashed_password = get_password_hash(user.password, crypt_context=self._crypt_context)
         user_dict = (
             user.create_update_dict() if safe else user.create_update_dict_superuser()
         )
@@ -191,7 +194,7 @@ class BaseUserManager(Generic[models.UC, models.UD]):
                 password = generate_password()
                 user = self.user_db_model(
                     email=oauth_account.account_email,
-                    hashed_password=get_password_hash(password),
+                    hashed_password=get_password_hash(password, crypt_context=self._crypt_context),
                     oauth_accounts=[oauth_account],
                 )
                 await self.user_db.create(user)
@@ -523,11 +526,11 @@ class BaseUserManager(Generic[models.UC, models.UD]):
         except UserNotExists:
             # Run the hasher to mitigate timing attack
             # Inspired from Django: https://code.djangoproject.com/ticket/20760
-            password.get_password_hash(credentials.password)
+            password.get_password_hash(credentials.password, crypt_context=self._crypt_context)
             return None
 
         verified, updated_password_hash = password.verify_and_update_password(
-            credentials.password, user.hashed_password
+            credentials.password, user.hashed_password, crypt_context=self._crypt_context
         )
         if not verified:
             return None
@@ -549,11 +552,17 @@ class BaseUserManager(Generic[models.UC, models.UD]):
                     user.is_verified = False
             elif field == "password":
                 await self.validate_password(value, user)
-                hashed_password = get_password_hash(value)
+                hashed_password = get_password_hash(value, crypt_context=self._crypt_context)
                 user.hashed_password = hashed_password
             else:
                 setattr(user, field, value)
         return await self.user_db.update(user)
+
+    @property
+    def _crypt_context(self):
+        if not self.crypt_context_kwargs:
+            return None
+        return get_crypt_context(**self.crypt_context_kwargs)
 
 
 UserManagerDependency = DependencyCallable[BaseUserManager[models.UC, models.UD]]
