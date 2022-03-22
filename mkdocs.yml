@@ -83,6 +83,7 @@ nav:
       - configuration/routers/users.md
     - configuration/full-example.md
     - configuration/oauth.md
+    - configuration/password-hash.md
   - Usage:
     - usage/flow.md
     - usage/routes.md
