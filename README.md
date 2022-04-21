@@ -61,9 +61,6 @@ Add quickly a registration and authentication system to your [FastAPI](https://f
 * **Bring your own database**: host your database anywhere, we'll take care of the rest
 * **Pre-built login and registration pages**: clean and fast authentication so you don't have to do it yourself
 * **Official Python client** with built-in **FastAPI integration**
-* Integrate a simple face detection algorithm in a FastAPI backend
-* Integrate common Python data science libraries in a web backend
-* Deploy a performant and reliable web backend for a data science application
 
 <p align="center">
     <a href="https://www.fief.dev"><img width="150px" src="https://raw.githubusercontent.com/fief-dev/.github/main/graphics/join-the-beta-button.svg?sanitize=true" /></a>
