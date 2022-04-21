@@ -209,7 +209,11 @@ class BaseUserManager(Generic[models.UC, models.UD]):
             # Update oauth
             updated_oauth_accounts = []
             for existing_oauth_account in user.oauth_accounts:  # type: ignore
-                if existing_oauth_account.account_id == oauth_account.account_id:
+                if (
+                    existing_oauth_account.account_id == oauth_account.account_id
+                    and existing_oauth_account.oauth_name == oauth_account.oauth_name
+                ):
+                    oauth_account.id = existing_oauth_account.id
                     updated_oauth_accounts.append(oauth_account)
                 else:
                     updated_oauth_accounts.append(existing_oauth_account)
