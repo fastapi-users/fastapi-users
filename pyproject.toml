@@ -120,7 +120,7 @@ ormar = [
     "fastapi-users-db-ormar >=1.0.0",
 ]
 oauth = [
-    "httpx-oauth >=0.4,<0.5"
+    "httpx-oauth >=0.4,<0.7"
 ]
 redis = [
     "aioredis >=2.0.1,<2.1.0",
