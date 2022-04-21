@@ -498,6 +498,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "ricfri",
+      "name": "Richard Friberg",
+      "avatar_url": "https://avatars.githubusercontent.com/u/21967765?v=4",
+      "profile": "https://github.com/ricfri",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
