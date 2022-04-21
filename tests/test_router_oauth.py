@@ -211,7 +211,7 @@ class TestCallback:
         assert response.status_code == status.HTTP_200_OK
 
         get_access_token_mock.assert_called_once_with(
-            "CODE", "http://www.tintagel.bt/callback"
+            "CODE", "http://www.tintagel.bt/callback", None
         )
 
         data = cast(Dict[str, Any], response.json())
