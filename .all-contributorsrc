@@ -507,6 +507,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "KentonParton",
+      "name": "Kenton Parton",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20202312?v=4",
+      "profile": "http://www.kentonparton.com",
+      "contributions": [
+        "financial"
+      ]
     }
   ],
   "contributorsPerLine": 7,
