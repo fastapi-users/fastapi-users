@@ -17,8 +17,8 @@ from fastapi_users.router.common import ErrorCode, ErrorModel
 
 def get_users_router(
     get_user_manager: UserManagerDependency[models.UP],
-    user_model: Type[schemas.U],
-    user_update_model: Type[schemas.UU],
+    user_schema: Type[schemas.U],
+    user_update_schema: Type[schemas.UU],
     authenticator: Authenticator,
     requires_verification: bool = False,
 ) -> APIRouter:
@@ -43,7 +43,7 @@ def get_users_router(
 
     @router.get(
         "/me",
-        response_model=user_model,
+        response_model=user_schema,
         name="users:current_user",
         responses={
             status.HTTP_401_UNAUTHORIZED: {
@@ -58,7 +58,7 @@ def get_users_router(
 
     @router.patch(
         "/me",
-        response_model=user_model,
+        response_model=user_schema,
         dependencies=[Depends(get_current_active_user)],
         name="users:patch_current_user",
         responses={
@@ -94,7 +94,7 @@ def get_users_router(
     )
     async def update_me(
         request: Request,
-        user_update: user_update_model,  # type: ignore
+        user_update: user_update_schema,  # type: ignore
         user: models.UP = Depends(get_current_active_user),
         user_manager: BaseUserManager[models.UP] = Depends(get_user_manager),
     ):
@@ -118,7 +118,7 @@ def get_users_router(
 
     @router.get(
         "/{id:uuid}",
-        response_model=user_model,
+        response_model=user_schema,
         dependencies=[Depends(get_current_superuser)],
         name="users:user",
         responses={
@@ -138,7 +138,7 @@ def get_users_router(
 
     @router.patch(
         "/{id:uuid}",
-        response_model=user_model,
+        response_model=user_schema,
         dependencies=[Depends(get_current_superuser)],
         name="users:patch_user",
         responses={
@@ -179,7 +179,7 @@ def get_users_router(
         },
     )
     async def update_user(
-        user_update: user_update_model,  # type: ignore
+        user_update: user_update_schema,  # type: ignore
         request: Request,
         user=Depends(get_user_or_404),
         user_manager: BaseUserManager[models.UP] = Depends(get_user_manager),

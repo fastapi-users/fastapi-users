@@ -17,7 +17,7 @@ from fastapi_users.router.common import ErrorCode, ErrorModel
 
 def get_verify_router(
     get_user_manager: UserManagerDependency[models.UP],
-    user_model: Type[schemas.U],
+    user_schema: Type[schemas.U],
 ):
     router = APIRouter()
 
@@ -41,7 +41,7 @@ def get_verify_router(
 
     @router.post(
         "/verify",
-        response_model=user_model,
+        response_model=user_schema,
         name="verify:verify",
         responses={
             status.HTTP_400_BAD_REQUEST: {

@@ -100,11 +100,11 @@ class BaseTestUserManager(Generic[models.UP], BaseUserManager[models.UP]):
 
 
 class UserManager(BaseTestUserManager[UserModel]):
-    user_model = UserModel
+    pass
 
 
 class UserManagerOAuth(BaseTestUserManager[UserOAuthModel]):
-    user_model = UserOAuthModel
+    pass
 
 
 class UserManagerMock(BaseTestUserManager[models.UP]):

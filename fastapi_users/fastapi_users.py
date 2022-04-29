@@ -48,13 +48,13 @@ class FastAPIUsers(Generic[models.UP, schemas.U, schemas.UC, schemas.UU]):
         auth_backends: Sequence[AuthenticationBackend],
         user_schema: Type[schemas.U],
         user_create_schema: Type[schemas.UC],
-        user_update_model: Type[schemas.UU],
+        user_update_schema: Type[schemas.UU],
     ):
         self.authenticator = Authenticator(auth_backends, get_user_manager)
 
         self._user_schema = user_schema
         self._user_create_schema = user_create_schema
-        self._user_update_schema = user_update_model
+        self._user_update_schema = user_update_schema
 
         self.get_user_manager = get_user_manager
         self.current_user = self.authenticator.current_user

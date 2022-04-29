@@ -1,4 +1,4 @@
-from typing import Any, Dict, Generic, Optional, Type, Union
+from typing import Any, Dict, Generic, Optional, Union
 
 import jwt
 from fastapi import Request
@@ -52,7 +52,6 @@ class BaseUserManager(Generic[models.UP]):
     """
     User management logic.
 
-    :attribute user_model: Model of a user.
     :attribute reset_password_token_secret: Secret to encode reset password token.
     :attribute reset_password_token_lifetime_seconds: Lifetime of reset password token.
     :attribute reset_password_token_audience: JWT audience of reset password token.
@@ -63,7 +62,6 @@ class BaseUserManager(Generic[models.UP]):
     :param user_db: Database adapter instance.
     """
 
-    user_model: Type[models.UP]
     reset_password_token_secret: SecretType
     reset_password_token_lifetime_seconds: int = 3600
     reset_password_token_audience: str = RESET_PASSWORD_TOKEN_AUDIENCE
