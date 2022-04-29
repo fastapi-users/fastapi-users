@@ -9,6 +9,8 @@ else:
 
 
 class UserProtocol(Protocol):
+    """User protocol that ORM model should follow."""
+
     id: uuid.UUID
     email: str
     hashed_password: str
@@ -21,6 +23,8 @@ class UserProtocol(Protocol):
 
 
 class OAuthAccountProtocol(Protocol):
+    """OAuth account protocol that ORM model should follow."""
+
     id: uuid.UUID
     oauth_name: str
     access_token: str
@@ -38,6 +42,8 @@ OAP = TypeVar("OAP", bound=OAuthAccountProtocol)
 
 
 class UserOAuthProtocol(UserProtocol, Generic[OAP]):
+    """User protocol including a list of OAuth accounts."""
+
     oauth_accounts: List[OAP]
 
 

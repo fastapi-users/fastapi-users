@@ -1,17 +1,17 @@
 import secrets
 from datetime import datetime, timedelta, timezone
-from typing import Generic, Optional
+from typing import Any, Dict, Generic, Optional
 
 from fastapi_users import models
 from fastapi_users.authentication.strategy.base import Strategy
 from fastapi_users.authentication.strategy.db.adapter import AccessTokenDatabase
-from fastapi_users.authentication.strategy.db.models import A
+from fastapi_users.authentication.strategy.db.models import AP
 from fastapi_users.manager import BaseUserManager, UserNotExists
 
 
-class DatabaseStrategy(Strategy, Generic[models.UP, A]):
+class DatabaseStrategy(Strategy, Generic[models.UP, AP]):
     def __init__(
-        self, database: AccessTokenDatabase[A], lifetime_seconds: Optional[int] = None
+        self, database: AccessTokenDatabase[AP], lifetime_seconds: Optional[int] = None
     ):
         self.database = database
         self.lifetime_seconds = lifetime_seconds
@@ -39,8 +39,8 @@ class DatabaseStrategy(Strategy, Generic[models.UP, A]):
             return None
 
     async def write_token(self, user: models.UP) -> str:
-        access_token = self._create_access_token(user)
-        await self.database.create(access_token)
+        access_token_dict = self._create_access_token_dict(user)
+        access_token = await self.database.create(access_token_dict)
         return access_token.token
 
     async def destroy_token(self, token: str, user: models.UP) -> None:
@@ -48,6 +48,6 @@ class DatabaseStrategy(Strategy, Generic[models.UP, A]):
         if access_token is not None:
             await self.database.delete(access_token)
 
-    def _create_access_token(self, user: models.UP) -> A:
+    def _create_access_token_dict(self, user: models.UP) -> Dict[str, Any]:
         token = secrets.token_urlsafe()
-        return self.database.access_token_model(token=token, user_id=user.id)
+        return {"token": token, "user_id": user.id}
