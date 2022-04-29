@@ -3,7 +3,7 @@ from typing import Type
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from pydantic import UUID4
 
-from fastapi_users import models
+from fastapi_users import models, schemas
 from fastapi_users.authentication import Authenticator
 from fastapi_users.manager import (
     BaseUserManager,
@@ -16,10 +16,9 @@ from fastapi_users.router.common import ErrorCode, ErrorModel
 
 
 def get_users_router(
-    get_user_manager: UserManagerDependency[models.UC, models.UD],
-    user_model: Type[models.U],
-    user_update_model: Type[models.UU],
-    user_db_model: Type[models.UD],
+    get_user_manager: UserManagerDependency[models.UP],
+    user_model: Type[schemas.U],
+    user_update_model: Type[schemas.UU],
     authenticator: Authenticator,
     requires_verification: bool = False,
 ) -> APIRouter:
@@ -35,8 +34,8 @@ def get_users_router(
 
     async def get_user_or_404(
         id: UUID4,
-        user_manager: BaseUserManager[models.UC, models.UD] = Depends(get_user_manager),
-    ) -> models.UD:
+        user_manager: BaseUserManager[models.UP] = Depends(get_user_manager),
+    ) -> models.UP:
         try:
             return await user_manager.get(id)
         except UserNotExists:
@@ -53,7 +52,7 @@ def get_users_router(
         },
     )
     async def me(
-        user: user_db_model = Depends(get_current_active_user),  # type: ignore
+        user: models.UP = Depends(get_current_active_user),
     ):
         return user
 
@@ -96,8 +95,8 @@ def get_users_router(
     async def update_me(
         request: Request,
         user_update: user_update_model,  # type: ignore
-        user: user_db_model = Depends(get_current_active_user),  # type: ignore
-        user_manager: BaseUserManager[models.UC, models.UD] = Depends(get_user_manager),
+        user: models.UP = Depends(get_current_active_user),
+        user_manager: BaseUserManager[models.UP] = Depends(get_user_manager),
     ):
         try:
             return await user_manager.update(
@@ -183,7 +182,7 @@ def get_users_router(
         user_update: user_update_model,  # type: ignore
         request: Request,
         user=Depends(get_user_or_404),
-        user_manager: BaseUserManager[models.UC, models.UD] = Depends(get_user_manager),
+        user_manager: BaseUserManager[models.UP] = Depends(get_user_manager),
     ):
         try:
             return await user_manager.update(
@@ -223,7 +222,7 @@ def get_users_router(
     )
     async def delete_user(
         user=Depends(get_user_or_404),
-        user_manager: BaseUserManager[models.UC, models.UD] = Depends(get_user_manager),
+        user_manager: BaseUserManager[models.UP] = Depends(get_user_manager),
     ):
         await user_manager.delete(user)
         return None

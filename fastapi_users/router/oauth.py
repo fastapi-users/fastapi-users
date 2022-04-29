@@ -6,7 +6,7 @@ from httpx_oauth.integrations.fastapi import OAuth2AuthorizeCallback
 from httpx_oauth.oauth2 import BaseOAuth2, OAuth2Token
 from pydantic import BaseModel
 
-from fastapi_users import models
+from fastapi_users import models, schemas
 from fastapi_users.authentication import AuthenticationBackend, Strategy
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
@@ -29,7 +29,7 @@ def generate_state_token(
 def get_oauth_router(
     oauth_client: BaseOAuth2,
     backend: AuthenticationBackend,
-    get_user_manager: UserManagerDependency[models.UC, models.UD],
+    get_user_manager: UserManagerDependency[models.UP],
     state_secret: SecretType,
     redirect_url: str = None,
 ) -> APIRouter:
@@ -101,8 +101,8 @@ def get_oauth_router(
         access_token_state: Tuple[OAuth2Token, str] = Depends(
             oauth2_authorize_callback
         ),
-        user_manager: BaseUserManager[models.UC, models.UD] = Depends(get_user_manager),
-        strategy: Strategy[models.UC, models.UD] = Depends(backend.get_strategy),
+        user_manager: BaseUserManager[models.UP] = Depends(get_user_manager),
+        strategy: Strategy[models.UP] = Depends(backend.get_strategy),
     ):
         token, state = access_token_state
         account_id, account_email = await oauth_client.get_id_email(
@@ -114,7 +114,7 @@ def get_oauth_router(
         except jwt.DecodeError:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
 
-        new_oauth_account = models.BaseOAuthAccount(
+        new_oauth_account = schemas.BaseOAuthAccount(
             oauth_name=oauth_client.name,
             access_token=token["access_token"],
             expires_at=token.get("expires_at"),

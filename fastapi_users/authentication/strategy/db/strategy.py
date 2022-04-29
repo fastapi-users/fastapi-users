@@ -9,7 +9,7 @@ from fastapi_users.authentication.strategy.db.models import A
 from fastapi_users.manager import BaseUserManager, UserNotExists
 
 
-class DatabaseStrategy(Strategy, Generic[models.UC, models.UD, A]):
+class DatabaseStrategy(Strategy, Generic[models.UP, A]):
     def __init__(
         self, database: AccessTokenDatabase[A], lifetime_seconds: Optional[int] = None
     ):
@@ -17,8 +17,8 @@ class DatabaseStrategy(Strategy, Generic[models.UC, models.UD, A]):
         self.lifetime_seconds = lifetime_seconds
 
     async def read_token(
-        self, token: Optional[str], user_manager: BaseUserManager[models.UC, models.UD]
-    ) -> Optional[models.UD]:
+        self, token: Optional[str], user_manager: BaseUserManager[models.UP]
+    ) -> Optional[models.UP]:
         if token is None:
             return None
 
@@ -38,16 +38,16 @@ class DatabaseStrategy(Strategy, Generic[models.UC, models.UD, A]):
         except UserNotExists:
             return None
 
-    async def write_token(self, user: models.UD) -> str:
+    async def write_token(self, user: models.UP) -> str:
         access_token = self._create_access_token(user)
         await self.database.create(access_token)
         return access_token.token
 
-    async def destroy_token(self, token: str, user: models.UD) -> None:
+    async def destroy_token(self, token: str, user: models.UP) -> None:
         access_token = await self.database.get_by_token(token)
         if access_token is not None:
             await self.database.delete(access_token)
 
-    def _create_access_token(self, user: models.UD) -> A:
+    def _create_access_token(self, user: models.UP) -> A:
         token = secrets.token_urlsafe()
         return self.database.access_token_model(token=token, user_id=user.id)

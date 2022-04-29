@@ -2,7 +2,7 @@
 
 __version__ = "9.3.1"
 
-from fastapi_users import models  # noqa: F401
+from fastapi_users import models, schemas  # noqa: F401
 from fastapi_users.fastapi_users import FastAPIUsers  # noqa: F401
 from fastapi_users.manager import (  # noqa: F401
     BaseUserManager,
@@ -10,7 +10,7 @@ from fastapi_users.manager import (  # noqa: F401
 )
 
 __all__ = [
-    "models",
+    "schemas",
     "FastAPIUsers",
     "BaseUserManager",
     "InvalidPasswordException",

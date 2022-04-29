@@ -1,81 +1,44 @@
+import sys
 import uuid
-from typing import List, Optional, TypeVar
+from typing import Generic, List, Optional, TypeVar
 
-from pydantic import UUID4, BaseModel, EmailStr, Field
-
-
-class CreateUpdateDictModel(BaseModel):
-    def create_update_dict(self):
-        return self.dict(
-            exclude_unset=True,
-            exclude={
-                "id",
-                "is_superuser",
-                "is_active",
-                "is_verified",
-                "oauth_accounts",
-            },
-        )
-
-    def create_update_dict_superuser(self):
-        return self.dict(exclude_unset=True, exclude={"id"})
+if sys.version_info < (3, 8):
+    from typing_extensions import Protocol  # pragma: no cover
+else:
+    from typing import Protocol  # pragma: no cover
 
 
-class BaseUser(CreateUpdateDictModel):
-    """Base User model."""
-
-    id: UUID4 = Field(default_factory=uuid.uuid4)
-    email: EmailStr
-    is_active: bool = True
-    is_superuser: bool = False
-    is_verified: bool = False
-
-
-class BaseUserCreate(CreateUpdateDictModel):
-    email: EmailStr
-    password: str
-    is_active: Optional[bool] = True
-    is_superuser: Optional[bool] = False
-    is_verified: Optional[bool] = False
-
-
-class BaseUserUpdate(CreateUpdateDictModel):
-    password: Optional[str]
-    email: Optional[EmailStr]
-    is_active: Optional[bool]
-    is_superuser: Optional[bool]
-    is_verified: Optional[bool]
-
-
-class BaseUserDB(BaseUser):
+class UserProtocol(Protocol):
+    id: uuid.UUID
+    email: str
     hashed_password: str
+    is_active: bool
+    is_superuser: bool
+    is_verified: bool
 
-    class Config:
-        orm_mode = True
-
-
-U = TypeVar("U", bound=BaseUser)
-UC = TypeVar("UC", bound=BaseUserCreate)
-UU = TypeVar("UU", bound=BaseUserUpdate)
-UD = TypeVar("UD", bound=BaseUserDB)
+    def __init__(self, *args, **kwargs) -> None:
+        ...  # pragma: no cover
 
 
-class BaseOAuthAccount(BaseModel):
-    """Base OAuth account model."""
-
-    id: UUID4 = Field(default_factory=uuid.uuid4)
+class OAuthAccountProtocol(Protocol):
+    id: uuid.UUID
     oauth_name: str
     access_token: str
-    expires_at: Optional[int] = None
-    refresh_token: Optional[str] = None
+    expires_at: Optional[int]
+    refresh_token: Optional[str]
     account_id: str
     account_email: str
 
-    class Config:
-        orm_mode = True
+    def __init__(self, *args, **kwargs) -> None:
+        ...  # pragma: no cover
 
 
-class BaseOAuthAccountMixin(BaseModel):
-    """Adds OAuth accounts list to a User model."""
+UP = TypeVar("UP", bound=UserProtocol)
+OAP = TypeVar("OAP", bound=OAuthAccountProtocol)
 
-    oauth_accounts: List[BaseOAuthAccount] = []
+
+class UserOAuthProtocol(UserProtocol, Generic[OAP]):
+    oauth_accounts: List[OAP]
+
+
+UOAP = TypeVar("UOAP", bound=UserOAuthProtocol)

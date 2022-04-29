@@ -11,7 +11,7 @@ from fastapi_users.manager import (
     UserNotExists,
 )
 from fastapi_users.router import ErrorCode, get_verify_router
-from tests.conftest import AsyncMethodMocker, User, UserDB, UserManagerMock
+from tests.conftest import AsyncMethodMocker, User, UserManagerMock, UserModel
 
 
 @pytest.fixture
@@ -20,10 +20,7 @@ async def test_app_client(
     get_user_manager,
     get_test_client,
 ) -> AsyncGenerator[httpx.AsyncClient, None]:
-    verify_router = get_verify_router(
-        get_user_manager,
-        User,
-    )
+    verify_router = get_verify_router(get_user_manager, User)
 
     app = FastAPI()
     app.include_router(verify_router)
@@ -70,7 +67,7 @@ class TestVerifyTokenRequest:
         async_method_mocker: AsyncMethodMocker,
         test_app_client: httpx.AsyncClient,
         user_manager: UserManagerMock,
-        user: UserDB,
+        user: UserModel,
     ):
         async_method_mocker(user_manager, "get_by_email", return_value=user)
         user_manager.request_verify.side_effect = UserInactive()
@@ -83,7 +80,7 @@ class TestVerifyTokenRequest:
         async_method_mocker: AsyncMethodMocker,
         test_app_client: httpx.AsyncClient,
         user_manager: UserManagerMock,
-        user: UserDB,
+        user: UserModel,
     ):
         async_method_mocker(user_manager, "get_by_email", return_value=user)
         user_manager.request_verify.side_effect = UserAlreadyVerified()
@@ -96,7 +93,7 @@ class TestVerifyTokenRequest:
         async_method_mocker: AsyncMethodMocker,
         test_app_client: httpx.AsyncClient,
         user_manager: UserManagerMock,
-        user: UserDB,
+        user: UserModel,
     ):
         async_method_mocker(user_manager, "get_by_email", return_value=user)
         async_method_mocker(user_manager, "request_verify", return_value=None)
@@ -171,7 +168,7 @@ class TestVerify:
         async_method_mocker: AsyncMethodMocker,
         test_app_client: httpx.AsyncClient,
         user_manager: UserManagerMock,
-        user: UserDB,
+        user: UserModel,
     ):
         async_method_mocker(user_manager, "verify", return_value=user)
         response = await test_app_client.post("/verify", json={"token": "foo"})

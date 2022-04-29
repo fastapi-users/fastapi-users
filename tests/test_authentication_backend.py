@@ -3,7 +3,7 @@ from typing import Callable, Generic, Optional, Type, cast
 import pytest
 from fastapi import Response
 
-from fastapi_users import models
+from fastapi_users import models, schemas
 from fastapi_users.authentication import (
     AuthenticationBackend,
     BearerTransport,
@@ -19,16 +19,16 @@ class MockTransportLogoutNotSupported(BearerTransport):
     pass
 
 
-class MockStrategyDestroyNotSupported(Strategy, Generic[models.UC, models.UD]):
+class MockStrategyDestroyNotSupported(Strategy, Generic[schemas.UC, schemas.UD]):
     async def read_token(
-        self, token: Optional[str], user_manager: BaseUserManager[models.UC, models.UD]
-    ) -> Optional[models.UD]:
+        self, token: Optional[str], user_manager: BaseUserManager[models.UP]
+    ) -> Optional[schemas.UD]:
         return None
 
-    async def write_token(self, user: models.UD) -> str:
+    async def write_token(self, user: schemas.UD) -> str:
         return "TOKEN"
 
-    async def destroy_token(self, token: str, user: models.UD) -> None:
+    async def destroy_token(self, token: str, user: schemas.UD) -> None:
         raise StrategyDestroyNotSupportedError
 
 

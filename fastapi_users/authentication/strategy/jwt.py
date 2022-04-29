@@ -12,7 +12,7 @@ from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.manager import BaseUserManager, UserNotExists
 
 
-class JWTStrategy(Strategy, Generic[models.UC, models.UD]):
+class JWTStrategy(Strategy, Generic[models.UP]):
     def __init__(
         self,
         secret: SecretType,
@@ -36,8 +36,8 @@ class JWTStrategy(Strategy, Generic[models.UC, models.UD]):
         return self.public_key or self.secret
 
     async def read_token(
-        self, token: Optional[str], user_manager: BaseUserManager[models.UC, models.UD]
-    ) -> Optional[models.UD]:
+        self, token: Optional[str], user_manager: BaseUserManager[models.UP]
+    ) -> Optional[models.UP]:
         if token is None:
             return None
 
@@ -59,13 +59,13 @@ class JWTStrategy(Strategy, Generic[models.UC, models.UD]):
         except UserNotExists:
             return None
 
-    async def write_token(self, user: models.UD) -> str:
+    async def write_token(self, user: models.UP) -> str:
         data = {"user_id": str(user.id), "aud": self.token_audience}
         return generate_jwt(
             data, self.encode_key, self.lifetime_seconds, algorithm=self.algorithm
         )
 
-    async def destroy_token(self, token: str, user: models.UD) -> None:
+    async def destroy_token(self, token: str, user: models.UP) -> None:
         raise StrategyDestroyNotSupportedError(
             "A JWT can't be invalidated: it's valid until it expires."
         )

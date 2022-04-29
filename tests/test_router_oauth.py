@@ -7,7 +7,7 @@ from httpx_oauth.oauth2 import BaseOAuth2, OAuth2
 
 from fastapi_users.authentication import AuthenticationBackend
 from fastapi_users.router.oauth import generate_state_token, get_oauth_router
-from tests.conftest import AsyncMethodMocker, UserDB, UserManagerMock
+from tests.conftest import AsyncMethodMocker, UserManagerMock, UserOAuthModel
 
 
 @pytest.fixture
@@ -112,7 +112,7 @@ class TestCallback:
         async_method_mocker: AsyncMethodMocker,
         test_app_client: httpx.AsyncClient,
         oauth_client: BaseOAuth2,
-        user_oauth: UserDB,
+        user_oauth: UserOAuthModel,
         access_token: str,
     ):
         async_method_mocker(oauth_client, "get_access_token", return_value=access_token)
@@ -133,7 +133,7 @@ class TestCallback:
         async_method_mocker: AsyncMethodMocker,
         test_app_client: httpx.AsyncClient,
         oauth_client: BaseOAuth2,
-        user_oauth: UserDB,
+        user_oauth: UserOAuthModel,
         user_manager_oauth: UserManagerMock,
         access_token: str,
     ):
@@ -161,7 +161,7 @@ class TestCallback:
         async_method_mocker: AsyncMethodMocker,
         test_app_client: httpx.AsyncClient,
         oauth_client: BaseOAuth2,
-        inactive_user_oauth: UserDB,
+        inactive_user_oauth: UserOAuthModel,
         user_manager_oauth: UserManagerMock,
         access_token: str,
     ):
@@ -188,7 +188,7 @@ class TestCallback:
         async_method_mocker: AsyncMethodMocker,
         test_app_client_redirect_url: httpx.AsyncClient,
         oauth_client: BaseOAuth2,
-        user_oauth: UserDB,
+        user_oauth: UserOAuthModel,
         user_manager_oauth: UserManagerMock,
         access_token: str,
     ):
