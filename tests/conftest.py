@@ -430,6 +430,32 @@ def mock_user_db_oauth(
         async def delete(self, user: UserOAuthModel) -> None:
             pass
 
+        async def add_oauth_account(
+            self, user: UserOAuthModel, create_dict: Dict[str, Any]
+        ) -> UserOAuthModel:
+            oauth_account = OAuthAccountModel(**create_dict)
+            user.oauth_accounts.append(oauth_account)
+            return user
+
+        async def update_oauth_account(  # type: ignore
+            self,
+            user: UserOAuthModel,
+            oauth_account: OAuthAccountModel,
+            update_dict: Dict[str, Any],
+        ) -> UserOAuthModel:
+            for field, value in update_dict.items():
+                setattr(oauth_account, field, value)
+            updated_oauth_accounts = []
+            for existing_oauth_account in user.oauth_accounts:
+                if (
+                    existing_oauth_account.account_id == oauth_account.account_id
+                    and existing_oauth_account.oauth_name == oauth_account.oauth_name
+                ):
+                    updated_oauth_accounts.append(oauth_account)
+                else:
+                    updated_oauth_accounts.append(existing_oauth_account)
+            return user
+
     return MockUserDatabase()
 
 

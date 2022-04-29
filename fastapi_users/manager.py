@@ -171,7 +171,12 @@ class BaseUserManager(Generic[models.UP]):
 
     async def oauth_callback(
         self: "BaseUserManager[models.UOAP]",
-        oauth_account: models.OAP,
+        oauth_name: str,
+        access_token: str,
+        account_id: str,
+        account_email: str,
+        expires_at: Optional[int] = None,
+        refresh_token: Optional[str] = None,
         request: Optional[Request] = None,
     ) -> models.UOAP:
         """
@@ -185,44 +190,53 @@ class BaseUserManager(Generic[models.UP]):
         If the user does not exist, it is created and the on_after_register handler
         is triggered.
 
-        :param oauth_account: The new OAuth account to create.
+        :param oauth_name: Name of the OAuth client.
+        :param access_token: Valid access token for the service provider.
+        :param account_id: ID of the user on the service provider.
+        :param account_email: E-mail of the user on the service provider.
+        :param expires_at: Optional timestamp at which the access token expires.
+        :param refresh_token: Optional refresh token to get a
+        fresh access token from the service provider.
         :param request: Optional FastAPI request that
         triggered the operation, defaults to None
         :return: A user.
         """
+        oauth_account_dict = {
+            "oauth_name": oauth_name,
+            "access_token": access_token,
+            "account_id": account_id,
+            "account_email": account_email,
+            "expires_at": expires_at,
+            "refresh_token": refresh_token,
+        }
+
         try:
-            user = await self.get_by_oauth_account(
-                oauth_account.oauth_name, oauth_account.account_id
-            )
+            user = await self.get_by_oauth_account(oauth_name, account_id)
         except UserNotExists:
             try:
                 # Link account
-                user = await self.get_by_email(oauth_account.account_email)
-                oauth_accounts = [*user.oauth_accounts, oauth_account]
-                await self.user_db.update(user, {"oauth_accounts": oauth_accounts})
+                user = await self.get_by_email(account_email)
+                user = await self.user_db.add_oauth_account(user, oauth_account_dict)
             except UserNotExists:
                 # Create account
                 password = self.password_helper.generate()
                 user_dict = {
-                    "email": oauth_account.account_email,
+                    "email": account_email,
                     "hashed_password": self.password_helper.hash(password),
-                    "oauth_accounts": [oauth_account],
                 }
                 user = await self.user_db.create(user_dict)
+                user = await self.user_db.add_oauth_account(user, oauth_account_dict)
                 await self.on_after_register(user, request)
         else:
             # Update oauth
-            updated_oauth_accounts = []
-            for existing_oauth_account in user.oauth_accounts:  # type: ignore
+            for existing_oauth_account in user.oauth_accounts:
                 if (
-                    existing_oauth_account.account_id == oauth_account.account_id
-                    and existing_oauth_account.oauth_name == oauth_account.oauth_name
+                    existing_oauth_account.account_id == account_id
+                    and existing_oauth_account.oauth_name == oauth_name
                 ):
-                    oauth_account.id = existing_oauth_account.id
-                    updated_oauth_accounts.append(oauth_account)
-                else:
-                    updated_oauth_accounts.append(existing_oauth_account)
-            await self.user_db.update(user, {"oauth_accounts": updated_oauth_accounts})
+                    user = await self.user_db.update_oauth_account(
+                        user, existing_oauth_account, oauth_account_dict
+                    )
 
         return user
 

@@ -6,7 +6,7 @@ from httpx_oauth.integrations.fastapi import OAuth2AuthorizeCallback
 from httpx_oauth.oauth2 import BaseOAuth2, OAuth2Token
 from pydantic import BaseModel
 
-from fastapi_users import models, schemas
+from fastapi_users import models
 from fastapi_users.authentication import AuthenticationBackend, Strategy
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
@@ -114,16 +114,15 @@ def get_oauth_router(
         except jwt.DecodeError:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
 
-        new_oauth_account = schemas.BaseOAuthAccount(
-            oauth_name=oauth_client.name,
-            access_token=token["access_token"],
-            expires_at=token.get("expires_at"),
-            refresh_token=token.get("refresh_token"),
-            account_id=account_id,
-            account_email=account_email,
+        user = await user_manager.oauth_callback(
+            oauth_client.name,
+            token["access_token"],
+            account_id,
+            account_email,
+            token.get("expires_at"),
+            token.get("refresh_token"),
+            request,
         )
-
-        user = await user_manager.oauth_callback(new_oauth_account, request)
 
         if not user.is_active:
             raise HTTPException(

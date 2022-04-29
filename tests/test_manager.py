@@ -173,14 +173,18 @@ class TestOAuthCallback:
         user_manager_oauth: UserManagerMock[UserOAuthModel],
         user_oauth: UserOAuthModel,
     ):
-        oauth_account = copy.deepcopy(user_oauth.oauth_accounts[0])
-        oauth_account.id = uuid.uuid4()
-        oauth_account.access_token = "UPDATED_TOKEN"
+        oauth_account = user_oauth.oauth_accounts[0]
 
-        user = await user_manager_oauth.oauth_callback(oauth_account)
+        user = await user_manager_oauth.oauth_callback(
+            oauth_account.oauth_name,
+            "UPDATED_TOKEN",
+            oauth_account.account_id,
+            oauth_account.account_email,
+        )
 
         assert user.id == user_oauth.id
         assert len(user.oauth_accounts) == 2
+        assert user.oauth_accounts[0].id == oauth_account.id
         assert user.oauth_accounts[0].oauth_name == "service1"
         assert user.oauth_accounts[0].access_token == "UPDATED_TOKEN"
         assert user.oauth_accounts[1].access_token == "TOKEN"
@@ -193,36 +197,24 @@ class TestOAuthCallback:
         user_manager_oauth: UserManagerMock[UserOAuthModel],
         superuser_oauth: UserOAuthModel,
     ):
-        oauth_account = OAuthAccountModel(
-            oauth_name="service1",
-            access_token="TOKEN",
-            expires_at=1579000751,
-            account_id="superuser_oauth1",
-            account_email=superuser_oauth.email,
+        user = await user_manager_oauth.oauth_callback(
+            "service1", "TOKEN", "superuser_oauth1", superuser_oauth.email, 1579000751
         )
-
-        user = await user_manager_oauth.oauth_callback(oauth_account)
 
         assert user.id == superuser_oauth.id
         assert len(user.oauth_accounts) == 1
-        assert user.oauth_accounts[0].id == oauth_account.id
+        assert user.oauth_accounts[0].id is not None
 
         assert user_manager_oauth.on_after_register.called is False
 
     async def test_new_user(self, user_manager_oauth: UserManagerMock[UserOAuthModel]):
-        oauth_account = OAuthAccountModel(
-            oauth_name="service1",
-            access_token="TOKEN",
-            expires_at=1579000751,
-            account_id="new_user_oauth1",
-            account_email="galahad@camelot.bt",
+        user = await user_manager_oauth.oauth_callback(
+            "service1", "TOKEN", "new_user_oauth1", "galahad@camelot.bt", 1579000751
         )
-
-        user = await user_manager_oauth.oauth_callback(oauth_account)
 
         assert user.email == "galahad@camelot.bt"
         assert len(user.oauth_accounts) == 1
-        assert user.oauth_accounts[0].id == oauth_account.id
+        assert user.oauth_accounts[0].id is not None
 
         assert user_manager_oauth.on_after_register.called is True
 

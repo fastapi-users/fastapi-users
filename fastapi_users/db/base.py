@@ -2,7 +2,7 @@ from typing import Any, Dict, Generic, Optional
 
 from pydantic import UUID4
 
-from fastapi_users.models import UP
+from fastapi_users.models import OAP, UP
 from fastapi_users.types import DependencyCallable
 
 
@@ -31,6 +31,16 @@ class BaseUserDatabase(Generic[UP]):
 
     async def delete(self, user: UP) -> None:
         """Delete a user."""
+        raise NotImplementedError()
+
+    async def add_oauth_account(self, user: UP, create_dict: Dict[str, Any]) -> UP:
+        """Create an OAuth account and add it to the user."""
+        raise NotImplementedError()
+
+    async def update_oauth_account(
+        self, user: UP, oauth_account: OAP, update_dict: Dict[str, Any]
+    ) -> UP:
+        """Update an OAuth account on a user."""
         raise NotImplementedError()
 
 
