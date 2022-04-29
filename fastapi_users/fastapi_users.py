@@ -22,7 +22,7 @@ except ModuleNotFoundError:  # pragma: no cover
     BaseOAuth2 = Type  # type: ignore
 
 
-class FastAPIUsers(Generic[models.UP, schemas.U, schemas.UC, schemas.UU, schemas.UD]):
+class FastAPIUsers(Generic[models.UP, schemas.U, schemas.UC, schemas.UU]):
     """
     Main object that ties together the component for users authentication.
 

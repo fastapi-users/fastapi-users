@@ -47,17 +47,9 @@ class BaseUserUpdate(CreateUpdateDictModel):
     is_verified: Optional[bool]
 
 
-class BaseUserDB(BaseUser):
-    hashed_password: str
-
-    class Config:
-        orm_mode = True
-
-
 U = TypeVar("U", bound=BaseUser)
 UC = TypeVar("UC", bound=BaseUserCreate)
 UU = TypeVar("UU", bound=BaseUserUpdate)
-UD = TypeVar("UD", bound=BaseUserDB)
 
 
 class BaseOAuthAccount(BaseModel):

@@ -20,7 +20,6 @@ from fastapi_users.manager import (
 from tests.conftest import (
     OAuthAccountModel,
     UserCreate,
-    UserDBOAuth,
     UserManagerMock,
     UserModel,
     UserOAuthModel,
@@ -106,7 +105,7 @@ class TestGetByOAuthAccount:
             await user_manager_oauth.get_by_oauth_account("service1", "foo")
 
     async def test_existing_user(
-        self, user_manager_oauth: UserManagerMock[UserModel], user_oauth: UserDBOAuth
+        self, user_manager_oauth: UserManagerMock[UserModel], user_oauth: UserOAuthModel
     ):
         oauth_account = user_oauth.oauth_accounts[0]
         retrieved_user = await user_manager_oauth.get_by_oauth_account(
@@ -192,7 +191,7 @@ class TestOAuthCallback:
     async def test_existing_user_without_oauth(
         self,
         user_manager_oauth: UserManagerMock[UserOAuthModel],
-        superuser_oauth: UserDBOAuth,
+        superuser_oauth: UserOAuthModel,
     ):
         oauth_account = OAuthAccountModel(
             oauth_name="service1",

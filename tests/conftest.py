@@ -82,15 +82,7 @@ class UserUpdate(schemas.BaseUserUpdate):
     first_name: Optional[str]
 
 
-class UserDB(User, schemas.BaseUserDB):
-    pass
-
-
 class UserOAuth(User, schemas.BaseOAuthAccountMixin):
-    pass
-
-
-class UserDBOAuth(UserOAuth, UserDB):
     pass
 
 
