@@ -1,7 +1,6 @@
 from typing import Generic, List, Optional
 
 import jwt
-from pydantic import UUID4
 
 from fastapi_users import models
 from fastapi_users.authentication.strategy.base import (
@@ -9,7 +8,7 @@ from fastapi_users.authentication.strategy.base import (
     StrategyDestroyNotSupportedError,
 )
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
-from fastapi_users.manager import BaseUserManager, UserNotExists
+from fastapi_users.manager import BaseUserManager, InvalidID, UserNotExists
 
 
 class JWTStrategy(Strategy, Generic[models.UP]):
@@ -36,7 +35,7 @@ class JWTStrategy(Strategy, Generic[models.UP]):
         return self.public_key or self.secret
 
     async def read_token(
-        self, token: Optional[str], user_manager: BaseUserManager[models.UP]
+        self, token: Optional[str], user_manager: BaseUserManager[models.UP, models.ID]
     ) -> Optional[models.UP]:
         if token is None:
             return None
@@ -52,11 +51,9 @@ class JWTStrategy(Strategy, Generic[models.UP]):
             return None
 
         try:
-            user_uiid = UUID4(user_id)
-            return await user_manager.get(user_uiid)
-        except ValueError:
-            return None
-        except UserNotExists:
+            parsed_id = user_manager.parse_id(user_id)
+            return await user_manager.get(parsed_id)
+        except (UserNotExists, InvalidID):
             return None
 
     async def write_token(self, user: models.UP) -> str:

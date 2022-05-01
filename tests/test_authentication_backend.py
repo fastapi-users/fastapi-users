@@ -21,7 +21,7 @@ class MockTransportLogoutNotSupported(BearerTransport):
 
 class MockStrategyDestroyNotSupported(Strategy, Generic[models.UP]):
     async def read_token(
-        self, token: Optional[str], user_manager: BaseUserManager[models.UP]
+        self, token: Optional[str], user_manager: BaseUserManager[models.UP, models.ID]
     ) -> Optional[models.UP]:
         return None
 

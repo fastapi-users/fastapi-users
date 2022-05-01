@@ -1,9 +1,9 @@
+import uuid
 from typing import Any, Dict, Generic, Optional, Union
 
 import jwt
 from fastapi import Request
 from fastapi.security import OAuth2PasswordRequestForm
-from pydantic import UUID4
 
 from fastapi_users import models, schemas
 from fastapi_users.db import BaseUserDatabase
@@ -16,6 +16,10 @@ VERIFY_USER_TOKEN_AUDIENCE = "fastapi-users:verify"
 
 
 class FastAPIUsersException(Exception):
+    pass
+
+
+class InvalidID(FastAPIUsersException):
     pass
 
 
@@ -48,7 +52,7 @@ class InvalidPasswordException(FastAPIUsersException):
         self.reason = reason
 
 
-class BaseUserManager(Generic[models.UP]):
+class BaseUserManager(Generic[models.UP, models.ID]):
     """
     User management logic.
 
@@ -70,12 +74,12 @@ class BaseUserManager(Generic[models.UP]):
     verification_token_lifetime_seconds: int = 3600
     verification_token_audience: str = VERIFY_USER_TOKEN_AUDIENCE
 
-    user_db: BaseUserDatabase[models.UP]
+    user_db: BaseUserDatabase[models.UP, models.ID]
     password_helper: PasswordHelperProtocol
 
     def __init__(
         self,
-        user_db: BaseUserDatabase[models.UP],
+        user_db: BaseUserDatabase[models.UP, models.ID],
         password_helper: Optional[PasswordHelperProtocol] = None,
     ):
         self.user_db = user_db
@@ -84,7 +88,17 @@ class BaseUserManager(Generic[models.UP]):
         else:
             self.password_helper = password_helper  # pragma: no cover
 
-    async def get(self, id: UUID4) -> models.UP:
+    def parse_id(self, value: Any) -> models.ID:
+        """
+        Parse a value into a correct models.ID instance.
+
+        :param value: The value to parse.
+        :raises InvalidID: The models.ID value is invalid.
+        :return: An models.ID object.
+        """
+        raise NotImplementedError()  # pragma: no cover
+
+    async def get(self, id: models.ID) -> models.UP:
         """
         Get a user by id.
 
@@ -170,7 +184,7 @@ class BaseUserManager(Generic[models.UP]):
         return created_user
 
     async def oauth_callback(
-        self: "BaseUserManager[models.UOAP]",
+        self: "BaseUserManager[models.UOAP, models.ID]",
         oauth_name: str,
         access_token: str,
         account_id: str,
@@ -192,7 +206,7 @@ class BaseUserManager(Generic[models.UP]):
 
         :param oauth_name: Name of the OAuth client.
         :param access_token: Valid access token for the service provider.
-        :param account_id: ID of the user on the service provider.
+        :param account_id: models.ID of the user on the service provider.
         :param account_email: E-mail of the user on the service provider.
         :param expires_at: Optional timestamp at which the access token expires.
         :param refresh_token: Optional refresh token to get a
@@ -307,11 +321,11 @@ class BaseUserManager(Generic[models.UP]):
             raise InvalidVerifyToken()
 
         try:
-            user_uuid = UUID4(user_id)
-        except ValueError:
+            parsed_id = self.parse_id(user_id)
+        except InvalidID:
             raise InvalidVerifyToken()
 
-        if user_uuid != user.id:
+        if parsed_id != user.id:
             raise InvalidVerifyToken()
 
         if user.is_verified:
@@ -382,11 +396,11 @@ class BaseUserManager(Generic[models.UP]):
             raise InvalidResetPasswordToken()
 
         try:
-            user_uuid = UUID4(user_id)
-        except ValueError:
+            parsed_id = self.parse_id(user_id)
+        except InvalidID:
             raise InvalidResetPasswordToken()
 
-        user = await self.get(user_uuid)
+        user = await self.get(parsed_id)
 
         if not user.is_active:
             raise UserInactive()
@@ -588,4 +602,14 @@ class BaseUserManager(Generic[models.UP]):
         return await self.user_db.update(user, validated_update_dict)
 
 
-UserManagerDependency = DependencyCallable[BaseUserManager[models.UP]]
+class UUIDIDMixin:
+    def parse_id(self, value: Any) -> uuid.UUID:
+        if isinstance(value, uuid.UUID):
+            return value
+        try:
+            return uuid.UUID(value)
+        except ValueError as e:
+            raise InvalidID() from e
+
+
+UserManagerDependency = DependencyCallable[BaseUserManager[models.UP, models.ID]]

@@ -1,9 +1,6 @@
 from fastapi_users.db.base import BaseUserDatabase, UserDatabaseDependency
 
-__all__ = [
-    "BaseUserDatabase",
-    "UserDatabaseDependency",
-]
+__all__ = ["BaseUserDatabase", "UserDatabaseDependency"]
 
 try:  # pragma: no cover
     from fastapi_users_db_mongodb import MongoDBUserDatabase  # noqa: F401

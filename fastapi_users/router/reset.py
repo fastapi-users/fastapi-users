@@ -40,7 +40,7 @@ RESET_PASSWORD_RESPONSES: OpenAPIResponseType = {
 
 
 def get_reset_password_router(
-    get_user_manager: UserManagerDependency[models.UP],
+    get_user_manager: UserManagerDependency[models.UP, models.ID],
 ) -> APIRouter:
     """Generate a router with the reset password routes."""
     router = APIRouter()
@@ -53,7 +53,7 @@ def get_reset_password_router(
     async def forgot_password(
         request: Request,
         email: EmailStr = Body(..., embed=True),
-        user_manager: BaseUserManager[models.UP] = Depends(get_user_manager),
+        user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ):
         try:
             user = await user_manager.get_by_email(email)
@@ -76,7 +76,7 @@ def get_reset_password_router(
         request: Request,
         token: str = Body(...),
         password: str = Body(...),
-        user_manager: BaseUserManager[models.UP] = Depends(get_user_manager),
+        user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ):
         try:
             await user_manager.reset_password(token, password, request)

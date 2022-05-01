@@ -44,7 +44,7 @@ class FastAPIUsers(Generic[models.UP, schemas.U, schemas.UC, schemas.UU]):
 
     def __init__(
         self,
-        get_user_manager: UserManagerDependency[models.UP],
+        get_user_manager: UserManagerDependency[models.UP, models.ID],
         auth_backends: Sequence[AuthenticationBackend],
         user_schema: Type[schemas.U],
         user_create_schema: Type[schemas.UC],

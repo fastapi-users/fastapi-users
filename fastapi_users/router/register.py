@@ -13,7 +13,7 @@ from fastapi_users.router.common import ErrorCode, ErrorModel
 
 
 def get_register_router(
-    get_user_manager: UserManagerDependency[models.UP],
+    get_user_manager: UserManagerDependency[models.UP, models.ID],
     user_schema: Type[schemas.U],
     user_create_schema: Type[schemas.UC],
 ) -> APIRouter:
@@ -56,7 +56,7 @@ def get_register_router(
     async def register(
         request: Request,
         user_create: user_create_schema,  # type: ignore
-        user_manager: BaseUserManager[models.UP] = Depends(get_user_manager),
+        user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ):
         try:
             created_user = await user_manager.create(

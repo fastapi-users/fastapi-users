@@ -33,7 +33,7 @@ class AuthenticationBackend(Generic[models.UP]):
         self,
         name: str,
         transport: Transport,
-        get_strategy: DependencyCallable[Strategy[models.UP]],
+        get_strategy: DependencyCallable[Strategy[models.UP, models.ID]],
     ):
         self.name = name
         self.transport = transport
@@ -41,7 +41,7 @@ class AuthenticationBackend(Generic[models.UP]):
 
     async def login(
         self,
-        strategy: Strategy[models.UP],
+        strategy: Strategy[models.UP, models.ID],
         user: models.UP,
         response: Response,
     ) -> Any:
@@ -50,7 +50,7 @@ class AuthenticationBackend(Generic[models.UP]):
 
     async def logout(
         self,
-        strategy: Strategy[models.UP],
+        strategy: Strategy[models.UP, models.ID],
         user: models.UP,
         token: str,
         response: Response,

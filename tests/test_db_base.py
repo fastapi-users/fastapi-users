@@ -3,7 +3,7 @@ import uuid
 import pytest
 
 from fastapi_users.db import BaseUserDatabase
-from tests.conftest import OAuthAccountModel, UserModel
+from tests.conftest import IDType, OAuthAccountModel, UserModel
 
 
 @pytest.mark.asyncio
@@ -11,7 +11,7 @@ from tests.conftest import OAuthAccountModel, UserModel
 async def test_not_implemented_methods(
     user: UserModel, oauth_account1: OAuthAccountModel
 ):
-    base_user_db = BaseUserDatabase[UserModel]()
+    base_user_db = BaseUserDatabase[UserModel, IDType]()
 
     with pytest.raises(NotImplementedError):
         await base_user_db.get(uuid.uuid4())

@@ -1,5 +1,4 @@
 import sys
-import uuid
 from typing import Generic, List, Optional, TypeVar
 
 if sys.version_info < (3, 8):
@@ -7,11 +6,13 @@ if sys.version_info < (3, 8):
 else:
     from typing import Protocol  # pragma: no cover
 
+ID = TypeVar("ID")
 
-class UserProtocol(Protocol):
+
+class UserProtocol(Protocol[ID]):
     """User protocol that ORM model should follow."""
 
-    id: uuid.UUID
+    id: ID
     email: str
     hashed_password: str
     is_active: bool
@@ -22,10 +23,10 @@ class UserProtocol(Protocol):
         ...  # pragma: no cover
 
 
-class OAuthAccountProtocol(Protocol):
+class OAuthAccountProtocol(Protocol[ID]):
     """OAuth account protocol that ORM model should follow."""
 
-    id: uuid.UUID
+    id: ID
     oauth_name: str
     access_token: str
     expires_at: Optional[int]
@@ -41,7 +42,7 @@ UP = TypeVar("UP", bound=UserProtocol)
 OAP = TypeVar("OAP", bound=OAuthAccountProtocol)
 
 
-class UserOAuthProtocol(UserProtocol, Generic[OAP]):
+class UserOAuthProtocol(UserProtocol[ID], Generic[ID, OAP]):
     """User protocol including a list of OAuth accounts."""
 
     oauth_accounts: List[OAP]

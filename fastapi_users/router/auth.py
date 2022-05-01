@@ -12,7 +12,7 @@ from fastapi_users.router.common import ErrorCode, ErrorModel
 
 def get_auth_router(
     backend: AuthenticationBackend,
-    get_user_manager: UserManagerDependency[models.UP],
+    get_user_manager: UserManagerDependency[models.UP, models.ID],
     authenticator: Authenticator,
     requires_verification: bool = False,
 ) -> APIRouter:
@@ -51,8 +51,8 @@ def get_auth_router(
     async def login(
         response: Response,
         credentials: OAuth2PasswordRequestForm = Depends(),
-        user_manager: BaseUserManager[models.UP] = Depends(get_user_manager),
-        strategy: Strategy[models.UP] = Depends(backend.get_strategy),
+        user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
+        strategy: Strategy[models.UP, models.ID] = Depends(backend.get_strategy),
     ):
         user = await user_manager.authenticate(credentials)
 
@@ -83,7 +83,7 @@ def get_auth_router(
     async def logout(
         response: Response,
         user_token: Tuple[models.UP, str] = Depends(get_current_user_token),
-        strategy: Strategy[models.UP] = Depends(backend.get_strategy),
+        strategy: Strategy[models.UP, models.ID] = Depends(backend.get_strategy),
     ):
         user, token = user_token
         return await backend.logout(strategy, user, token, response)

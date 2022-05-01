@@ -16,7 +16,7 @@ from fastapi_users.router.common import ErrorCode, ErrorModel
 
 
 def get_verify_router(
-    get_user_manager: UserManagerDependency[models.UP],
+    get_user_manager: UserManagerDependency[models.UP, models.ID],
     user_schema: Type[schemas.U],
 ):
     router = APIRouter()
@@ -29,7 +29,7 @@ def get_verify_router(
     async def request_verify_token(
         request: Request,
         email: EmailStr = Body(..., embed=True),
-        user_manager: BaseUserManager[models.UP] = Depends(get_user_manager),
+        user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ):
         try:
             user = await user_manager.get_by_email(email)
@@ -69,7 +69,7 @@ def get_verify_router(
     async def verify(
         request: Request,
         token: str = Body(..., embed=True),
-        user_manager: BaseUserManager[models.UP] = Depends(get_user_manager),
+        user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ):
         try:
             return await user_manager.verify(token, request)

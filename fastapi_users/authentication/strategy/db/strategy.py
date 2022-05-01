@@ -6,7 +6,7 @@ from fastapi_users import models
 from fastapi_users.authentication.strategy.base import Strategy
 from fastapi_users.authentication.strategy.db.adapter import AccessTokenDatabase
 from fastapi_users.authentication.strategy.db.models import AP
-from fastapi_users.manager import BaseUserManager, UserNotExists
+from fastapi_users.manager import BaseUserManager, InvalidID, UserNotExists
 
 
 class DatabaseStrategy(Strategy, Generic[models.UP, AP]):
@@ -17,7 +17,7 @@ class DatabaseStrategy(Strategy, Generic[models.UP, AP]):
         self.lifetime_seconds = lifetime_seconds
 
     async def read_token(
-        self, token: Optional[str], user_manager: BaseUserManager[models.UP]
+        self, token: Optional[str], user_manager: BaseUserManager[models.UP, models.ID]
     ) -> Optional[models.UP]:
         if token is None:
             return None
@@ -33,9 +33,9 @@ class DatabaseStrategy(Strategy, Generic[models.UP, AP]):
             return None
 
         try:
-            user_id = access_token.user_id
-            return await user_manager.get(user_id)
-        except UserNotExists:
+            parsed_id = user_manager.parse_id(access_token.user_id)
+            return await user_manager.get(parsed_id)
+        except (UserNotExists, InvalidID):
             return None
 
     async def write_token(self, user: models.UP) -> str:

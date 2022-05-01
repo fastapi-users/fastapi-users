@@ -1,5 +1,3 @@
-import copy
-import uuid
 from typing import Callable
 
 import pytest
@@ -18,7 +16,6 @@ from fastapi_users.manager import (
     UserNotExists,
 )
 from tests.conftest import (
-    OAuthAccountModel,
     UserCreate,
     UserManagerMock,
     UserModel,

@@ -29,7 +29,7 @@ def generate_state_token(
 def get_oauth_router(
     oauth_client: BaseOAuth2,
     backend: AuthenticationBackend,
-    get_user_manager: UserManagerDependency[models.UP],
+    get_user_manager: UserManagerDependency[models.UP, models.ID],
     state_secret: SecretType,
     redirect_url: str = None,
 ) -> APIRouter:
@@ -101,8 +101,8 @@ def get_oauth_router(
         access_token_state: Tuple[OAuth2Token, str] = Depends(
             oauth2_authorize_callback
         ),
-        user_manager: BaseUserManager[models.UP] = Depends(get_user_manager),
-        strategy: Strategy[models.UP] = Depends(backend.get_strategy),
+        user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
+        strategy: Strategy[models.UP, models.ID] = Depends(backend.get_strategy),
     ):
         token, state = access_token_state
         account_id, account_email = await oauth_client.get_id_email(

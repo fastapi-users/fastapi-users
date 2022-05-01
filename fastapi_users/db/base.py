@@ -1,15 +1,13 @@
 from typing import Any, Dict, Generic, Optional
 
-from pydantic import UUID4
-
-from fastapi_users.models import OAP, UP
+from fastapi_users.models import ID, OAP, UP
 from fastapi_users.types import DependencyCallable
 
 
-class BaseUserDatabase(Generic[UP]):
+class BaseUserDatabase(Generic[UP, ID]):
     """Base adapter for retrieving, creating and updating users from a database."""
 
-    async def get(self, id: UUID4) -> Optional[UP]:
+    async def get(self, id: ID) -> Optional[UP]:
         """Get a single user by id."""
         raise NotImplementedError()
 
@@ -44,4 +42,4 @@ class BaseUserDatabase(Generic[UP]):
         raise NotImplementedError()
 
 
-UserDatabaseDependency = DependencyCallable[BaseUserDatabase[UP]]
+UserDatabaseDependency = DependencyCallable[BaseUserDatabase[UP, ID]]

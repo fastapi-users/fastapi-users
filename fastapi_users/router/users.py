@@ -1,12 +1,12 @@
-from typing import Type
+from typing import Any, Type
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
-from pydantic import UUID4
 
 from fastapi_users import models, schemas
 from fastapi_users.authentication import Authenticator
 from fastapi_users.manager import (
     BaseUserManager,
+    InvalidID,
     InvalidPasswordException,
     UserAlreadyExists,
     UserManagerDependency,
@@ -16,7 +16,7 @@ from fastapi_users.router.common import ErrorCode, ErrorModel
 
 
 def get_users_router(
-    get_user_manager: UserManagerDependency[models.UP],
+    get_user_manager: UserManagerDependency[models.UP, models.ID],
     user_schema: Type[schemas.U],
     user_update_schema: Type[schemas.UU],
     authenticator: Authenticator,
@@ -33,13 +33,14 @@ def get_users_router(
     )
 
     async def get_user_or_404(
-        id: UUID4,
-        user_manager: BaseUserManager[models.UP] = Depends(get_user_manager),
+        id: Any,
+        user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ) -> models.UP:
         try:
-            return await user_manager.get(id)
-        except UserNotExists:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+            parsed_id = user_manager.parse_id(id)
+            return await user_manager.get(parsed_id)
+        except (UserNotExists, InvalidID) as e:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND) from e
 
     @router.get(
         "/me",
@@ -96,7 +97,7 @@ def get_users_router(
         request: Request,
         user_update: user_update_schema,  # type: ignore
         user: models.UP = Depends(get_current_active_user),
-        user_manager: BaseUserManager[models.UP] = Depends(get_user_manager),
+        user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ):
         try:
             return await user_manager.update(
@@ -117,7 +118,7 @@ def get_users_router(
             )
 
     @router.get(
-        "/{id:uuid}",
+        "/{id}",
         response_model=user_schema,
         dependencies=[Depends(get_current_superuser)],
         name="users:user",
@@ -137,7 +138,7 @@ def get_users_router(
         return user
 
     @router.patch(
-        "/{id:uuid}",
+        "/{id}",
         response_model=user_schema,
         dependencies=[Depends(get_current_superuser)],
         name="users:patch_user",
@@ -182,7 +183,7 @@ def get_users_router(
         user_update: user_update_schema,  # type: ignore
         request: Request,
         user=Depends(get_user_or_404),
-        user_manager: BaseUserManager[models.UP] = Depends(get_user_manager),
+        user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ):
         try:
             return await user_manager.update(
@@ -203,7 +204,7 @@ def get_users_router(
             )
 
     @router.delete(
-        "/{id:uuid}",
+        "/{id}",
         status_code=status.HTTP_204_NO_CONTENT,
         response_class=Response,
         dependencies=[Depends(get_current_superuser)],
@@ -222,7 +223,7 @@ def get_users_router(
     )
     async def delete_user(
         user=Depends(get_user_or_404),
-        user_manager: BaseUserManager[models.UP] = Depends(get_user_manager),
+        user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ):
         await user_manager.delete(user)
         return None

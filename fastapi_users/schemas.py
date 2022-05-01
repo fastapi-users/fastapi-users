@@ -1,7 +1,8 @@
-import uuid
-from typing import List, Optional, TypeVar
+from typing import Generic, List, Optional, TypeVar
 
-from pydantic import UUID4, BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr
+
+from fastapi_users import models
 
 
 class CreateUpdateDictModel(BaseModel):
@@ -21,10 +22,10 @@ class CreateUpdateDictModel(BaseModel):
         return self.dict(exclude_unset=True, exclude={"id"})
 
 
-class BaseUser(CreateUpdateDictModel):
+class BaseUser(Generic[models.ID], CreateUpdateDictModel):
     """Base User model."""
 
-    id: UUID4 = Field(default_factory=uuid.uuid4)
+    id: models.ID
     email: EmailStr
     is_active: bool = True
     is_superuser: bool = False
@@ -52,10 +53,10 @@ UC = TypeVar("UC", bound=BaseUserCreate)
 UU = TypeVar("UU", bound=BaseUserUpdate)
 
 
-class BaseOAuthAccount(BaseModel):
+class BaseOAuthAccount(Generic[models.ID], BaseModel):
     """Base OAuth account model."""
 
-    id: UUID4 = Field(default_factory=uuid.uuid4)
+    id: models.ID
     oauth_name: str
     access_token: str
     expires_at: Optional[int] = None

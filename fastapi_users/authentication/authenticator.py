@@ -51,7 +51,7 @@ class Authenticator:
     def __init__(
         self,
         backends: Sequence[AuthenticationBackend],
-        get_user_manager: UserManagerDependency[models.UP],
+        get_user_manager: UserManagerDependency[models.UP, models.ID],
     ):
         self.backends = backends
         self.get_user_manager = get_user_manager
@@ -148,7 +148,7 @@ class Authenticator:
     async def _authenticate(
         self,
         *args,
-        user_manager: BaseUserManager[models.UP],
+        user_manager: BaseUserManager[models.UP, models.ID],
         optional: bool = False,
         active: bool = False,
         verified: bool = False,
@@ -163,7 +163,7 @@ class Authenticator:
         for backend in self.backends:
             if backend in enabled_backends:
                 token = kwargs[name_to_variable_name(backend.name)]
-                strategy: Strategy[models.UP] = kwargs[
+                strategy: Strategy[models.UP, models.ID] = kwargs[
                     name_to_strategy_variable_name(backend.name)
                 ]
                 if token is not None:

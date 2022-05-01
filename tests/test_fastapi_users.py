@@ -32,12 +32,13 @@ async def test_app_client(
     app.include_router(
         fastapi_users.get_oauth_router(oauth_client, mock_authentication, secret)
     )
-    app.include_router(fastapi_users.get_users_router(), prefix="/users")
-    app.include_router(fastapi_users.get_verify_router())
 
     @app.delete("/users/me")
     def custom_users_route():
         return None
+
+    app.include_router(fastapi_users.get_users_router(), prefix="/users")
+    app.include_router(fastapi_users.get_verify_router())
 
     @app.get("/current-user", response_model=User)
     def current_user(user: UserModel = Depends(fastapi_users.current_user())):

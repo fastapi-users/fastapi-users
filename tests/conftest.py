@@ -29,8 +29,10 @@ from fastapi_users.db import BaseUserDatabase
 from fastapi_users.jwt import SecretType
 from fastapi_users.manager import (
     BaseUserManager,
+    InvalidID,
     InvalidPasswordException,
     UserNotExists,
+    UUIDIDMixin,
 )
 from fastapi_users.openapi import OpenAPIResponseType
 from fastapi_users.password import PasswordHelper
@@ -43,8 +45,11 @@ lancelot_password_hash = password_helper.hash("lancelot")
 excalibur_password_hash = password_helper.hash("excalibur")
 
 
+IDType = uuid.UUID
+
+
 @dataclasses.dataclass
-class UserModel(models.UserProtocol):
+class UserModel(models.UserProtocol[IDType]):
     email: str
     hashed_password: str
     id: uuid.UUID = dataclasses.field(default_factory=uuid.uuid4)
@@ -55,7 +60,7 @@ class UserModel(models.UserProtocol):
 
 
 @dataclasses.dataclass
-class OAuthAccountModel(models.OAuthAccountProtocol):
+class OAuthAccountModel(models.OAuthAccountProtocol[IDType]):
     oauth_name: str
     access_token: str
     account_id: str
@@ -86,7 +91,9 @@ class UserOAuth(User, schemas.BaseOAuthAccountMixin):
     pass
 
 
-class BaseTestUserManager(Generic[models.UP], BaseUserManager[models.UP]):
+class BaseTestUserManager(
+    Generic[models.UP], UUIDIDMixin, BaseUserManager[models.UP, IDType]
+):
     reset_password_token_secret = "SECRET"
     verification_token_secret = "SECRET"
 
@@ -318,8 +325,8 @@ def mock_user_db(
     inactive_user: UserModel,
     superuser: UserModel,
     verified_superuser: UserModel,
-) -> BaseUserDatabase[UserModel]:
-    class MockUserDatabase(BaseUserDatabase[UserModel]):
+) -> BaseUserDatabase[UserModel, IDType]:
+    class MockUserDatabase(BaseUserDatabase[UserModel, IDType]):
         async def get(self, id: UUID4) -> Optional[UserModel]:
             if id == user.id:
                 return user
@@ -370,8 +377,8 @@ def mock_user_db_oauth(
     inactive_user_oauth: UserOAuthModel,
     superuser_oauth: UserOAuthModel,
     verified_superuser_oauth: UserOAuthModel,
-) -> BaseUserDatabase[UserOAuthModel]:
-    class MockUserDatabase(BaseUserDatabase[UserOAuthModel]):
+) -> BaseUserDatabase[UserOAuthModel, IDType]:
+    class MockUserDatabase(BaseUserDatabase[UserOAuthModel, IDType]):
         async def get(self, id: UUID4) -> Optional[UserOAuthModel]:
             if id == user_oauth.id:
                 return user_oauth
@@ -518,17 +525,15 @@ class MockTransport(BearerTransport):
         return {}
 
 
-class MockStrategy(Strategy[UserModel]):
+class MockStrategy(Strategy[UserModel, IDType]):
     async def read_token(
-        self, token: Optional[str], user_manager: BaseUserManager[UserModel]
+        self, token: Optional[str], user_manager: BaseUserManager[UserModel, IDType]
     ) -> Optional[UserModel]:
         if token is not None:
             try:
-                token_uuid = UUID4(token)
-                return await user_manager.get(token_uuid)
-            except ValueError:
-                return None
-            except UserNotExists:
+                parsed_id = user_manager.parse_id(token)
+                return await user_manager.get(parsed_id)
+            except (InvalidID, UserNotExists):
                 return None
         return None
 

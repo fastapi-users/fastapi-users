@@ -14,9 +14,9 @@ class StrategyDestroyNotSupportedError(Exception):
     pass
 
 
-class Strategy(Protocol, Generic[models.UP]):
+class Strategy(Protocol, Generic[models.UP, models.ID]):
     async def read_token(
-        self, token: Optional[str], user_manager: BaseUserManager[models.UP]
+        self, token: Optional[str], user_manager: BaseUserManager[models.UP, models.ID]
     ) -> Optional[models.UP]:
         ...  # pragma: no cover
 

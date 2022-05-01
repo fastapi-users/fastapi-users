@@ -2,11 +2,10 @@ import secrets
 from typing import Generic, Optional
 
 import aioredis
-from pydantic import UUID4
 
 from fastapi_users import models
 from fastapi_users.authentication.strategy.base import Strategy
-from fastapi_users.manager import BaseUserManager, UserNotExists
+from fastapi_users.manager import BaseUserManager, InvalidID, UserNotExists
 
 
 class RedisStrategy(Strategy, Generic[models.UP]):
@@ -15,7 +14,7 @@ class RedisStrategy(Strategy, Generic[models.UP]):
         self.lifetime_seconds = lifetime_seconds
 
     async def read_token(
-        self, token: Optional[str], user_manager: BaseUserManager[models.UP]
+        self, token: Optional[str], user_manager: BaseUserManager[models.UP, models.ID]
     ) -> Optional[models.UP]:
         if token is None:
             return None
@@ -25,11 +24,9 @@ class RedisStrategy(Strategy, Generic[models.UP]):
             return None
 
         try:
-            user_uiid = UUID4(user_id)
-            return await user_manager.get(user_uiid)
-        except ValueError:
-            return None
-        except UserNotExists:
+            parsed_id = user_manager.parse_id(user_id)
+            return await user_manager.get(parsed_id)
+        except (UserNotExists, InvalidID):
             return None
 
     async def write_token(self, user: models.UP) -> str:
