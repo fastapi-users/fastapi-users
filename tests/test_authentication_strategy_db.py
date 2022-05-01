@@ -10,11 +10,11 @@ from fastapi_users.authentication.strategy import (
     AccessTokenProtocol,
     DatabaseStrategy,
 )
-from tests.conftest import UserModel
+from tests.conftest import UserModel, IDType
 
 
 @dataclasses.dataclass
-class AccessTokenModel(AccessTokenProtocol):
+class AccessTokenModel(AccessTokenProtocol[IDType]):
     token: str
     user_id: uuid.UUID
     id: uuid.UUID = dataclasses.field(default_factory=uuid.uuid4)

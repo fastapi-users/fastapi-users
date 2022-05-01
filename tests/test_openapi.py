@@ -3,12 +3,12 @@ import pytest
 from fastapi import FastAPI, status
 
 from fastapi_users.fastapi_users import FastAPIUsers
-from tests.conftest import User, UserCreate, UserModel, UserUpdate
+from tests.conftest import IDType, User, UserCreate, UserModel, UserUpdate
 
 
 @pytest.fixture
 def fastapi_users(get_user_manager, mock_authentication) -> FastAPIUsers:
-    return FastAPIUsers[UserModel, User, UserCreate, UserUpdate](
+    return FastAPIUsers[UserModel, IDType, User, UserCreate, UserUpdate](
         get_user_manager, [mock_authentication], User, UserCreate, UserUpdate
     )
 

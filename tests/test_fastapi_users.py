@@ -5,7 +5,7 @@ import pytest
 from fastapi import Depends, FastAPI, status
 
 from fastapi_users import FastAPIUsers
-from tests.conftest import User, UserCreate, UserModel, UserUpdate
+from tests.conftest import IDType, User, UserCreate, UserModel, UserUpdate
 
 
 @pytest.fixture
@@ -17,7 +17,7 @@ async def test_app_client(
     oauth_client,
     get_test_client,
 ) -> AsyncGenerator[httpx.AsyncClient, None]:
-    fastapi_users = FastAPIUsers[UserModel, User, UserCreate, UserUpdate](
+    fastapi_users = FastAPIUsers[UserModel, IDType, User, UserCreate, UserUpdate](
         get_user_manager,
         [mock_authentication],
         User,
