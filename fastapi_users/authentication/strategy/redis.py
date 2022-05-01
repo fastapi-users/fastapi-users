@@ -8,7 +8,7 @@ from fastapi_users.authentication.strategy.base import Strategy
 from fastapi_users.manager import BaseUserManager, InvalidID, UserNotExists
 
 
-class RedisStrategy(Strategy, Generic[models.UP]):
+class RedisStrategy(Strategy[models.UP, models.ID], Generic[models.UP, models.ID]):
     def __init__(self, redis: aioredis.Redis, lifetime_seconds: Optional[int] = None):
         self.redis = redis
         self.lifetime_seconds = lifetime_seconds

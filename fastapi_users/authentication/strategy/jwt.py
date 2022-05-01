@@ -11,7 +11,7 @@ from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.manager import BaseUserManager, InvalidID, UserNotExists
 
 
-class JWTStrategy(Strategy, Generic[models.UP]):
+class JWTStrategy(Strategy[models.UP, models.ID], Generic[models.UP, models.ID]):
     def __init__(
         self,
         secret: SecretType,

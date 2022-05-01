@@ -9,7 +9,9 @@ from fastapi_users.authentication.strategy.db.models import AP
 from fastapi_users.manager import BaseUserManager, InvalidID, UserNotExists
 
 
-class DatabaseStrategy(Strategy, Generic[models.UP, AP]):
+class DatabaseStrategy(
+    Strategy[models.UP, models.ID], Generic[models.UP, models.ID, AP]
+):
     def __init__(
         self, database: AccessTokenDatabase[AP], lifetime_seconds: Optional[int] = None
     ):

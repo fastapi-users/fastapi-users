@@ -10,7 +10,7 @@ from fastapi_users.authentication.strategy import (
     AccessTokenProtocol,
     DatabaseStrategy,
 )
-from tests.conftest import UserModel, IDType
+from tests.conftest import IDType, UserModel
 
 
 @dataclasses.dataclass
@@ -75,7 +75,7 @@ class TestReadToken:
     @pytest.mark.asyncio
     async def test_missing_token(
         self,
-        database_strategy: DatabaseStrategy[UserModel, AccessTokenModel],
+        database_strategy: DatabaseStrategy[UserModel, IDType, AccessTokenModel],
         user_manager,
     ):
         authenticated_user = await database_strategy.read_token(None, user_manager)
@@ -84,7 +84,7 @@ class TestReadToken:
     @pytest.mark.asyncio
     async def test_invalid_token(
         self,
-        database_strategy: DatabaseStrategy[UserModel, AccessTokenModel],
+        database_strategy: DatabaseStrategy[UserModel, IDType, AccessTokenModel],
         user_manager,
     ):
         authenticated_user = await database_strategy.read_token("TOKEN", user_manager)
@@ -93,7 +93,7 @@ class TestReadToken:
     @pytest.mark.asyncio
     async def test_valid_token_not_existing_user(
         self,
-        database_strategy: DatabaseStrategy[UserModel, AccessTokenModel],
+        database_strategy: DatabaseStrategy[UserModel, IDType, AccessTokenModel],
         access_token_database: AccessTokenDatabaseMock,
         user_manager,
     ):
@@ -109,7 +109,7 @@ class TestReadToken:
     @pytest.mark.asyncio
     async def test_valid_token(
         self,
-        database_strategy: DatabaseStrategy[UserModel, AccessTokenModel],
+        database_strategy: DatabaseStrategy[UserModel, IDType, AccessTokenModel],
         access_token_database: AccessTokenDatabaseMock,
         user_manager,
         user: UserModel,
@@ -123,7 +123,7 @@ class TestReadToken:
 @pytest.mark.authentication
 @pytest.mark.asyncio
 async def test_write_token(
-    database_strategy: DatabaseStrategy[UserModel, AccessTokenModel],
+    database_strategy: DatabaseStrategy[UserModel, IDType, AccessTokenModel],
     access_token_database: AccessTokenDatabaseMock,
     user: UserModel,
 ):
@@ -137,7 +137,7 @@ async def test_write_token(
 @pytest.mark.authentication
 @pytest.mark.asyncio
 async def test_destroy_token(
-    database_strategy: DatabaseStrategy[UserModel, AccessTokenModel],
+    database_strategy: DatabaseStrategy[UserModel, IDType, AccessTokenModel],
     access_token_database: AccessTokenDatabaseMock,
     user: UserModel,
 ):
