@@ -1,6 +1,6 @@
 from typing import Any, Dict, Generic, Optional
 
-from fastapi_users.models import ID, OAP, UP
+from fastapi_users.models import ID, OAP, UOAP, UP
 from fastapi_users.types import DependencyCallable
 
 
@@ -31,13 +31,18 @@ class BaseUserDatabase(Generic[UP, ID]):
         """Delete a user."""
         raise NotImplementedError()
 
-    async def add_oauth_account(self, user: UP, create_dict: Dict[str, Any]) -> UP:
+    async def add_oauth_account(
+        self: "BaseUserDatabase[UOAP, ID]", user: UOAP, create_dict: Dict[str, Any]
+    ) -> UOAP:
         """Create an OAuth account and add it to the user."""
         raise NotImplementedError()
 
     async def update_oauth_account(
-        self, user: UP, oauth_account: OAP, update_dict: Dict[str, Any]
-    ) -> UP:
+        self: "BaseUserDatabase[UOAP, ID]",
+        user: UOAP,
+        oauth_account: OAP,
+        update_dict: Dict[str, Any],
+    ) -> UOAP:
         """Update an OAuth account on a user."""
         raise NotImplementedError()
 
