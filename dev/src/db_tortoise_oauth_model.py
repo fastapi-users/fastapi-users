@@ -1,18 +1,18 @@
-from fastapi_users import models
+from fastapi_users import models, schemas
 from fastapi_users.db import TortoiseBaseOAuthAccountModel, TortoiseBaseUserModel
 from tortoise import fields
 from tortoise.contrib.pydantic import PydanticModel
 
 
-class User(models.BaseUser, models.BaseOAuthAccountMixin):
+class User(schemas.BaseUser, schemas.BaseOAuthAccountMixin):
     pass
 
 
-class UserCreate(models.BaseUserCreate):
+class UserCreate(schemas.BaseUserCreate):
     pass
 
 
-class UserUpdate(models.BaseUserUpdate):
+class UserUpdate(schemas.BaseUserUpdate):
     pass
 
 
@@ -20,7 +20,7 @@ class UserModel(TortoiseBaseUserModel):
     pass
 
 
-class UserDB(User, models.BaseUserDB, PydanticModel):
+class UserDB(User, schemas.BaseUserDB, PydanticModel):
     class Config:
         orm_mode = True
         orig_model = UserModel
