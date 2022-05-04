@@ -49,10 +49,10 @@ Add quickly a registration and authentication system to your [FastAPI](https://f
 ## In a hurry? Discover Fief, the open-source authentication platform
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/fief-dev/.github/main/logos/logo-full-red.svg?sanitize=true" alt="Fief" width="256">
+  <img src="https://raw.githubusercontent.com/fief-dev/.github/main/logos/logo-full-red.svg?sanitize=true" alt="Fief" width="256" style="width: 256px">
 </p>
 
-<img src="https://www.fief.dev/illustrations/guard-right.svg" alt="Fief" height="300" align="right">
+<img src="https://www.fief.dev/illustrations/guard-right.svg" alt="Fief" height="300" align="right" style="height: 300px">
 
 **Implementing registration, login, social auth is hard and painful. We know it. With our highly secure and open-source users management platform, you can focus on your app while staying in control of your users data.**
 
