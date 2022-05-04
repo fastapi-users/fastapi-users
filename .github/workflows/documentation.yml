@@ -29,7 +29,9 @@ jobs:
         uses: battila7/get-version-action@v2
       - name: Deploy
         env:
-          DOC_TAG: ${{ steps.version_tag.outputs.major && steps.version_tag.outputs.minor && format('{0}.{1}', steps.version_tag.outputs.major, steps.version_tag.outputs.minor) || 'dev' }}
+          DOC_TAG: ${{ steps.version_tag.outputs.major && steps.version_tag.outputs.minor && format('{0}.{1} latest', steps.version_tag.outputs.major, steps.version_tag.outputs.minor) || 'dev' }}
         run: |
+          git config user.name fastapi-users-ci
+          git config user.email fastapi-users-ci@francoisvoron.com
           git fetch origin gh-pages --depth=1
-          mike deploy --push --update-aliases ${{ env.DOC_TAG }} latest
+          mike deploy --push --update-aliases ${{ env.DOC_TAG }}
