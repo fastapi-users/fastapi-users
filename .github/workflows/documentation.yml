@@ -30,6 +30,8 @@ jobs:
       - name: Get tag
         run: |
           echo ${{ steps.version_tag.outputs.version }}
+          echo ${{ steps.version_tag.outputs.major }}
+          echo ${{ steps.version_tag.outputs.minor }}
           echo ${{ github.ref_name }}
       - name: Deploy
         run: |
