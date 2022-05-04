@@ -1,0 +1,2052 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Ready-to-use and customizable users management for FastAPI">
+      
+      
+      
+      <link rel="icon" href="../../favicon.png">
+      <meta name="generator" content="mkdocs-1.2.4, mkdocs-material-8.2.7">
+    
+    
+      
+        <title>Routes - FastAPI Users</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.9d5733d3.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.e6a45f82.min.css">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="red">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#routes" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-component="outdated" hidden>
+        <aside class="md-banner md-banner--warning">
+          
+        </aside>
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="FastAPI Users" class="md-header__button md-logo" aria-label="FastAPI Users" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.5 12A2.5 2.5 0 0 0 19 9.5 2.5 2.5 0 0 0 16.5 7 2.5 2.5 0 0 0 14 9.5a2.5 2.5 0 0 0 2.5 2.5M9 11a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m7.5 3c-1.83 0-5.5.92-5.5 2.75V19h11v-2.25c0-1.83-3.67-2.75-5.5-2.75M9 13c-2.33 0-7 1.17-7 3.5V19h7v-2.25c0-.85.33-2.34 2.37-3.47C10.5 13.1 9.66 13 9 13z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            FastAPI Users
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Routes
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="red"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="red"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/fastapi-users/fastapi-users" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    frankie567/fastapi-users
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="FastAPI Users" class="md-nav__button md-logo" aria-label="FastAPI Users" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.5 12A2.5 2.5 0 0 0 19 9.5 2.5 2.5 0 0 0 16.5 7 2.5 2.5 0 0 0 14 9.5a2.5 2.5 0 0 0 2.5 2.5M9 11a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m7.5 3c-1.83 0-5.5.92-5.5 2.75V19h11v-2.25c0-1.83-3.67-2.75-5.5-2.75M9 13c-2.33 0-7 1.17-7 3.5V19h7v-2.25c0-.85.33-2.34 2.37-3.47C10.5 13.1 9.66 13 9 13z"/></svg>
+
+    </a>
+    FastAPI Users
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/fastapi-users/fastapi-users" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    frankie567/fastapi-users
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/" class="md-nav__link">
+        Installation
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Configuration
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Configuration" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Configuration
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/overview/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/models/" class="md-nav__link">
+        Models
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3" type="checkbox" id="__nav_3_3" >
+      
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_3_3">
+          Database adapters
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Database adapters" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_3">
+          <span class="md-nav__icon md-icon"></span>
+          Database adapters
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/databases/sqlalchemy/" class="md-nav__link">
+        SQLAlchemy
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/databases/mongodb/" class="md-nav__link">
+        MongoDB
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/databases/tortoise/" class="md-nav__link">
+        Tortoise ORM
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/databases/ormar/" class="md-nav__link">
+        Ormar
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4" type="checkbox" id="__nav_3_4" >
+      
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../configuration/authentication/">Authentication backends</a>
+          
+            <label for="__nav_3_4">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Authentication backends" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_4">
+          <span class="md-nav__icon md-icon"></span>
+          Authentication backends
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4_2" type="checkbox" id="__nav_3_4_2" >
+      
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_3_4_2">
+          Transports
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Transports" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Transports
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/authentication/transports/cookie/" class="md-nav__link">
+        Cookie
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/authentication/transports/bearer/" class="md-nav__link">
+        Bearer
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4_3" type="checkbox" id="__nav_3_4_3" >
+      
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_3_4_3">
+          Strategies
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Strategies" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          Strategies
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/authentication/strategies/database/" class="md-nav__link">
+        Database
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/authentication/strategies/jwt/" class="md-nav__link">
+        JWT
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/authentication/strategies/redis/" class="md-nav__link">
+        Redis
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/authentication/backend/" class="md-nav__link">
+        Create a backend
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/user-manager/" class="md-nav__link">
+        UserManager
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_6" type="checkbox" id="__nav_3_6" >
+      
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../configuration/routers/">Routers</a>
+          
+            <label for="__nav_3_6">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Routers" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_6">
+          <span class="md-nav__icon md-icon"></span>
+          Routers
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/routers/auth/" class="md-nav__link">
+        Auth router
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/routers/register/" class="md-nav__link">
+        Register routes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/routers/verify/" class="md-nav__link">
+        Verify router
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/routers/reset/" class="md-nav__link">
+        Reset password router
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/routers/users/" class="md-nav__link">
+        Users router
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/full-example/" class="md-nav__link">
+        Full example
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/oauth/" class="md-nav__link">
+        OAuth2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/password-hash/" class="md-nav__link">
+        Password hash
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+      
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Usage
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Usage" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Usage
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flow/" class="md-nav__link">
+        Flow
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Routes
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Routes
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#auth-router" class="md-nav__link">
+    Auth router
+  </a>
+  
+    <nav class="md-nav" aria-label="Auth router">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#post-login" class="md-nav__link">
+    POST /login
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post-logout" class="md-nav__link">
+    POST /logout
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#register-router" class="md-nav__link">
+    Register router
+  </a>
+  
+    <nav class="md-nav" aria-label="Register router">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#post-register" class="md-nav__link">
+    POST /register
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reset-password-router" class="md-nav__link">
+    Reset password router
+  </a>
+  
+    <nav class="md-nav" aria-label="Reset password router">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#post-forgot-password" class="md-nav__link">
+    POST /forgot-password
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post-reset-password" class="md-nav__link">
+    POST /reset-password
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verify-router" class="md-nav__link">
+    Verify router
+  </a>
+  
+    <nav class="md-nav" aria-label="Verify router">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#post-request-verify-token" class="md-nav__link">
+    POST /request-verify-token
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post-verify" class="md-nav__link">
+    POST /verify
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#oauth-router" class="md-nav__link">
+    OAuth router
+  </a>
+  
+    <nav class="md-nav" aria-label="OAuth router">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get-authorize" class="md-nav__link">
+    GET /authorize
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-callback" class="md-nav__link">
+    GET /callback
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#users-router" class="md-nav__link">
+    Users router
+  </a>
+  
+    <nav class="md-nav" aria-label="Users router">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get-me" class="md-nav__link">
+    GET /me
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#patch-me" class="md-nav__link">
+    PATCH /me
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-user_id" class="md-nav__link">
+    GET /{user_id}
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#patch-user_id" class="md-nav__link">
+    PATCH /{user_id}
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delete-user_id" class="md-nav__link">
+    DELETE /{user_id}
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../current-user/" class="md-nav__link">
+        Get current user
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Cookbook
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Cookbook" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Cookbook
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cookbook/create-user-programmatically/" class="md-nav__link">
+        Create a user programmatically
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Migration
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Migration" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Migration
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../migration/08_to_1x/" class="md-nav__link">
+        0.8.x ➡️ 1.x.x
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../migration/1x_to_2x/" class="md-nav__link">
+        1.x.x ➡️ 2.x.x
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../migration/2x_to_3x/" class="md-nav__link">
+        2.x.x ➡️ 3.x.x
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../migration/3x_to_4x/" class="md-nav__link">
+        3.x.x ➡️ 4.x.x
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../migration/4x_to_5x/" class="md-nav__link">
+        4.x.x ➡️ 5.x.x
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../migration/6x_to_7x/" class="md-nav__link">
+        6.x.x ➡️ 7.x.x
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../migration/7x_to_8x/" class="md-nav__link">
+        7.x.x ➡️ 8.x.x
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../migration/8x_to_9x/" class="md-nav__link">
+        8.x.x ➡️ 9.x.x
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#auth-router" class="md-nav__link">
+    Auth router
+  </a>
+  
+    <nav class="md-nav" aria-label="Auth router">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#post-login" class="md-nav__link">
+    POST /login
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post-logout" class="md-nav__link">
+    POST /logout
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#register-router" class="md-nav__link">
+    Register router
+  </a>
+  
+    <nav class="md-nav" aria-label="Register router">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#post-register" class="md-nav__link">
+    POST /register
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reset-password-router" class="md-nav__link">
+    Reset password router
+  </a>
+  
+    <nav class="md-nav" aria-label="Reset password router">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#post-forgot-password" class="md-nav__link">
+    POST /forgot-password
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post-reset-password" class="md-nav__link">
+    POST /reset-password
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verify-router" class="md-nav__link">
+    Verify router
+  </a>
+  
+    <nav class="md-nav" aria-label="Verify router">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#post-request-verify-token" class="md-nav__link">
+    POST /request-verify-token
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post-verify" class="md-nav__link">
+    POST /verify
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#oauth-router" class="md-nav__link">
+    OAuth router
+  </a>
+  
+    <nav class="md-nav" aria-label="OAuth router">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get-authorize" class="md-nav__link">
+    GET /authorize
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-callback" class="md-nav__link">
+    GET /callback
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#users-router" class="md-nav__link">
+    Users router
+  </a>
+  
+    <nav class="md-nav" aria-label="Users router">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get-me" class="md-nav__link">
+    GET /me
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#patch-me" class="md-nav__link">
+    PATCH /me
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-user_id" class="md-nav__link">
+    GET /{user_id}
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#patch-user_id" class="md-nav__link">
+    PATCH /{user_id}
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delete-user_id" class="md-nav__link">
+    DELETE /{user_id}
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+
+<h1 id="routes">Routes<a class="headerlink" href="#routes" title="Permanent link">&para;</a></h1>
+<p>You'll find here the routes exposed by <strong>FastAPI Users</strong>. Note that you can also review them through the <a href="https://fastapi.tiangolo.com/tutorial/first-steps/#interactive-api-docs">interactive API docs</a>.</p>
+<h2 id="auth-router">Auth router<a class="headerlink" href="#auth-router" title="Permanent link">&para;</a></h2>
+<p>Each <a href="../../configuration/authentication/">authentication backend</a> you <a href="../../configuration/routers/auth/">generate a router for</a> will produce the following routes. Take care about the prefix you gave it, especially if you have several backends.</p>
+<h3 id="post-login"><code>POST /login</code><a class="headerlink" href="#post-login" title="Permanent link">&para;</a></h3>
+<p>Login a user against the method named <code>name</code>. Check the corresponding <a href="../../configuration/authentication/">authentication method</a> to view the success response.</p>
+<div class="admonition abstract">
+<p class="admonition-title">Payload (<code>application/x-www-form-urlencoded</code>)</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>username=king.arthur@camelot.bt&amp;password=guinevere
+</code></pre></div>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>422 Validation Error</code></p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>400 Bad Request</code></p>
+<p>Bad credentials or the user is inactive.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;LOGIN_BAD_CREDENTIALS&quot;</span><span class="w"></span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>400 Bad Request</code></p>
+<p>The user is not verified.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;LOGIN_USER_NOT_VERIFIED&quot;</span><span class="w"></span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<h3 id="post-logout"><code>POST /logout</code><a class="headerlink" href="#post-logout" title="Permanent link">&para;</a></h3>
+<p>Logout the authenticated user against the method named <code>name</code>. Check the corresponding <a href="../../configuration/authentication/">authentication method</a> to view the success response.</p>
+<div class="admonition fail">
+<p class="admonition-title"><code>401 Unauthorized</code></p>
+<p>Missing token or inactive user.</p>
+</div>
+<div class="admonition success">
+<p class="admonition-title"><code>200 OK</code></p>
+<p>The logout process was successful.</p>
+</div>
+<h2 id="register-router">Register router<a class="headerlink" href="#register-router" title="Permanent link">&para;</a></h2>
+<h3 id="post-register"><code>POST /register</code><a class="headerlink" href="#post-register" title="Permanent link">&para;</a></h3>
+<p>Register a new user. Will call the <code>on_after_register</code> <a href="../../configuration/user-manager/#on_after_register">handler</a> on successful registration.</p>
+<div class="admonition abstract">
+<p class="admonition-title">Payload</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;king.arthur@camelot.bt&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;guinevere&quot;</span><span class="w"></span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="admonition success">
+<p class="admonition-title"><code>201 Created</code></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;57cbb51a-ab71-4009-8802-3f54b4f2e23&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;king.arthur@camelot.bt&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nt">&quot;is_active&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="nt">&quot;is_superuser&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>422 Validation Error</code></p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>400 Bad Request</code></p>
+<p>A user already exists with this email.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;REGISTER_USER_ALREADY_EXISTS&quot;</span><span class="w"></span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>400 Bad Request</code></p>
+<p><a href="../../configuration/user-manager/#validate_password">Password validation</a> failed.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">        </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;REGISTER_INVALID_PASSWORD&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">        </span><span class="nt">&quot;reason&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Password should be at least 3 characters&quot;</span><span class="w"></span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<h2 id="reset-password-router">Reset password router<a class="headerlink" href="#reset-password-router" title="Permanent link">&para;</a></h2>
+<h3 id="post-forgot-password"><code>POST /forgot-password</code><a class="headerlink" href="#post-forgot-password" title="Permanent link">&para;</a></h3>
+<p>Request a reset password procedure. Will generate a temporary token and call the <code>on_after_forgot_password</code> <a href="../../configuration/user-manager/#on_after_forgot_password">handler</a> if the user exists.</p>
+<p>To prevent malicious users from guessing existing users in your database, the route will always return a <code>202 Accepted</code> response, even if the user requested does not exist.</p>
+<div class="admonition abstract">
+<p class="admonition-title">Payload</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;king.arthur@camelot.bt&quot;</span><span class="w"></span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="admonition success">
+<p class="admonition-title"><code>202 Accepted</code></p>
+</div>
+<h3 id="post-reset-password"><code>POST /reset-password</code><a class="headerlink" href="#post-reset-password" title="Permanent link">&para;</a></h3>
+<p>Reset a password. Requires the token generated by the <code>/forgot-password</code> route.</p>
+<div class="admonition abstract">
+<p class="admonition-title">Payload</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="nt">&quot;token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiOTIyMWZmYzktNjQwZi00MzcyLTg2ZDMtY2U2NDJjYmE1NjAzIiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTcxNTA0MTkzfQ.M10bjOe45I5Ncu_uXvOmVV8QxnL-nZfcH96U90JaocI&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;merlin&quot;</span><span class="w"></span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="admonition success">
+<p class="admonition-title"><code>200 OK</code></p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>422 Validation Error</code></p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>400 Bad Request</code></p>
+<p>Bad or expired token.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;RESET_PASSWORD_BAD_TOKEN&quot;</span><span class="w"></span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>400 Bad Request</code></p>
+<p><a href="../../configuration/user-manager/#validate_password">Password validation</a> failed.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">        </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;REGISTER_INVALID_PASSWORD&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">        </span><span class="nt">&quot;reason&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Password should be at least 3 characters&quot;</span><span class="w"></span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<h2 id="verify-router">Verify router<a class="headerlink" href="#verify-router" title="Permanent link">&para;</a></h2>
+<h3 id="post-request-verify-token"><code>POST /request-verify-token</code><a class="headerlink" href="#post-request-verify-token" title="Permanent link">&para;</a></h3>
+<p>Request a user to verify their e-mail. Will generate a temporary token and call the <code>on_after_request_verify</code> <a href="../../configuration/user-manager/#on_after_request_verify">handler</a> if the user <strong>exists</strong>, <strong>active</strong> and <strong>not already verified</strong>.</p>
+<p>To prevent malicious users from guessing existing users in your database, the route will always return a <code>202 Accepted</code> response, even if the user requested does not exist, not active or already verified.</p>
+<div class="admonition abstract">
+<p class="admonition-title">Payload</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;king.arthur@camelot.bt&quot;</span><span class="w"></span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="admonition success">
+<p class="admonition-title"><code>202 Accepted</code></p>
+</div>
+<h3 id="post-verify"><code>POST /verify</code><a class="headerlink" href="#post-verify" title="Permanent link">&para;</a></h3>
+<p>Verify a user. Requires the token generated by the <code>/request-verify-token</code> route. Will call the call the <code>on_after_verify</code> <a href="../../configuration/user-manager/#on_after_verify">handler</a> on success.</p>
+<div class="admonition abstract">
+<p class="admonition-title">Payload</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">    </span><span class="nt">&quot;token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiOTIyMWZmYzktNjQwZi00MzcyLTg2ZDMtY2U2NDJjYmE1NjAzIiwiYXVkIjoiZmFzdGFwaS11c2VyczphdXRoIiwiZXhwIjoxNTcxNTA0MTkzfQ.M10bjOe45I5Ncu_uXvOmVV8QxnL-nZfcH96U90JaocI&quot;</span><span class="w"></span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="admonition success">
+<p class="admonition-title"><code>200 OK</code></p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>422 Validation Error</code></p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>400 Bad Request</code></p>
+<p>Bad token, not existing user or not the e-mail currently set for the user.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">    </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;VERIFY_USER_BAD_TOKEN&quot;</span><span class="w"></span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>400 Bad Request</code></p>
+<p>The user is already verified.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">    </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;VERIFY_USER_ALREADY_VERIFIED&quot;</span><span class="w"></span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<h2 id="oauth-router">OAuth router<a class="headerlink" href="#oauth-router" title="Permanent link">&para;</a></h2>
+<p>Each OAuth router you define will expose the two following routes.</p>
+<h3 id="get-authorize"><code>GET /authorize</code><a class="headerlink" href="#get-authorize" title="Permanent link">&para;</a></h3>
+<p>Return the authorization URL for the OAuth service where you should redirect your user.</p>
+<div class="admonition abstract">
+<p class="admonition-title">Query parameters</p>
+<ul>
+<li><code>scopes</code>: Optional list of scopes to ask for. Expected format: <code>scopes=a&amp;scopes=b</code>.</li>
+</ul>
+</div>
+<div class="admonition success">
+<p class="admonition-title"><code>200 OK</code></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">    </span><span class="nt">&quot;authorization_url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://www.tintagel.bt/oauth/authorize?client_id=CLIENT_ID&amp;scopes=a+b&amp;redirect_uri=https://www.camelot.bt/oauth/callback&quot;</span><span class="w"></span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>422 Validation Error</code></p>
+<p>Invalid parameters - e.g. unknown authentication backend.</p>
+</div>
+<h3 id="get-callback"><code>GET /callback</code><a class="headerlink" href="#get-callback" title="Permanent link">&para;</a></h3>
+<p>Handle the OAuth callback.</p>
+<div class="admonition abstract">
+<p class="admonition-title">Query parameters</p>
+<ul>
+<li><code>code</code>: OAuth callback code.</li>
+<li><code>state</code>: State token.</li>
+<li><code>error</code>: OAuth error.</li>
+</ul>
+</div>
+<p>Depending on the situation, several things can happen:</p>
+<ul>
+<li>The OAuth account exists in database and is linked to a user:<ul>
+<li>OAuth account is updated in database with fresh access token.</li>
+<li>The user is authenticated following the chosen <a href="../../configuration/authentication/">authentication method</a>.</li>
+</ul>
+</li>
+<li>The OAuth account doesn't exist in database but a user with the same email address exists:<ul>
+<li>OAuth account is linked to the user.</li>
+<li>The user is authenticated following the chosen <a href="../../configuration/authentication/">authentication method</a>.</li>
+</ul>
+</li>
+<li>The OAuth account doesn't exist in database and no user with the email address exists:<ul>
+<li>A new user is created and linked to the OAuth account.</li>
+<li>The user is authenticated following the chosen <a href="../../configuration/authentication/">authentication method</a>.</li>
+</ul>
+</li>
+</ul>
+<div class="admonition fail">
+<p class="admonition-title"><code>400 Bad Request</code></p>
+<p>Invalid token.</p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>400 Bad Request</code></p>
+<p>User is inactive.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">    </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;LOGIN_BAD_CREDENTIALS&quot;</span><span class="w"></span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<h2 id="users-router">Users router<a class="headerlink" href="#users-router" title="Permanent link">&para;</a></h2>
+<h3 id="get-me"><code>GET /me</code><a class="headerlink" href="#get-me" title="Permanent link">&para;</a></h3>
+<p>Return the current authenticated active user.</p>
+<div class="admonition success">
+<p class="admonition-title"><code>200 OK</code></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;57cbb51a-ab71-4009-8802-3f54b4f2e23&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">    </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;king.arthur@camelot.bt&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">    </span><span class="nt">&quot;is_active&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="w">    </span><span class="nt">&quot;is_superuser&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>401 Unauthorized</code></p>
+<p>Missing token or inactive user.</p>
+</div>
+<h3 id="patch-me"><code>PATCH /me</code><a class="headerlink" href="#patch-me" title="Permanent link">&para;</a></h3>
+<p>Update the current authenticated active user.</p>
+<div class="admonition abstract">
+<p class="admonition-title">Payload</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">    </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;king.arthur@tintagel.bt&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">    </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;merlin&quot;</span><span class="w"></span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="admonition success">
+<p class="admonition-title"><code>200 OK</code></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;57cbb51a-ab71-4009-8802-3f54b4f2e23&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">    </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;king.arthur@tintagel.bt&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">    </span><span class="nt">&quot;is_active&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="w">    </span><span class="nt">&quot;is_superuser&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>401 Unauthorized</code></p>
+<p>Missing token or inactive user.</p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>400 Bad Request</code></p>
+<p><a href="../../configuration/user-manager/#validate_password">Password validation</a> failed.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">    </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">        </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;UPDATE_USER_INVALID_PASSWORD&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="w">        </span><span class="nt">&quot;reason&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Password should be at least 3 characters&quot;</span><span class="w"></span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>400 Bad Request</code></p>
+<p>A user with this email already exists.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="w">    </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;UPDATE_USER_EMAIL_ALREADY_EXISTS&quot;</span><span class="w"></span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>422 Validation Error</code></p>
+</div>
+<h3 id="get-user_id"><code>GET /{user_id}</code><a class="headerlink" href="#get-user_id" title="Permanent link">&para;</a></h3>
+<p>Return the user with id <code>user_id</code>.</p>
+<div class="admonition success">
+<p class="admonition-title"><code>200 OK</code></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;57cbb51a-ab71-4009-8802-3f54b4f2e23&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="w">    </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;king.arthur@camelot.bt&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="w">    </span><span class="nt">&quot;is_active&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="w">    </span><span class="nt">&quot;is_superuser&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>401 Unauthorized</code></p>
+<p>Missing token or inactive user.</p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>403 Forbidden</code></p>
+<p>Not a superuser.</p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>404 Not found</code></p>
+<p>The user does not exist.</p>
+</div>
+<h3 id="patch-user_id"><code>PATCH /{user_id}</code><a class="headerlink" href="#patch-user_id" title="Permanent link">&para;</a></h3>
+<p>Update the user with id <code>user_id</code>.</p>
+<div class="admonition abstract">
+<p class="admonition-title">Payload</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="w">    </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;king.arthur@tintagel.bt&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="w">    </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;merlin&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="w">    </span><span class="nt">&quot;is_active&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="w">    </span><span class="nt">&quot;is_superuser&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="admonition success">
+<p class="admonition-title"><code>200 OK</code></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;57cbb51a-ab71-4009-8802-3f54b4f2e23&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">    </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;king.arthur@camelot.bt&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">    </span><span class="nt">&quot;is_active&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="w">    </span><span class="nt">&quot;is_superuser&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>401 Unauthorized</code></p>
+<p>Missing token or inactive user.</p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>403 Forbidden</code></p>
+<p>Not a superuser.</p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>404 Not found</code></p>
+<p>The user does not exist.</p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>400 Bad Request</code></p>
+<p><a href="../../configuration/user-manager/#validate_password">Password validation</a> failed.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="w">    </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="w">        </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;UPDATE_USER_INVALID_PASSWORD&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="w">        </span><span class="nt">&quot;reason&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Password should be at least 3 characters&quot;</span><span class="w"></span>
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>400 Bad Request</code></p>
+<p>A user with this email already exists.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="w">    </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;UPDATE_USER_EMAIL_ALREADY_EXISTS&quot;</span><span class="w"></span>
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></p>
+</div>
+<h3 id="delete-user_id"><code>DELETE /{user_id}</code><a class="headerlink" href="#delete-user_id" title="Permanent link">&para;</a></h3>
+<p>Delete the user with id <code>user_id</code>.</p>
+<div class="admonition success">
+<p class="admonition-title"><code>204 No content</code></p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>401 Unauthorized</code></p>
+<p>Missing token or inactive user.</p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>403 Forbidden</code></p>
+<p>Not a superuser.</p>
+</div>
+<div class="admonition fail">
+<p class="admonition-title"><code>404 Not found</code></p>
+<p>The user does not exist.</p>
+</div>
+
+              
+            </article>
+          </div>
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" data-md-state="hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"/></svg>
+            Back to top
+          </a>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../flow/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Flow" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Flow
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../current-user/" class="md-footer__link md-footer__link--next" aria-label="Next: Get current user" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Get current user
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.top", "navigation.sections", "navigation.indexes", "search.suggest", "search.highlight", "content.code.annotate"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.5e67fbfe.min.js", "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e87a5f81.min.js"></script>
+      
+    
+  </body>
+</html>
