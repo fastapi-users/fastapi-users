@@ -123,39 +123,39 @@ app.include_router(
 
 #### SQLAlchemy
 
-[Open :octicons-link-external-16:](https://github.com/fastapi-users/fastapi-users/tree/master/examples/sqlalchemy-oauth)
+[Open :material-open-in-new:](https://github.com/fastapi-users/fastapi-users/tree/master/examples/sqlalchemy-oauth)
 
-=== ":octicons-file-code-16: requirements.txt"
+=== "requirements.txt"
 
     ```
     --8<-- "examples/sqlalchemy-oauth/requirements.txt"
     ```
 
-=== ":octicons-file-code-16: main.py"
+=== "main.py"
 
     ```py
     --8<-- "examples/sqlalchemy-oauth/main.py"
     ```
 
-=== ":octicons-file-code-16: app/app.py"
+=== "app/app.py"
 
     ```py
     --8<-- "examples/sqlalchemy-oauth/app/app.py"
     ```
 
-=== ":octicons-file-code-16: app/db.py"
+=== "app/db.py"
 
     ```py
     --8<-- "examples/sqlalchemy-oauth/app/db.py"
     ```
 
-=== ":octicons-file-code-16: app/models.py"
+=== "app/models.py"
 
     ```py
     --8<-- "examples/sqlalchemy-oauth/app/models.py"
     ```
 
-=== ":octicons-file-code-16: app/users.py"
+=== "app/users.py"
 
     ```py
     --8<-- "examples/sqlalchemy-oauth/app/users.py"
@@ -163,39 +163,39 @@ app.include_router(
 
 #### MongoDB
 
-[Open :octicons-link-external-16:](https://github.com/fastapi-users/fastapi-users/tree/master/examples/mongodb-oauth)
+[Open :material-open-in-new:](https://github.com/fastapi-users/fastapi-users/tree/master/examples/mongodb-oauth)
 
-=== ":octicons-file-code-16: requirements.txt"
+=== "requirements.txt"
 
     ```
     --8<-- "examples/mongodb-oauth/requirements.txt"
     ```
 
-=== ":octicons-file-code-16: main.py"
+=== "main.py"
 
     ```py
     --8<-- "examples/mongodb-oauth/main.py"
     ```
 
-=== ":octicons-file-code-16: app/app.py"
+=== "app/app.py"
 
     ```py
     --8<-- "examples/mongodb-oauth/app/app.py"
     ```
 
-=== ":octicons-file-code-16: app/db.py"
+=== "app/db.py"
 
     ```py
     --8<-- "examples/mongodb-oauth/app/db.py"
     ```
 
-=== ":octicons-file-code-16: app/models.py"
+=== "app/models.py"
 
     ```py
     --8<-- "examples/mongodb-oauth/app/models.py"
     ```
 
-=== ":octicons-file-code-16: app/users.py"
+=== "app/users.py"
 
     ```py
     --8<-- "examples/mongodb-oauth/app/users.py"
@@ -203,39 +203,39 @@ app.include_router(
 
 #### Tortoise ORM
 
-[Open :octicons-link-external-16:](https://github.com/fastapi-users/fastapi-users/tree/master/examples/tortoise-oauth)
+[Open :material-open-in-new:](https://github.com/fastapi-users/fastapi-users/tree/master/examples/tortoise-oauth)
 
-=== ":octicons-file-code-16: requirements.txt"
+=== "requirements.txt"
 
     ```
     --8<-- "examples/tortoise-oauth/requirements.txt"
     ```
 
-=== ":octicons-file-code-16: main.py"
+=== "main.py"
 
     ```py
     --8<-- "examples/tortoise-oauth/main.py"
     ```
 
-=== ":octicons-file-code-16: app/app.py"
+=== "app/app.py"
 
     ```py
     --8<-- "examples/tortoise-oauth/app/app.py"
     ```
 
-=== ":octicons-file-code-16: app/db.py"
+=== "app/db.py"
 
     ```py
     --8<-- "examples/tortoise-oauth/app/db.py"
     ```
 
-=== ":octicons-file-code-16: app/models.py"
+=== "app/models.py"
 
     ```py
     --8<-- "examples/tortoise-oauth/app/models.py"
     ```
 
-=== ":octicons-file-code-16: app/users.py"
+=== "app/users.py"
 
     ```py
     --8<-- "examples/tortoise-oauth/app/users.py"
