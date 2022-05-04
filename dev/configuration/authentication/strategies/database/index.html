@@ -1396,7 +1396,7 @@
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">model.py</label><label for="__tabbed_2_2">adapter.py</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">schemas</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span> <span class="nn">fastapi_users</span> <span class="kn">import</span> <span class="n">models</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="hll"><span class="kn">from</span> <span class="nn">fastapi_users.authentication.strategy.db.models</span> <span class="kn">import</span> <span class="n">BaseAccessToken</span>
 </span><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">TortoiseBaseUserModel</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="hll"><span class="kn">from</span> <span class="nn">fastapi_users_db_tortoise.access_token</span> <span class="kn">import</span> <span class="n">TortoiseBaseAccessTokenModel</span>
@@ -1404,15 +1404,15 @@
 <a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="kn">from</span> <span class="nn">tortoise.contrib.pydantic</span> <span class="kn">import</span> <span class="n">PydanticModel</span>
 <a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
 <a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">schemas</span><span class="o">.</span><span class="n">BaseUser</span><span class="p">):</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUser</span><span class="p">):</span>
 <a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    <span class="k">pass</span>
 <a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
 <a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="k">class</span> <span class="nc">UserCreate</span><span class="p">(</span><span class="n">schemas</span><span class="o">.</span><span class="n">BaseUserCreate</span><span class="p">):</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="k">class</span> <span class="nc">UserCreate</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUserCreate</span><span class="p">):</span>
 <a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>    <span class="k">pass</span>
 <a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>
 <a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="k">class</span> <span class="nc">UserUpdate</span><span class="p">(</span><span class="n">schemas</span><span class="o">.</span><span class="n">BaseUserUpdate</span><span class="p">):</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="k">class</span> <span class="nc">UserUpdate</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">BaseUserUpdate</span><span class="p">):</span>
 <a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>    <span class="k">pass</span>
 <a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>
 <a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>
@@ -1420,7 +1420,7 @@
 <a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>    <span class="k">pass</span>
 <a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>
 <a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>
-<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="k">class</span> <span class="nc">UserDB</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">schemas</span><span class="o">.</span><span class="n">BaseUserDB</span><span class="p">,</span> <span class="n">PydanticModel</span><span class="p">):</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="k">class</span> <span class="nc">UserDB</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseUserDB</span><span class="p">,</span> <span class="n">PydanticModel</span><span class="p">):</span>
 <a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
 <a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>        <span class="n">orm_mode</span> <span class="o">=</span> <span class="kc">True</span>
 <a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>        <span class="n">orig_model</span> <span class="o">=</span> <span class="n">UserModel</span>
