@@ -2,6 +2,8 @@ name: Update documentation
 
 on:
   push:
+    tags:
+      - "*"
     branches:
       - master
 
@@ -22,10 +24,14 @@ jobs:
           flit install --deps develop --extras oauth,redis
       - name: Build
         run: mkdocs build
+      - name: Parse tag
+        id: version_tag
+        uses: battila7/get-version-action@v2
       - name: Get tag
         run: |
-          python -c "from packaging import version; from fastapi_users import __version__; version = version.parse(__version__); print(f'DOCS_VERSION={version.major}.{version.minor}')" >> $GITHUB_ENV
+          echo ${{ steps.version_tag.outputs.version }}
+          echo ${{ github.ref_name }}
       - name: Deploy
         run: |
           git fetch origin gh-pages --depth=1
-          mike deploy --push --update-aliases ${{ env.DOCS_VERSION }} latest
+          mike deploy --push --update-aliases ${{ steps.version_tag.outputs.major }} latest
