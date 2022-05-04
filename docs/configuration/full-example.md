@@ -8,39 +8,39 @@ Here is a full working example with JWT authentication to help get you started.
 
 ## SQLAlchemy
 
-[Open :octicons-link-external-16:](https://github.com/fastapi-users/fastapi-users/tree/master/examples/sqlalchemy)
+[Open :material-open-in-new:](https://github.com/fastapi-users/fastapi-users/tree/master/examples/sqlalchemy)
 
-=== ":octicons-file-code-16: requirements.txt"
+=== "requirements.txt"
 
     ```
     --8<-- "examples/sqlalchemy/requirements.txt"
     ```
 
-=== ":octicons-file-code-16: main.py"
+=== "main.py"
 
     ```py
     --8<-- "examples/sqlalchemy/main.py"
     ```
 
-=== ":octicons-file-code-16: app/app.py"
+=== "app/app.py"
 
     ```py
     --8<-- "examples/sqlalchemy/app/app.py"
     ```
 
-=== ":octicons-file-code-16: app/db.py"
+=== "app/db.py"
 
     ```py
     --8<-- "examples/sqlalchemy/app/db.py"
     ```
 
-=== ":octicons-file-code-16: app/models.py"
+=== "app/models.py"
 
     ```py
     --8<-- "examples/sqlalchemy/app/models.py"
     ```
 
-=== ":octicons-file-code-16: app/users.py"
+=== "app/users.py"
 
     ```py
     --8<-- "examples/sqlalchemy/app/users.py"
@@ -48,39 +48,39 @@ Here is a full working example with JWT authentication to help get you started.
 
 ## MongoDB
 
-[Open :octicons-link-external-16:](https://github.com/fastapi-users/fastapi-users/tree/master/examples/mongodb)
+[Open :material-open-in-new:](https://github.com/fastapi-users/fastapi-users/tree/master/examples/mongodb)
 
-=== ":octicons-file-code-16: requirements.txt"
+=== "requirements.txt"
 
     ```
     --8<-- "examples/mongodb/requirements.txt"
     ```
 
-=== ":octicons-file-code-16: main.py"
+=== "main.py"
 
     ```py
     --8<-- "examples/mongodb/main.py"
     ```
 
-=== ":octicons-file-code-16: app/app.py"
+=== "app/app.py"
 
     ```py
     --8<-- "examples/mongodb/app/app.py"
     ```
 
-=== ":octicons-file-code-16: app/db.py"
+=== "app/db.py"
 
     ```py
     --8<-- "examples/mongodb/app/db.py"
     ```
 
-=== ":octicons-file-code-16: app/models.py"
+=== "app/models.py"
 
     ```py
     --8<-- "examples/mongodb/app/models.py"
     ```
 
-=== ":octicons-file-code-16: app/users.py"
+=== "app/users.py"
 
     ```py
     --8<-- "examples/mongodb/app/users.py"
@@ -88,39 +88,39 @@ Here is a full working example with JWT authentication to help get you started.
 
 ## Tortoise ORM
 
-[Open :octicons-link-external-16:](https://github.com/fastapi-users/fastapi-users/tree/master/examples/tortoise)
+[Open :material-open-in-new:](https://github.com/fastapi-users/fastapi-users/tree/master/examples/tortoise)
 
-=== ":octicons-file-code-16: requirements.txt"
+=== "requirements.txt"
 
     ```
     --8<-- "examples/tortoise/requirements.txt"
     ```
 
-=== ":octicons-file-code-16: main.py"
+=== "main.py"
 
     ```py
     --8<-- "examples/tortoise/main.py"
     ```
 
-=== ":octicons-file-code-16: app/app.py"
+=== "app/app.py"
 
     ```py
     --8<-- "examples/tortoise/app/app.py"
     ```
 
-=== ":octicons-file-code-16: app/db.py"
+=== "app/db.py"
 
     ```py
     --8<-- "examples/tortoise/app/db.py"
     ```
 
-=== ":octicons-file-code-16: app/models.py"
+=== "app/models.py"
 
     ```py
     --8<-- "examples/tortoise/app/models.py"
     ```
 
-=== ":octicons-file-code-16: app/users.py"
+=== "app/users.py"
 
     ```py
     --8<-- "examples/tortoise/app/users.py"

@@ -86,6 +86,7 @@ dev = [
     "isort",
     "pytest-asyncio",
     "flake8-docstrings",
+    "mike",
     "mkdocs",
     "mkdocs-material",
     "mkdocs-mermaid2-plugin",

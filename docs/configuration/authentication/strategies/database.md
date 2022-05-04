@@ -37,12 +37,12 @@ It is structured like this:
 
     With Tortoise ORM, you need to define a proper Tortoise model for `AccessToken` and manually specify the user foreign key. Besides, you need to modify the Pydantic model a bit so that it works well with this Tortoise model.
 
-    === ":octicons-file-code-16: model.py"
+    === "model.py"
         ```py hl_lines="2 4 31-38"
         --8<-- "docs/src/db_tortoise_access_tokens_model.py"
         ```
 
-    === ":octicons-file-code-16: adapter.py"
+    === "adapter.py"
         ```py hl_lines="2 4 13-14"
         --8<-- "docs/src/db_tortoise_access_tokens_adapter.py"
         ```
