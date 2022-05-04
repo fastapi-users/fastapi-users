@@ -17,16 +17,12 @@ async def test_app_client(
     oauth_client,
     get_test_client,
 ) -> AsyncGenerator[httpx.AsyncClient, None]:
-    fastapi_users = FastAPIUsers[UserModel, IDType, User, UserCreate, UserUpdate](
-        get_user_manager,
-        [mock_authentication],
-        User,
-        UserCreate,
-        UserUpdate,
+    fastapi_users = FastAPIUsers[UserModel, IDType](
+        get_user_manager, [mock_authentication]
     )
 
     app = FastAPI()
-    app.include_router(fastapi_users.get_register_router())
+    app.include_router(fastapi_users.get_register_router(User, UserCreate))
     app.include_router(fastapi_users.get_reset_password_router())
     app.include_router(fastapi_users.get_auth_router(mock_authentication))
     app.include_router(
@@ -37,8 +33,10 @@ async def test_app_client(
     def custom_users_route():
         return None
 
-    app.include_router(fastapi_users.get_users_router(), prefix="/users")
-    app.include_router(fastapi_users.get_verify_router())
+    app.include_router(
+        fastapi_users.get_users_router(User, UserUpdate), prefix="/users"
+    )
+    app.include_router(fastapi_users.get_verify_router(User))
 
     @app.get("/current-user", response_model=User)
     def current_user(user: UserModel = Depends(fastapi_users.current_user())):

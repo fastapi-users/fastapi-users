@@ -8,9 +8,7 @@ from tests.conftest import IDType, User, UserCreate, UserModel, UserUpdate
 
 @pytest.fixture
 def fastapi_users(get_user_manager, mock_authentication) -> FastAPIUsers:
-    return FastAPIUsers[UserModel, IDType, User, UserCreate, UserUpdate](
-        get_user_manager, [mock_authentication], User, UserCreate, UserUpdate
-    )
+    return FastAPIUsers[UserModel, IDType](get_user_manager, [mock_authentication])
 
 
 @pytest.fixture
@@ -18,14 +16,14 @@ def test_app(
     fastapi_users: FastAPIUsers, secret, mock_authentication, oauth_client
 ) -> FastAPI:
     app = FastAPI()
-    app.include_router(fastapi_users.get_register_router())
+    app.include_router(fastapi_users.get_register_router(User, UserCreate))
     app.include_router(fastapi_users.get_reset_password_router())
     app.include_router(fastapi_users.get_auth_router(mock_authentication))
     app.include_router(
         fastapi_users.get_oauth_router(oauth_client, mock_authentication, secret)
     )
-    app.include_router(fastapi_users.get_users_router())
-    app.include_router(fastapi_users.get_verify_router())
+    app.include_router(fastapi_users.get_users_router(User, UserUpdate))
+    app.include_router(fastapi_users.get_verify_router(User))
 
     return app
 
