@@ -27,13 +27,9 @@ jobs:
       - name: Parse tag
         id: version_tag
         uses: battila7/get-version-action@v2
-      - name: Get tag
-        run: |
-          echo ${{ steps.version_tag.outputs.version }}
-          echo ${{ steps.version_tag.outputs.major }}
-          echo ${{ steps.version_tag.outputs.minor }}
-          echo ${{ github.ref_name }}
       - name: Deploy
+        env:
+          DOC_TAG: ${{ steps.version_tag.outputs.version && format('{0}.{1}', steps.version_tag.outputs.major, steps.version_tag.outputs.minor) || 'dev' }}
         run: |
           git fetch origin gh-pages --depth=1
-          mike deploy --push --update-aliases ${{ steps.version_tag.outputs.major }} latest
+          mike deploy --push --update-aliases ${{ env.DOC_TAG }} latest
