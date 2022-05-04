@@ -3,6 +3,7 @@ site_description: Ready-to-use and customizable users management for FastAPI
 
 theme:
   name: 'material'
+  custom_dir: docs-overrides
   palette:
     - scheme: default
       primary: 'red'
