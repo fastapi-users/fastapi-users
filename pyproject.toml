@@ -10,19 +10,11 @@ module = "passlib.*"
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
-module = "fastapi_users_db_mongodb.*"
+module = "fastapi_users_db_beanie.*"
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = "fastapi_users_db_sqlalchemy.*"
-ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
-module = "fastapi_users_db_tortoise.*"
-ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
-module = "fastapi_users_db_ormar.*"
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
@@ -106,7 +98,7 @@ dev = [
     "uvicorn",
 ]
 sqlalchemy = [
-    "fastapi-users-db-sqlalchemy >=3.0.0",
+    "fastapi-users-db-sqlalchemy >=4.0.0",
 ]
 beanie = [
     "fastapi-users-db-beanie >=1.0.0",
