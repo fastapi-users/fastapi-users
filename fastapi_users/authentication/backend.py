@@ -14,7 +14,7 @@ from fastapi_users.authentication.transport import (
 from fastapi_users.types import DependencyCallable
 
 
-class AuthenticationBackend(Generic[models.UP]):
+class AuthenticationBackend(Generic[models.UP, models.ID]):
     """
     Combination of an authentication transport and strategy.
 
