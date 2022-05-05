@@ -612,4 +612,14 @@ class UUIDIDMixin:
             raise InvalidID() from e
 
 
+class IntegerIDMixin:
+    def parse_id(self, value: Any) -> int:
+        if isinstance(value, float):
+            raise InvalidID()
+        try:
+            return int(value)
+        except ValueError as e:
+            raise InvalidID() from e
+
+
 UserManagerDependency = DependencyCallable[BaseUserManager[models.UP, models.ID]]

@@ -7,6 +7,8 @@ from pytest_mock import MockerFixture
 
 from fastapi_users.jwt import decode_jwt, generate_jwt
 from fastapi_users.manager import (
+    IntegerIDMixin,
+    InvalidID,
     InvalidPasswordException,
     InvalidResetPasswordToken,
     InvalidVerifyToken,
@@ -591,3 +593,19 @@ class TestAuthenticate:
         assert user is not None
         assert user.email == "king.arthur@camelot.bt"
         assert update_spy.called is True
+
+
+def test_integer_id_mixin():
+    integer_id_mixin = IntegerIDMixin()
+
+    assert integer_id_mixin.parse_id("123") == 123
+    assert integer_id_mixin.parse_id(123) == 123
+
+    with pytest.raises(InvalidID):
+        integer_id_mixin.parse_id("123.42")
+
+    with pytest.raises(InvalidID):
+        integer_id_mixin.parse_id(123.42)
+
+    with pytest.raises(InvalidID):
+        integer_id_mixin.parse_id("abc")
