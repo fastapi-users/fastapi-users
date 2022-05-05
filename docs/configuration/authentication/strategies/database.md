@@ -4,68 +4,72 @@ The most natural way for storing tokens is of course the very same database you'
 
 ## Configuration
 
-The configuration of this strategy is a bit more complex than the others as it requires you to configure models and a database adapter, [exactly like we did for users](../../overview.md#database-adapters).
+The configuration of this strategy is a bit more complex than the others as it requires you to configure models and a database adapter, [exactly like we did for users](../../overview.md#user-model-and-database-adapters).
 
 
-### Model
+### Database adapters
 
-You should define an `AccessToken` Pydantic model inheriting from `BaseAccessToken`.
-
-```py
-from fastapi_users.authentication.strategy.db import BaseAccessToken
-
-
-class AccessToken(BaseAccessToken):
-        pass
-```
-
-It is structured like this:
+An access token will be structured like this in your database:
 
 * `token` (`str`) – Unique identifier of the token. It's generated automatically upon login by the strategy.
-* `user_id` (`UUID4`) – User id. of the user associated to this token.
+* `user_id` (`ID`) – User id. of the user associated to this token.
 * `created_at` (`datetime`) – Date and time of creation of the token. It's used to determine if the token is expired or not.
 
-### Database adapter
+We are providing a base model with those fields for each database we are supporting.
 
-=== "SQLAlchemy"
+#### SQLAlchemy
 
-    ```py hl_lines="5-8 13 23-24 45-46"
-    --8<-- "docs/src/db_sqlalchemy_access_tokens.py"
+We'll expand from the basic SQLAlchemy configuration.
+
+```py hl_lines="5-8 21-22 43-46"
+--8<-- "docs/src/db_sqlalchemy_access_tokens.py"
+```
+
+1. We define an `AccessToken` ORM model inheriting from `SQLAlchemyBaseAccessTokenTableUUID`.
+
+2. We define a dependency to instantiate the `SQLAlchemyAccessTokenDatabase` class. Just like the user database adapter, it expects a fresh SQLAlchemy session and the `AccessToken` model class we defined above.
+
+!!! tip "`user_id` foreign key is defined as UUID"
+    By default, we use UUID as a primary key ID for your user, so we follow the same convention to define the foreign key pointing to the user.
+
+    If you want to use another type, like an auto-incremented integer, you can use `SQLAlchemyBaseAccessTokenTable` as base class and define your own `user_id` column.
+
+    ```py
+    class AccessToken(SQLAlchemyBaseAccessTokenTable[int], Base):
+        @declared_attr
+        def user_id(cls):
+            return Column(Integer, ForeignKey("user.id", ondelete="cascade"), nullable=False)
     ```
 
-=== "Tortoise ORM"
+    Notice that `SQLAlchemyBaseAccessTokenTable` expects a generic type to define the actual type of ID you use.
 
-    With Tortoise ORM, you need to define a proper Tortoise model for `AccessToken` and manually specify the user foreign key. Besides, you need to modify the Pydantic model a bit so that it works well with this Tortoise model.
+#### Beanie
 
-    === "model.py"
-        ```py hl_lines="2 4 31-38"
-        --8<-- "docs/src/db_tortoise_access_tokens_model.py"
-        ```
+We'll expand from the basic Beanie configuration.
 
-    === "adapter.py"
-        ```py hl_lines="2 4 13-14"
-        --8<-- "docs/src/db_tortoise_access_tokens_adapter.py"
-        ```
+```py hl_lines="4-7 20-21 28-29"
+--8<-- "docs/src/db_beanie_access_tokens.py"
+```
 
-=== "MongoDB"
+1. We define an `AccessToken` ODM model inheriting from `BeanieBaseAccessToken`. Notice that we set a generic type to define the type of the `user_id` reference. By default, it's a standard MongoDB ObjectID.
 
-    ```py hl_lines="3 5 13 20-21"
-    --8<-- "docs/src/db_mongodb_access_tokens.py"
-    ```
+2. We define a dependency to instantiate the `BeanieAccessTokenDatabase` class. Just like the user database adapter, it expects the `AccessToken` model class we defined above.
 
 
 ### Strategy
 
 ```py
+import uuid
+
 from fastapi import Depends
 from fastapi_users.authentication.strategy.db import AccessTokenDatabase, DatabaseStrategy
 
-from .models import AccessToken, UserCreate, UserDB
+from .db import AccessToken, User
 
 
 def get_database_strategy(
     access_token_db: AccessTokenDatabase[AccessToken] = Depends(get_access_token_db),
-) -> DatabaseStrategy[UserCreate, UserDB, AccessToken]:
+) -> DatabaseStrategy:
     return DatabaseStrategy(access_token_db, lifetime_seconds=3600)
 ```
 

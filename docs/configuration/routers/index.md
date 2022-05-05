@@ -4,28 +4,32 @@ We're almost there! The last step is to configure the `FastAPIUsers` object that
 
 ## Configure `FastAPIUsers`
 
-Configure `FastAPIUsers` object with all the elements we defined before. More precisely:
+Configure `FastAPIUsers` object with the elements we defined before. More precisely:
 
 * `get_user_manager`: Dependency callable getter to inject the
     user manager class instance. See [UserManager](../user-manager.md).
 * `auth_backends`: List of authentication backends. See [Authentication](../authentication/index.md).
-* `user_model`: Pydantic model of a user.
-* `user_create_model`: Pydantic model for creating a user.
-* `user_update_model`: Pydantic model for updating a user.
-* `user_db_model`: Pydantic model of a DB representation of a user.
 
 ```py
+import uuid
+
 from fastapi_users import FastAPIUsers
 
-fastapi_users = FastAPIUsers(
+from .db import User
+
+fastapi_users = FastAPIUsers[User, uuid.UUID](
     get_user_manager,
     [auth_backend],
-    User,
-    UserCreate,
-    UserUpdate,
-    UserDB,
 )
 ```
+
+!!! note "Typing: User and ID generic types are expected"
+    You can see that we define two generic types when instantiating:
+
+    * `User`, which is the user model we defined in the database part
+    * The ID, which should correspond to the type of ID you use on your model. Here, we chose UUID, but it can be anything, like an integer or a MongoDB ObjectID.
+
+    It'll help you to have **good type-checking and auto-completion**.
 
 ## Available routers
 

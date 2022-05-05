@@ -14,7 +14,7 @@ from fastapi_users.authentication.transport import (
 from fastapi_users.types import DependencyCallable
 
 
-class AuthenticationBackend(Generic[models.UC, models.UD]):
+class AuthenticationBackend(Generic[models.UP]):
     """
     Combination of an authentication transport and strategy.
 
@@ -33,7 +33,7 @@ class AuthenticationBackend(Generic[models.UC, models.UD]):
         self,
         name: str,
         transport: Transport,
-        get_strategy: DependencyCallable[Strategy[models.UC, models.UD]],
+        get_strategy: DependencyCallable[Strategy[models.UP, models.ID]],
     ):
         self.name = name
         self.transport = transport
@@ -41,8 +41,8 @@ class AuthenticationBackend(Generic[models.UC, models.UD]):
 
     async def login(
         self,
-        strategy: Strategy[models.UC, models.UD],
-        user: models.UD,
+        strategy: Strategy[models.UP, models.ID],
+        user: models.UP,
         response: Response,
     ) -> Any:
         token = await strategy.write_token(user)
@@ -50,8 +50,8 @@ class AuthenticationBackend(Generic[models.UC, models.UD]):
 
     async def logout(
         self,
-        strategy: Strategy[models.UC, models.UD],
-        user: models.UD,
+        strategy: Strategy[models.UP, models.ID],
+        user: models.UP,
         token: str,
         response: Response,
     ) -> Any:

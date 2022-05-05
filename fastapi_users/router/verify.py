@@ -3,7 +3,7 @@ from typing import Type
 from fastapi import APIRouter, Body, Depends, HTTPException, Request, status
 from pydantic import EmailStr
 
-from fastapi_users import models
+from fastapi_users import models, schemas
 from fastapi_users.manager import (
     BaseUserManager,
     InvalidVerifyToken,
@@ -16,8 +16,8 @@ from fastapi_users.router.common import ErrorCode, ErrorModel
 
 
 def get_verify_router(
-    get_user_manager: UserManagerDependency[models.UC, models.UD],
-    user_model: Type[models.U],
+    get_user_manager: UserManagerDependency[models.UP, models.ID],
+    user_schema: Type[schemas.U],
 ):
     router = APIRouter()
 
@@ -29,7 +29,7 @@ def get_verify_router(
     async def request_verify_token(
         request: Request,
         email: EmailStr = Body(..., embed=True),
-        user_manager: BaseUserManager[models.UC, models.UD] = Depends(get_user_manager),
+        user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ):
         try:
             user = await user_manager.get_by_email(email)
@@ -41,7 +41,7 @@ def get_verify_router(
 
     @router.post(
         "/verify",
-        response_model=user_model,
+        response_model=user_schema,
         name="verify:verify",
         responses={
             status.HTTP_400_BAD_REQUEST: {
@@ -69,7 +69,7 @@ def get_verify_router(
     async def verify(
         request: Request,
         token: str = Body(..., embed=True),
-        user_manager: BaseUserManager[models.UC, models.UD] = Depends(get_user_manager),
+        user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ):
         try:
             return await user_manager.verify(token, request)

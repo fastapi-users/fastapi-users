@@ -6,7 +6,7 @@ from fastapi import FastAPI, status
 
 from fastapi_users.authentication import Authenticator
 from fastapi_users.router import ErrorCode, get_auth_router
-from tests.conftest import UserDB, get_mock_authentication
+from tests.conftest import UserModel, get_mock_authentication
 
 
 @pytest.fixture
@@ -118,7 +118,7 @@ class TestLogin:
         path,
         email,
         test_app_client: Tuple[httpx.AsyncClient, bool],
-        user: UserDB,
+        user: UserModel,
     ):
         client, requires_verification = test_app_client
         data = {"username": email, "password": "guinevere"}
@@ -140,7 +140,7 @@ class TestLogin:
         path,
         email,
         test_app_client: Tuple[httpx.AsyncClient, bool],
-        verified_user: UserDB,
+        verified_user: UserModel,
     ):
         client, _ = test_app_client
         data = {"username": email, "password": "excalibur"}
@@ -182,7 +182,7 @@ class TestLogout:
         mocker,
         path,
         test_app_client: Tuple[httpx.AsyncClient, bool],
-        user: UserDB,
+        user: UserModel,
     ):
         client, requires_verification = test_app_client
         response = await client.post(
@@ -198,7 +198,7 @@ class TestLogout:
         mocker,
         path,
         test_app_client: Tuple[httpx.AsyncClient, bool],
-        verified_user: UserDB,
+        verified_user: UserModel,
     ):
         client, _ = test_app_client
         response = await client.post(

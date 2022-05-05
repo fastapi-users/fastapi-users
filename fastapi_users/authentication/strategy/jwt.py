@@ -1,7 +1,6 @@
 from typing import Generic, List, Optional
 
 import jwt
-from pydantic import UUID4
 
 from fastapi_users import models
 from fastapi_users.authentication.strategy.base import (
@@ -9,10 +8,10 @@ from fastapi_users.authentication.strategy.base import (
     StrategyDestroyNotSupportedError,
 )
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
-from fastapi_users.manager import BaseUserManager, UserNotExists
+from fastapi_users.manager import BaseUserManager, InvalidID, UserNotExists
 
 
-class JWTStrategy(Strategy, Generic[models.UC, models.UD]):
+class JWTStrategy(Strategy[models.UP, models.ID], Generic[models.UP, models.ID]):
     def __init__(
         self,
         secret: SecretType,
@@ -36,8 +35,8 @@ class JWTStrategy(Strategy, Generic[models.UC, models.UD]):
         return self.public_key or self.secret
 
     async def read_token(
-        self, token: Optional[str], user_manager: BaseUserManager[models.UC, models.UD]
-    ) -> Optional[models.UD]:
+        self, token: Optional[str], user_manager: BaseUserManager[models.UP, models.ID]
+    ) -> Optional[models.UP]:
         if token is None:
             return None
 
@@ -52,20 +51,18 @@ class JWTStrategy(Strategy, Generic[models.UC, models.UD]):
             return None
 
         try:
-            user_uiid = UUID4(user_id)
-            return await user_manager.get(user_uiid)
-        except ValueError:
-            return None
-        except UserNotExists:
+            parsed_id = user_manager.parse_id(user_id)
+            return await user_manager.get(parsed_id)
+        except (UserNotExists, InvalidID):
             return None
 
-    async def write_token(self, user: models.UD) -> str:
+    async def write_token(self, user: models.UP) -> str:
         data = {"user_id": str(user.id), "aud": self.token_audience}
         return generate_jwt(
             data, self.encode_key, self.lifetime_seconds, algorithm=self.algorithm
         )
 
-    async def destroy_token(self, token: str, user: models.UD) -> None:
+    async def destroy_token(self, token: str, user: models.UP) -> None:
         raise StrategyDestroyNotSupportedError(
             "A JWT can't be invalidated: it's valid until it expires."
         )

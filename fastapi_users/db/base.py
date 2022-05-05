@@ -1,46 +1,50 @@
-from typing import Generic, Optional, Type
+from typing import Any, Dict, Generic, Optional
 
-from pydantic import UUID4
-
-from fastapi_users.models import UD
+from fastapi_users.models import ID, OAP, UOAP, UP
 from fastapi_users.types import DependencyCallable
 
 
-class BaseUserDatabase(Generic[UD]):
-    """
-    Base adapter for retrieving, creating and updating users from a database.
+class BaseUserDatabase(Generic[UP, ID]):
+    """Base adapter for retrieving, creating and updating users from a database."""
 
-    :param user_db_model: Pydantic model of a DB representation of a user.
-    """
-
-    user_db_model: Type[UD]
-
-    def __init__(self, user_db_model: Type[UD]):
-        self.user_db_model = user_db_model
-
-    async def get(self, id: UUID4) -> Optional[UD]:
+    async def get(self, id: ID) -> Optional[UP]:
         """Get a single user by id."""
         raise NotImplementedError()
 
-    async def get_by_email(self, email: str) -> Optional[UD]:
+    async def get_by_email(self, email: str) -> Optional[UP]:
         """Get a single user by email."""
         raise NotImplementedError()
 
-    async def get_by_oauth_account(self, oauth: str, account_id: str) -> Optional[UD]:
+    async def get_by_oauth_account(self, oauth: str, account_id: str) -> Optional[UP]:
         """Get a single user by OAuth account id."""
         raise NotImplementedError()
 
-    async def create(self, user: UD) -> UD:
+    async def create(self, create_dict: Dict[str, Any]) -> UP:
         """Create a user."""
         raise NotImplementedError()
 
-    async def update(self, user: UD) -> UD:
+    async def update(self, user: UP, update_dict: Dict[str, Any]) -> UP:
         """Update a user."""
         raise NotImplementedError()
 
-    async def delete(self, user: UD) -> None:
+    async def delete(self, user: UP) -> None:
         """Delete a user."""
         raise NotImplementedError()
 
+    async def add_oauth_account(
+        self: "BaseUserDatabase[UOAP, ID]", user: UOAP, create_dict: Dict[str, Any]
+    ) -> UOAP:
+        """Create an OAuth account and add it to the user."""
+        raise NotImplementedError()
 
-UserDatabaseDependency = DependencyCallable[BaseUserDatabase[UD]]
+    async def update_oauth_account(
+        self: "BaseUserDatabase[UOAP, ID]",
+        user: UOAP,
+        oauth_account: OAP,
+        update_dict: Dict[str, Any],
+    ) -> UOAP:
+        """Update an OAuth account on a user."""
+        raise NotImplementedError()
+
+
+UserDatabaseDependency = DependencyCallable[BaseUserDatabase[UP, ID]]

@@ -12,7 +12,7 @@ from fastapi_users.authentication.strategy import Strategy
 from fastapi_users.authentication.transport import Transport
 from fastapi_users.manager import BaseUserManager
 from fastapi_users.types import DependencyCallable
-from tests.conftest import UserDB
+from tests.conftest import User, UserModel
 
 
 class MockSecurityScheme(SecurityBase):
@@ -29,18 +29,18 @@ class MockTransport(Transport):
 
 class NoneStrategy(Strategy):
     async def read_token(
-        self, token: Optional[str], user_manager: BaseUserManager[models.UC, models.UD]
-    ) -> Optional[models.UD]:
+        self, token: Optional[str], user_manager: BaseUserManager[models.UP, models.ID]
+    ) -> Optional[models.UP]:
         return None
 
 
-class UserStrategy(Strategy, Generic[models.UC, models.UD]):
-    def __init__(self, user: models.UD):
+class UserStrategy(Strategy, Generic[models.UP]):
+    def __init__(self, user: models.UP):
         self.user = user
 
     async def read_token(
-        self, token: Optional[str], user_manager: BaseUserManager[models.UC, models.UD]
-    ) -> Optional[models.UD]:
+        self, token: Optional[str], user_manager: BaseUserManager[models.UP, models.ID]
+    ) -> Optional[models.UP]:
         return self.user
 
 
@@ -55,7 +55,7 @@ def get_backend_none():
 
 
 @pytest.fixture
-def get_backend_user(user: UserDB):
+def get_backend_user(user: UserModel):
     def _get_backend_user(name: str = "user"):
         return AuthenticationBackend(
             name=name,
@@ -78,17 +78,17 @@ def get_test_auth_client(get_user_manager, get_test_client):
         app = FastAPI()
         authenticator = Authenticator(backends, get_user_manager)
 
-        @app.get("/test-current-user")
+        @app.get("/test-current-user", response_model=User)
         def test_current_user(
-            user: UserDB = Depends(
+            user: UserModel = Depends(
                 authenticator.current_user(get_enabled_backends=get_enabled_backends)
             ),
         ):
             return user
 
-        @app.get("/test-current-active-user")
+        @app.get("/test-current-active-user", response_model=User)
         def test_current_active_user(
-            user: UserDB = Depends(
+            user: UserModel = Depends(
                 authenticator.current_user(
                     active=True, get_enabled_backends=get_enabled_backends
                 )
@@ -96,9 +96,9 @@ def get_test_auth_client(get_user_manager, get_test_client):
         ):
             return user
 
-        @app.get("/test-current-superuser")
+        @app.get("/test-current-superuser", response_model=User)
         def test_current_superuser(
-            user: UserDB = Depends(
+            user: UserModel = Depends(
                 authenticator.current_user(
                     active=True,
                     superuser=True,

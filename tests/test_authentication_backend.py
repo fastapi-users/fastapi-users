@@ -12,23 +12,23 @@ from fastapi_users.authentication import (
 from fastapi_users.authentication.strategy import StrategyDestroyNotSupportedError
 from fastapi_users.authentication.transport.base import Transport
 from fastapi_users.manager import BaseUserManager
-from tests.conftest import MockStrategy, MockTransport, UserDB
+from tests.conftest import MockStrategy, MockTransport, UserModel
 
 
 class MockTransportLogoutNotSupported(BearerTransport):
     pass
 
 
-class MockStrategyDestroyNotSupported(Strategy, Generic[models.UC, models.UD]):
+class MockStrategyDestroyNotSupported(Strategy, Generic[models.UP]):
     async def read_token(
-        self, token: Optional[str], user_manager: BaseUserManager[models.UC, models.UD]
-    ) -> Optional[models.UD]:
+        self, token: Optional[str], user_manager: BaseUserManager[models.UP, models.ID]
+    ) -> Optional[models.UP]:
         return None
 
-    async def write_token(self, user: models.UD) -> str:
+    async def write_token(self, user: models.UP) -> str:
         return "TOKEN"
 
-    async def destroy_token(self, token: str, user: models.UD) -> None:
+    async def destroy_token(self, token: str, user: models.UP) -> None:
         raise StrategyDestroyNotSupportedError
 
 
@@ -55,7 +55,7 @@ def backend(
 
 @pytest.mark.asyncio
 @pytest.mark.authentication
-async def test_logout(backend: AuthenticationBackend, user: UserDB):
+async def test_logout(backend: AuthenticationBackend, user: UserModel):
     strategy = cast(Strategy, backend.get_strategy())
     result = await backend.logout(strategy, user, "TOKEN", Response())
     assert result is None
