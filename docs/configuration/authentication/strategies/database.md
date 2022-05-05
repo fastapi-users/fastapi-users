@@ -21,7 +21,7 @@ We are providing a base model with those fields for each database we are support
 
 We'll expand from the basic SQLAlchemy configuration.
 
-```py hl_lines="5 19-20 41-42"
+```py hl_lines="5-8 21-22 43-46"
 --8<-- "docs/src/db_sqlalchemy_access_tokens.py"
 ```
 
@@ -47,7 +47,7 @@ We'll expand from the basic SQLAlchemy configuration.
 
 We'll expand from the basic Beanie configuration.
 
-```py hl_lines="4 17-18 25-26"
+```py hl_lines="4-7 20-21 28-29"
 --8<-- "docs/src/db_beanie_access_tokens.py"
 ```
 
