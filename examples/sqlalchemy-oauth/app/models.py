@@ -1,17 +1,17 @@
-from fastapi_users import models
+from fastapi_users import models, schemas
 
 
-class User(models.BaseUser, models.BaseOAuthAccountMixin):
+class User(schemas.BaseUser, schemas.BaseOAuthAccountMixin):
     pass
 
 
-class UserCreate(models.BaseUserCreate):
+class UserCreate(schemas.BaseUserCreate):
     pass
 
 
-class UserUpdate(models.BaseUserUpdate):
+class UserUpdate(schemas.BaseUserUpdate):
     pass
 
 
-class UserDB(User, models.BaseUserDB):
+class UserDB(User, schemas.BaseUserDB):
     pass

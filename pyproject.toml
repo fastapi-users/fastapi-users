@@ -106,19 +106,10 @@ dev = [
     "uvicorn",
 ]
 sqlalchemy = [
-    "fastapi-users-db-sqlalchemy >=1.1.0,<2.0.0",
+    "fastapi-users-db-sqlalchemy >=3.0.0",
 ]
-sqlalchemy2 = [
-    "fastapi-users-db-sqlalchemy >=2.0.0",
-]
-mongodb = [
-    "fastapi-users-db-mongodb >=1.1.0",
-]
-tortoise-orm = [
-    "fastapi-users-db-tortoise >=1.1.0",
-]
-ormar = [
-    "fastapi-users-db-ormar >=1.0.0",
+beanie = [
+    "fastapi-users-db-beanie >=1.0.0",
 ]
 oauth = [
     "httpx-oauth >=0.4,<0.7"

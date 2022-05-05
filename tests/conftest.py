@@ -75,7 +75,7 @@ class UserOAuthModel(UserModel):
     oauth_accounts: List[OAuthAccountModel] = dataclasses.field(default_factory=list)
 
 
-class User(schemas.BaseUser):
+class User(schemas.BaseUser[IDType]):
     first_name: Optional[str]
 
 

@@ -34,10 +34,10 @@ Here is a full working example with JWT authentication to help get you started.
     --8<-- "examples/sqlalchemy/app/db.py"
     ```
 
-=== "app/models.py"
+=== "app/schemas.py"
 
     ```py
-    --8<-- "examples/sqlalchemy/app/models.py"
+    --8<-- "examples/sqlalchemy/app/schemas.py"
     ```
 
 === "app/users.py"
@@ -46,84 +46,44 @@ Here is a full working example with JWT authentication to help get you started.
     --8<-- "examples/sqlalchemy/app/users.py"
     ```
 
-## MongoDB
+## Beanie
 
-[Open :material-open-in-new:](https://github.com/fastapi-users/fastapi-users/tree/master/examples/mongodb)
+[Open :material-open-in-new:](https://github.com/fastapi-users/fastapi-users/tree/master/examples/beanie)
 
 === "requirements.txt"
 
     ```
-    --8<-- "examples/mongodb/requirements.txt"
+    --8<-- "examples/beanie/requirements.txt"
     ```
 
 === "main.py"
 
     ```py
-    --8<-- "examples/mongodb/main.py"
+    --8<-- "examples/beanie/main.py"
     ```
 
 === "app/app.py"
 
     ```py
-    --8<-- "examples/mongodb/app/app.py"
+    --8<-- "examples/beanie/app/app.py"
     ```
 
 === "app/db.py"
 
     ```py
-    --8<-- "examples/mongodb/app/db.py"
+    --8<-- "examples/beanie/app/db.py"
     ```
 
-=== "app/models.py"
+=== "app/schemas.py"
 
     ```py
-    --8<-- "examples/mongodb/app/models.py"
+    --8<-- "examples/beanie/app/schemas.py"
     ```
 
 === "app/users.py"
 
     ```py
-    --8<-- "examples/mongodb/app/users.py"
-    ```
-
-## Tortoise ORM
-
-[Open :material-open-in-new:](https://github.com/fastapi-users/fastapi-users/tree/master/examples/tortoise)
-
-=== "requirements.txt"
-
-    ```
-    --8<-- "examples/tortoise/requirements.txt"
-    ```
-
-=== "main.py"
-
-    ```py
-    --8<-- "examples/tortoise/main.py"
-    ```
-
-=== "app/app.py"
-
-    ```py
-    --8<-- "examples/tortoise/app/app.py"
-    ```
-
-=== "app/db.py"
-
-    ```py
-    --8<-- "examples/tortoise/app/db.py"
-    ```
-
-=== "app/models.py"
-
-    ```py
-    --8<-- "examples/tortoise/app/models.py"
-    ```
-
-=== "app/users.py"
-
-    ```py
-    --8<-- "examples/tortoise/app/users.py"
+    --8<-- "examples/beanie/app/users.py"
     ```
 
 ## What now?
