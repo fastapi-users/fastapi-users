@@ -1,3 +1,0 @@
-fastapi
-fastapi-users[tortoise-orm,oauth]
-uvicorn[standard]

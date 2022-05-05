@@ -1,3 +1,0 @@
-fastapi
-fastapi-users[mongodb,oauth]
-uvicorn[standard]
