@@ -57,6 +57,8 @@ Notice that we pass a reference to the `User` model we defined above.
 When initializing your FastAPI app, it's important that you [**initialize Beanie**](https://roman-right.github.io/beanie/tutorial/initialization/) so it can discover your models. We can achieve this using a startup event handler on the FastAPI app:
 
 ```py
+from beanie import init_beanie
+
 
 @app.on_event("startup")
 async def on_startup():
