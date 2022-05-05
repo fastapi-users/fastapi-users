@@ -15,7 +15,7 @@
     
     
       
-        <title>MongoDB - FastAPI Users</title>
+        <title>Beanie - FastAPI Users</title>
       
     
     
@@ -65,7 +65,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#mongodb" class="md-skip">
+        <a href="#beanie" class="md-skip">
           Skip to content
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              MongoDB
+              Beanie
             
           </span>
         </div>
@@ -289,26 +289,6 @@
       
       
       
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      
       
         <label class="md-nav__link" for="__nav_3">
           Configuration
@@ -340,20 +320,6 @@
               
   
   
-  
-    <li class="md-nav__item">
-      <a href="../../models/" class="md-nav__link">
-        Models
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
     
   
   
@@ -361,30 +327,20 @@
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3" type="checkbox" id="__nav_3_3" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2" type="checkbox" id="__nav_3_2" checked>
       
       
       
-        
-          
-        
-          
-        
-          
-        
-          
-        
       
-      
-        <label class="md-nav__link" for="__nav_3_3">
-          Database adapters
+        <label class="md-nav__link" for="__nav_3_2">
+          User model and databases
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" aria-label="Database adapters" data-md-level="2">
-        <label class="md-nav__title" for="__nav_3_3">
+      <nav class="md-nav" aria-label="User model and databases" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_2">
           <span class="md-nav__icon md-icon"></span>
-          Database adapters
+          User model and databases
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -418,12 +374,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          MongoDB
+          Beanie
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        MongoDB
+        Beanie
       </a>
       
         
@@ -449,8 +405,22 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#create-the-user-model" class="md-nav__link">
+    Create the User model
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#create-the-database-adapter" class="md-nav__link">
     Create the database adapter
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#initialize-beanie" class="md-nav__link">
+    Initialize Beanie
   </a>
   
 </li>
@@ -459,34 +429,6 @@
   
 </nav>
       
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../tortoise/" class="md-nav__link">
-        Tortoise ORM
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../ormar/" class="md-nav__link">
-        Ormar
-      </a>
     </li>
   
 
@@ -508,41 +450,35 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4" type="checkbox" id="__nav_3_4" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3" type="checkbox" id="__nav_3_3" >
       
       
       
-        
-          
-            
-          
-        
-          
-        
-          
-        
-          
-        
       
-      
-        
-        
-        <div class="md-nav__link md-nav__link--index ">
-          <a href="../../authentication/">Authentication backends</a>
-          
-            <label for="__nav_3_4">
-              <span class="md-nav__icon md-icon"></span>
-            </label>
-          
-        </div>
+        <label class="md-nav__link" for="__nav_3_3">
+          Authentication backends
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <nav class="md-nav" aria-label="Authentication backends" data-md-level="2">
-        <label class="md-nav__title" for="__nav_3_4">
+        <label class="md-nav__title" for="__nav_3_3">
           <span class="md-nav__icon md-icon"></span>
           Authentication backends
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../authentication/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
             
           
             
@@ -554,24 +490,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4_2" type="checkbox" id="__nav_3_4_2" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3_2" type="checkbox" id="__nav_3_3_2" >
       
       
       
-        
-          
-        
-          
-        
       
-      
-        <label class="md-nav__link" for="__nav_3_4_2">
+        <label class="md-nav__link" for="__nav_3_3_2">
           Transports
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Transports" data-md-level="3">
-        <label class="md-nav__title" for="__nav_3_4_2">
+        <label class="md-nav__title" for="__nav_3_3_2">
           <span class="md-nav__icon md-icon"></span>
           Transports
         </label>
@@ -621,26 +551,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4_3" type="checkbox" id="__nav_3_4_3" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3_3" type="checkbox" id="__nav_3_3_3" >
       
       
       
-        
-          
-        
-          
-        
-          
-        
       
-      
-        <label class="md-nav__link" for="__nav_3_4_3">
+        <label class="md-nav__link" for="__nav_3_3_3">
           Strategies
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Strategies" data-md-level="3">
-        <label class="md-nav__title" for="__nav_3_4_3">
+        <label class="md-nav__title" for="__nav_3_3_3">
           <span class="md-nav__icon md-icon"></span>
           Strategies
         </label>
@@ -735,6 +657,20 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../schemas/" class="md-nav__link">
+        Schemas
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
     
     <li class="md-nav__item md-nav__item--nested">
       
@@ -743,33 +679,11 @@
       
       
       
-        
-          
-            
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
       
-      
-        
-        
-        <div class="md-nav__link md-nav__link--index ">
-          <a href="../../routers/">Routers</a>
-          
-            <label for="__nav_3_6">
-              <span class="md-nav__icon md-icon"></span>
-            </label>
-          
-        </div>
+        <label class="md-nav__link" for="__nav_3_6">
+          Routers
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <nav class="md-nav" aria-label="Routers" data-md-level="2">
         <label class="md-nav__title" for="__nav_3_6">
@@ -778,6 +692,18 @@
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../routers/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
             
           
             
@@ -922,14 +848,6 @@
       
       
       
-        
-          
-        
-          
-        
-          
-        
-      
       
         <label class="md-nav__link" for="__nav_4">
           Usage
@@ -1008,10 +926,6 @@
       
       
       
-        
-          
-        
-      
       
         <label class="md-nav__link" for="__nav_5">
           Cookbook
@@ -1061,24 +975,6 @@
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
       
       
-      
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
       
       
         <label class="md-nav__link" for="__nav_6">
@@ -1205,6 +1101,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../migration/9x_to_10x/" class="md-nav__link">
+        9.x.x ➡️ 10.x.x
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -1245,8 +1155,22 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#create-the-user-model" class="md-nav__link">
+    Create the User model
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#create-the-database-adapter" class="md-nav__link">
     Create the database adapter
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#initialize-beanie" class="md-nav__link">
+    Initialize Beanie
   </a>
   
 </li>
@@ -1265,58 +1189,111 @@
                 
 
 
-<h1 id="mongodb">MongoDB<a class="headerlink" href="#mongodb" title="Permanent link">&para;</a></h1>
-<p><strong>FastAPI Users</strong> provides the necessary tools to work with MongoDB databases thanks to <a href="https://github.com/mongodb/motor">mongodb/motor</a> package for full async support.</p>
+<h1 id="beanie">Beanie<a class="headerlink" href="#beanie" title="Permanent link">&para;</a></h1>
+<p><strong>FastAPI Users</strong> provides the necessary tools to work with MongoDB databases using the <a href="https://github.com/roman-right/beanie">Beanie ODM</a>.</p>
 <h2 id="setup-database-connection-and-collection">Setup database connection and collection<a class="headerlink" href="#setup-database-connection-and-collection" title="Permanent link">&para;</a></h2>
-<p>Let's create a MongoDB connection and instantiate a collection.</p>
+<p>The first thing to do is to create a MongoDB connection using <a href="https://github.com/mongodb/motor">mongodb/motor</a> (automatically installed with Beanie).</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span> <span class="nn">motor.motor_asyncio</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">MongoDBUserDatabase</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">UserDB</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="hll"><span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;mongodb://localhost:27017&quot;</span>
-</span><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="hll"><span class="n">client</span> <span class="o">=</span> <span class="n">motor</span><span class="o">.</span><span class="n">motor_asyncio</span><span class="o">.</span><span class="n">AsyncIOMotorClient</span><span class="p">(</span>
-</span><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="hll">    <span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">uuidRepresentation</span><span class="o">=</span><span class="s2">&quot;standard&quot;</span>
-</span><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="hll"><span class="p">)</span>
-</span><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="hll"><span class="n">db</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="s2">&quot;database_name&quot;</span><span class="p">]</span>
-</span><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="hll"><span class="n">collection</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="s2">&quot;users&quot;</span><span class="p">]</span>
-</span><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_db</span><span class="p">():</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    <span class="k">yield</span> <span class="n">MongoDBUserDatabase</span><span class="p">(</span><span class="n">UserDB</span><span class="p">,</span> <span class="n">collection</span><span class="p">)</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span> <span class="nn">beanie</span> <span class="kn">import</span> <span class="n">PydanticObjectId</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">BeanieBaseUser</span><span class="p">,</span> <span class="n">BeanieUserDatabase</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="hll"><span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;mongodb://localhost:27017&quot;</span>
+</span><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="hll"><span class="n">client</span> <span class="o">=</span> <span class="n">motor</span><span class="o">.</span><span class="n">motor_asyncio</span><span class="o">.</span><span class="n">AsyncIOMotorClient</span><span class="p">(</span>
+</span><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="hll">    <span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">uuidRepresentation</span><span class="o">=</span><span class="s2">&quot;standard&quot;</span>
+</span><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="hll"><span class="p">)</span>
+</span><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="hll"><span class="n">db</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="s2">&quot;database_name&quot;</span><span class="p">]</span>
+</span><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">BeanieBaseUser</span><span class="p">[</span><span class="n">PydanticObjectId</span><span class="p">]):</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    <span class="k">pass</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_db</span><span class="p">():</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    <span class="k">yield</span> <span class="n">BeanieUserDatabase</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
 </code></pre></div>
-<p>You can choose any name for the database and the collection.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>You may have noticed the <code>uuidRepresentation</code> parameter. It controls how the UUID values will be encoded in the database. By default, it's set to <code>pythonLegacy</code> but new applications should consider setting this to <code>standard</code> for cross language compatibility. <a href="https://pymongo.readthedocs.io/en/stable/api/pymongo/mongo_client.html#pymongo.mongo_client.MongoClient">Read more about this</a>.</p>
+<p>You can choose any name for the database.</p>
+<h2 id="create-the-user-model">Create the User model<a class="headerlink" href="#create-the-user-model" title="Permanent link">&para;</a></h2>
+<p>As for any Beanie ODM model, we'll create a <code>User</code> model.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span> <span class="nn">motor.motor_asyncio</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span> <span class="nn">beanie</span> <span class="kn">import</span> <span class="n">PydanticObjectId</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">BeanieBaseUser</span><span class="p">,</span> <span class="n">BeanieUserDatabase</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;mongodb://localhost:27017&quot;</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">client</span> <span class="o">=</span> <span class="n">motor</span><span class="o">.</span><span class="n">motor_asyncio</span><span class="o">.</span><span class="n">AsyncIOMotorClient</span><span class="p">(</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">uuidRepresentation</span><span class="o">=</span><span class="s2">&quot;standard&quot;</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="p">)</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="n">db</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="s2">&quot;database_name&quot;</span><span class="p">]</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="hll"><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">BeanieBaseUser</span><span class="p">[</span><span class="n">PydanticObjectId</span><span class="p">]):</span>
+</span><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="hll">    <span class="k">pass</span>
+</span><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_db</span><span class="p">():</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>    <span class="k">yield</span> <span class="n">BeanieUserDatabase</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
+</code></pre></div>
+<p>As you can see, <strong>FastAPI Users</strong> provides a base class that will include base fields for our <code>User</code> table. You can of course add you own fields there to fit to your needs!</p>
+<div class="admonition tip">
+<p class="admonition-title">Document ID is a MongoDB ObjectID</p>
+<p>Beanie <a href="https://roman-right.github.io/beanie/tutorial/defining-a-document/#id">automatically manages document ID</a> by encoding/decoding MongoDB ObjectID.</p>
+<p>If you want to use another type, like UUID, you can override the <code>id</code> field:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">import</span> <span class="nn">uuid</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">BeanieBaseUser</span><span class="p">[</span><span class="n">uuid</span><span class="o">.</span><span class="n">UUID</span><span class="p">]):</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    <span class="nb">id</span><span class="p">:</span> <span class="n">uuid</span><span class="o">.</span><span class="n">UUID</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">)</span>
+</code></pre></div>
+<p>Notice that <code>BeanieBaseUser</code> expects a generic type to define the actual type of ID you use.</p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>The base class is configured to automatically create a <a href="https://roman-right.github.io/beanie/tutorial/defining-a-document/#indexes">unique index</a> on <code>id</code> and <code>email</code>.</p>
 </div>
 <h2 id="create-the-database-adapter">Create the database adapter<a class="headerlink" href="#create-the-database-adapter" title="Permanent link">&para;</a></h2>
 <p>The database adapter of <strong>FastAPI Users</strong> makes the link between your database configuration and the users logic. It should be generated by a FastAPI dependency.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span> <span class="nn">motor.motor_asyncio</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">MongoDBUserDatabase</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">UserDB</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;mongodb://localhost:27017&quot;</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">client</span> <span class="o">=</span> <span class="n">motor</span><span class="o">.</span><span class="n">motor_asyncio</span><span class="o">.</span><span class="n">AsyncIOMotorClient</span><span class="p">(</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">uuidRepresentation</span><span class="o">=</span><span class="s2">&quot;standard&quot;</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="p">)</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="n">db</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="s2">&quot;database_name&quot;</span><span class="p">]</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="n">collection</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="s2">&quot;users&quot;</span><span class="p">]</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="hll"><span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_db</span><span class="p">():</span>
-</span><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="hll">    <span class="k">yield</span> <span class="n">MongoDBUserDatabase</span><span class="p">(</span><span class="n">UserDB</span><span class="p">,</span> <span class="n">collection</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">import</span> <span class="nn">motor.motor_asyncio</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span> <span class="nn">beanie</span> <span class="kn">import</span> <span class="n">PydanticObjectId</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">BeanieBaseUser</span><span class="p">,</span> <span class="n">BeanieUserDatabase</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;mongodb://localhost:27017&quot;</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">client</span> <span class="o">=</span> <span class="n">motor</span><span class="o">.</span><span class="n">motor_asyncio</span><span class="o">.</span><span class="n">AsyncIOMotorClient</span><span class="p">(</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    <span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">uuidRepresentation</span><span class="o">=</span><span class="s2">&quot;standard&quot;</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="p">)</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="n">db</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="s2">&quot;database_name&quot;</span><span class="p">]</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">BeanieBaseUser</span><span class="p">[</span><span class="n">PydanticObjectId</span><span class="p">]):</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    <span class="k">pass</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="hll"><span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_db</span><span class="p">():</span>
+</span><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="hll">    <span class="k">yield</span> <span class="n">BeanieUserDatabase</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
 </span></code></pre></div>
-<p>Notice that we pass a reference to your <a href="../../models/"><code>UserDB</code> model</a>.</p>
-<div class="admonition info">
-<p class="admonition-title">Info</p>
-<p>The database adapter will automatically create a <a href="https://docs.mongodb.com/manual/core/index-unique/">unique index</a> on <code>id</code> and <code>email</code>.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p><strong>FastAPI Users</strong> will use its defined <a href="../../models/"><code>id</code> UUID</a> as unique identifier for the user, rather than the builtin MongoDB <code>_id</code>.</p>
-</div>
+<p>Notice that we pass a reference to the <code>User</code> model we defined above.</p>
+<h2 id="initialize-beanie">Initialize Beanie<a class="headerlink" href="#initialize-beanie" title="Permanent link">&para;</a></h2>
+<p>When initializing your FastAPI app, it's important that you <a href="https://roman-right.github.io/beanie/tutorial/initialization/"><strong>initialize Beanie</strong></a> so it can discover your models. We can achieve this using a startup event handler on the FastAPI app:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span> <span class="nn">beanie</span> <span class="kn">import</span> <span class="n">init_beanie</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="nd">@app</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span><span class="s2">&quot;startup&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="k">async</span> <span class="k">def</span> <span class="nf">on_startup</span><span class="p">():</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    <span class="k">await</span> <span class="n">init_beanie</span><span class="p">(</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>        <span class="n">database</span><span class="o">=</span><span class="n">db</span><span class="p">,</span>  <span class="c1"># (1)!</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>        <span class="n">document_models</span><span class="o">=</span><span class="p">[</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>            <span class="n">User</span><span class="p">,</span>  <span class="c1"># (2)!</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>        <span class="p">],</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>    <span class="p">)</span>
+</code></pre></div>
+<ol>
+<li>
+<p>This is the <code>db</code> Motor database instance we defined above.</p>
+</li>
+<li>
+<p>This is the Beanie <code>User</code> model we defined above. Don't forget to also add your very own models!</p>
+</li>
+</ol>
 
               
             </article>
@@ -1351,13 +1328,13 @@
       
       
         
-        <a href="../tortoise/" class="md-footer__link md-footer__link--next" aria-label="Next: Tortoise ORM" rel="next">
+        <a href="../../authentication/" class="md-footer__link md-footer__link--next" aria-label="Next: Introduction" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Tortoise ORM
+              Introduction
             </div>
           </div>
           <div class="md-footer__button md-icon">
@@ -1387,7 +1364,7 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top", "navigation.sections", "navigation.indexes", "search.suggest", "search.highlight", "content.code.annotate"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.5e67fbfe.min.js", "version": {"provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.top", "navigation.sections", "search.suggest", "search.highlight", "content.code.annotate"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.5e67fbfe.min.js", "version": {"provider": "mike"}}</script>
     
     
       <script src="../../../assets/javascripts/bundle.e87a5f81.min.js"></script>

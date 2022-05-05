@@ -1,7 +1,7 @@
 import contextlib
 
 from app.db import get_async_session, get_user_db
-from app.models import UserCreate
+from app.schemas import UserCreate
 from app.users import get_user_manager
 from fastapi_users.manager import UserAlreadyExists
 
