@@ -31,6 +31,9 @@ class BaseUser(Generic[models.ID], CreateUpdateDictModel):
     is_superuser: bool = False
     is_verified: bool = False
 
+    class Config:
+        orm_mode = True
+
 
 class BaseUserCreate(CreateUpdateDictModel):
     email: EmailStr
