@@ -3,9 +3,9 @@ from typing import Generic, Optional
 
 import aioredis
 
-from fastapi_users import models
+from fastapi_users import exceptions, models
 from fastapi_users.authentication.strategy.base import Strategy
-from fastapi_users.manager import BaseUserManager, InvalidID, UserNotExists
+from fastapi_users.manager import BaseUserManager
 
 
 class RedisStrategy(Strategy[models.UP, models.ID], Generic[models.UP, models.ID]):
@@ -26,7 +26,7 @@ class RedisStrategy(Strategy[models.UP, models.ID], Generic[models.UP, models.ID
         try:
             parsed_id = user_manager.parse_id(user_id)
             return await user_manager.get(parsed_id)
-        except (UserNotExists, InvalidID):
+        except (exceptions.UserNotExists, exceptions.InvalidID):
             return None
 
     async def write_token(self, user: models.UP) -> str:

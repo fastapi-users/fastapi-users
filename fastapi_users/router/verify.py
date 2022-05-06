@@ -3,15 +3,8 @@ from typing import Type
 from fastapi import APIRouter, Body, Depends, HTTPException, Request, status
 from pydantic import EmailStr
 
-from fastapi_users import models, schemas
-from fastapi_users.manager import (
-    BaseUserManager,
-    InvalidVerifyToken,
-    UserAlreadyVerified,
-    UserInactive,
-    UserManagerDependency,
-    UserNotExists,
-)
+from fastapi_users import exceptions, models, schemas
+from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from fastapi_users.router.common import ErrorCode, ErrorModel
 
 
@@ -34,7 +27,11 @@ def get_verify_router(
         try:
             user = await user_manager.get_by_email(email)
             await user_manager.request_verify(user, request)
-        except (UserNotExists, UserInactive, UserAlreadyVerified):
+        except (
+            exceptions.UserNotExists,
+            exceptions.UserInactive,
+            exceptions.UserAlreadyVerified,
+        ):
             pass
 
         return None
@@ -73,12 +70,12 @@ def get_verify_router(
     ):
         try:
             return await user_manager.verify(token, request)
-        except (InvalidVerifyToken, UserNotExists):
+        except (exceptions.InvalidVerifyToken, exceptions.UserNotExists):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=ErrorCode.VERIFY_USER_BAD_TOKEN,
             )
-        except UserAlreadyVerified:
+        except exceptions.UserAlreadyVerified:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=ErrorCode.VERIFY_USER_ALREADY_VERIFIED,

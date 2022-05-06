@@ -2,13 +2,8 @@ from typing import Type
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 
-from fastapi_users import models, schemas
-from fastapi_users.manager import (
-    BaseUserManager,
-    InvalidPasswordException,
-    UserAlreadyExists,
-    UserManagerDependency,
-)
+from fastapi_users import exceptions, models, schemas
+from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from fastapi_users.router.common import ErrorCode, ErrorModel
 
 
@@ -62,12 +57,12 @@ def get_register_router(
             created_user = await user_manager.create(
                 user_create, safe=True, request=request
             )
-        except UserAlreadyExists:
+        except exceptions.UserAlreadyExists:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=ErrorCode.REGISTER_USER_ALREADY_EXISTS,
             )
-        except InvalidPasswordException as e:
+        except exceptions.InvalidPasswordException as e:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail={

@@ -22,18 +22,12 @@ from httpx_oauth.oauth2 import OAuth2
 from pydantic import UUID4, SecretStr
 from pytest_mock import MockerFixture
 
-from fastapi_users import models, schemas
+from fastapi_users import exceptions, models, schemas
 from fastapi_users.authentication import AuthenticationBackend, BearerTransport
 from fastapi_users.authentication.strategy import Strategy
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.jwt import SecretType
-from fastapi_users.manager import (
-    BaseUserManager,
-    InvalidID,
-    InvalidPasswordException,
-    UserNotExists,
-    UUIDIDMixin,
-)
+from fastapi_users.manager import BaseUserManager, UUIDIDMixin
 from fastapi_users.openapi import OpenAPIResponseType
 from fastapi_users.password import PasswordHelper
 
@@ -101,7 +95,7 @@ class BaseTestUserManager(
         self, password: str, user: Union[schemas.UC, models.UP]
     ) -> None:
         if len(password) < 3:
-            raise InvalidPasswordException(
+            raise exceptions.InvalidPasswordException(
                 reason="Password should be at least 3 characters"
             )
 
@@ -533,7 +527,7 @@ class MockStrategy(Strategy[UserModel, IDType]):
             try:
                 parsed_id = user_manager.parse_id(token)
                 return await user_manager.get(parsed_id)
-            except (InvalidID, UserNotExists):
+            except (exceptions.InvalidID, exceptions.UserNotExists):
                 return None
         return None
 

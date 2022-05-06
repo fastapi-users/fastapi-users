@@ -5,7 +5,7 @@ import jwt
 from fastapi import Request
 from fastapi.security import OAuth2PasswordRequestForm
 
-from fastapi_users import models, schemas
+from fastapi_users import exceptions, models, schemas
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.password import PasswordHelper, PasswordHelperProtocol
@@ -13,43 +13,6 @@ from fastapi_users.types import DependencyCallable
 
 RESET_PASSWORD_TOKEN_AUDIENCE = "fastapi-users:reset"
 VERIFY_USER_TOKEN_AUDIENCE = "fastapi-users:verify"
-
-
-class FastAPIUsersException(Exception):
-    pass
-
-
-class InvalidID(FastAPIUsersException):
-    pass
-
-
-class UserAlreadyExists(FastAPIUsersException):
-    pass
-
-
-class UserNotExists(FastAPIUsersException):
-    pass
-
-
-class UserInactive(FastAPIUsersException):
-    pass
-
-
-class UserAlreadyVerified(FastAPIUsersException):
-    pass
-
-
-class InvalidVerifyToken(FastAPIUsersException):
-    pass
-
-
-class InvalidResetPasswordToken(FastAPIUsersException):
-    pass
-
-
-class InvalidPasswordException(FastAPIUsersException):
-    def __init__(self, reason: Any) -> None:
-        self.reason = reason
 
 
 class BaseUserManager(Generic[models.UP, models.ID]):
@@ -109,7 +72,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         user = await self.user_db.get(id)
 
         if user is None:
-            raise UserNotExists()
+            raise exceptions.UserNotExists()
 
         return user
 
@@ -124,7 +87,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         user = await self.user_db.get_by_email(user_email)
 
         if user is None:
-            raise UserNotExists()
+            raise exceptions.UserNotExists()
 
         return user
 
@@ -140,7 +103,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         user = await self.user_db.get_by_oauth_account(oauth, account_id)
 
         if user is None:
-            raise UserNotExists()
+            raise exceptions.UserNotExists()
 
         return user
 
@@ -167,7 +130,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
 
         existing_user = await self.user_db.get_by_email(user_create.email)
         if existing_user is not None:
-            raise UserAlreadyExists()
+            raise exceptions.UserAlreadyExists()
 
         user_dict = (
             user_create.create_update_dict()
@@ -226,12 +189,12 @@ class BaseUserManager(Generic[models.UP, models.ID]):
 
         try:
             user = await self.get_by_oauth_account(oauth_name, account_id)
-        except UserNotExists:
+        except exceptions.UserNotExists:
             try:
                 # Link account
                 user = await self.get_by_email(account_email)
                 user = await self.user_db.add_oauth_account(user, oauth_account_dict)
-            except UserNotExists:
+            except exceptions.UserNotExists:
                 # Create account
                 password = self.password_helper.generate()
                 user_dict = {
@@ -269,9 +232,9 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         :raises UserAlreadyVerified: The user is already verified.
         """
         if not user.is_active:
-            raise UserInactive()
+            raise exceptions.UserInactive()
         if user.is_verified:
-            raise UserAlreadyVerified()
+            raise exceptions.UserAlreadyVerified()
 
         token_data = {
             "user_id": str(user.id),
@@ -307,29 +270,29 @@ class BaseUserManager(Generic[models.UP, models.ID]):
                 [self.verification_token_audience],
             )
         except jwt.PyJWTError:
-            raise InvalidVerifyToken()
+            raise exceptions.InvalidVerifyToken()
 
         try:
             user_id = data["user_id"]
             email = data["email"]
         except KeyError:
-            raise InvalidVerifyToken()
+            raise exceptions.InvalidVerifyToken()
 
         try:
             user = await self.get_by_email(email)
-        except UserNotExists:
-            raise InvalidVerifyToken()
+        except exceptions.UserNotExists:
+            raise exceptions.InvalidVerifyToken()
 
         try:
             parsed_id = self.parse_id(user_id)
-        except InvalidID:
-            raise InvalidVerifyToken()
+        except exceptions.InvalidID:
+            raise exceptions.InvalidVerifyToken()
 
         if parsed_id != user.id:
-            raise InvalidVerifyToken()
+            raise exceptions.InvalidVerifyToken()
 
         if user.is_verified:
-            raise UserAlreadyVerified()
+            raise exceptions.UserAlreadyVerified()
 
         verified_user = await self._update(user, {"is_verified": True})
 
@@ -351,7 +314,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         :raises UserInactive: The user is inactive.
         """
         if not user.is_active:
-            raise UserInactive()
+            raise exceptions.UserInactive()
 
         token_data = {
             "user_id": str(user.id),
@@ -388,22 +351,22 @@ class BaseUserManager(Generic[models.UP, models.ID]):
                 [self.reset_password_token_audience],
             )
         except jwt.PyJWTError:
-            raise InvalidResetPasswordToken()
+            raise exceptions.InvalidResetPasswordToken()
 
         try:
             user_id = data["user_id"]
         except KeyError:
-            raise InvalidResetPasswordToken()
+            raise exceptions.InvalidResetPasswordToken()
 
         try:
             parsed_id = self.parse_id(user_id)
-        except InvalidID:
-            raise InvalidResetPasswordToken()
+        except exceptions.InvalidID:
+            raise exceptions.InvalidResetPasswordToken()
 
         user = await self.get(parsed_id)
 
         if not user.is_active:
-            raise UserInactive()
+            raise exceptions.UserInactive()
 
         updated_user = await self._update(user, {"password": password})
 
@@ -565,7 +528,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         """
         try:
             user = await self.get_by_email(credentials.username)
-        except UserNotExists:
+        except exceptions.UserNotExists:
             # Run the hasher to mitigate timing attack
             # Inspired from Django: https://code.djangoproject.com/ticket/20760
             self.password_helper.hash(credentials.password)
@@ -588,8 +551,8 @@ class BaseUserManager(Generic[models.UP, models.ID]):
             if field == "email" and value != user.email:
                 try:
                     await self.get_by_email(value)
-                    raise UserAlreadyExists()
-                except UserNotExists:
+                    raise exceptions.UserAlreadyExists()
+                except exceptions.UserNotExists:
                     validated_update_dict["email"] = value
                     validated_update_dict["is_verified"] = False
             elif field == "password":
@@ -609,17 +572,17 @@ class UUIDIDMixin:
         try:
             return uuid.UUID(value)
         except ValueError as e:
-            raise InvalidID() from e
+            raise exceptions.InvalidID() from e
 
 
 class IntegerIDMixin:
     def parse_id(self, value: Any) -> int:
         if isinstance(value, float):
-            raise InvalidID()
+            raise exceptions.InvalidID()
         try:
             return int(value)
         except ValueError as e:
-            raise InvalidID() from e
+            raise exceptions.InvalidID() from e
 
 
 UserManagerDependency = DependencyCallable[BaseUserManager[models.UP, models.ID]]

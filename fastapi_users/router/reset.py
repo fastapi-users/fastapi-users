@@ -1,15 +1,8 @@
 from fastapi import APIRouter, Body, Depends, HTTPException, Request, status
 from pydantic import EmailStr
 
-from fastapi_users import models
-from fastapi_users.manager import (
-    BaseUserManager,
-    InvalidPasswordException,
-    InvalidResetPasswordToken,
-    UserInactive,
-    UserManagerDependency,
-    UserNotExists,
-)
+from fastapi_users import exceptions, models
+from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from fastapi_users.openapi import OpenAPIResponseType
 from fastapi_users.router.common import ErrorCode, ErrorModel
 
@@ -57,12 +50,12 @@ def get_reset_password_router(
     ):
         try:
             user = await user_manager.get_by_email(email)
-        except UserNotExists:
+        except exceptions.UserNotExists:
             return None
 
         try:
             await user_manager.forgot_password(user, request)
-        except UserInactive:
+        except exceptions.UserInactive:
             pass
 
         return None
@@ -80,12 +73,16 @@ def get_reset_password_router(
     ):
         try:
             await user_manager.reset_password(token, password, request)
-        except (InvalidResetPasswordToken, UserNotExists, UserInactive):
+        except (
+            exceptions.InvalidResetPasswordToken,
+            exceptions.UserNotExists,
+            exceptions.UserInactive,
+        ):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=ErrorCode.RESET_PASSWORD_BAD_TOKEN,
             )
-        except InvalidPasswordException as e:
+        except exceptions.InvalidPasswordException as e:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail={

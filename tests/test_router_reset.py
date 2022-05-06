@@ -4,7 +4,7 @@ import httpx
 import pytest
 from fastapi import FastAPI, status
 
-from fastapi_users.manager import (
+from fastapi_users.exceptions import (
     InvalidPasswordException,
     InvalidResetPasswordToken,
     UserInactive,

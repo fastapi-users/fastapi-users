@@ -2,16 +2,9 @@ from typing import Any, Type
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 
-from fastapi_users import models, schemas
+from fastapi_users import exceptions, models, schemas
 from fastapi_users.authentication import Authenticator
-from fastapi_users.manager import (
-    BaseUserManager,
-    InvalidID,
-    InvalidPasswordException,
-    UserAlreadyExists,
-    UserManagerDependency,
-    UserNotExists,
-)
+from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from fastapi_users.router.common import ErrorCode, ErrorModel
 
 
@@ -39,7 +32,7 @@ def get_users_router(
         try:
             parsed_id = user_manager.parse_id(id)
             return await user_manager.get(parsed_id)
-        except (UserNotExists, InvalidID) as e:
+        except (exceptions.UserNotExists, exceptions.InvalidID) as e:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND) from e
 
     @router.get(
@@ -103,7 +96,7 @@ def get_users_router(
             return await user_manager.update(
                 user_update, user, safe=True, request=request
             )
-        except InvalidPasswordException as e:
+        except exceptions.InvalidPasswordException as e:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail={
@@ -111,7 +104,7 @@ def get_users_router(
                     "reason": e.reason,
                 },
             )
-        except UserAlreadyExists:
+        except exceptions.UserAlreadyExists:
             raise HTTPException(
                 status.HTTP_400_BAD_REQUEST,
                 detail=ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS,
@@ -189,7 +182,7 @@ def get_users_router(
             return await user_manager.update(
                 user_update, user, safe=False, request=request
             )
-        except InvalidPasswordException as e:
+        except exceptions.InvalidPasswordException as e:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail={
@@ -197,7 +190,7 @@ def get_users_router(
                     "reason": e.reason,
                 },
             )
-        except UserAlreadyExists:
+        except exceptions.UserAlreadyExists:
             raise HTTPException(
                 status.HTTP_400_BAD_REQUEST,
                 detail=ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS,
