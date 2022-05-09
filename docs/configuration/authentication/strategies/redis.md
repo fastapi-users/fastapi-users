@@ -2,6 +2,14 @@
 
 [Redis](https://redis.io/) is an ultra-fast key-store database. As such, it's a good candidate for token management. In this strategy, a token is generated and associated with the user id. in the database. On each request, we try to retrieve this token from Redis to get the corresponding user id.
 
+## Installation
+
+You should install the library with the optional dependencies for Redis:
+
+```sh
+pip install 'fastapi-users[redis]'
+```
+
 ## Configuration
 
 ```py
