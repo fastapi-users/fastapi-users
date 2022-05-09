@@ -525,6 +525,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "killswitch-GUI",
+      "name": "⭕Alexander Rymdeko-Harvey",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8761706?v=4",
+      "profile": "https://blog.obscuritylabs.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
