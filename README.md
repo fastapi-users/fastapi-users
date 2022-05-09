@@ -13,7 +13,7 @@
 [![PyPI version](https://badge.fury.io/py/fastapi-users.svg)](https://badge.fury.io/py/fastapi-users)
 [![Downloads](https://pepy.tech/badge/fastapi-users)](https://pepy.tech/project/fastapi-users)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-55-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-56-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <p align="center">
 <a href="https://www.buymeacoffee.com/frankie567"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=frankie567&button_colour=FF5F5F&font_colour=ffffff&font_family=Arial&outline_colour=000000&coffee_colour=FFDD00"></a>
@@ -143,6 +143,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/jtv8"><img src="https://avatars.githubusercontent.com/u/29302451?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Joe Taylor</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=jtv8" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/ricfri"><img src="https://avatars.githubusercontent.com/u/21967765?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Richard Friberg</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/issues?q=author%3Aricfri" title="Bug reports">🐛</a></td>
     <td align="center"><a href="http://www.kentonparton.com"><img src="https://avatars.githubusercontent.com/u/20202312?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Kenton Parton</b></sub></a><br /><a href="#financial-KentonParton" title="Financial">💵</a></td>
+    <td align="center"><a href="https://github.com/Qwizi"><img src="https://avatars.githubusercontent.com/u/23024321?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Adrian Ciołek</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/issues?q=author%3AQwizi" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 
