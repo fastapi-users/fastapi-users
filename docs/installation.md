@@ -8,11 +8,21 @@ You can add **FastAPI Users** to your FastAPI project in a few easy steps. First
 pip install 'fastapi-users[sqlalchemy]'
 ```
 
+
 ## With Beanie support
 
 ```sh
-pip install 'fastapi-users[mongodb]'
+pip install 'fastapi-users[beanie]'
 ```
+
+## With Redis authentication backend support
+
+Information on installing with proper database support can be found in the [Redis](configuration/authentication/strategies/redis.md) section.
+
+## With OAuth2 support
+
+Information on installing with proper database support can be found in the [OAuth2](configuration/oauth.md) section.
+
 
 ---
 
