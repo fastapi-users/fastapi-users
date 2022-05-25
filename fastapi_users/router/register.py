@@ -71,6 +71,6 @@ def get_register_router(
                 },
             )
 
-        return created_user
+        return user_schema.from_orm(created_user)
 
     return router
