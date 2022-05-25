@@ -534,6 +534,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "schwannden",
+      "name": "schwannden",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5753086?v=4",
+      "profile": "http://schwannden.com",
+      "contributions": [
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 7,
