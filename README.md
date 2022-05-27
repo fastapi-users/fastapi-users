@@ -13,7 +13,7 @@
 [![PyPI version](https://badge.fury.io/py/fastapi-users.svg)](https://badge.fury.io/py/fastapi-users)
 [![Downloads](https://pepy.tech/badge/fastapi-users)](https://pepy.tech/project/fastapi-users)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-58-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-59-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <p align="center">
 <a href="https://www.buymeacoffee.com/frankie567"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=frankie567&button_colour=FF5F5F&font_colour=ffffff&font_family=Arial&outline_colour=000000&coffee_colour=FFDD00"></a>
@@ -148,6 +148,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://blog.obscuritylabs.com"><img src="https://avatars.githubusercontent.com/u/8761706?v=4?s=100" width="100px;" alt=""/><br /><sub><b>⭕Alexander Rymdeko-Harvey</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=killswitch-GUI" title="Documentation">📖</a></td>
     <td align="center"><a href="http://schwannden.com"><img src="https://avatars.githubusercontent.com/u/5753086?v=4?s=100" width="100px;" alt=""/><br /><sub><b>schwannden</b></sub></a><br /><a href="#maintenance-schwannden" title="Maintenance">🚧</a></td>
+    <td align="center"><a href="https://jimscope.is-a.dev"><img src="https://avatars.githubusercontent.com/u/27647007?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jimmy Angel Pérez Díaz</b></sub></a><br /><a href="#security-JimScope" title="Security">🛡️</a></td>
   </tr>
 </table>
 
