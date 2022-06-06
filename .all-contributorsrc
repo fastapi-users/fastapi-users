@@ -552,6 +552,15 @@
       "contributions": [
         "security"
       ]
+    },
+    {
+      "login": "austinorr",
+      "name": "Austin Orr",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8422403?v=4",
+      "profile": "http://austinmartinorr.com",
+      "contributions": [
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 7,
