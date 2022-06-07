@@ -13,10 +13,10 @@ pip install 'fastapi-users[redis]'
 ## Configuration
 
 ```py
-import aioredis
+import redis.asyncio
 from fastapi_users.authentication import RedisStrategy
 
-redis = aioredis.from_url("redis://localhost:6379", decode_responses=True)
+redis = redis.asyncio.from_url("redis://localhost:6379", decode_responses=True)
 
 def get_redis_strategy() -> RedisStrategy:
     return RedisStrategy(redis, lifetime_seconds=3600)
@@ -24,7 +24,7 @@ def get_redis_strategy() -> RedisStrategy:
 
 As you can see, instantiation is quite simple. It accepts the following arguments:
 
-* `redis` (`aioredis.Redis`): An instance of `aioredis.Redis`. Note that the `decode_responses` flag set to `True` is necessary.
+* `redis` (`redis.asyncio.Redis`): An instance of `redis.asyncio.Redis`. Note that the `decode_responses` flag set to `True` is necessary.
 * `lifetime_seconds` (`Optional[int]`): The lifetime of the token in seconds. Defaults to `None`, which means the token doesn't expire.
 
 !!! tip "Why it's inside a function?"
