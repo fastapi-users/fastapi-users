@@ -263,3 +263,50 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
     async def on_after_reset_password(self, user: User, request: Optional[Request] = None):
         print(f"User {user.id} has reset their password.")
 ```
+
+#### `on_before_delete`
+
+Perform logic before user delete.
+
+For example, you may want to **valide user resource integrity** to see if any related user resource need to be marked inactive, or delete
+them recursively.
+
+**Arguments**
+
+* `user` (`User`): the user to be deleted.
+* `request` (`Optional[Request]`): optional FastAPI request object that triggered the operation. Defaults to None.
+
+**Example**
+
+```py
+from fastapi_users import BaseUserManager, UUIDIDMixin
+
+
+class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
+    # ...
+    async def on_before_delete(self, user: User, request: Optional[Request] = None):
+        print(f"User {user.id} is going to be deleted")
+```
+
+#### `on_after_delete`
+
+Perform logic after user delete.
+
+For example, you may want to **send an email** to the administrator about the event.
+
+**Arguments**
+
+* `user` (`User`): the user to be deleted.
+* `request` (`Optional[Request]`): optional FastAPI request object that triggered the operation. Defaults to None.
+
+**Example**
+
+```py
+from fastapi_users import BaseUserManager, UUIDIDMixin
+
+
+class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
+    # ...
+    async def on_after_delete(self, user: User, request: Optional[Request] = None):
+        print(f"User {user.id} is successfully deleted")
+```
