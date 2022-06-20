@@ -120,6 +120,8 @@ class UserManagerMock(BaseTestUserManager[models.UP]):
     on_after_forgot_password: MagicMock
     on_after_reset_password: MagicMock
     on_after_update: MagicMock
+    on_before_delete: MagicMock
+    on_after_delete: MagicMock
     _update: MagicMock
 
 
@@ -475,6 +477,8 @@ def make_user_manager(mocker: MockerFixture):
         mocker.spy(user_manager, "on_after_forgot_password")
         mocker.spy(user_manager, "on_after_reset_password")
         mocker.spy(user_manager, "on_after_update")
+        mocker.spy(user_manager, "on_before_delete")
+        mocker.spy(user_manager, "on_after_delete")
         mocker.spy(user_manager, "_update")
         return user_manager
 

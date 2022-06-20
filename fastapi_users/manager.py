@@ -403,13 +403,19 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         await self.on_after_update(updated_user, updated_user_data, request)
         return updated_user
 
-    async def delete(self, user: models.UP) -> None:
+    async def delete(
+        self,
+        user: models.UP,
+        request: Optional[Request] = None,
+    ) -> None:
         """
         Delete a user.
 
         :param user: The user to delete.
         """
+        await self.on_before_delete(user, request)
         await self.user_db.delete(user)
+        await self.on_after_delete(user, request)
 
     async def validate_password(
         self, password: str, user: Union[schemas.UC, models.UP]
@@ -511,6 +517,34 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         *You should overload this method to add your own logic.*
 
         :param user: The user that reset its password.
+        :param request: Optional FastAPI request that
+        triggered the operation, defaults to None.
+        """
+        return  # pragma: no cover
+
+    async def on_before_delete(
+        self, user: models.UP, request: Optional[Request] = None
+    ) -> None:
+        """
+        Perform logic before user delete.
+
+        *You should overload this method to add your own logic.*
+
+        :param user: The user to be deleted
+        :param request: Optional FastAPI request that
+        triggered the operation, defaults to None.
+        """
+        return  # pragma: no cover
+
+    async def on_after_delete(
+        self, user: models.UP, request: Optional[Request] = None
+    ) -> None:
+        """
+        Perform logic before user delete.
+
+        *You should overload this method to add your own logic.*
+
+        :param user: The user to be deleted
         :param request: Optional FastAPI request that
         triggered the operation, defaults to None.
         """

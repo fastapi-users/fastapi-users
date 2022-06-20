@@ -532,6 +532,10 @@ class TestDelete:
     ):
         await user_manager.delete(user)
 
+        assert user_manager.on_before_delete.called is True
+
+        assert user_manager.on_after_delete.called is True
+
 
 @pytest.mark.asyncio
 @pytest.mark.manager
