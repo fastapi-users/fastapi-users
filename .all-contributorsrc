@@ -561,6 +561,15 @@
       "contributions": [
         "maintenance"
       ]
+    },
+    {
+      "login": "carloe",
+      "name": "Carlo Eugster",
+      "avatar_url": "https://avatars.githubusercontent.com/u/299107?v=4",
+      "profile": "http://carlo.io",
+      "contributions": [
+        "security"
+      ]
     }
   ],
   "contributorsPerLine": 7,
