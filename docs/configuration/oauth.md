@@ -65,7 +65,7 @@ The advantage of MongoDB is that you can easily embed sub-objects in a single do
 
 It's worth to note that `OAuthAccount` is **not a Beanie document** but a Pydantic model that we'll embed inside the `User` document, through the `oauth_accounts` array.
 
-### Generate a router
+### Generate routers
 
 Once you have a `FastAPIUsers` instance, you can make it generate a single OAuth router for a given client **and** authentication backend.
 
@@ -76,6 +76,50 @@ app.include_router(
     tags=["auth"],
 )
 ```
+
+!!! tip
+    If you have several OAuth clients and/or several authentication backends, you'll need to create a router for each pair you want to support.
+
+#### Existing account association
+
+If a user with the same e-mail address already exists, an HTTP 400 error will be raised by default.
+
+You can however choose to automatically link this OAuth account to the existing user account by setting the `associate_by_email` flag:
+
+```py
+app.include_router(
+    fastapi_users.get_oauth_router(
+        google_oauth_client,
+        auth_backend,
+        "SECRET",
+        associate_by_email=True,
+    ),
+    prefix="/auth/google",
+    tags=["auth"],
+)
+```
+
+Bear in mind though that it can lead to security breaches if the OAuth provider does not validate e-mail addresses. How?
+
+* Let's say your app support an OAuth provider, *Merlinbook*, which does not validate e-mail addresses.
+* Imagine a user registers to your app with the e-mail address `lancelot@camelot.bt`.
+* Now, a malicious user creates an account on *Merlinbook* with the same e-mail address. Without e-mail validation, the malicious user can use this account without limitation.
+* The malicious user authenticates using *Merlinbook* OAuth on your app, which automatically associates to the existing `lancelot@camelot.bt`.
+* Now, the malicious user has full access to the user account on your app 😞
+
+#### Association router for authenticated users
+
+We also provide a router to associate an already authenticated user with an OAuth account. After this association, the user will be able to authenticate with this OAuth provider.
+
+```py
+app.include_router(
+    fastapi_users.get_oauth_associate_router(google_oauth_client, UserRead, "SECRET"),
+    prefix="/auth/associate/google",
+    tags=["auth"],
+)
+```
+
+Notice that, just like for the [Users router](./routers/users.md), you have to pass the `UserRead` Pydantic schema.
 
 ### Full example
 

@@ -23,6 +23,7 @@ flowchart TB
     subgraph ROUTERS[Routers]
         AUTH[[get_auth_router]]
         OAUTH[[get_oauth_router]]
+        OAUTH_ASSOCIATE[[get_oauth_associate_router]]
         REGISTER[[get_register_router]]
         VERIFY[[get_verify_router]]
         RESET[[get_reset_password_router]]

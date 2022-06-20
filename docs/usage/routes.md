@@ -214,9 +214,6 @@ Return the authorization URL for the OAuth service where you should redirect you
     }
     ```
 
-!!! fail "`422 Validation Error`"
-    Invalid parameters - e.g. unknown authentication backend.
-
 ### `GET /callback`
 
 Handle the OAuth callback.
@@ -232,14 +229,23 @@ Depending on the situation, several things can happen:
     * OAuth account is updated in database with fresh access token.
     * The user is authenticated following the chosen [authentication method](../configuration/authentication/index.md).
 * The OAuth account doesn't exist in database but a user with the same email address exists:
-    * OAuth account is linked to the user.
-    * The user is authenticated following the chosen [authentication method](../configuration/authentication/index.md).
+    * By default, an HTTP 400 error is raised.
+    * If [the `associate_by_email` flag is set to `True`](../configuration/oauth.md#existing-account-association) on the router declaration, OAuth account is linked to the user. The user is authenticated following the chosen [authentication method](../configuration/authentication/index.md).
 * The OAuth account doesn't exist in database and no user with the email address exists:
     * A new user is created and linked to the OAuth account.
     * The user is authenticated following the chosen [authentication method](../configuration/authentication/index.md).
 
 !!! fail "`400 Bad Request`"
     Invalid token.
+
+!!! fail "`400 Bad Request`"
+    Another user with the same e-mail address already exists.
+
+    ```json
+    {
+        "detail": "OAUTH_USER_ALREADY_EXISTS"
+    }
+    ```
 
 !!! fail "`400 Bad Request`"
     User is inactive.
@@ -249,6 +255,63 @@ Depending on the situation, several things can happen:
         "detail": "LOGIN_BAD_CREDENTIALS"
     }
     ```
+
+## OAuth association router
+
+Each OAuth association router you define will expose the two following routes.
+
+### `GET /authorize`
+
+Return the authorization URL for the OAuth service where you should redirect your user.
+
+!!! abstract "Query parameters"
+    * `scopes`: Optional list of scopes to ask for. Expected format: `scopes=a&scopes=b`.
+
+!!! fail "`401 Unauthorized`"
+    Missing token or inactive user.
+
+!!! success "`200 OK`"
+    ```json
+    {
+        "authorization_url": "https://www.tintagel.bt/oauth/authorize?client_id=CLIENT_ID&scopes=a+b&redirect_uri=https://www.camelot.bt/oauth/callback"
+    }
+    ```
+
+### `GET /callback`
+
+Handle the OAuth callback and add the OAuth account to the current authenticated active user.
+
+!!! abstract "Query parameters"
+    * `code`: OAuth callback code.
+    * `state`: State token.
+    * `error`: OAuth error.
+
+!!! fail "`401 Unauthorized`"
+    Missing token or inactive user.
+
+!!! fail "`400 Bad Request`"
+    Invalid token.
+
+!!! success "`200 OK`"
+    ```json
+    {
+        "id": "57cbb51a-ab71-4009-8802-3f54b4f2e23",
+        "email": "king.arthur@tintagel.bt",
+        "is_active": true,
+        "is_superuser": false,
+        "oauth_accounts": [
+            {
+                "id": "6c98caf5-9bc5-4c4f-8a45-a0ae0c40cd77",
+                "oauth_name": "TINTAGEL",
+                "access_token": "ACCESS_TOKEN",
+                "expires_at": "1641040620",
+                "account_id": "king_arthur_tintagel",
+                "account_email": "king.arthur@tintagel.bt"
+            }
+        ]
+    }
+    ```
+
 
 ## Users router
 
