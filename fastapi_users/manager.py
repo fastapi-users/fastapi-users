@@ -155,14 +155,17 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         expires_at: Optional[int] = None,
         refresh_token: Optional[str] = None,
         request: Optional[Request] = None,
+        *,
+        associate_by_email: bool = False
     ) -> models.UOAP:
         """
         Handle the callback after a successful OAuth authentication.
 
         If the user already exists with this OAuth account, the token is updated.
 
-        If a user with the same e-mail already exists,
-        the OAuth account is linked to it.
+        If a user with the same e-mail already exists and `associate_by_email` is True,
+        the OAuth account is associated to this user.
+        Otherwise, the `UserNotExists` exception is raised.
 
         If the user does not exist, it is created and the on_after_register handler
         is triggered.
@@ -176,6 +179,8 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         fresh access token from the service provider.
         :param request: Optional FastAPI request that
         triggered the operation, defaults to None
+        :param associate_by_email: If True, any existing user with the same
+        e-mail address will be associated to this user. Defaults to False.
         :return: A user.
         """
         oauth_account_dict = {
@@ -191,8 +196,10 @@ class BaseUserManager(Generic[models.UP, models.ID]):
             user = await self.get_by_oauth_account(oauth_name, account_id)
         except exceptions.UserNotExists:
             try:
-                # Link account
+                # Associate account
                 user = await self.get_by_email(account_email)
+                if not associate_by_email:
+                    raise exceptions.UserAlreadyExists()
                 user = await self.user_db.add_oauth_account(user, oauth_account_dict)
             except exceptions.UserNotExists:
                 # Create account

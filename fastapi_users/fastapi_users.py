@@ -93,6 +93,7 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
         backend: AuthenticationBackend,
         state_secret: SecretType,
         redirect_url: str = None,
+        associate_by_email: bool = False,
     ) -> APIRouter:
         """
         Return an OAuth router for a given OAuth client and authentication backend.
@@ -102,6 +103,8 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
         :param state_secret: Secret used to encode the state JWT.
         :param redirect_url: Optional arbitrary redirect URL for the OAuth2 flow.
         If not given, the URL to the callback endpoint will be generated.
+        :param associate_by_email: If True, any existing user with the same
+        e-mail address will be associated to this user. Defaults to False.
         """
         return get_oauth_router(
             oauth_client,
@@ -109,6 +112,7 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
             self.get_user_manager,
             state_secret,
             redirect_url,
+            associate_by_email,
         )
 
     def get_users_router(

@@ -32,6 +32,7 @@ def get_oauth_router(
     get_user_manager: UserManagerDependency[models.UP, models.ID],
     state_secret: SecretType,
     redirect_url: str = None,
+    associate_by_email: bool = False,
 ) -> APIRouter:
     """Generate a router with the OAuth routes."""
     router = APIRouter()
@@ -122,6 +123,7 @@ def get_oauth_router(
             token.get("expires_at"),
             token.get("refresh_token"),
             request,
+            associate_by_email=associate_by_email,
         )
 
         if not user.is_active:

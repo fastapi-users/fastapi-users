@@ -191,13 +191,18 @@ class TestOAuthCallback:
 
         assert user_manager_oauth.on_after_register.called is False
 
-    async def test_existing_user_without_oauth(
+    async def test_existing_user_without_oauth_associate(
         self,
         user_manager_oauth: UserManagerMock[UserOAuthModel],
         superuser_oauth: UserOAuthModel,
     ):
         user = await user_manager_oauth.oauth_callback(
-            "service1", "TOKEN", "superuser_oauth1", superuser_oauth.email, 1579000751
+            "service1",
+            "TOKEN",
+            "superuser_oauth1",
+            superuser_oauth.email,
+            1579000751,
+            associate_by_email=True,
         )
 
         assert user.id == superuser_oauth.id
@@ -205,6 +210,21 @@ class TestOAuthCallback:
         assert user.oauth_accounts[0].id is not None
 
         assert user_manager_oauth.on_after_register.called is False
+
+    async def test_existing_user_without_oauth_no_associate(
+        self,
+        user_manager_oauth: UserManagerMock[UserOAuthModel],
+        superuser_oauth: UserOAuthModel,
+    ):
+        with pytest.raises(UserAlreadyExists):
+            await user_manager_oauth.oauth_callback(
+                "service1",
+                "TOKEN",
+                "superuser_oauth1",
+                superuser_oauth.email,
+                1579000751,
+                associate_by_email=False,
+            )
 
     async def test_new_user(self, user_manager_oauth: UserManagerMock[UserOAuthModel]):
         user = await user_manager_oauth.oauth_callback(
