@@ -8,6 +8,7 @@ from pydantic import BaseModel
 
 from fastapi_users import models, schemas
 from fastapi_users.authentication import AuthenticationBackend, Authenticator, Strategy
+from fastapi_users.exceptions import UserAlreadyExists
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from fastapi_users.router.common import ErrorCode, ErrorModel
@@ -115,16 +116,22 @@ def get_oauth_router(
         except jwt.DecodeError:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
 
-        user = await user_manager.oauth_callback(
-            oauth_client.name,
-            token["access_token"],
-            account_id,
-            account_email,
-            token.get("expires_at"),
-            token.get("refresh_token"),
-            request,
-            associate_by_email=associate_by_email,
-        )
+        try:
+            user = await user_manager.oauth_callback(
+                oauth_client.name,
+                token["access_token"],
+                account_id,
+                account_email,
+                token.get("expires_at"),
+                token.get("refresh_token"),
+                request,
+                associate_by_email=associate_by_email,
+            )
+        except UserAlreadyExists:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=ErrorCode.OAUTH_USER_ALREADY_EXISTS,
+            )
 
         if not user.is_active:
             raise HTTPException(

@@ -5,7 +5,9 @@ import pytest
 from fastapi import FastAPI, status
 from httpx_oauth.oauth2 import BaseOAuth2, OAuth2
 
+from fastapi_users import exceptions
 from fastapi_users.authentication import AuthenticationBackend, Authenticator
+from fastapi_users.router.common import ErrorCode
 from fastapi_users.router.oauth import (
     generate_state_token,
     get_oauth_associate_router,
@@ -16,7 +18,6 @@ from tests.conftest import (
     User,
     UserManagerMock,
     UserModel,
-    UserOAuth,
     UserOAuthModel,
 )
 
@@ -158,6 +159,34 @@ class TestCallback:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
         get_id_email_mock.assert_called_once_with("TOKEN")
+
+    async def test_already_exists_error(
+        self,
+        async_method_mocker: AsyncMethodMocker,
+        test_app_client: httpx.AsyncClient,
+        oauth_client: BaseOAuth2,
+        user_oauth: UserOAuthModel,
+        user_manager_oauth: UserManagerMock,
+        access_token: str,
+    ):
+        state_jwt = generate_state_token({}, "SECRET")
+        async_method_mocker(oauth_client, "get_access_token", return_value=access_token)
+        async_method_mocker(
+            oauth_client, "get_id_email", return_value=("user_oauth1", user_oauth.email)
+        )
+        async_method_mocker(
+            user_manager_oauth, "oauth_callback"
+        ).side_effect = exceptions.UserAlreadyExists
+
+        response = await test_app_client.get(
+            "/oauth/callback",
+            params={"code": "CODE", "state": state_jwt},
+        )
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+        data = cast(Dict[str, Any], response.json())
+        assert data["detail"] == ErrorCode.OAUTH_USER_ALREADY_EXISTS
 
     async def test_active_user(
         self,
