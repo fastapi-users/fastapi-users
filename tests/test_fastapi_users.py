@@ -28,6 +28,9 @@ async def test_app_client(
     app.include_router(
         fastapi_users.get_oauth_router(oauth_client, mock_authentication, secret)
     )
+    app.include_router(
+        fastapi_users.get_oauth_associate_router(oauth_client, User, secret)
+    )
 
     @app.delete("/users/me")
     def custom_users_route():

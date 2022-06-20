@@ -224,6 +224,48 @@ class BaseUserManager(Generic[models.UP, models.ID]):
 
         return user
 
+    async def oauth_associate_callback(
+        self: "BaseUserManager[models.UOAP, models.ID]",
+        user: models.UOAP,
+        oauth_name: str,
+        access_token: str,
+        account_id: str,
+        account_email: str,
+        expires_at: Optional[int] = None,
+        refresh_token: Optional[str] = None,
+        request: Optional[Request] = None,
+    ) -> models.UOAP:
+        """
+        Handle the callback after a successful OAuth association.
+
+        We add this new OAuth account to the given user.
+
+        :param oauth_name: Name of the OAuth client.
+        :param access_token: Valid access token for the service provider.
+        :param account_id: models.ID of the user on the service provider.
+        :param account_email: E-mail of the user on the service provider.
+        :param expires_at: Optional timestamp at which the access token expires.
+        :param refresh_token: Optional refresh token to get a
+        fresh access token from the service provider.
+        :param request: Optional FastAPI request that
+        triggered the operation, defaults to None
+        :return: A user.
+        """
+        oauth_account_dict = {
+            "oauth_name": oauth_name,
+            "access_token": access_token,
+            "account_id": account_id,
+            "account_email": account_email,
+            "expires_at": expires_at,
+            "refresh_token": refresh_token,
+        }
+
+        user = await self.user_db.add_oauth_account(user, oauth_account_dict)
+
+        await self.on_after_update(user, {}, request)
+
+        return user
+
     async def request_verify(
         self, user: models.UP, request: Optional[Request] = None
     ) -> None:

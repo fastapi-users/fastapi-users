@@ -13,6 +13,7 @@ from fastapi_users.router import (
     get_users_router,
     get_verify_router,
 )
+from fastapi_users.router.oauth import get_oauth_associate_router
 
 try:
     from httpx_oauth.oauth2 import BaseOAuth2
@@ -78,7 +79,7 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
 
         :param backend: The authentication backend instance.
         :param requires_verification: Whether the authentication
-        require the user to be verified or not.
+        require the user to be verified or not. Defaults to False.
         """
         return get_auth_router(
             backend,
@@ -115,6 +116,35 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
             associate_by_email,
         )
 
+    def get_oauth_associate_router(
+        self,
+        oauth_client: BaseOAuth2,
+        user_schema: Type[schemas.U],
+        state_secret: SecretType,
+        redirect_url: str = None,
+        requires_verification: bool = False,
+    ) -> APIRouter:
+        """
+        Return an OAuth association router for a given OAuth client.
+
+        :param oauth_client: The HTTPX OAuth client instance.
+        :param user_schema: Pydantic schema of a public user.
+        :param state_secret: Secret used to encode the state JWT.
+        :param redirect_url: Optional arbitrary redirect URL for the OAuth2 flow.
+        If not given, the URL to the callback endpoint will be generated.
+        :param requires_verification: Whether the endpoints
+        require the users to be verified or not. Defaults to False.
+        """
+        return get_oauth_associate_router(
+            oauth_client,
+            self.authenticator,
+            self.get_user_manager,
+            user_schema,
+            state_secret,
+            redirect_url,
+            requires_verification,
+        )
+
     def get_users_router(
         self,
         user_schema: Type[schemas.U],
@@ -127,7 +157,7 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
         :param user_schema: Pydantic schema of a public user.
         :param user_update_schema: Pydantic schema for updating a user.
         :param requires_verification: Whether the endpoints
-        require the users to be verified or not.
+        require the users to be verified or not. Defaults to False.
         """
         return get_users_router(
             self.get_user_manager,
