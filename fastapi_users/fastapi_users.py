@@ -13,12 +13,12 @@ from fastapi_users.router import (
     get_users_router,
     get_verify_router,
 )
-from fastapi_users.router.oauth import get_oauth_associate_router
 
 try:
     from httpx_oauth.oauth2 import BaseOAuth2
 
     from fastapi_users.router import get_oauth_router
+    from fastapi_users.router.oauth import get_oauth_associate_router
 except ModuleNotFoundError:  # pragma: no cover
     BaseOAuth2 = Type  # type: ignore
 
