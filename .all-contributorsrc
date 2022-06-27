@@ -571,6 +571,15 @@
       "contributions": [
         "security"
       ]
+    },
+    {
+      "login": "vittoriozamboni",
+      "name": "Vittorio Zamboni",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1734279?v=4",
+      "profile": "http://www.vzamboni.io",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
