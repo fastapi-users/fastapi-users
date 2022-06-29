@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 from sqlalchemy.orm import sessionmaker
 
+# DATABASE_URL = "postgresql+asyncpg://username:password@host:5432/basename"
 DATABASE_URL = "sqlite+aiosqlite:///./test.db"
 Base: DeclarativeMeta = declarative_base()
 
