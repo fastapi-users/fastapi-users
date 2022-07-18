@@ -580,6 +580,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "aryadovoy",
+      "name": "Andrey",
+      "avatar_url": "https://avatars.githubusercontent.com/u/26593349?v=4",
+      "profile": "https://github.com/aryadovoy",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
