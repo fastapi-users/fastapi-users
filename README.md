@@ -17,7 +17,7 @@
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <p align="center">
-<a href="https://github.com/sponsors/frankie567"><img src="https://md-buttons.onrender.com/button.svg?text=Buy%20me%20a%20coffee%20%E2%98%95%EF%B8%8F&bg=ef4444&w=200&px=40"></a>
+<a href="https://github.com/sponsors/frankie567"><img src="https://md-btn.deta.dev/button.svg?text=Buy%20me%20a%20coffee%20%E2%98%95%EF%B8%8F&bg=ef4444&w=200&px=40"></a>
 </p>
 
 ---
@@ -64,7 +64,7 @@ Add quickly a registration and authentication system to your [FastAPI](https://f
 <br clear="right"/>
 
 <p align="center">
-    <a href="https://www.fief.dev"><img src="https://md-buttons.onrender.com/button.svg?text=Join%20the%20beta&bg=f43f5e&w=150&px=30" /></a>
+    <a href="https://www.fief.dev"><img src="https://md-btn.deta.dev/button.svg?text=Join%20the%20beta&bg=f43f5e&w=150&px=30" /></a>
 </p>
 <p align="center">It's free!</p>
 
