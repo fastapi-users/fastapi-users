@@ -13,7 +13,7 @@
 [![PyPI version](https://badge.fury.io/py/fastapi-users.svg)](https://badge.fury.io/py/fastapi-users)
 [![Downloads](https://pepy.tech/badge/fastapi-users)](https://pepy.tech/project/fastapi-users)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-62-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-63-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <p align="center">
@@ -155,6 +155,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="http://austinmartinorr.com"><img src="https://avatars.githubusercontent.com/u/8422403?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Austin Orr</b></sub></a><br /><a href="#maintenance-austinorr" title="Maintenance">🚧</a></td>
     <td align="center"><a href="http://carlo.io"><img src="https://avatars.githubusercontent.com/u/299107?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Carlo Eugster</b></sub></a><br /><a href="#security-carloe" title="Security">🛡️</a></td>
     <td align="center"><a href="http://www.vzamboni.io"><img src="https://avatars.githubusercontent.com/u/1734279?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Vittorio Zamboni</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=vittoriozamboni" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/aryadovoy"><img src="https://avatars.githubusercontent.com/u/26593349?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Andrey</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=aryadovoy" title="Documentation">📖</a></td>
   </tr>
 </table>
 
