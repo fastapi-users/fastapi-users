@@ -61,8 +61,10 @@ Add quickly a registration and authentication system to your [FastAPI](https://f
 * **Pre-built login and registration pages**: clean and fast authentication so you don't have to do it yourself
 * **Official Python client** with built-in **FastAPI integration**
 
+<br clear="right"/>
+
 <p align="center">
-    <a href="https://www.fief.dev"><img width="150px" src="https://raw.githubusercontent.com/fief-dev/.github/main/graphics/join-the-beta-button.svg?sanitize=true" /></a>
+    <a href="https://www.fief.dev"><img src="https://md-buttons.onrender.com/button.svg?text=Join%20the%20beta&bg=f43f5e&w=150&px=30" /></a>
 </p>
 <p align="center">It's free!</p>
 
