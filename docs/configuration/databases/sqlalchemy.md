@@ -9,7 +9,12 @@ To work with your DBMS, you'll need to install the corresponding asyncio driver.
 * For PostgreSQL: `pip install asyncpg`
 * For SQLite: `pip install aiosqlite`
 
-For the sake of this tutorial from now on, we'll use a simple SQLite databse.
+Examples of `DB_URL`s are:
+
+* PostgreSQL: `engine = create_engine('postgresql+asyncpg://user:password@host:port/name')`
+* SQLite: `engine = create_engine('sqlite+aiosqlite:///name.db')`
+
+For the sake of this tutorial from now on, we'll use a simple SQLite database.
 
 ## Create the User model
 
