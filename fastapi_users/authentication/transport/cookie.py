@@ -40,10 +40,11 @@ class CookieTransport(Transport):
             httponly=self.cookie_httponly,
             samesite=self.cookie_samesite,
         )
+        response.status_code = 204
 
         # We shouldn't return directly the response
         # so that FastAPI can terminate it properly
-        return None
+        return response
 
     async def get_logout_response(self, response: Response) -> Any:
         response.set_cookie(
