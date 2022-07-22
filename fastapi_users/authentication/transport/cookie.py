@@ -30,6 +30,7 @@ class CookieTransport(Transport):
         self.scheme = APIKeyCookie(name=self.cookie_name, auto_error=False)
 
     async def get_login_response(self, token: str, response: Response) -> Any:
+        response = Response(status_code=status.HTTP_204_NO_CONTENT)
         response.set_cookie(
             self.cookie_name,
             token,
@@ -40,10 +41,6 @@ class CookieTransport(Transport):
             httponly=self.cookie_httponly,
             samesite=self.cookie_samesite,
         )
-        response.status_code = 204
-
-        # We shouldn't return directly the response
-        # so that FastAPI can terminate it properly
         return response
 
     async def get_logout_response(self, response: Response) -> Any:
@@ -60,7 +57,7 @@ class CookieTransport(Transport):
 
     @staticmethod
     def get_openapi_login_responses_success() -> OpenAPIResponseType:
-        return {status.HTTP_200_OK: {"model": None}}
+        return {status.HTTP_204_NO_CONTENT: {"model": None}}
 
     @staticmethod
     def get_openapi_logout_responses_success() -> OpenAPIResponseType:
