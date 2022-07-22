@@ -589,6 +589,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "caniko",
+      "name": "Can H. Tartanoglu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/29519599?v=4",
+      "profile": "http://linkedin.com/in/canhtartanoglu",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
