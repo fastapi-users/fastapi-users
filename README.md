@@ -13,7 +13,7 @@
 [![PyPI version](https://badge.fury.io/py/fastapi-users.svg)](https://badge.fury.io/py/fastapi-users)
 [![Downloads](https://pepy.tech/badge/fastapi-users)](https://pepy.tech/project/fastapi-users)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-64-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-65-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <p align="center">
@@ -159,6 +159,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="http://linkedin.com/in/canhtartanoglu"><img src="https://avatars.githubusercontent.com/u/29519599?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Can H. Tartanoglu</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/issues?q=author%3Acaniko" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://github.com/flipee"><img src="https://avatars.githubusercontent.com/u/22459623?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Filipe Nascimento</b></sub></a><br /><a href="#security-flipee" title="Security">🛡️</a></td>
   </tr>
 </table>
 
