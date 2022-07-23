@@ -598,6 +598,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "flipee",
+      "name": "Filipe Nascimento",
+      "avatar_url": "https://avatars.githubusercontent.com/u/22459623?v=4",
+      "profile": "https://github.com/flipee",
+      "contributions": [
+        "security"
+      ]
     }
   ],
   "contributorsPerLine": 7,
