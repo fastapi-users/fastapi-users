@@ -68,7 +68,7 @@ class TestReadToken:
         redis: RedisMock,
         user_manager,
     ):
-        await redis.set("TOKEN", "bar")
+        await redis.set(f"{redis_strategy.key_prefix}TOKEN", "bar")
         authenticated_user = await redis_strategy.read_token("TOKEN", user_manager)
         assert authenticated_user is None
 
@@ -79,7 +79,9 @@ class TestReadToken:
         redis: RedisMock,
         user_manager,
     ):
-        await redis.set("TOKEN", "d35d213e-f3d8-4f08-954a-7e0d1bea286f")
+        await redis.set(
+            f"{redis_strategy.key_prefix}TOKEN", "d35d213e-f3d8-4f08-954a-7e0d1bea286f"
+        )
         authenticated_user = await redis_strategy.read_token("TOKEN", user_manager)
         assert authenticated_user is None
 
@@ -91,7 +93,7 @@ class TestReadToken:
         user_manager,
         user,
     ):
-        await redis.set("TOKEN", str(user.id))
+        await redis.set(f"{redis_strategy.key_prefix}TOKEN", str(user.id))
         authenticated_user = await redis_strategy.read_token("TOKEN", user_manager)
         assert authenticated_user is not None
         assert authenticated_user.id == user.id
@@ -104,7 +106,7 @@ async def test_write_token(
 ):
     token = await redis_strategy.write_token(user)
 
-    value = await redis.get(token)
+    value = await redis.get(f"{redis_strategy.key_prefix}{token}")
     assert value == str(user.id)
 
 
@@ -113,8 +115,8 @@ async def test_write_token(
 async def test_destroy_token(
     redis_strategy: RedisStrategy[UserModel, IDType], redis: RedisMock, user
 ):
-    await redis.set("TOKEN", str(user.id))
+    await redis.set(f"{redis_strategy.key_prefix}TOKEN", str(user.id))
 
     await redis_strategy.destroy_token("TOKEN", user)
 
-    assert await redis.get("TOKEN") is None
+    assert await redis.get(f"{redis_strategy.key_prefix}TOKEN") is None

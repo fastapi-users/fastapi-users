@@ -26,6 +26,7 @@ As you can see, instantiation is quite simple. It accepts the following argument
 
 * `redis` (`redis.asyncio.Redis`): An instance of `redis.asyncio.Redis`. Note that the `decode_responses` flag set to `True` is necessary.
 * `lifetime_seconds` (`Optional[int]`): The lifetime of the token in seconds. Defaults to `None`, which means the token doesn't expire.
+* `key_prefix` (`str`): The prefix used to set the key in the Redis stored. Defaults to `fastapi_users_token:`.
 
 !!! tip "Why it's inside a function?"
     To allow strategies to be instantiated dynamically with other dependencies, they have to be provided as a callable to the authentication backend.
