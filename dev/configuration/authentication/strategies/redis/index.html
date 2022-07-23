@@ -1196,6 +1196,7 @@
 <ul>
 <li><code>redis</code> (<code>redis.asyncio.Redis</code>): An instance of <code>redis.asyncio.Redis</code>. Note that the <code>decode_responses</code> flag set to <code>True</code> is necessary.</li>
 <li><code>lifetime_seconds</code> (<code>Optional[int]</code>): The lifetime of the token in seconds. Defaults to <code>None</code>, which means the token doesn't expire.</li>
+<li><code>key_prefix</code> (<code>str</code>): The prefix used to set the key in the Redis stored. Defaults to <code>fastapi_users_token:</code>.</li>
 </ul>
 <div class="admonition tip">
 <p class="admonition-title">Why it's inside a function?</p>
