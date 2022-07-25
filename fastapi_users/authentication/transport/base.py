@@ -1,5 +1,4 @@
 import sys
-from typing import Any
 
 if sys.version_info < (3, 8):
     from typing_extensions import Protocol  # pragma: no cover
@@ -19,10 +18,10 @@ class TransportLogoutNotSupportedError(Exception):
 class Transport(Protocol):
     scheme: SecurityBase
 
-    async def get_login_response(self, token: str, response: Response) -> Any:
+    async def get_login_response(self, token: str) -> Response:
         ...  # pragma: no cover
 
-    async def get_logout_response(self, response: Response) -> Any:
+    async def get_logout_response(self) -> Response:
         ...  # pragma: no cover
 
     @staticmethod

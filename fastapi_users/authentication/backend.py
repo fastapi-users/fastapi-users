@@ -1,6 +1,6 @@
-from typing import Any, Generic
+from typing import Generic
 
-from fastapi import Response
+from fastapi import Response, status
 
 from fastapi_users import models
 from fastapi_users.authentication.strategy import (
@@ -40,27 +40,22 @@ class AuthenticationBackend(Generic[models.UP, models.ID]):
         self.get_strategy = get_strategy
 
     async def login(
-        self,
-        strategy: Strategy[models.UP, models.ID],
-        user: models.UP,
-        response: Response,
-    ) -> Any:
+        self, strategy: Strategy[models.UP, models.ID], user: models.UP
+    ) -> Response:
         token = await strategy.write_token(user)
-        return await self.transport.get_login_response(token, response)
+        return await self.transport.get_login_response(token)
 
     async def logout(
-        self,
-        strategy: Strategy[models.UP, models.ID],
-        user: models.UP,
-        token: str,
-        response: Response,
-    ) -> Any:
+        self, strategy: Strategy[models.UP, models.ID], user: models.UP, token: str
+    ) -> Response:
         try:
             await strategy.destroy_token(token, user)
         except StrategyDestroyNotSupportedError:
             pass
 
         try:
-            await self.transport.get_logout_response(response)
+            response = await self.transport.get_logout_response()
         except TransportLogoutNotSupportedError:
-            return None
+            response = Response(status_code=status.HTTP_204_NO_CONTENT)
+
+        return response
