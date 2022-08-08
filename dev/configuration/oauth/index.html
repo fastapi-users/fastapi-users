@@ -1445,7 +1445,7 @@
 </span><a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>
 <a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>
 <a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_db</span><span class="p">():</span>
-<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a>    <span class="k">yield</span> <span class="n">BeanieUserDatabase</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
+<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a>    <span class="k">yield</span> <span class="n">BeanieUserDatabase</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">OAuthAccount</span><span class="p">)</span>
 </code></pre></div>
 <p>It's worth to note that <code>OAuthAccount</code> is <strong>not a Beanie document</strong> but a Pydantic model that we'll embed inside the <code>User</code> document, through the <code>oauth_accounts</code> array.</p>
 <h3 id="generate-routers">Generate routers<a class="headerlink" href="#generate-routers" title="Permanent link">&para;</a></h3>
@@ -1799,7 +1799,7 @@ Insecure passwords may give attackers full access to your database.</p>
 <a id="__codelineno-18-21" name="__codelineno-18-21" href="#__codelineno-18-21"></a>
 <a id="__codelineno-18-22" name="__codelineno-18-22" href="#__codelineno-18-22"></a>
 <a id="__codelineno-18-23" name="__codelineno-18-23" href="#__codelineno-18-23"></a><span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_db</span><span class="p">():</span>
-<a id="__codelineno-18-24" name="__codelineno-18-24" href="#__codelineno-18-24"></a>    <span class="k">yield</span> <span class="n">BeanieUserDatabase</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
+<a id="__codelineno-18-24" name="__codelineno-18-24" href="#__codelineno-18-24"></a>    <span class="k">yield</span> <span class="n">BeanieUserDatabase</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">OAuthAccount</span><span class="p">)</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
