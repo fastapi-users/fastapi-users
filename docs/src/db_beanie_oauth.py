@@ -21,4 +21,4 @@ class User(BeanieBaseUser[PydanticObjectId]):
 
 
 async def get_user_db():
-    yield BeanieUserDatabase(User)
+    yield BeanieUserDatabase(User, OAuthAccount)
