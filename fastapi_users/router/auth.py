@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Any, Tuple
 
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
@@ -11,7 +11,7 @@ from fastapi_users.router.common import ErrorCode, ErrorModel
 
 
 def get_auth_router(
-    backend: AuthenticationBackend,
+    backend: AuthenticationBackend[Any, Any],
     get_user_manager: UserManagerDependency[models.UP, models.ID],
     authenticator: Authenticator,
     requires_verification: bool = False,
@@ -46,9 +46,11 @@ def get_auth_router(
     @router.post(
         "/login",
         name=f"auth:{backend.name}.login",
+        response_model=backend.transport.login_response_model,
+        response_model_exclude_none=True,
         responses=login_responses,
     )
-    async def login(
+    async def login(  # type: ignore
         response: Response,
         credentials: OAuth2PasswordRequestForm = Depends(),
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
@@ -78,9 +80,12 @@ def get_auth_router(
     }
 
     @router.post(
-        "/logout", name=f"auth:{backend.name}.logout", responses=logout_responses
+        "/logout",
+        name=f"auth:{backend.name}.logout",
+        response_model=backend.transport.logout_response_model,
+        responses=logout_responses,
     )
-    async def logout(
+    async def logout(  # type: ignore
         response: Response,
         user_token: Tuple[models.UP, str] = Depends(get_current_user_token),
         strategy: Strategy[models.UP, models.ID] = Depends(backend.get_strategy),

@@ -25,6 +25,7 @@ from pytest_mock import MockerFixture
 from fastapi_users import exceptions, models, schemas
 from fastapi_users.authentication import AuthenticationBackend, BearerTransport
 from fastapi_users.authentication.strategy import Strategy
+from fastapi_users.authentication.transport.bearer import BearerResponse
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.jwt import SecretType
 from fastapi_users.manager import BaseUserManager, UUIDIDMixin
@@ -523,7 +524,8 @@ class MockTransport(BearerTransport):
         return {}
 
 
-class MockStrategy(Strategy[UserModel, IDType]):
+MockBackend = AuthenticationBackend[BearerResponse, None]
+
     async def read_token(
         self, token: Optional[str], user_manager: BaseUserManager[UserModel, IDType]
     ) -> Optional[UserModel]:

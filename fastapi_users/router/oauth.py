@@ -1,4 +1,4 @@
-from typing import Dict, List, Tuple, Type
+from typing import Any, Dict, List, Tuple, Type
 
 import jwt
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
@@ -29,7 +29,7 @@ def generate_state_token(
 
 def get_oauth_router(
     oauth_client: BaseOAuth2,
-    backend: AuthenticationBackend,
+    backend: AuthenticationBackend[Any, Any],
     get_user_manager: UserManagerDependency[models.UP, models.ID],
     state_secret: SecretType,
     redirect_url: str = None,
@@ -77,6 +77,8 @@ def get_oauth_router(
         "/callback",
         name=callback_route_name,
         description="The response varies based on the authentication backend used.",
+        response_model=backend.transport.login_response_model,
+        response_model_exclude_none=True,
         responses={
             status.HTTP_400_BAD_REQUEST: {
                 "model": ErrorModel,
