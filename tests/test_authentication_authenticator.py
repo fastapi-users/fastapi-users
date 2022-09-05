@@ -81,10 +81,19 @@ def require_superuser(request: pytest.FixtureRequest) -> bool:
     return getattr(request, "param")
 
 
+@pytest.fixture(params=[False])
+def require_fresh(request: pytest.FixtureRequest) -> bool:
+    return getattr(request, "param")
+
+
 @pytest.fixture
 @pytest.mark.asyncio
 def get_test_auth_client(
-    get_user_manager, get_test_client, require_active: bool, require_superuser: bool
+    get_user_manager,
+    get_test_client,
+    require_active: bool,
+    require_superuser: bool,
+    require_fresh: bool,
 ):
     async def _get_test_auth_client(
         backends: List[AuthenticationBackend],
@@ -101,6 +110,7 @@ def get_test_auth_client(
                 authenticator.current_user(
                     active=require_active,
                     superuser=require_superuser,
+                    fresh=require_fresh,
                     get_enabled_backends=get_enabled_backends,
                 )
             ),
@@ -113,6 +123,7 @@ def get_test_auth_client(
                 authenticator.current_user_token(
                     active=require_active,
                     superuser=require_superuser,
+                    fresh=require_fresh,
                     get_enabled_backends=get_enabled_backends,
                 )
             ),
@@ -127,6 +138,7 @@ def get_test_auth_client(
                 authenticator.current_token(
                     active=require_active,
                     superuser=require_superuser,
+                    fresh=require_fresh,
                     get_enabled_backends=get_enabled_backends,
                 )
             ),
@@ -213,3 +225,42 @@ async def test_authenticators_with_same_name(get_test_auth_client, get_backend_n
     with pytest.raises(DuplicateBackendNamesError):
         async for _ in get_test_auth_client([get_backend_none(), get_backend_none()]):
             pass
+
+
+@pytest.fixture(params=[status.HTTP_200_OK])
+def expected_http_status(request: pytest.FixtureRequest) -> int:
+    return getattr(request, "param")
+
+
+@pytest.mark.authentication
+@pytest.mark.asyncio
+@pytest.mark.parametrize("require_active", [False], indirect=True)
+@pytest.mark.parametrize("require_superuser", [False], indirect=True)
+@pytest.mark.parametrize(
+    ("require_fresh", "token_fresh", "expected_http_status"),
+    [
+        (False, False, status.HTTP_200_OK),
+        (False, True, status.HTTP_200_OK),
+        (True, False, status.HTTP_403_FORBIDDEN),
+        (True, True, status.HTTP_200_OK),
+    ],
+    indirect=True,
+)
+@pytest.mark.parametrize(
+    "path",
+    [
+        "/test-current-user",
+        "/test-current-user-token",
+        "/test-current-token",
+    ],
+)
+async def test_freshness(
+    get_test_auth_client,
+    get_backend_none,
+    get_backend_user,
+    path: str,
+    expected_http_status: int,
+):
+    async for client in get_test_auth_client([get_backend_none(), get_backend_user()]):
+        response = await client.get(path)
+        assert response.status_code == expected_http_status

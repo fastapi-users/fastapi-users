@@ -63,6 +63,7 @@ class Authenticator:
         active: bool = False,
         verified: bool = False,
         superuser: bool = False,
+        fresh: bool = False,
         get_enabled_backends: Optional[EnabledBackendsDependency] = None,
     ):
         """
@@ -96,6 +97,7 @@ class Authenticator:
                 active=active,
                 verified=verified,
                 superuser=superuser,
+                fresh=fresh,
                 **kwargs,
             )
             return token_data.user, token
@@ -108,6 +110,7 @@ class Authenticator:
         active: bool = False,
         verified: bool = False,
         superuser: bool = False,
+        fresh: bool = False,
         get_enabled_backends: Optional[EnabledBackendsDependency] = None,
     ):
         """
@@ -141,6 +144,7 @@ class Authenticator:
                 active=active,
                 verified=verified,
                 superuser=superuser,
+                fresh=fresh,
                 **kwargs,
             )
             if token_data:
@@ -155,6 +159,7 @@ class Authenticator:
         active: bool = False,
         verified: bool = False,
         superuser: bool = False,
+        fresh: bool = False,
         get_enabled_backends: Optional[EnabledBackendsDependency] = None,
     ):
         """
@@ -188,6 +193,7 @@ class Authenticator:
                 active=active,
                 verified=verified,
                 superuser=superuser,
+                fresh=fresh,
                 **kwargs,
             )
             return token_data
@@ -202,6 +208,7 @@ class Authenticator:
         active: bool = False,
         verified: bool = False,
         superuser: bool = False,
+        fresh: bool = False,
         **kwargs,
     ) -> Tuple[Optional[UserTokenData[models.UP, models.ID]], Optional[str]]:
         token_data: Optional[UserTokenData[models.UP, models.ID]] = None
@@ -228,10 +235,9 @@ class Authenticator:
                     status_code = status.HTTP_401_UNAUTHORIZED
                     token_data = None
                 elif (
-                    verified
-                    and not token_data.user.is_verified
-                    or superuser
-                    and not token_data.user.is_superuser
+                    (verified and not token_data.user.is_verified)
+                    or (superuser and not token_data.user.is_superuser)
+                    or (fresh and not token_data.fresh)
                 ):
                     token_data = None
         if not token_data and not optional:

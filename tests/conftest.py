@@ -702,7 +702,7 @@ def oauth_client() -> OAuth2:
 
 
 @pytest.fixture(params=[True])
-def fresh(request: pytest.FixtureRequest) -> bool:
+def token_fresh(request: pytest.FixtureRequest) -> bool:
     return request.param  # type: ignore
 
 
@@ -719,22 +719,28 @@ def scopes(request: pytest.FixtureRequest) -> Set[Scope]:
 @pytest.fixture
 def token_data(
     user: UserModel,
-    fresh: bool,
+    token_fresh: bool,
     token_expired: bool,
     scopes: Set[Scope],
 ) -> UserTokenData[UserModel, IDType]:
 
     now = datetime.now(timezone.utc)
-    last_authenticated = now if fresh else now - timedelta(days=1)
 
     if token_expired:
         expires_at = now - timedelta(minutes=30)
     else:
         expires_at = now + timedelta(minutes=30)
 
+    created_at = expires_at - timedelta(hours=1)
+
+    if token_fresh:
+        last_authenticated = created_at
+    else:
+        last_authenticated = created_at - timedelta(days=1)
+
     return UserTokenData(
         user_id=user.id,
-        created_at=expires_at - timedelta(hours=1),
+        created_at=created_at,
         expires_at=expires_at,
         last_authenticated=last_authenticated,
         scopes=scopes,
