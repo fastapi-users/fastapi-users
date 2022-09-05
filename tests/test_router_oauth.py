@@ -1,4 +1,4 @@
-from typing import Any, Dict, cast
+from typing import Any, Dict, Optional, cast
 
 import httpx
 import pytest
@@ -13,12 +13,16 @@ from fastapi_users.router.oauth import (
     get_oauth_associate_router,
     get_oauth_router,
 )
+from fastapi_users.scopes import SystemScope
 from tests.conftest import (
     AsyncMethodMocker,
     User,
     UserManagerMock,
     UserModel,
     UserOAuthModel,
+    assert_valid_token_response,
+    mock_authorized_headers,
+    mock_token_data,
 )
 
 
@@ -188,6 +192,10 @@ class TestCallback:
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.OAUTH_USER_ALREADY_EXISTS
 
+    @pytest.mark.parametrize(
+        "access_token_lifetime_seconds", [None, 3600], indirect=True
+    )
+    @pytest.mark.freeze_time
     async def test_active_user(
         self,
         async_method_mocker: AsyncMethodMocker,
@@ -196,6 +204,7 @@ class TestCallback:
         user_oauth: UserOAuthModel,
         user_manager_oauth: UserManagerMock,
         access_token: str,
+        access_token_lifetime_seconds: Optional[int],
     ):
         state_jwt = generate_state_token({}, "SECRET")
         async_method_mocker(oauth_client, "get_access_token", return_value=access_token)
@@ -213,8 +222,12 @@ class TestCallback:
 
         assert response.status_code == status.HTTP_200_OK
 
-        data = cast(Dict[str, Any], response.json())
-        assert data["access_token"] == str(user_oauth.id)
+        expected_access_token = mock_token_data(
+            user_id=user_oauth.id,
+            scopes={SystemScope.USER},
+            lifetime_seconds=access_token_lifetime_seconds,
+        )
+        assert_valid_token_response(response.json(), expected_access_token)
 
     async def test_inactive_user(
         self,
@@ -243,6 +256,10 @@ class TestCallback:
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
+    @pytest.mark.parametrize(
+        "access_token_lifetime_seconds", [None, 3600], indirect=True
+    )
+    @pytest.mark.freeze_time
     async def test_redirect_url_router(
         self,
         async_method_mocker: AsyncMethodMocker,
@@ -251,6 +268,7 @@ class TestCallback:
         user_oauth: UserOAuthModel,
         user_manager_oauth: UserManagerMock,
         access_token: str,
+        access_token_lifetime_seconds: Optional[int],
     ):
         state_jwt = generate_state_token({}, "SECRET")
         get_access_token_mock = async_method_mocker(
@@ -273,9 +291,12 @@ class TestCallback:
         get_access_token_mock.assert_called_once_with(
             "CODE", "http://www.tintagel.bt/callback", None
         )
-
-        data = cast(Dict[str, Any], response.json())
-        assert data["access_token"] == str(user_oauth.id)
+        expected_access_token = mock_token_data(
+            user_id=user_oauth.id,
+            scopes={SystemScope.USER},
+            lifetime_seconds=access_token_lifetime_seconds,
+        )
+        assert_valid_token_response(response.json(), expected_access_token)
 
 
 @pytest.mark.router
@@ -295,7 +316,7 @@ class TestAssociateAuthorize:
         response = await test_app_client.get(
             "/oauth-associate/authorize",
             params={"scopes": ["scope1", "scope2"]},
-            headers={"Authorization": f"Bearer {inactive_user_oauth.id}"},
+            headers=mock_authorized_headers(inactive_user_oauth),
         )
 
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
@@ -314,7 +335,7 @@ class TestAssociateAuthorize:
         response = await test_app_client.get(
             "/oauth-associate/authorize",
             params={"scopes": ["scope1", "scope2"]},
-            headers={"Authorization": f"Bearer {user_oauth.id}"},
+            headers=mock_authorized_headers(user_oauth),
         )
 
         assert response.status_code == status.HTTP_200_OK
@@ -337,7 +358,7 @@ class TestAssociateAuthorize:
         response = await test_app_client_redirect_url.get(
             "/oauth-associate/authorize",
             params={"scopes": ["scope1", "scope2"]},
-            headers={"Authorization": f"Bearer {user_oauth.id}"},
+            headers=mock_authorized_headers(user_oauth),
         )
 
         assert response.status_code == status.HTTP_200_OK
@@ -377,7 +398,7 @@ class TestAssociateCallback:
         response = await test_app_client.get(
             "/oauth-associate/callback",
             params={"code": "CODE", "state": "STATE"},
-            headers={"Authorization": f"Bearer {inactive_user_oauth.id}"},
+            headers=mock_authorized_headers(inactive_user_oauth),
         )
 
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
@@ -398,7 +419,7 @@ class TestAssociateCallback:
         response = await test_app_client.get(
             "/oauth-associate/callback",
             params={"code": "CODE", "state": "STATE"},
-            headers={"Authorization": f"Bearer {user_oauth.id}"},
+            headers=mock_authorized_headers(user_oauth),
         )
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
@@ -422,7 +443,7 @@ class TestAssociateCallback:
         response = await test_app_client.get(
             "/oauth-associate/callback",
             params={"code": "CODE", "state": state_jwt},
-            headers={"Authorization": f"Bearer {user_oauth.id}"},
+            headers=mock_authorized_headers(user_oauth),
         )
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
@@ -449,7 +470,7 @@ class TestAssociateCallback:
         response = await test_app_client.get(
             "/oauth-associate/callback",
             params={"code": "CODE", "state": state_jwt},
-            headers={"Authorization": f"Bearer {user_oauth.id}"},
+            headers=mock_authorized_headers(user_oauth),
         )
 
         assert response.status_code == status.HTTP_200_OK
@@ -480,7 +501,7 @@ class TestAssociateCallback:
         response = await test_app_client_redirect_url.get(
             "/oauth-associate/callback",
             params={"code": "CODE", "state": state_jwt},
-            headers={"Authorization": f"Bearer {user_oauth.id}"},
+            headers=mock_authorized_headers(user_oauth),
         )
 
         assert response.status_code == status.HTTP_200_OK

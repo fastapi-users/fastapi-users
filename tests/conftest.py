@@ -1,6 +1,7 @@
 import asyncio
 import dataclasses
 import uuid
+from datetime import datetime, timedelta, timezone
 from typing import (
     Any,
     AsyncGenerator,
@@ -9,28 +10,31 @@ from typing import (
     Generic,
     List,
     Optional,
+    Set,
     Type,
     Union,
 )
 from unittest.mock import MagicMock
 
 import httpx
+import pydantic
 import pytest
 from asgi_lifespan import LifespanManager
 from fastapi import FastAPI, Response
 from httpx_oauth.oauth2 import OAuth2
-from pydantic import UUID4, SecretStr
 from pytest_mock import MockerFixture
 
 from fastapi_users import exceptions, models, schemas
 from fastapi_users.authentication import AuthenticationBackend, BearerTransport
 from fastapi_users.authentication.strategy import Strategy
+from fastapi_users.authentication.token import TokenData, UserTokenData
 from fastapi_users.authentication.transport.bearer import BearerResponse
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.jwt import SecretType
 from fastapi_users.manager import BaseUserManager, UUIDIDMixin
 from fastapi_users.openapi import OpenAPIResponseType
 from fastapi_users.password import PasswordHelper
+from fastapi_users.scopes import Scope, SystemScope
 
 password_helper = PasswordHelper()
 guinevere_password_hash = password_helper.hash("guinevere")
@@ -157,7 +161,7 @@ def async_method_mocker(mocker: MockerFixture) -> AsyncMethodMocker:
     return _async_method_mocker
 
 
-@pytest.fixture(params=["SECRET", SecretStr("SECRET")])
+@pytest.fixture(params=["SECRET", pydantic.SecretStr("SECRET")])
 def secret(request) -> SecretType:
     return request.param
 
@@ -324,7 +328,7 @@ def mock_user_db(
     verified_superuser: UserModel,
 ) -> BaseUserDatabase[UserModel, IDType]:
     class MockUserDatabase(BaseUserDatabase[UserModel, IDType]):
-        async def get(self, id: UUID4) -> Optional[UserModel]:
+        async def get(self, id: pydantic.UUID4) -> Optional[UserModel]:
             if id == user.id:
                 return user
             if id == verified_user.id:
@@ -376,7 +380,7 @@ def mock_user_db_oauth(
     verified_superuser_oauth: UserOAuthModel,
 ) -> BaseUserDatabase[UserOAuthModel, IDType]:
     class MockUserDatabase(BaseUserDatabase[UserOAuthModel, IDType]):
-        async def get(self, id: UUID4) -> Optional[UserOAuthModel]:
+        async def get(self, id: pydantic.UUID4) -> Optional[UserOAuthModel]:
             if id == user_oauth.id:
                 return user_oauth
             if id == verified_user_oauth.id:
@@ -526,35 +530,147 @@ class MockTransport(BearerTransport):
 
 MockBackend = AuthenticationBackend[BearerResponse, None]
 
-    async def read_token(
-        self, token: Optional[str], user_manager: BaseUserManager[UserModel, IDType]
-    ) -> Optional[UserModel]:
-        if token is not None:
-            try:
-                parsed_id = user_manager.parse_id(token)
-                return await user_manager.get(parsed_id)
-            except (exceptions.InvalidID, exceptions.UserNotExists):
-                return None
-        return None
 
-    async def write_token(self, user: UserModel) -> str:
-        return str(user.id)
+class MockStrategy(Strategy):
+    def __init__(self, token_type: str = "access"):
+        self.token_type = token_type
+
+    async def read_token(
+        self,
+        token: Optional[str],
+        user_manager: BaseUserManager[UserModel, IDType],
+    ) -> Optional[UserTokenData[UserModel, IDType]]:
+        if token is None:
+            return None
+
+        try:
+            token_data = TokenData.parse_raw(token)
+        except pydantic.ValidationError:
+            return None
+
+        if token_data is None:
+            return None
+
+        try:
+            return await token_data.lookup_user(user_manager)
+        except (exceptions.UserNotExists, exceptions.InvalidID):
+            return None
+
+    async def write_token(
+        self,
+        token_data: UserTokenData[models.UserProtocol[Any], Any],
+    ) -> str:
+        return token_data.json()
 
     async def destroy_token(self, token: str, user: UserModel) -> None:
         return None
 
 
-def get_mock_authentication(name: str):
+def mock_valid_access_token(user: UserModel) -> str:
+    token_data = UserTokenData.issue_now(user, scopes=[SystemScope.USER])
+    return token_data.json()
+
+
+def mock_valid_refresh_token(user: UserModel) -> str:
+    token_data = UserTokenData.issue_now(user, scopes=[SystemScope.REFRESH])
+    return token_data.json()
+
+
+def mock_authorized_headers(user: UserModel) -> Dict[str, str]:
+    return {"Authorization": f"Bearer {mock_valid_access_token(user)}"}
+
+
+def assert_valid_token_response(
+    token_response: Dict[str, str],
+    expected_access_token: TokenData,
+    expected_refresh_token: Optional[TokenData] = None,
+) -> None:
+    assert isinstance(token_response, dict)
+    assert set(token_response.keys()).issubset(
+        {"token_type", "access_token", "refresh_token"}
+    )
+    assert "token_type" in token_response
+    assert "access_token" in token_response
+    assert token_response["access_token"] == expected_access_token.json()
+    if expected_refresh_token:
+        assert "refresh_token" in token_response
+        assert token_response["refresh_token"] == expected_refresh_token.json()
+    else:
+        assert "refresh_token" not in token_response
+
+
+def mock_token_data(
+    user_id: Any,
+    scopes: Set[Scope],
+    created_at: Optional[datetime] = None,
+    last_authenticated: Optional[datetime] = None,
+    lifetime_seconds: Optional[int] = None,
+) -> TokenData:
+
+    now = datetime.now(timezone.utc)
+
+    created_at = created_at or now
+    last_authenticated = last_authenticated or now
+
+    if lifetime_seconds:
+        expires_at = now + timedelta(seconds=lifetime_seconds)
+    else:
+        expires_at = None
+
+    return TokenData(
+        user_id=user_id,
+        created_at=created_at,
+        expires_at=expires_at,
+        last_authenticated=last_authenticated,
+        scopes=scopes,
+    )
+
+
+def get_mock_authentication(
+    name: str,
+    access_token_lifetime_seconds: Optional[int] = 3600,
+    refresh_token_enabled: bool = False,
+    refresh_token_lifetime_seconds: Optional[int] = 86400,
+) -> MockBackend:
     return AuthenticationBackend(
         name=name,
         transport=MockTransport(tokenUrl="/login"),
         get_strategy=lambda: MockStrategy(),
+        access_token_lifetime_seconds=access_token_lifetime_seconds,
+        refresh_token_enabled=refresh_token_enabled,
+        refresh_token_lifetime_seconds=refresh_token_lifetime_seconds,
     )
 
 
 @pytest.fixture
-def mock_authentication():
-    return get_mock_authentication(name="mock")
+def mock_authentication_factory(
+    access_token_lifetime_seconds: Optional[int],
+    refresh_token_enabled: bool,
+    refresh_token_lifetime_seconds: Optional[int],
+) -> Callable[[str], MockBackend]:
+    def _mock_authentication_factory(name: str):
+        return get_mock_authentication(
+            name=name,
+            access_token_lifetime_seconds=access_token_lifetime_seconds,
+            refresh_token_enabled=refresh_token_enabled,
+            refresh_token_lifetime_seconds=refresh_token_lifetime_seconds,
+        )
+
+    return _mock_authentication_factory
+
+
+@pytest.fixture
+def mock_authentication(
+    access_token_lifetime_seconds: int,
+    refresh_token_enabled: bool,
+    refresh_token_lifetime_seconds: int,
+) -> MockBackend:
+    return get_mock_authentication(
+        name="mock",
+        access_token_lifetime_seconds=access_token_lifetime_seconds,
+        refresh_token_enabled=refresh_token_enabled,
+        refresh_token_lifetime_seconds=refresh_token_lifetime_seconds,
+    )
 
 
 @pytest.fixture
@@ -583,3 +699,59 @@ def oauth_client() -> OAuth2:
         ACCESS_TOKEN_ENDPOINT,
         name="service1",
     )
+
+
+@pytest.fixture(params=[True])
+def fresh(request: pytest.FixtureRequest) -> bool:
+    return request.param  # type: ignore
+
+
+@pytest.fixture(params=[False])
+def token_expired(request: pytest.FixtureRequest) -> bool:
+    return request.param  # type: ignore
+
+
+@pytest.fixture(params=[{SystemScope.USER}])
+def scopes(request: pytest.FixtureRequest) -> Set[Scope]:
+    return request.param  # type: ignore
+
+
+@pytest.fixture
+def token_data(
+    user: UserModel,
+    fresh: bool,
+    token_expired: bool,
+    scopes: Set[Scope],
+) -> UserTokenData[UserModel, IDType]:
+
+    now = datetime.now(timezone.utc)
+    last_authenticated = now if fresh else now - timedelta(days=1)
+
+    if token_expired:
+        expires_at = now - timedelta(minutes=30)
+    else:
+        expires_at = now + timedelta(minutes=30)
+
+    return UserTokenData(
+        user_id=user.id,
+        created_at=expires_at - timedelta(hours=1),
+        expires_at=expires_at,
+        last_authenticated=last_authenticated,
+        scopes=scopes,
+        user=user,
+    )
+
+
+@pytest.fixture(params=[False])
+def refresh_token_enabled(request: pytest.FixtureRequest) -> bool:
+    return getattr(request, "param")
+
+
+@pytest.fixture(params=[3600])
+def access_token_lifetime_seconds(request: pytest.FixtureRequest) -> Optional[int]:
+    return getattr(request, "param")
+
+
+@pytest.fixture(params=[86400])
+def refresh_token_lifetime_seconds(request: pytest.FixtureRequest) -> Optional[int]:
+    return getattr(request, "param")

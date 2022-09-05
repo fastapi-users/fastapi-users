@@ -1,4 +1,5 @@
-from typing import Generic, List, Optional
+from datetime import datetime, timezone
+from typing import Any, List, Optional
 
 import jwt
 
@@ -7,21 +8,20 @@ from fastapi_users.authentication.strategy.base import (
     Strategy,
     StrategyDestroyNotSupportedError,
 )
-from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
+from fastapi_users.authentication.token import UserTokenData
+from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt  # type: ignore
 from fastapi_users.manager import BaseUserManager
 
 
-class JWTStrategy(Strategy[models.UP, models.ID], Generic[models.UP, models.ID]):
+class JWTStrategy(Strategy):
     def __init__(
         self,
         secret: SecretType,
-        lifetime_seconds: Optional[int],
         token_audience: List[str] = ["fastapi-users:auth"],
         algorithm: str = "HS256",
         public_key: Optional[SecretType] = None,
     ):
         self.secret = secret
-        self.lifetime_seconds = lifetime_seconds
         self.token_audience = token_audience
         self.algorithm = algorithm
         self.public_key = public_key
@@ -35,8 +35,10 @@ class JWTStrategy(Strategy[models.UP, models.ID], Generic[models.UP, models.ID])
         return self.public_key or self.secret
 
     async def read_token(
-        self, token: Optional[str], user_manager: BaseUserManager[models.UP, models.ID]
-    ) -> Optional[models.UP]:
+        self,
+        token: Optional[str],
+        user_manager: BaseUserManager[models.UP, Any],
+    ) -> Optional[UserTokenData[models.UP, models.ID]]:
         if token is None:
             return None
 
@@ -44,25 +46,56 @@ class JWTStrategy(Strategy[models.UP, models.ID], Generic[models.UP, models.ID])
             data = decode_jwt(
                 token, self.decode_key, self.token_audience, algorithms=[self.algorithm]
             )
-            user_id = data.get("user_id")
-            if user_id is None:
-                return None
         except jwt.PyJWTError:
             return None
 
+        if any(x not in data for x in ["sub", "iat", "auth_time"]):
+            return None
+
+        user_id = data["sub"]
         try:
             parsed_id = user_manager.parse_id(user_id)
-            return await user_manager.get(parsed_id)
+            user = await user_manager.get(parsed_id)
         except (exceptions.UserNotExists, exceptions.InvalidID):
             return None
 
-    async def write_token(self, user: models.UP) -> str:
-        data = {"user_id": str(user.id), "aud": self.token_audience}
-        return generate_jwt(
-            data, self.encode_key, self.lifetime_seconds, algorithm=self.algorithm
+        if "exp" in data:
+            expires_at = datetime.fromtimestamp(data["exp"], tz=timezone.utc)
+        else:
+            expires_at = None
+
+        scope = data["scope"]
+
+        return UserTokenData(
+            user=user,
+            created_at=datetime.fromtimestamp(data["iat"], tz=timezone.utc),
+            expires_at=expires_at,
+            last_authenticated=datetime.fromtimestamp(
+                data["auth_time"], tz=timezone.utc
+            ),
+            scopes=set(scope.split(" ")) if scope else set(),
         )
 
-    async def destroy_token(self, token: str, user: models.UP) -> None:
+    async def write_token(
+        self,
+        token_data: UserTokenData[models.UserProtocol[Any], Any],
+    ) -> str:
+        data = {
+            "sub": str(token_data.user.id),
+            "aud": self.token_audience,
+            "iat": int(token_data.created_at.timestamp()),
+            "scope": token_data.scope,
+            "auth_time": int(token_data.last_authenticated.timestamp()),
+        }
+        if token_data.expires_at:
+            data["exp"] = int(token_data.expires_at.timestamp())
+        return generate_jwt(data, self.encode_key, algorithm=self.algorithm)
+
+    async def destroy_token(
+        self,
+        token: str,
+        user: models.UserProtocol[Any],
+    ) -> None:
         raise StrategyDestroyNotSupportedError(
             "A JWT can't be invalidated: it's valid until it expires."
         )

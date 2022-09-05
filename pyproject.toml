@@ -97,6 +97,7 @@ dev = [
     "asgi_lifespan",
     "uvicorn",
     "types-redis",
+    "pytest-freezegun",
 ]
 sqlalchemy = [
     "fastapi-users-db-sqlalchemy >=4.0.0",

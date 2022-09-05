@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Tuple, Type
+from typing import Dict, List, Tuple, Type
 
 import jwt
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
@@ -8,6 +8,7 @@ from pydantic import BaseModel
 
 from fastapi_users import models, schemas
 from fastapi_users.authentication import AuthenticationBackend, Authenticator, Strategy
+from fastapi_users.authentication.token import UserTokenData
 from fastapi_users.exceptions import UserAlreadyExists
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
@@ -29,7 +30,7 @@ def generate_state_token(
 
 def get_oauth_router(
     oauth_client: BaseOAuth2,
-    backend: AuthenticationBackend[Any, Any],
+    backend: AuthenticationBackend,
     get_user_manager: UserManagerDependency[models.UP, models.ID],
     state_secret: SecretType,
     redirect_url: str = None,
@@ -106,7 +107,7 @@ def get_oauth_router(
             oauth2_authorize_callback
         ),
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
-        strategy: Strategy[models.UP, models.ID] = Depends(backend.get_strategy),
+        strategy: Strategy = Depends(backend.get_strategy),
     ):
         token, state = access_token_state
         account_id, account_email = await oauth_client.get_id_email(

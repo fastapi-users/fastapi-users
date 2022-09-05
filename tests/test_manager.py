@@ -17,6 +17,7 @@ from fastapi_users.exceptions import (
 )
 from fastapi_users.jwt import decode_jwt, generate_jwt
 from fastapi_users.manager import IntegerIDMixin
+from fastapi_users.scopes import SystemScope
 from tests.conftest import (
     UserCreate,
     UserManagerMock,

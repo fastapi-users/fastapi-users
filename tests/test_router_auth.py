@@ -1,4 +1,4 @@
-from typing import Any, AsyncGenerator, Dict, Tuple, cast
+from typing import Any, AsyncGenerator, Callable, Dict, Optional, Tuple, cast
 
 import httpx
 import pytest
@@ -6,13 +6,23 @@ from fastapi import FastAPI, status
 
 from fastapi_users.authentication import Authenticator
 from fastapi_users.router import ErrorCode, get_auth_router
-from tests.conftest import UserModel, get_mock_authentication
+from fastapi_users.scopes import SystemScope
+from tests.conftest import (
+    MockBackend,
+    UserModel,
+    assert_valid_token_response,
+    mock_authorized_headers,
+    mock_token_data,
+)
 
 
 @pytest.fixture
-def app_factory(get_user_manager, mock_authentication):
+def app_factory(
+    mock_authentication_factory: Callable[[str], MockBackend], get_user_manager
+):
     def _app_factory(requires_verification: bool) -> FastAPI:
-        mock_authentication_bis = get_mock_authentication(name="mock-bis")
+        mock_authentication = mock_authentication_factory("mock")
+        mock_authentication_bis = mock_authentication_factory("mock-bis")
         authenticator = Authenticator(
             [mock_authentication, mock_authentication_bis], get_user_manager
         )
@@ -113,12 +123,17 @@ class TestLogin:
     @pytest.mark.parametrize(
         "email", ["king.arthur@camelot.bt", "King.Arthur@camelot.bt"]
     )
+    @pytest.mark.parametrize(
+        "access_token_lifetime_seconds", [None, 3600], indirect=True
+    )
+    @pytest.mark.freeze_time
     async def test_valid_credentials_unverified(
         self,
         path,
         email,
         test_app_client: Tuple[httpx.AsyncClient, bool],
         user: UserModel,
+        access_token_lifetime_seconds: Optional[int],
     ):
         client, requires_verification = test_app_client
         data = {"username": email, "password": "guinevere"}
@@ -129,27 +144,36 @@ class TestLogin:
             assert data["detail"] == ErrorCode.LOGIN_USER_NOT_VERIFIED
         else:
             assert response.status_code == status.HTTP_200_OK
-            assert response.json() == {
-                "access_token": str(user.id),
-                "token_type": "bearer",
-            }
+            expected_access_token = mock_token_data(
+                user_id=user.id,
+                scopes={SystemScope.USER},
+                lifetime_seconds=access_token_lifetime_seconds,
+            )
+            assert_valid_token_response(response.json(), expected_access_token)
 
     @pytest.mark.parametrize("email", ["lake.lady@camelot.bt", "Lake.Lady@camelot.bt"])
+    @pytest.mark.parametrize(
+        "access_token_lifetime_seconds", [None, 3600], indirect=True
+    )
+    @pytest.mark.freeze_time
     async def test_valid_credentials_verified(
         self,
         path,
         email,
         test_app_client: Tuple[httpx.AsyncClient, bool],
         verified_user: UserModel,
+        access_token_lifetime_seconds: Optional[int],
     ):
         client, _ = test_app_client
         data = {"username": email, "password": "excalibur"}
         response = await client.post(path, data=data)
         assert response.status_code == status.HTTP_200_OK
-        assert response.json() == {
-            "access_token": str(verified_user.id),
-            "token_type": "bearer",
-        }
+        expected_access_token = mock_token_data(
+            user_id=verified_user.id,
+            scopes={SystemScope.USER, SystemScope.VERIFIED},
+            lifetime_seconds=access_token_lifetime_seconds,
+        )
+        assert_valid_token_response(response.json(), expected_access_token)
 
     async def test_inactive_user(
         self,
@@ -185,9 +209,7 @@ class TestLogout:
         user: UserModel,
     ):
         client, requires_verification = test_app_client
-        response = await client.post(
-            path, headers={"Authorization": f"Bearer {user.id}"}
-        )
+        response = await client.post(path, headers=mock_authorized_headers(user))
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
         else:
@@ -202,7 +224,7 @@ class TestLogout:
     ):
         client, _ = test_app_client
         response = await client.post(
-            path, headers={"Authorization": f"Bearer {verified_user.id}"}
+            path, headers=mock_authorized_headers(verified_user)
         )
         assert response.status_code == status.HTTP_200_OK
 
