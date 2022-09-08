@@ -3,6 +3,7 @@ from fastapi import Depends, FastAPI
 from app.db import User, create_db_and_tables
 from app.schemas import UserCreate, UserRead, UserUpdate
 from app.users import (
+    SECRET,
     auth_backend,
     current_active_user,
     fastapi_users,
@@ -35,7 +36,7 @@ app.include_router(
     tags=["users"],
 )
 app.include_router(
-    fastapi_users.get_oauth_router(google_oauth_client, auth_backend, "SECRET"),
+    fastapi_users.get_oauth_router(google_oauth_client, auth_backend, SECRET),
     prefix="/auth/google",
     tags=["auth"],
 )
