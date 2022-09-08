@@ -1,4 +1,4 @@
-from typing import AsyncGenerator
+from typing import AsyncGenerator, Optional
 
 import httpx
 import pytest
@@ -73,45 +73,45 @@ async def test_app_client(
     ):
         return user
 
-    @app.get("/optional-current-user", response_model=User)
+    @app.get("/optional-current-user")
     def optional_current_user(
-        user: UserModel = Depends(fastapi_users.current_user(optional=True)),
+        user: Optional[UserModel] = Depends(fastapi_users.current_user(optional=True)),
     ):
-        return user
+        return User.from_orm(user) if user else None
 
-    @app.get("/optional-current-active-user", response_model=User)
+    @app.get("/optional-current-active-user")
     def optional_current_active_user(
-        user: UserModel = Depends(
+        user: Optional[UserModel] = Depends(
             fastapi_users.current_user(optional=True, active=True)
         ),
     ):
-        return user
+        return User.from_orm(user) if user else None
 
-    @app.get("/optional-current-verified-user", response_model=User)
+    @app.get("/optional-current-verified-user")
     def optional_current_verified_user(
-        user: UserModel = Depends(
+        user: Optional[UserModel] = Depends(
             fastapi_users.current_user(optional=True, verified=True)
         ),
     ):
-        return user
+        return User.from_orm(user) if user else None
 
-    @app.get("/optional-current-superuser", response_model=User)
+    @app.get("/optional-current-superuser")
     def optional_current_superuser(
-        user: UserModel = Depends(
+        user: Optional[UserModel] = Depends(
             fastapi_users.current_user(optional=True, active=True, superuser=True)
         ),
     ):
-        return user
+        return User.from_orm(user) if user else None
 
-    @app.get("/optional-current-verified-superuser", response_model=User)
+    @app.get("/optional-current-verified-superuser")
     def optional_current_verified_superuser(
-        user: UserModel = Depends(
+        user: Optional[UserModel] = Depends(
             fastapi_users.current_user(
                 optional=True, active=True, verified=True, superuser=True
             )
         ),
     ):
-        return user
+        return User.from_orm(user) if user else None
 
     async for client in get_test_client(app):
         yield client
