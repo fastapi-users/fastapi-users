@@ -6,50 +6,69 @@ from fastapi_users import exceptions, models
 from fastapi_users.authentication.strategy.base import Strategy
 from fastapi_users.authentication.strategy.db.adapter import AccessTokenDatabase
 from fastapi_users.authentication.strategy.db.models import AP
+from fastapi_users.authentication.token import TokenData, UserTokenData
 from fastapi_users.manager import BaseUserManager
 
 
-class DatabaseStrategy(
-    Strategy[models.UP, models.ID], Generic[models.UP, models.ID, AP]
-):
-    def __init__(
-        self, database: AccessTokenDatabase[AP], lifetime_seconds: Optional[int] = None
-    ):
+class DatabaseStrategy(Strategy, Generic[AP]):
+    def __init__(self, database: AccessTokenDatabase[AP]):
         self.database = database
-        self.lifetime_seconds = lifetime_seconds
 
     async def read_token(
-        self, token: Optional[str], user_manager: BaseUserManager[models.UP, models.ID]
-    ) -> Optional[models.UP]:
+        self,
+        token: Optional[str],
+        user_manager: BaseUserManager[models.UP, models.ID],
+    ) -> Optional[UserTokenData[models.UP, models.ID]]:
+
         if token is None:
             return None
 
-        max_age = None
-        if self.lifetime_seconds:
-            max_age = datetime.now(timezone.utc) - timedelta(
-                seconds=self.lifetime_seconds
-            )
-
-        access_token = await self.database.get_by_token(token, max_age)
+        access_token = await self.database.get_by_token(token)
         if access_token is None:
             return None
 
+        token_data = TokenData(
+            user_id=access_token.user_id,
+            created_at=access_token.created_at,
+            expires_at=access_token.expires_at,
+            last_authenticated=access_token.last_authenticated,
+            scopes=(
+                set(access_token.scopes.split(" ")) if access_token.scopes else set()
+            ),
+        )
+
+        if token_data.expired:
+            return None
+
         try:
-            parsed_id = user_manager.parse_id(access_token.user_id)
-            return await user_manager.get(parsed_id)
+            return await token_data.lookup_user(user_manager)
         except (exceptions.UserNotExists, exceptions.InvalidID):
             return None
 
-    async def write_token(self, user: models.UP) -> str:
-        access_token_dict = self._create_access_token_dict(user)
+    async def write_token(
+        self,
+        token_data: UserTokenData[models.UserProtocol[Any], Any],
+    ) -> str:
+        access_token_dict = self._create_access_token_dict(token_data)
         access_token = await self.database.create(access_token_dict)
         return access_token.token
 
-    async def destroy_token(self, token: str, user: models.UP) -> None:
+    async def destroy_token(
+        self,
+        token: str,
+        user: models.UserProtocol[Any],
+    ) -> None:
         access_token = await self.database.get_by_token(token)
         if access_token is not None:
             await self.database.delete(access_token)
 
-    def _create_access_token_dict(self, user: models.UP) -> Dict[str, Any]:
+    def _create_access_token_dict(
+        self, token_data: UserTokenData[models.UP, models.ID]
+    ) -> Dict[str, Any]:
         token = secrets.token_urlsafe()
-        return {"token": token, "user_id": user.id}
+        return {
+            "token": token,
+            "user_id": token_data.user.id,
+            "scopes": token_data.scope,
+            **token_data.dict(exclude={"user", "scopes"}),
+        }

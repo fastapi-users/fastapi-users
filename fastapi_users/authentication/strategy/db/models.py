@@ -1,6 +1,6 @@
 import sys
 from datetime import datetime
-from typing import TypeVar
+from typing import Optional, TypeVar
 
 if sys.version_info < (3, 8):
     from typing_extensions import Protocol  # pragma: no cover
@@ -16,6 +16,9 @@ class AccessTokenProtocol(Protocol[models.ID]):
     token: str
     user_id: models.ID
     created_at: datetime
+    expires_at: Optional[datetime]
+    last_authenticated: datetime
+    scopes: str
 
     def __init__(self, *args, **kwargs) -> None:
         ...  # pragma: no cover

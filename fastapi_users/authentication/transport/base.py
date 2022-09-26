@@ -1,5 +1,7 @@
 import sys
-from typing import Any
+from typing import Optional, Type, TypeVar
+
+from pydantic import BaseModel
 
 if sys.version_info < (3, 8):
     from typing_extensions import Protocol  # pragma: no cover
@@ -16,13 +18,26 @@ class TransportLogoutNotSupportedError(Exception):
     pass
 
 
-class Transport(Protocol):
+class TransportTokenResponse(BaseModel):
+    access_token: str
+    refresh_token: Optional[str] = None
+
+
+LoginT = TypeVar("LoginT")
+LogoutT = TypeVar("LogoutT")
+
+
+class Transport(Protocol[LoginT, LogoutT]):
+    login_response_model: Optional[Type[LoginT]] = None
+    logout_response_model: Optional[Type[LogoutT]] = None
     scheme: SecurityBase
 
-    async def get_login_response(self, token: str, response: Response) -> Any:
+    async def get_login_response(
+        self, token: TransportTokenResponse, response: Response
+    ) -> LoginT:
         ...  # pragma: no cover
 
-    async def get_logout_response(self, response: Response) -> Any:
+    async def get_logout_response(self, response: Response) -> LogoutT:
         ...  # pragma: no cover
 
     @staticmethod

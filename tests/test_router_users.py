@@ -6,7 +6,13 @@ from fastapi import FastAPI, status
 
 from fastapi_users.authentication import Authenticator
 from fastapi_users.router import ErrorCode, get_users_router
-from tests.conftest import User, UserModel, UserUpdate, get_mock_authentication
+from tests.conftest import (
+    User,
+    UserModel,
+    UserUpdate,
+    get_mock_authentication,
+    mock_authorized_headers,
+)
 
 
 @pytest.fixture
@@ -62,7 +68,7 @@ class TestMe:
     ):
         client, _ = test_app_client
         response = await client.get(
-            "/me", headers={"Authorization": f"Bearer {inactive_user.id}"}
+            "/me", headers=mock_authorized_headers(inactive_user)
         )
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
@@ -72,9 +78,7 @@ class TestMe:
         user: UserModel,
     ):
         client, requires_verification = test_app_client
-        response = await client.get(
-            "/me", headers={"Authorization": f"Bearer {user.id}"}
-        )
+        response = await client.get("/me", headers=mock_authorized_headers(user))
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
         else:
@@ -90,7 +94,7 @@ class TestMe:
     ):
         client, _ = test_app_client
         response = await client.get(
-            "/me", headers={"Authorization": f"Bearer {verified_user.id}"}
+            "/me", headers=mock_authorized_headers(verified_user)
         )
         assert response.status_code == status.HTTP_200_OK
         data = cast(Dict[str, Any], response.json())
@@ -119,7 +123,7 @@ class TestUpdateMe:
     ):
         client, _ = test_app_client
         response = await client.patch(
-            "/me", headers={"Authorization": f"Bearer {inactive_user.id}"}
+            "/me", headers=mock_authorized_headers(inactive_user)
         )
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
@@ -133,7 +137,7 @@ class TestUpdateMe:
         response = await client.patch(
             "/me",
             json={"email": verified_user.email},
-            headers={"Authorization": f"Bearer {user.id}"},
+            headers=mock_authorized_headers(user),
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -151,7 +155,7 @@ class TestUpdateMe:
         response = await client.patch(
             "/me",
             json={"password": "m"},
-            headers={"Authorization": f"Bearer {user.id}"},
+            headers=mock_authorized_headers(user),
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -170,7 +174,7 @@ class TestUpdateMe:
     ):
         client, requires_verification = test_app_client
         response = await client.patch(
-            "/me", json={}, headers={"Authorization": f"Bearer {user.id}"}
+            "/me", json={}, headers=mock_authorized_headers(user)
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -188,7 +192,7 @@ class TestUpdateMe:
         client, requires_verification = test_app_client
         json = {"email": "king.arthur@tintagel.bt"}
         response = await client.patch(
-            "/me", json=json, headers={"Authorization": f"Bearer {user.id}"}
+            "/me", json=json, headers=mock_authorized_headers(user)
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -206,7 +210,7 @@ class TestUpdateMe:
         client, _ = test_app_client
         json = {"email": "king.arthur@tintagel.bt"}
         response = await client.patch(
-            "/me", json=json, headers={"Authorization": f"Bearer {verified_user.id}"}
+            "/me", json=json, headers=mock_authorized_headers(verified_user)
         )
         assert response.status_code == status.HTTP_200_OK
 
@@ -221,7 +225,7 @@ class TestUpdateMe:
         client, requires_verification = test_app_client
         json = {"is_superuser": True}
         response = await client.patch(
-            "/me", json=json, headers={"Authorization": f"Bearer {user.id}"}
+            "/me", json=json, headers=mock_authorized_headers(user)
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -239,7 +243,7 @@ class TestUpdateMe:
         client, requires_verification = test_app_client
         json = {"is_active": False}
         response = await client.patch(
-            "/me", json=json, headers={"Authorization": f"Bearer {user.id}"}
+            "/me", json=json, headers=mock_authorized_headers(user)
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -257,7 +261,7 @@ class TestUpdateMe:
         client, requires_verification = test_app_client
         json = {"is_verified": True}
         response = await client.patch(
-            "/me", json=json, headers={"Authorization": f"Bearer {user.id}"}
+            "/me", json=json, headers=mock_authorized_headers(user)
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -280,7 +284,7 @@ class TestUpdateMe:
 
         json = {"password": "merlin"}
         response = await client.patch(
-            "/me", json=json, headers={"Authorization": f"Bearer {user.id}"}
+            "/me", json=json, headers=mock_authorized_headers(user)
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -298,7 +302,7 @@ class TestUpdateMe:
     ):
         client, _ = test_app_client
         response = await client.patch(
-            "/me", json={}, headers={"Authorization": f"Bearer {verified_user.id}"}
+            "/me", json={}, headers=mock_authorized_headers(verified_user)
         )
         assert response.status_code == status.HTTP_200_OK
 
@@ -313,7 +317,7 @@ class TestUpdateMe:
         client, _ = test_app_client
         json = {"email": "king.arthur@tintagel.bt"}
         response = await client.patch(
-            "/me", json=json, headers={"Authorization": f"Bearer {verified_user.id}"}
+            "/me", json=json, headers=mock_authorized_headers(verified_user)
         )
         assert response.status_code == status.HTTP_200_OK
 
@@ -328,7 +332,7 @@ class TestUpdateMe:
         client, _ = test_app_client
         json = {"is_superuser": True}
         response = await client.patch(
-            "/me", json=json, headers={"Authorization": f"Bearer {verified_user.id}"}
+            "/me", json=json, headers=mock_authorized_headers(verified_user)
         )
         assert response.status_code == status.HTTP_200_OK
 
@@ -343,7 +347,7 @@ class TestUpdateMe:
         client, _ = test_app_client
         json = {"is_active": False}
         response = await client.patch(
-            "/me", json=json, headers={"Authorization": f"Bearer {verified_user.id}"}
+            "/me", json=json, headers=mock_authorized_headers(verified_user)
         )
         assert response.status_code == status.HTTP_200_OK
 
@@ -358,7 +362,7 @@ class TestUpdateMe:
         client, _ = test_app_client
         json = {"is_verified": False}
         response = await client.patch(
-            "/me", json=json, headers={"Authorization": f"Bearer {verified_user.id}"}
+            "/me", json=json, headers=mock_authorized_headers(verified_user)
         )
         assert response.status_code == status.HTTP_200_OK
 
@@ -378,7 +382,7 @@ class TestUpdateMe:
 
         json = {"password": "merlin"}
         response = await client.patch(
-            "/me", json=json, headers={"Authorization": f"Bearer {verified_user.id}"}
+            "/me", json=json, headers=mock_authorized_headers(verified_user)
         )
         assert response.status_code == status.HTTP_200_OK
         assert mock_user_db.update.called is True
@@ -403,7 +407,7 @@ class TestGetUser:
         client, requires_verification = test_app_client
         response = await client.get(
             "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
-            headers={"Authorization": f"Bearer {user.id}"},
+            headers=mock_authorized_headers(user),
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -416,7 +420,7 @@ class TestGetUser:
         client, _ = test_app_client
         response = await client.get(
             "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
-            headers={"Authorization": f"Bearer {verified_user.id}"},
+            headers=mock_authorized_headers(verified_user),
         )
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
@@ -428,7 +432,7 @@ class TestGetUser:
         client, requires_verification = test_app_client
         response = await client.get(
             "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
-            headers={"Authorization": f"Bearer {superuser.id}"},
+            headers=mock_authorized_headers(superuser),
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -443,7 +447,7 @@ class TestGetUser:
         client, _ = test_app_client
         response = await client.get(
             "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
-            headers={"Authorization": f"Bearer {verified_superuser.id}"},
+            headers=mock_authorized_headers(verified_superuser),
         )
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
@@ -455,7 +459,7 @@ class TestGetUser:
     ):
         client, requires_verification = test_app_client
         response = await client.get(
-            f"/{user.id}", headers={"Authorization": f"Bearer {superuser.id}"}
+            f"/{user.id}", headers=mock_authorized_headers(superuser)
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -474,7 +478,7 @@ class TestGetUser:
     ):
         client, _ = test_app_client
         response = await client.get(
-            f"/{user.id}", headers={"Authorization": f"Bearer {verified_superuser.id}"}
+            f"/{user.id}", headers=mock_authorized_headers(verified_superuser)
         )
         assert response.status_code == status.HTTP_200_OK
 
@@ -502,7 +506,7 @@ class TestUpdateUser:
         client, requires_verification = test_app_client
         response = await client.patch(
             "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
-            headers={"Authorization": f"Bearer {user.id}"},
+            headers=mock_authorized_headers(user),
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -515,7 +519,7 @@ class TestUpdateUser:
         client, _ = test_app_client
         response = await client.patch(
             "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
-            headers={"Authorization": f"Bearer {verified_user.id}"},
+            headers=mock_authorized_headers(verified_user),
         )
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
@@ -528,7 +532,7 @@ class TestUpdateUser:
         response = await client.patch(
             "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
             json={},
-            headers={"Authorization": f"Bearer {superuser.id}"},
+            headers=mock_authorized_headers(superuser),
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -544,7 +548,7 @@ class TestUpdateUser:
         response = await client.patch(
             "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
             json={},
-            headers={"Authorization": f"Bearer {verified_superuser.id}"},
+            headers=mock_authorized_headers(verified_superuser),
         )
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
@@ -556,7 +560,7 @@ class TestUpdateUser:
     ):
         client, requires_verification = test_app_client
         response = await client.patch(
-            f"/{user.id}", json={}, headers={"Authorization": f"Bearer {superuser.id}"}
+            f"/{user.id}", json={}, headers=mock_authorized_headers(superuser)
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -576,7 +580,7 @@ class TestUpdateUser:
         response = await client.patch(
             f"/{user.id}",
             json={},
-            headers={"Authorization": f"Bearer {verified_superuser.id}"},
+            headers=mock_authorized_headers(verified_superuser),
         )
         assert response.status_code == status.HTTP_200_OK
 
@@ -594,7 +598,7 @@ class TestUpdateUser:
         response = await client.patch(
             f"/{user.id}",
             json=json,
-            headers={"Authorization": f"Bearer {superuser.id}"},
+            headers=mock_authorized_headers(superuser),
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -615,7 +619,7 @@ class TestUpdateUser:
         response = await client.patch(
             f"/{user.id}",
             json={"email": verified_user.email},
-            headers={"Authorization": f"Bearer {verified_superuser.id}"},
+            headers=mock_authorized_headers(verified_superuser),
         )
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
@@ -631,7 +635,7 @@ class TestUpdateUser:
         response = await client.patch(
             f"/{user.id}",
             json={"password": "m"},
-            headers={"Authorization": f"Bearer {verified_superuser.id}"},
+            headers=mock_authorized_headers(verified_superuser),
         )
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
@@ -651,7 +655,7 @@ class TestUpdateUser:
         response = await client.patch(
             f"/{user.id}",
             json=json,
-            headers={"Authorization": f"Bearer {verified_superuser.id}"},
+            headers=mock_authorized_headers(verified_superuser),
         )
         assert response.status_code == status.HTTP_200_OK
 
@@ -669,7 +673,7 @@ class TestUpdateUser:
         response = await client.patch(
             f"/{user.id}",
             json=json,
-            headers={"Authorization": f"Bearer {superuser.id}"},
+            headers=mock_authorized_headers(superuser),
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -690,7 +694,7 @@ class TestUpdateUser:
         response = await client.patch(
             f"/{user.id}",
             json=json,
-            headers={"Authorization": f"Bearer {verified_superuser.id}"},
+            headers=mock_authorized_headers(verified_superuser),
         )
         assert response.status_code == status.HTTP_200_OK
 
@@ -708,7 +712,7 @@ class TestUpdateUser:
         response = await client.patch(
             f"/{user.id}",
             json=json,
-            headers={"Authorization": f"Bearer {superuser.id}"},
+            headers=mock_authorized_headers(superuser),
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -729,7 +733,7 @@ class TestUpdateUser:
         response = await client.patch(
             f"/{user.id}",
             json=json,
-            headers={"Authorization": f"Bearer {verified_superuser.id}"},
+            headers=mock_authorized_headers(verified_superuser),
         )
         assert response.status_code == status.HTTP_200_OK
 
@@ -747,7 +751,7 @@ class TestUpdateUser:
         response = await client.patch(
             f"/{user.id}",
             json=json,
-            headers={"Authorization": f"Bearer {superuser.id}"},
+            headers=mock_authorized_headers(superuser),
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -768,7 +772,7 @@ class TestUpdateUser:
         response = await client.patch(
             f"/{user.id}",
             json=json,
-            headers={"Authorization": f"Bearer {verified_superuser.id}"},
+            headers=mock_authorized_headers(verified_superuser),
         )
         assert response.status_code == status.HTTP_200_OK
 
@@ -791,7 +795,7 @@ class TestUpdateUser:
         response = await client.patch(
             f"/{user.id}",
             json=json,
-            headers={"Authorization": f"Bearer {superuser.id}"},
+            headers=mock_authorized_headers(superuser),
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -818,7 +822,7 @@ class TestUpdateUser:
         response = await client.patch(
             f"/{user.id}",
             json=json,
-            headers={"Authorization": f"Bearer {verified_superuser.id}"},
+            headers=mock_authorized_headers(verified_superuser),
         )
         assert response.status_code == status.HTTP_200_OK
         assert mock_user_db.update.called is True
@@ -843,7 +847,7 @@ class TestDeleteUser:
         client, requires_verification = test_app_client
         response = await client.delete(
             "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
-            headers={"Authorization": f"Bearer {user.id}"},
+            headers=mock_authorized_headers(user),
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -856,7 +860,7 @@ class TestDeleteUser:
         client, _ = test_app_client
         response = await client.delete(
             "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
-            headers={"Authorization": f"Bearer {verified_user.id}"},
+            headers=mock_authorized_headers(verified_user),
         )
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
@@ -868,7 +872,7 @@ class TestDeleteUser:
         client, requires_verification = test_app_client
         response = await client.delete(
             "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
-            headers={"Authorization": f"Bearer {superuser.id}"},
+            headers=mock_authorized_headers(superuser),
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -883,7 +887,7 @@ class TestDeleteUser:
         client, _ = test_app_client
         response = await client.delete(
             "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
-            headers={"Authorization": f"Bearer {verified_superuser.id}"},
+            headers=mock_authorized_headers(verified_superuser),
         )
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
@@ -899,7 +903,7 @@ class TestDeleteUser:
         mocker.spy(mock_user_db, "delete")
 
         response = await client.delete(
-            f"/{user.id}", headers={"Authorization": f"Bearer {superuser.id}"}
+            f"/{user.id}", headers=mock_authorized_headers(superuser)
         )
         if requires_verification:
             assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -923,7 +927,7 @@ class TestDeleteUser:
         mocker.spy(mock_user_db, "delete")
 
         response = await client.delete(
-            f"/{user.id}", headers={"Authorization": f"Bearer {verified_superuser.id}"}
+            f"/{user.id}", headers=mock_authorized_headers(verified_superuser)
         )
         assert response.status_code == status.HTTP_204_NO_CONTENT
         assert response.content == b""

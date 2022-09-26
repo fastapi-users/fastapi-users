@@ -3,7 +3,10 @@ import re
 import pytest
 from fastapi import Response, status
 
-from fastapi_users.authentication.transport import CookieTransport
+from fastapi_users.authentication.transport import (
+    CookieTransport,
+    TransportTokenResponse,
+)
 
 COOKIE_MAX_AGE = 3600
 COOKIE_NAME = "COOKIE_NAME"
@@ -39,7 +42,8 @@ async def test_get_login_response(cookie_transport: CookieTransport):
     httponly = cookie_transport.cookie_httponly
 
     response = Response()
-    login_response = await cookie_transport.get_login_response("TOKEN", response)
+    token_response = TransportTokenResponse(access_token="TOKEN")
+    login_response = await cookie_transport.get_login_response(token_response, response)
 
     assert login_response is None
 

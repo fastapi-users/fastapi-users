@@ -8,6 +8,7 @@ from pydantic import BaseModel
 
 from fastapi_users import models, schemas
 from fastapi_users.authentication import AuthenticationBackend, Authenticator, Strategy
+from fastapi_users.authentication.token import UserTokenData
 from fastapi_users.exceptions import UserAlreadyExists
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
@@ -77,6 +78,8 @@ def get_oauth_router(
         "/callback",
         name=callback_route_name,
         description="The response varies based on the authentication backend used.",
+        response_model=backend.transport.login_response_model,
+        response_model_exclude_none=True,
         responses={
             status.HTTP_400_BAD_REQUEST: {
                 "model": ErrorModel,
@@ -104,7 +107,7 @@ def get_oauth_router(
             oauth2_authorize_callback
         ),
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
-        strategy: Strategy[models.UP, models.ID] = Depends(backend.get_strategy),
+        strategy: Strategy = Depends(backend.get_strategy),
     ):
         token, state = access_token_state
         account_id, account_email = await oauth_client.get_id_email(

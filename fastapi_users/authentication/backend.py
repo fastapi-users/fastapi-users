@@ -1,4 +1,5 @@
-from typing import Any, Generic
+from datetime import datetime
+from typing import Any, Generic, Optional, Set
 
 from fastapi import Response
 
@@ -7,14 +8,19 @@ from fastapi_users.authentication.strategy import (
     Strategy,
     StrategyDestroyNotSupportedError,
 )
+from fastapi_users.authentication.token import UserTokenData
 from fastapi_users.authentication.transport import (
+    LoginT,
+    LogoutT,
     Transport,
     TransportLogoutNotSupportedError,
+    TransportTokenResponse,
 )
+from fastapi_users.scopes import SystemScope
 from fastapi_users.types import DependencyCallable
 
 
-class AuthenticationBackend(Generic[models.UP, models.ID]):
+class AuthenticationBackend(Generic[LoginT, LogoutT]):
     """
     Combination of an authentication transport and strategy.
 
@@ -27,34 +33,67 @@ class AuthenticationBackend(Generic[models.UP, models.ID]):
     """
 
     name: str
-    transport: Transport
+    transport: Transport[LoginT, LogoutT]
 
     def __init__(
         self,
         name: str,
-        transport: Transport,
-        get_strategy: DependencyCallable[Strategy[models.UP, models.ID]],
+        transport: Transport[LoginT, LogoutT],
+        get_strategy: DependencyCallable[Strategy],
+        access_token_lifetime_seconds: Optional[int] = 3600,
+        refresh_token_enabled: bool = False,
+        refresh_token_lifetime_seconds: Optional[int] = 86400,
     ):
         self.name = name
         self.transport = transport
         self.get_strategy = get_strategy
+        self.access_token_lifetime_seconds = access_token_lifetime_seconds
+        self.refresh_token_enabled = refresh_token_enabled
+        self.refresh_token_lifetime_seconds = refresh_token_lifetime_seconds
 
     async def login(
         self,
-        strategy: Strategy[models.UP, models.ID],
-        user: models.UP,
+        strategy: Strategy,
+        user: models.UserProtocol[Any],
         response: Response,
-    ) -> Any:
-        token = await strategy.write_token(user)
-        return await self.transport.get_login_response(token, response)
+        last_authenticated: Optional[datetime] = None,
+    ) -> Optional[LoginT]:
+        scopes: Set[str] = set()
+        if user.is_active:
+            scopes.add(SystemScope.USER)
+        if user.is_verified:
+            scopes.add(SystemScope.VERIFIED)
+        if user.is_superuser:
+            scopes.add(SystemScope.SUPERUSER)
+
+        access_token_data = UserTokenData.issue_now(
+            user,
+            self.access_token_lifetime_seconds,
+            last_authenticated,
+            scopes=scopes,
+        )
+        token_response = TransportTokenResponse(
+            access_token=await strategy.write_token(access_token_data)
+        )
+        if self.refresh_token_enabled:
+            refresh_token_data = UserTokenData.issue_now(
+                user,
+                self.refresh_token_lifetime_seconds,
+                last_authenticated,
+                scopes={SystemScope.REFRESH},
+            )
+            token_response.refresh_token = await strategy.write_token(
+                refresh_token_data
+            )
+        return await self.transport.get_login_response(token_response, response)
 
     async def logout(
         self,
-        strategy: Strategy[models.UP, models.ID],
-        user: models.UP,
+        strategy: Strategy,
+        user: models.UserProtocol[Any],
         token: str,
         response: Response,
-    ) -> Any:
+    ) -> Optional[LogoutT]:
         try:
             await strategy.destroy_token(token, user)
         except StrategyDestroyNotSupportedError:
