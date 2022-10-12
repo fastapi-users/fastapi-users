@@ -571,6 +571,20 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         """
         return  # pragma: no cover
 
+    async def on_after_login(
+        self, user: models.UP, request: Optional[Request] = None
+    ) -> None:
+        """
+        Perform logic after user login.
+
+        *You should overload this method to add your own logic.*
+
+        :param user: The user that is logging in
+        :param request: Optional FastAPI request that
+        triggered the operation, defaults to None.
+        """
+        return  # pragma: no cover
+
     async def on_before_delete(
         self, user: models.UP, request: Optional[Request] = None
     ) -> None:
