@@ -67,7 +67,7 @@ class TestLogin:
         response = await client.post(path, data={})
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
         assert user_manager.on_after_login.called is False
-        
+
     async def test_missing_username(
         self,
         path,
@@ -179,6 +179,7 @@ class TestLogin:
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
         assert user_manager.on_after_login.called is False
+
 
 @pytest.mark.router
 @pytest.mark.parametrize("path", ["/mock/logout", "/mock-bis/logout"])
