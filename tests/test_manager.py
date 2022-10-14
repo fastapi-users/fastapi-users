@@ -595,7 +595,6 @@ class TestAuthenticate:
         form = create_oauth2_password_request_form("lancelot@camelot.bt", "guinevere")
         user = await user_manager.authenticate(form)
         assert user is None
-        assert user_manager.on_after_login.called is False
 
     async def test_wrong_password(
         self,
@@ -607,7 +606,6 @@ class TestAuthenticate:
         form = create_oauth2_password_request_form("king.arthur@camelot.bt", "percival")
         user = await user_manager.authenticate(form)
         assert user is None
-        assert user_manager.on_after_login.called is False
 
     async def test_valid_credentials(
         self,
@@ -622,7 +620,6 @@ class TestAuthenticate:
         user = await user_manager.authenticate(form)
         assert user is not None
         assert user.email == "king.arthur@camelot.bt"
-        assert user_manager.on_after_login.called is True
 
     async def test_upgrade_password_hash(
         self,

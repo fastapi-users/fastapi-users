@@ -61,35 +61,42 @@ class TestLogin:
         self,
         path,
         test_app_client: Tuple[httpx.AsyncClient, bool],
+        user_manager,
     ):
         client, _ = test_app_client
         response = await client.post(path, data={})
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
-
+        assert user_manager.on_after_login.called is False
+        
     async def test_missing_username(
         self,
         path,
         test_app_client: Tuple[httpx.AsyncClient, bool],
+        user_manager,
     ):
         client, _ = test_app_client
         data = {"password": "guinevere"}
         response = await client.post(path, data=data)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert user_manager.on_after_login.called is False
 
     async def test_missing_password(
         self,
         path,
         test_app_client: Tuple[httpx.AsyncClient, bool],
+        user_manager,
     ):
         client, _ = test_app_client
         data = {"username": "king.arthur@camelot.bt"}
         response = await client.post(path, data=data)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert user_manager.on_after_login.called is False
 
     async def test_not_existing_user(
         self,
         path,
         test_app_client: Tuple[httpx.AsyncClient, bool],
+        user_manager,
     ):
         client, _ = test_app_client
         data = {"username": "lancelot@camelot.bt", "password": "guinevere"}
@@ -97,11 +104,13 @@ class TestLogin:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
+        assert user_manager.on_after_login.called is False
 
     async def test_wrong_password(
         self,
         path,
         test_app_client: Tuple[httpx.AsyncClient, bool],
+        user_manager,
     ):
         client, _ = test_app_client
         data = {"username": "king.arthur@camelot.bt", "password": "percival"}
@@ -109,6 +118,7 @@ class TestLogin:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
+        assert user_manager.on_after_login.called is False
 
     @pytest.mark.parametrize(
         "email", ["king.arthur@camelot.bt", "King.Arthur@camelot.bt"]
@@ -118,6 +128,7 @@ class TestLogin:
         path,
         email,
         test_app_client: Tuple[httpx.AsyncClient, bool],
+        user_manager,
         user: UserModel,
     ):
         client, requires_verification = test_app_client
@@ -127,12 +138,14 @@ class TestLogin:
             assert response.status_code == status.HTTP_400_BAD_REQUEST
             data = cast(Dict[str, Any], response.json())
             assert data["detail"] == ErrorCode.LOGIN_USER_NOT_VERIFIED
+            assert user_manager.on_after_login.called is False
         else:
             assert response.status_code == status.HTTP_200_OK
             assert response.json() == {
                 "access_token": str(user.id),
                 "token_type": "bearer",
             }
+            assert user_manager.on_after_login.called is True
 
     @pytest.mark.parametrize("email", ["lake.lady@camelot.bt", "Lake.Lady@camelot.bt"])
     async def test_valid_credentials_verified(
@@ -140,6 +153,7 @@ class TestLogin:
         path,
         email,
         test_app_client: Tuple[httpx.AsyncClient, bool],
+        user_manager,
         verified_user: UserModel,
     ):
         client, _ = test_app_client
@@ -150,11 +164,13 @@ class TestLogin:
             "access_token": str(verified_user.id),
             "token_type": "bearer",
         }
+        assert user_manager.on_after_login.called is True
 
     async def test_inactive_user(
         self,
         path,
         test_app_client: Tuple[httpx.AsyncClient, bool],
+        user_manager,
     ):
         client, _ = test_app_client
         data = {"username": "percival@camelot.bt", "password": "angharad"}
@@ -162,7 +178,7 @@ class TestLogin:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.LOGIN_BAD_CREDENTIALS
-
+        assert user_manager.on_after_login.called is False
 
 @pytest.mark.router
 @pytest.mark.parametrize("path", ["/mock/logout", "/mock-bis/logout"])
