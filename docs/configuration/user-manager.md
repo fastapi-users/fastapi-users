@@ -164,6 +164,33 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
         print(f"User {user.id} has been updated with {update_dict}.")
 ```
 
+#### `on_after_login`
+
+Perform logic after a successful user login.
+
+It may be useful for custom logic or processes triggered by new logins, for example a daily login reward or for analytics.
+
+**Arguments**
+
+* `user` (`User`): the updated user.
+* `request` (`Optional[Request]`): optional FastAPI request object that triggered the operation. Defaults to None.
+
+**Example**
+
+```py
+from fastapi_users import BaseUserManager, UUIDIDMixin
+
+
+class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
+    # ...
+    async def on_after_login(
+        self,
+        user: User,
+        request: Optional[Request] = None,
+    ):
+        print(f"User {user.id} logged in.")
+```
+
 #### `on_after_request_verify`
 
 Perform logic after successful verification request.
