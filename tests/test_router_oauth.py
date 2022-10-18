@@ -188,6 +188,8 @@ class TestCallback:
         data = cast(Dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.OAUTH_USER_ALREADY_EXISTS
 
+        assert user_manager_oauth.on_after_login.called is False
+
     async def test_active_user(
         self,
         async_method_mocker: AsyncMethodMocker,
@@ -216,6 +218,8 @@ class TestCallback:
         data = cast(Dict[str, Any], response.json())
         assert data["access_token"] == str(user_oauth.id)
 
+        assert user_manager_oauth.on_after_login.called is True
+
     async def test_inactive_user(
         self,
         async_method_mocker: AsyncMethodMocker,
@@ -242,6 +246,7 @@ class TestCallback:
         )
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert user_manager_oauth.on_after_login.called is False
 
     async def test_redirect_url_router(
         self,
@@ -276,6 +281,7 @@ class TestCallback:
 
         data = cast(Dict[str, Any], response.json())
         assert data["access_token"] == str(user_oauth.id)
+        assert user_manager_oauth.on_after_login.called is True
 
 
 @pytest.mark.router
