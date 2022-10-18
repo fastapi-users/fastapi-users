@@ -61,3 +61,10 @@ jobs:
       run: |
         hatch build
         hatch publish
+    - name: Create release
+      uses: ncipollo/release-action@v1
+      with:
+        draft: true
+        body: ${{ github.event.head_commit.message }}
+        artifacts: dist/*.whl,dist/*.tar.gz
+        token: ${{ secrets.GITHUB_TOKEN }}
