@@ -34,4 +34,4 @@ jobs:
           git config user.name fastapi-users-ci
           git config user.email fastapi-users-ci@francoisvoron.com
           git fetch origin gh-pages --depth=1
-          mike deploy --push --update-aliases ${{ env.DOC_TAG }}
+          hatch run mike deploy --push --update-aliases ${{ env.DOC_TAG }}
