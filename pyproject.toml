@@ -31,12 +31,75 @@ markers = [
 	"router",
 ]
 
-[build-system]
-requires = ["flit_core >=3.2,<4"]
-build-backend = "flit_core.buildapi"
+[tool.hatch]
 
-[tool.flit.module]
-name = "fastapi_users"
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.version]
+source = "regex_commit"
+commit_extra_args = ["-e"]
+path = "fastapi_users/__init__.py"
+
+[tool.hatch.envs.default]
+features = [
+    "sqlalchemy",
+    "beanie",
+    "oauth",
+    "redis",
+]
+dependencies = [
+    "flake8",
+    "pytest",
+    "requests",
+    "isort",
+    "pytest-asyncio",
+    "flake8-docstrings",
+    "mike",
+    "mkdocs",
+    "mkdocs-material",
+    "mkdocs-mermaid2-plugin",
+    "black",
+    "mypy",
+    "pytest-cov",
+    "pytest-mock",
+    "flit",
+    "markdown-include",
+    "pygments",
+    "pymdown-extensions",
+    "bumpversion",
+    "httpx-oauth",
+    "httpx",
+    "asgi_lifespan",
+    "uvicorn",
+    "types-redis",
+]
+
+[tool.hatch.envs.default.scripts]
+test = "pytest --cov=fastapi_users/ --cov-report=term-missing --cov-fail-under=100"
+test-cov-xml = "pytest --cov=fastapi_users/ --cov-report=xml --cov-fail-under=100"
+lint = [
+  "isort ./fastapi_users ./tests",
+  "isort ./docs/src -o fastapi_users",
+  "isort ./examples -o fastapi_users -p app",
+  "black . ",
+  "mypy fastapi_users/",
+]
+lint-check = [
+  "isort --check-only ./fastapi_users ./tests",
+  "isort --check-only  ./docs/src -o fastapi_users",
+  "isort --check-only ./examples -o fastapi_users -p app",
+  "black --check .",
+  "mypy fief_client/",
+]
+docs = "mkdocs serve"
+
+[tool.hatch.build.targets.sdist]
+support-legacy = true  # Create setup.py
+
+[build-system]
+requires = ["hatchling", "hatch-regex-commit"]
+build-backend = "hatchling.build"
 
 [project]
 name = "fastapi-users"
@@ -71,33 +134,6 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = [
-    "flake8",
-    "pytest",
-    "requests",
-    "isort",
-    "pytest-asyncio",
-    "flake8-docstrings",
-    "mike",
-    "mkdocs",
-    "mkdocs-material",
-    "mkdocs-mermaid2-plugin",
-    "black",
-    "mypy",
-    "codecov",
-    "pytest-cov",
-    "pytest-mock",
-    "flit",
-    "markdown-include",
-    "pygments",
-    "pymdown-extensions",
-    "bumpversion",
-    "httpx-oauth",
-    "httpx",
-    "asgi_lifespan",
-    "uvicorn",
-    "types-redis",
-]
 sqlalchemy = [
     "fastapi-users-db-sqlalchemy >=4.0.0",
 ]
@@ -113,3 +149,4 @@ redis = [
 
 [project.urls]
 Documentation = "https://fastapi-users.github.io/fastapi-users/"
+Source = "https://github.com/fastapi-users/fastapi-users"

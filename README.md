@@ -178,40 +178,14 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 
 ### Setup environment
 
-You should create a virtual environment and activate it:
-
-```bash
-python -m venv venv/
-```
-
-```bash
-source venv/bin/activate
-```
-
-And then install the development dependencies:
-
-```bash
-make install
-```
+We use [Hatch](https://hatch.pypa.io/latest/install/) to manage the development environment and production build. Ensure it's installed on your system.
 
 ### Run unit tests
 
 You can run all the tests with:
 
 ```bash
-make test
-```
-
-Alternatively, you can run `pytest` yourself.
-
-```bash
-pytest
-```
-
-There are quite a few unit tests, so you might run into ulimit issues where there are too many open file descriptors. You may be able to set a new, higher limit temporarily with:
-
-```bash
-ulimit -n 2048
+hatch run test
 ```
 
 ### Format the code
@@ -219,8 +193,18 @@ ulimit -n 2048
 Execute the following command to apply `isort` and `black` formatting:
 
 ```bash
-make format
+hatch run lint
 ```
+
+### Serve the documentation
+
+You can serve the documentation locally with the following command:
+
+```bash
+hatch run docs
+```
+
+The documentation will be available on [http://localhost:8000](http://localhost:8000).
 
 ## License
 

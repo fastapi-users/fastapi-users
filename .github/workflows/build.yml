@@ -11,33 +11,31 @@ jobs:
         python_version: [3.7, 3.8, 3.9, '3.10']
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
     - name: Set up Python
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python_version }}
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flit
-        flit install --deps develop --extras oauth,redis
-    - name: Check codestyle
+        pip install hatch
+        hatch env create
+    - name: Lint and typecheck
       run: |
-        make format-check
-        make lint
-    - name: Typecheck
+        hatch run lint-check
+    - name: Test
       run: |
-        make typecheck
-    - name: Test with pytest
-      env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      run: |
-        pytest --cov=fastapi_users/
-        codecov
+        hatch run test-cov-xml
+    - uses: codecov/codecov-action@v2
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        fail_ci_if_error: true
+        verbose: true
     - name: Build and install it on system host
       run: |
-        flit build --setup-py
-        flit install --deps none --python $(which python)
+        hatch build
+        pip install dist/fastapi_users-*.whl
         python test_build.py
 
   release:
@@ -46,19 +44,20 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
     - name: Set up Python
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v4
       with:
         python-version: 3.7
     - name: Install dependencies
+      shell: bash
       run: |
         python -m pip install --upgrade pip
-        pip install flit
-        flit install --deps develop --extras oauth,redis
-    - name: Release on PyPI
+        pip install hatch
+    - name: Build and publish on PyPI
       env:
-        FLIT_USERNAME: ${{ secrets.FLIT_USERNAME }}
-        FLIT_PASSWORD: ${{ secrets.FLIT_PASSWORD }}
+        HATCH_INDEX_USER: ${{ secrets.HATCH_INDEX_USER }}
+        HATCH_INDEX_AUTH: ${{ secrets.HATCH_INDEX_AUTH }}
       run: |
-        flit publish --setup-py
+        hatch build
+        hatch publish
