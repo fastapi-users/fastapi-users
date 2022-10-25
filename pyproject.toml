@@ -127,7 +127,7 @@ dependencies = [
     "fastapi >=0.65.2",
     "passlib[bcrypt] ==1.7.4",
     "email-validator >=1.1.0,<1.4",
-    "pyjwt[crypto] ==2.5.0",
+    "pyjwt[crypto] ==2.6.0",
     "python-multipart ==0.0.5",
     "makefun >=1.11.2,<2.0.0",
     "typing-extensions >=4.1.1; python_version < '3.8'",
