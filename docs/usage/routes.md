@@ -239,6 +239,15 @@ Depending on the situation, several things can happen:
     Invalid token.
 
 !!! fail "`400 Bad Request`"
+    The OAuth provider didn't return an e-mail address. Make sure this provider return e-mail address through their API and you have asked for the required scope.
+
+    ```json
+    {
+        "detail": "OAUTH_NOT_AVAILABLE_EMAIL"
+    }
+    ```
+
+!!! fail "`400 Bad Request`"
     Another user with the same e-mail address already exists.
 
     ```json
@@ -291,6 +300,15 @@ Handle the OAuth callback and add the OAuth account to the current authenticated
 
 !!! fail "`400 Bad Request`"
     Invalid token.
+
+!!! fail "`400 Bad Request`"
+    The OAuth provider didn't return an e-mail address. Make sure this provider return e-mail address through their API and you have asked for the required scope.
+
+    ```json
+    {
+        "detail": "OAUTH_NOT_AVAILABLE_EMAIL"
+    }
+    ```
 
 !!! success "`200 OK`"
     ```json
