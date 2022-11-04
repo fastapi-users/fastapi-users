@@ -111,6 +111,12 @@ def get_oauth_router(
             token["access_token"]
         )
 
+        if account_email is None:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=ErrorCode.OAUTH_NOT_AVAILABLE_EMAIL,
+            )
+
         try:
             decode_jwt(state, state_secret, [STATE_TOKEN_AUDIENCE])
         except jwt.DecodeError:
@@ -234,6 +240,12 @@ def get_oauth_associate_router(
         account_id, account_email = await oauth_client.get_id_email(
             token["access_token"]
         )
+
+        if account_email is None:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=ErrorCode.OAUTH_NOT_AVAILABLE_EMAIL,
+            )
 
         try:
             state_data = decode_jwt(state, state_secret, [STATE_TOKEN_AUDIENCE])

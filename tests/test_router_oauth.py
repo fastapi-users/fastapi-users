@@ -283,6 +283,33 @@ class TestCallback:
         assert data["access_token"] == str(user_oauth.id)
         assert user_manager_oauth.on_after_login.called is True
 
+    async def test_email_not_available(
+        self,
+        async_method_mocker: AsyncMethodMocker,
+        test_app_client_redirect_url: httpx.AsyncClient,
+        oauth_client: BaseOAuth2,
+        user_oauth: UserOAuthModel,
+        user_manager_oauth: UserManagerMock,
+        access_token: str,
+    ):
+        state_jwt = generate_state_token({}, "SECRET")
+        async_method_mocker(oauth_client, "get_access_token", return_value=access_token)
+        async_method_mocker(
+            oauth_client, "get_id_email", return_value=("user_oauth1", None)
+        )
+        async_method_mocker(
+            user_manager_oauth, "oauth_callback", return_value=user_oauth
+        )
+
+        response = await test_app_client_redirect_url.get(
+            "/oauth/callback",
+            params={"code": "CODE", "state": state_jwt},
+        )
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        json = response.json()
+        assert json["detail"] == ErrorCode.OAUTH_NOT_AVAILABLE_EMAIL
+
 
 @pytest.mark.router
 @pytest.mark.oauth
@@ -497,6 +524,34 @@ class TestAssociateCallback:
 
         data = cast(Dict[str, Any], response.json())
         assert data["id"] == str(user_oauth.id)
+
+    async def test_not_available_email(
+        self,
+        async_method_mocker: AsyncMethodMocker,
+        test_app_client_redirect_url: httpx.AsyncClient,
+        oauth_client: BaseOAuth2,
+        user_oauth: UserOAuthModel,
+        user_manager_oauth: UserManagerMock,
+        access_token: str,
+    ):
+        state_jwt = generate_state_token({"sub": str(user_oauth.id)}, "SECRET")
+        async_method_mocker(oauth_client, "get_access_token", return_value=access_token)
+        async_method_mocker(
+            oauth_client, "get_id_email", return_value=("user_oauth1", None)
+        )
+        async_method_mocker(
+            user_manager_oauth, "oauth_callback", return_value=user_oauth
+        )
+
+        response = await test_app_client_redirect_url.get(
+            "/oauth-associate/callback",
+            params={"code": "CODE", "state": state_jwt},
+            headers={"Authorization": f"Bearer {user_oauth.id}"},
+        )
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        json = response.json()
+        assert json["detail"] == ErrorCode.OAUTH_NOT_AVAILABLE_EMAIL
 
 
 @pytest.mark.asyncio
