@@ -20,7 +20,7 @@ It manages how the token will be carried over the request. We currently provide 
 
 #### [Bearer](transports/bearer.md)
 
-The token will be send through an `Authorization: Bearer` header.
+The token will be sent through an `Authorization: Bearer` header.
 
 !!! tip "Pros and cons"
 
@@ -31,7 +31,7 @@ The token will be send through an `Authorization: Bearer` header.
 
 #### [Cookie](transports/cookie.md)
 
-The token will be send through a cookie.
+The token will be sent through a cookie.
 
 !!! tip "Pros and cons"
 
@@ -44,7 +44,7 @@ The token will be send through a cookie.
 
 ### Strategy
 
-It manages how the token is generated and secured. We currently provide two methods:
+It manages how the token is generated and secured. We currently provide three methods:
 
 #### [JWT](strategies/jwt.md)
 
