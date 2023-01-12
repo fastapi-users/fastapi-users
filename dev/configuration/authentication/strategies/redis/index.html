@@ -1181,7 +1181,7 @@
 <p><a href="https://redis.io/">Redis</a> is an ultra-fast key-store database. As such, it's a good candidate for token management. In this strategy, a token is generated and associated with the user id. in the database. On each request, we try to retrieve this token from Redis to get the corresponding user id.</p>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
 <p>You should install the library with the optional dependencies for Redis:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip install <span class="s1">&#39;fastapi-users[redis]&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span><span class="s1">&#39;fastapi-users[redis]&#39;</span>
 </code></pre></div>
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span> <span class="nn">redis.asyncio</span>
