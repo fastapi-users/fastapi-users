@@ -286,7 +286,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
             raise exceptions.UserAlreadyVerified()
 
         token_data = {
-            "user_id": str(user.id),
+            "sub": str(user.id),
             "email": user.email,
             "aud": self.verification_token_audience,
         }
@@ -322,7 +322,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
             raise exceptions.InvalidVerifyToken()
 
         try:
-            user_id = data["user_id"]
+            user_id = data["sub"]
             email = data["email"]
         except KeyError:
             raise exceptions.InvalidVerifyToken()
@@ -366,7 +366,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
             raise exceptions.UserInactive()
 
         token_data = {
-            "user_id": str(user.id),
+            "sub": str(user.id),
             "password_fgpt": self.password_helper.hash(user.hashed_password),
             "aud": self.reset_password_token_audience,
         }
@@ -404,7 +404,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
             raise exceptions.InvalidResetPasswordToken()
 
         try:
-            user_id = data["user_id"]
+            user_id = data["sub"]
             password_fingerprint = data["password_fgpt"]
         except KeyError:
             raise exceptions.InvalidResetPasswordToken()

@@ -35,7 +35,7 @@ def verify_token(user_manager: UserManagerMock[UserModel]):
     ):
         data = {"aud": user_manager.verification_token_audience}
         if user_id is not None:
-            data["user_id"] = str(user_id)
+            data["sub"] = str(user_id)
         if email is not None:
             data["email"] = email
         return generate_jwt(data, user_manager.verification_token_secret, lifetime)
@@ -52,7 +52,7 @@ def forgot_password_token(user_manager: UserManagerMock[UserModel]):
     ):
         data = {"aud": user_manager.reset_password_token_audience}
         if user_id is not None:
-            data["user_id"] = str(user_id)
+            data["sub"] = str(user_id)
         if current_password_hash is not None:
             data["password_fgpt"] = user_manager.password_helper.hash(
                 current_password_hash
@@ -299,7 +299,7 @@ class TestRequestVerifyUser:
             user_manager.verification_token_secret,
             audience=[user_manager.verification_token_audience],
         )
-        assert decoded_token["user_id"] == str(user.id)
+        assert decoded_token["sub"] == str(user.id)
         assert decoded_token["email"] == str(user.email)
 
 
@@ -413,7 +413,7 @@ class TestForgotPassword:
             user_manager.reset_password_token_secret,
             audience=[user_manager.reset_password_token_audience],
         )
-        assert decoded_token["user_id"] == str(user.id)
+        assert decoded_token["sub"] == str(user.id)
 
         valid_fingerprint, _ = user_manager.password_helper.verify_and_update(
             user.hashed_password, decoded_token["password_fgpt"]

@@ -44,7 +44,7 @@ class JWTStrategy(Strategy[models.UP, models.ID], Generic[models.UP, models.ID])
             data = decode_jwt(
                 token, self.decode_key, self.token_audience, algorithms=[self.algorithm]
             )
-            user_id = data.get("user_id")
+            user_id = data.get("sub")
             if user_id is None:
                 return None
         except jwt.PyJWTError:
@@ -57,7 +57,7 @@ class JWTStrategy(Strategy[models.UP, models.ID], Generic[models.UP, models.ID])
             return None
 
     async def write_token(self, user: models.UP) -> str:
-        data = {"user_id": str(user.id), "aud": self.token_audience}
+        data = {"sub": str(user.id), "aud": self.token_audience}
         return generate_jwt(
             data, self.encode_key, self.lifetime_seconds, algorithm=self.algorithm
         )
