@@ -367,6 +367,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
 
         token_data = {
             "user_id": str(user.id),
+            "password_fgpt": self.password_helper.hash(user.hashed_password),
             "aud": self.reset_password_token_audience,
         }
         token = generate_jwt(
@@ -404,6 +405,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
 
         try:
             user_id = data["user_id"]
+            password_fingerprint = data["password_fgpt"]
         except KeyError:
             raise exceptions.InvalidResetPasswordToken()
 
@@ -413,6 +415,12 @@ class BaseUserManager(Generic[models.UP, models.ID]):
             raise exceptions.InvalidResetPasswordToken()
 
         user = await self.get(parsed_id)
+
+        valid_password_fingerprint, _ = self.password_helper.verify_and_update(
+            user.hashed_password, password_fingerprint
+        )
+        if not valid_password_fingerprint:
+            raise exceptions.InvalidResetPasswordToken()
 
         if not user.is_active:
             raise exceptions.UserInactive()
