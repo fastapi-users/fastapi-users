@@ -31,6 +31,8 @@ markers = [
 	"router",
 ]
 
+[tool.ruff]
+
 [tool.hatch]
 
 [tool.hatch.metadata]
@@ -49,12 +51,9 @@ features = [
     "redis",
 ]
 dependencies = [
-    "flake8",
     "pytest",
-    "requests",
     "isort",
     "pytest-asyncio",
-    "flake8-docstrings",
     "mike",
     "mkdocs",
     "mkdocs-material",
@@ -63,16 +62,15 @@ dependencies = [
     "mypy",
     "pytest-cov",
     "pytest-mock",
-    "flit",
     "markdown-include",
     "pygments",
     "pymdown-extensions",
-    "bumpversion",
     "httpx-oauth",
     "httpx",
     "asgi_lifespan",
     "uvicorn",
     "types-redis",
+    "ruff",
 ]
 
 [tool.hatch.envs.default.scripts]
@@ -83,6 +81,7 @@ lint = [
   "isort ./docs/src -o fastapi_users",
   "isort ./examples -o fastapi_users -p app",
   "black . ",
+  "ruff --fix .",
   "mypy fastapi_users/",
 ]
 lint-check = [
@@ -90,6 +89,7 @@ lint-check = [
   "isort --check-only  ./docs/src -o fastapi_users",
   "isort --check-only ./examples -o fastapi_users -p app",
   "black --check .",
+  "ruff .",
   "mypy fastapi_users/",
 ]
 docs = "mkdocs serve"
