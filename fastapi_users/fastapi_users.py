@@ -1,4 +1,4 @@
-from typing import Generic, Sequence, Type
+from typing import Generic, Optional, Sequence, Type
 
 from fastapi import APIRouter
 
@@ -93,7 +93,7 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
         oauth_client: BaseOAuth2,
         backend: AuthenticationBackend,
         state_secret: SecretType,
-        redirect_url: str = None,
+        redirect_url: Optional[str] = None,
         associate_by_email: bool = False,
     ) -> APIRouter:
         """
@@ -121,7 +121,7 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
         oauth_client: BaseOAuth2,
         user_schema: Type[schemas.U],
         state_secret: SecretType,
-        redirect_url: str = None,
+        redirect_url: Optional[str] = None,
         requires_verification: bool = False,
     ) -> APIRouter:
         """

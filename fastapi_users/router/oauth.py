@@ -1,4 +1,4 @@
-from typing import Dict, List, Tuple, Type
+from typing import Dict, List, Optional, Tuple, Type
 
 import jwt
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
@@ -32,7 +32,7 @@ def get_oauth_router(
     backend: AuthenticationBackend,
     get_user_manager: UserManagerDependency[models.UP, models.ID],
     state_secret: SecretType,
-    redirect_url: str = None,
+    redirect_url: Optional[str] = None,
     associate_by_email: bool = False,
 ) -> APIRouter:
     """Generate a router with the OAuth routes."""
@@ -159,7 +159,7 @@ def get_oauth_associate_router(
     get_user_manager: UserManagerDependency[models.UP, models.ID],
     user_schema: Type[schemas.U],
     state_secret: SecretType,
-    redirect_url: str = None,
+    redirect_url: Optional[str] = None,
     requires_verification: bool = False,
 ) -> APIRouter:
     """Generate a router with the OAuth routes to associate an authenticated user."""
