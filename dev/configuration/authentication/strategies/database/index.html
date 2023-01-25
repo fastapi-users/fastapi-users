@@ -17,7 +17,7 @@
         <link rel="next" href="../jwt/">
       
       <link rel="icon" href="../../../../favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.5">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.6">
     
     
       
@@ -1379,6 +1379,7 @@
 <p>We define a dependency to instantiate the <code>BeanieAccessTokenDatabase</code> class. Just like the user database adapter, it expects the <code>AccessToken</code> model class we defined above.</p>
 </li>
 </ol>
+<p>Don't forget to add the <code>AccessToken</code> ODM model to the <code>document_models</code> array in your Beanie initialization, <a href="../../../databases/beanie/#initialize-beanie">just like you did with the <code>User</code> model</a>!</p>
 <h3 id="strategy">Strategy<a class="headerlink" href="#strategy" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">import</span> <span class="nn">uuid</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
