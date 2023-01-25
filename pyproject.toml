@@ -142,7 +142,7 @@ beanie = [
     "fastapi-users-db-beanie >=1.0.0",
 ]
 oauth = [
-    "httpx-oauth >=0.4,<0.11"
+    "httpx-oauth >=0.4,<0.12"
 ]
 redis = [
     "redis >=4.3.3,<5.0.0",
