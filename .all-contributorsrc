@@ -627,6 +627,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "bkis",
+      "name": "Börge Kiss",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9215743?v=4",
+      "profile": "https://bkis.github.io",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
