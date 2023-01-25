@@ -55,6 +55,8 @@ We'll expand from the basic Beanie configuration.
 
 2. We define a dependency to instantiate the `BeanieAccessTokenDatabase` class. Just like the user database adapter, it expects the `AccessToken` model class we defined above.
 
+Don't forget to add the `AccessToken` ODM model to the `document_models` array in your Beanie initialization, [just like you did with the `User` model](../../databases/beanie.md#initialize-beanie)!
+
 
 ### Strategy
 
