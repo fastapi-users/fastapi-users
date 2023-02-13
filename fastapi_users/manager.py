@@ -157,6 +157,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         request: Optional[Request] = None,
         *,
         associate_by_email: bool = False,
+        is_verified_by_default: bool = False,
     ) -> models.UOAP:
         """
         Handle the callback after a successful OAuth authentication.
@@ -181,6 +182,10 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         triggered the operation, defaults to None
         :param associate_by_email: If True, any existing user with the same
         e-mail address will be associated to this user. Defaults to False.
+        :param is_verified_by_default: If True, the `is_verified` flag will be
+        set to `True` on newly created user. Make sure the OAuth Provider you're
+        using does verify the email address before enabling this flag.
+        Defaults to False.
         :return: A user.
         """
         oauth_account_dict = {
@@ -207,6 +212,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
                 user_dict = {
                     "email": account_email,
                     "hashed_password": self.password_helper.hash(password),
+                    "is_verified": is_verified_by_default,
                 }
                 user = await self.user_db.create(user_dict)
                 user = await self.user_db.add_oauth_account(user, oauth_account_dict)

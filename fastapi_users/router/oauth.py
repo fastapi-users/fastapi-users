@@ -34,6 +34,7 @@ def get_oauth_router(
     state_secret: SecretType,
     redirect_url: Optional[str] = None,
     associate_by_email: bool = False,
+    is_verified_by_default: bool = False,
 ) -> APIRouter:
     """Generate a router with the OAuth routes."""
     router = APIRouter()
@@ -132,6 +133,7 @@ def get_oauth_router(
                 token.get("refresh_token"),
                 request,
                 associate_by_email=associate_by_email,
+                is_verified_by_default=is_verified_by_default,
             )
         except UserAlreadyExists:
             raise HTTPException(

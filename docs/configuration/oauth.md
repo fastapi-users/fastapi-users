@@ -121,6 +121,31 @@ app.include_router(
 
 Notice that, just like for the [Users router](./routers/users.md), you have to pass the `UserRead` Pydantic schema.
 
+#### Set `is_verified` to `True` by default
+
+!!! tip "This section is only useful if you set up email verification"
+    You can read more about this feature [here](./routers/verify.md).
+
+When a new user registers with an OAuth provider, the `is_verified` flag is set to `False`, which requires the user to verify its email address.
+
+You can choose to trust the email address given by the OAuth provider and set the `is_verified` flag to `True` after registration. You can do this by setting the `is_verified_by_default` argument:
+
+```py
+app.include_router(
+    fastapi_users.get_oauth_router(
+        google_oauth_client,
+        auth_backend,
+        "SECRET",
+        is_verified_by_default=True,
+    ),
+    prefix="/auth/google",
+    tags=["auth"],
+)
+```
+
+!!! danger "Make sure you can trust the OAuth provider"
+    Make sure the OAuth provider you're using **does verify** the email address before enabling this flag.
+
 ### Full example
 
 !!! warning

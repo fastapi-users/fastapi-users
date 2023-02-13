@@ -240,6 +240,26 @@ class TestOAuthCallback:
         assert user.email == "galahad@camelot.bt"
         assert len(user.oauth_accounts) == 1
         assert user.oauth_accounts[0].id is not None
+        assert user.is_verified is False
+
+        assert user_manager_oauth.on_after_register.called is True
+
+    async def test_new_user_is_verified_by_default(
+        self, user_manager_oauth: UserManagerMock[UserOAuthModel]
+    ):
+        user = await user_manager_oauth.oauth_callback(
+            "service1",
+            "TOKEN",
+            "new_user_oauth1",
+            "galahad@camelot.bt",
+            1579000751,
+            is_verified_by_default=True,
+        )
+
+        assert user.email == "galahad@camelot.bt"
+        assert len(user.oauth_accounts) == 1
+        assert user.oauth_accounts[0].id is not None
+        assert user.is_verified is True
 
         assert user_manager_oauth.on_after_register.called is True
 
