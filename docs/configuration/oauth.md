@@ -32,11 +32,11 @@ google_oauth_client = GoogleOAuth2("CLIENT_ID", "CLIENT_SECRET")
 
 You'll need to define the SQLAlchemy model for storing OAuth accounts. We provide a base one for this:
 
-```py hl_lines="5 17-18 22 39-40"
+```py hl_lines="5 19-20 24-26 43-44"
 --8<-- "docs/src/db_sqlalchemy_oauth.py"
 ```
 
-Notice that we also manually added a `relationship` on the `UserTable` so that SQLAlchemy can properly retrieve the OAuth accounts of the user.
+Notice that we also manually added a `relationship` on `User` so that SQLAlchemy can properly retrieve the OAuth accounts of the user.
 
 Besides, when instantiating the database adapter, we need pass this SQLAlchemy model as third argument.
 
@@ -45,11 +45,11 @@ Besides, when instantiating the database adapter, we need pass this SQLAlchemy m
 
     ```py
     class OAuthAccount(SQLAlchemyBaseOAuthAccountTable[int], Base):
-        id = Column(Integer, primary_key=True)
+        id: Mapped[int] = mapped_column(Integer, primary_key=True)
 
         @declared_attr
-        def user_id(cls):
-            return Column(Integer, ForeignKey("user.id", ondelete="cascade"), nullable=False)
+        def user_id(cls) -> Mapped[int]:
+            return mapped_column(Integer, ForeignKey("user.id", ondelete="cascade"), nullable=False)
 
     ```
 

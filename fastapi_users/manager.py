@@ -156,7 +156,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         refresh_token: Optional[str] = None,
         request: Optional[Request] = None,
         *,
-        associate_by_email: bool = False
+        associate_by_email: bool = False,
     ) -> models.UOAP:
         """
         Handle the callback after a successful OAuth authentication.

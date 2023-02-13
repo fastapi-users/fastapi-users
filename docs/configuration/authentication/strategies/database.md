@@ -21,7 +21,7 @@ We are providing a base model with those fields for each database we are support
 
 We'll expand from the basic SQLAlchemy configuration.
 
-```py hl_lines="5-8 21-22 43-46"
+```py hl_lines="5-8 23-24 45-48"
 --8<-- "docs/src/db_sqlalchemy_access_tokens.py"
 ```
 
@@ -37,8 +37,8 @@ We'll expand from the basic SQLAlchemy configuration.
     ```py
     class AccessToken(SQLAlchemyBaseAccessTokenTable[int], Base):
         @declared_attr
-        def user_id(cls):
-            return Column(Integer, ForeignKey("user.id", ondelete="cascade"), nullable=False)
+        def user_id(cls) -> Mapped[int]:
+            return mapped_column(Integer, ForeignKey("user.id", ondelete="cascade"), nullable=False)
     ```
 
     Notice that `SQLAlchemyBaseAccessTokenTable` expects a generic type to define the actual type of ID you use.

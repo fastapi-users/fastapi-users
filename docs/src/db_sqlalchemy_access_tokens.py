@@ -6,11 +6,14 @@ from fastapi_users_db_sqlalchemy.access_token import (
     SQLAlchemyAccessTokenDatabase,
     SQLAlchemyBaseAccessTokenTableUUID,
 )
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import DeclarativeMeta, declarative_base, sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.orm import DeclarativeBase
 
 DATABASE_URL = "sqlite+aiosqlite:///./test.db"
-Base: DeclarativeMeta = declarative_base()
+
+
+class Base(DeclarativeBase):
+    pass
 
 
 class User(SQLAlchemyBaseUserTableUUID, Base):
@@ -22,7 +25,7 @@ class AccessToken(SQLAlchemyBaseAccessTokenTableUUID, Base):  # (1)!
 
 
 engine = create_async_engine(DATABASE_URL)
-async_session_maker = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
 
 
 async def create_db_and_tables():

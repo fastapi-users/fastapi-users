@@ -6,11 +6,14 @@ from fastapi_users.db import (
     SQLAlchemyBaseUserTableUUID,
     SQLAlchemyUserDatabase,
 )
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import DeclarativeMeta, declarative_base, relationship, sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.orm import DeclarativeBase, Mapped, relationship
 
 DATABASE_URL = "sqlite+aiosqlite:///./test.db"
-Base: DeclarativeMeta = declarative_base()
+
+
+class Base(DeclarativeBase):
+    pass
 
 
 class OAuthAccount(SQLAlchemyBaseOAuthAccountTableUUID, Base):
@@ -18,11 +21,13 @@ class OAuthAccount(SQLAlchemyBaseOAuthAccountTableUUID, Base):
 
 
 class User(SQLAlchemyBaseUserTableUUID, Base):
-    oauth_accounts: List[OAuthAccount] = relationship("OAuthAccount", lazy="joined")
+    oauth_accounts: Mapped[List[OAuthAccount]] = relationship(
+        "OAuthAccount", lazy="joined"
+    )
 
 
 engine = create_async_engine(DATABASE_URL)
-async_session_maker = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
 
 
 async def create_db_and_tables():

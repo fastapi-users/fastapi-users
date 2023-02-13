@@ -63,9 +63,9 @@ def forgot_password_token(user_manager: UserManagerMock[UserModel]):
 
 
 @pytest.fixture
-def create_oauth2_password_request_form() -> Callable[
-    [str, str], OAuth2PasswordRequestForm
-]:
+def create_oauth2_password_request_form() -> (
+    Callable[[str, str], OAuth2PasswordRequestForm]
+):
     def _create_oauth2_password_request_form(username, password):
         return OAuth2PasswordRequestForm(username=username, password=password, scope="")
 
@@ -252,7 +252,6 @@ class TestOAuthAssociateCallback:
         user_manager_oauth: UserManagerMock[UserOAuthModel],
         superuser_oauth: UserOAuthModel,
     ):
-
         user = await user_manager_oauth.oauth_associate_callback(
             superuser_oauth,
             "service1",
