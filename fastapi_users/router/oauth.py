@@ -62,7 +62,7 @@ def get_oauth_router(
         if redirect_url is not None:
             authorize_redirect_url = redirect_url
         else:
-            authorize_redirect_url = request.url_for(callback_route_name)
+            authorize_redirect_url = str(request.url_for(callback_route_name))
 
         state_data: Dict[str, str] = {}
         state = generate_state_token(state_data, state_secret)
@@ -197,7 +197,7 @@ def get_oauth_associate_router(
         if redirect_url is not None:
             authorize_redirect_url = redirect_url
         else:
-            authorize_redirect_url = request.url_for(callback_route_name)
+            authorize_redirect_url = str(request.url_for(callback_route_name))
 
         state_data: Dict[str, str] = {"sub": str(user.id)}
         state = generate_state_token(state_data, state_secret)
