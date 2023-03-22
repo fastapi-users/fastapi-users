@@ -16,6 +16,9 @@ Examples of `DB_URL`s are:
 
 For the sake of this tutorial from now on, we'll use a simple SQLite database.
 
+!!! warning
+    When using asynchronous sessions, ensure `Session.expire_on_commit` is set to `False` as recommended by the [SQLAlchemy docs on asyncio](https://docs.sqlalchemy.org/en/20/orm/extensions/asyncio.html#asyncio-orm-avoid-lazyloads). The examples on this documentation already have this setting correctly defined to `False` when using the `async_sessionmaker` factory.
+
 ## Create the User model
 
 As for any SQLAlchemy ORM model, we'll create a `User` model.
