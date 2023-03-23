@@ -636,6 +636,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "gpkc",
+      "name": "Guilherme Caminha",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4080737?v=4",
+      "profile": "http://www.praciano.com.br",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
