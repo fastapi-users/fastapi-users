@@ -10,7 +10,8 @@ db = client["database_name"]
 
 
 class User(BeanieBaseUser[PydanticObjectId]):
-    pass
+    organization: str = ""
+    is_org_moderator: bool = False
 
 
 async def get_user_db():

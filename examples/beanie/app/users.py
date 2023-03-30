@@ -11,6 +11,7 @@ from fastapi_users.authentication import (
 from fastapi_users.db import BeanieUserDatabase, ObjectIDIDMixin
 
 from app.db import User, get_user_db
+from app.schemas import UserCreate, UserUpdate
 
 SECRET = "SECRET"
 
@@ -34,7 +35,7 @@ class UserManager(ObjectIDIDMixin, BaseUserManager[User, PydanticObjectId]):
 
 
 async def get_user_manager(user_db: BeanieUserDatabase = Depends(get_user_db)):
-    yield UserManager(user_db)
+    yield UserManager(User, UserCreate, UserUpdate, user_db)
 
 
 bearer_transport = BearerTransport(tokenUrl="auth/jwt/login")
