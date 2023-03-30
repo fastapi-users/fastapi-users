@@ -19,7 +19,7 @@ import pytest
 from asgi_lifespan import LifespanManager
 from fastapi import FastAPI, Response
 from httpx_oauth.oauth2 import OAuth2
-from pydantic import UUID4, SecretStr
+from pydantic import UUID4, BaseModel, SecretStr, Field
 from pytest_mock import MockerFixture
 
 from fastapi_users import exceptions, models, schemas
@@ -30,6 +30,7 @@ from fastapi_users.jwt import SecretType
 from fastapi_users.manager import BaseUserManager, UUIDIDMixin
 from fastapi_users.openapi import OpenAPIResponseType
 from fastapi_users.password import PasswordHelper
+from fastapi_users.schemas import ProtectedField, Requires, ActioningUserIsSuperUser
 
 password_helper = PasswordHelper()
 guinevere_password_hash = password_helper.hash("guinevere")
@@ -42,15 +43,15 @@ excalibur_password_hash = password_helper.hash("excalibur")
 IDType = uuid.UUID
 
 
-@dataclasses.dataclass
-class UserModel(models.UserProtocol[IDType]):
+class UserModel(BaseModel):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4)
     email: str
     hashed_password: str
-    id: uuid.UUID = dataclasses.field(default_factory=uuid.uuid4)
     is_active: bool = True
     is_superuser: bool = False
     is_verified: bool = False
     first_name: Optional[str] = None
+    secret_field: Optional[bool] = False
 
 
 @dataclasses.dataclass
@@ -64,21 +65,37 @@ class OAuthAccountModel(models.OAuthAccountProtocol[IDType]):
     refresh_token: Optional[str] = None
 
 
-@dataclasses.dataclass
 class UserOAuthModel(UserModel):
-    oauth_accounts: List[OAuthAccountModel] = dataclasses.field(default_factory=list)
+    oauth_accounts: List[OAuthAccountModel] = Field(default_factory=list)
 
 
 class User(schemas.BaseUser[IDType]):
     first_name: Optional[str]
+    secret_field: Optional[bool]
 
 
 class UserCreate(schemas.BaseUserCreate):
     first_name: Optional[str]
+    secret_field: Optional[
+        ProtectedField(
+            "Secret Field",
+            bool,
+            ActioningUserIsSuperUser,
+            ignore_unauthorized_access=False,
+        )
+    ]
 
 
 class UserUpdate(schemas.BaseUserUpdate):
     first_name: Optional[str]
+    secret_field: Optional[
+        ProtectedField(
+            "Secret Field",
+            bool,
+            ActioningUserIsSuperUser,
+            ignore_unauthorized_access=False,
+        )
+    ]
 
 
 class UserOAuth(User, schemas.BaseOAuthAccountMixin):
@@ -466,7 +483,9 @@ def mock_user_db_oauth(
 @pytest.fixture
 def make_user_manager(mocker: MockerFixture):
     def _make_user_manager(user_manager_class: Type[BaseTestUserManager], mock_user_db):
-        user_manager = user_manager_class(mock_user_db)
+        user_manager = user_manager_class(
+            UserModel, UserCreate, UserUpdate, mock_user_db
+        )
         mocker.spy(user_manager, "get_by_email")
         mocker.spy(user_manager, "request_verify")
         mocker.spy(user_manager, "verify")

@@ -56,7 +56,7 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
         :param user_create_schema: Pydantic schema for creating a user.
         """
         return get_register_router(
-            self.get_user_manager, user_schema, user_create_schema
+            self.get_user_manager, user_schema, user_create_schema, self.authenticator
         )
 
     def get_verify_router(self, user_schema: Type[schemas.U]) -> APIRouter:

@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, Optional
 
 import pytest
 from fastapi.security import OAuth2PasswordRequestForm
@@ -14,16 +14,26 @@ from fastapi_users.exceptions import (
     UserAlreadyVerified,
     UserInactive,
     UserNotExists,
+    UnauthorizedUpdateException,
 )
 from fastapi_users.jwt import decode_jwt, generate_jwt
 from fastapi_users.manager import IntegerIDMixin
 from tests.conftest import (
+    User,
     UserCreate,
     UserManagerMock,
     UserModel,
     UserOAuthModel,
     UserUpdate,
 )
+
+
+def generate_user(is_superuser: bool) -> UserModel:
+    return UserModel(
+        email="email@email.com",
+        hashed_password="_hashed_password_",
+        is_superuser=is_superuser,
+    )
 
 
 @pytest.fixture
@@ -143,29 +153,86 @@ class TestCreateUser:
 
         assert user_manager.on_after_register.called is True
 
-    @pytest.mark.parametrize("safe,result", [(True, False), (False, True)])
+    @pytest.mark.parametrize(
+        "actioning_user,allowed",
+        [
+            (generate_user(is_superuser=True), True),
+            (generate_user(is_superuser=False), False),
+            (None, False),
+        ],
+    )
     async def test_superuser(
-        self, user_manager: UserManagerMock[UserModel], safe: bool, result: bool
+        self,
+        user_manager: UserManagerMock[UserModel],
+        actioning_user: UserModel,
+        allowed: bool,
     ):
         user = UserCreate(
             email="lancelot@camelot.b", password="guinevere", is_superuser=True
         )
-        created_user = await user_manager.create(user, safe)
+
+        # Not expecting this to throw since is_superuser has ignore_unauthorized_access=True
+        created_user = await user_manager.create(user, actioning_user)
         assert type(created_user) == UserModel
-        assert created_user.is_superuser is result
+        assert created_user.is_superuser is allowed
 
         assert user_manager.on_after_register.called is True
 
-    @pytest.mark.parametrize("safe,result", [(True, True), (False, False)])
+    @pytest.mark.parametrize(
+        "actioning_user,allowed",
+        [
+            (generate_user(is_superuser=True), True),
+            (generate_user(is_superuser=False), False),
+            (None, False),
+        ],
+    )
+    async def test_secretfield(
+        self,
+        user_manager: UserManagerMock[UserModel],
+        actioning_user: Optional[UserModel],
+        allowed: bool,
+    ):
+        user = UserCreate(
+            email="lancelot@camelot.b",
+            password="guinevere",
+            is_superuser=True,
+            secret_field=True,
+        )
+
+        try:
+            created_user = await user_manager.create(user, actioning_user)
+        except UnauthorizedUpdateException as e:
+            assert (
+                actioning_user is None or not actioning_user.is_superuser
+            ), "UnauthorizedUpdateException shouldn't be raised if the actioning user is a superuser!"
+            assert e.field_name == "secret_field"
+
+            assert user_manager.on_after_register.called is False
+        else:
+            assert (
+                not actioning_user is None and actioning_user.is_superuser
+            ), "Expected UnauthorizedUpdateException to be raised (actioning_user is not superuser)!"
+
+    @pytest.mark.parametrize(
+        "actioning_user,allowed",
+        [
+            (generate_user(is_superuser=True), True),
+            (generate_user(is_superuser=False), False),
+            (None, False),
+        ],
+    )
     async def test_is_active(
-        self, user_manager: UserManagerMock[UserModel], safe: bool, result: bool
+        self,
+        user_manager: UserManagerMock[UserModel],
+        actioning_user: UserModel,
+        allowed: bool,
     ):
         user = UserCreate(
             email="lancelot@camelot.b", password="guinevere", is_active=False
         )
-        created_user = await user_manager.create(user, safe)
+        created_user = await user_manager.create(user, actioning_user)
         assert type(created_user) == UserModel
-        assert created_user.is_active is result
+        assert created_user.is_active is (not allowed)
 
         assert user_manager.on_after_register.called is True
 
@@ -567,7 +634,9 @@ class TestUpdateUser:
         self, user: UserModel, user_manager: UserManagerMock[UserModel]
     ):
         user_update = UserUpdate(first_name="Arthur", is_superuser=True)
-        updated_user = await user_manager.update(user_update, user, safe=True)
+
+        # Since is_superuser has ignore_unauthorized_access=True, it will quietly ignore the field.
+        updated_user = await user_manager.update(user_update, user, user)
 
         assert updated_user.first_name == "Arthur"
         assert updated_user.is_superuser is False
@@ -577,20 +646,28 @@ class TestUpdateUser:
     async def test_unsafe_update(
         self, user: UserModel, user_manager: UserManagerMock[UserModel]
     ):
-        user_update = UserUpdate(first_name="Arthur", is_superuser=True)
-        updated_user = await user_manager.update(user_update, user, safe=False)
+        user_update = UserUpdate(
+            first_name="Arthur", is_superuser=True, secret_field=True
+        )
+        # We expect this to throw since secret field has ignore_unauthorized_access=False
+        try:
+            updated_user = await user_manager.update(user_update, user, user)
+        except UnauthorizedUpdateException as e:
+            assert e.field_name == "secret_field"
 
-        assert updated_user.first_name == "Arthur"
-        assert updated_user.is_superuser is True
+            not_updated_user = await user_manager.get(user.id)
+            assert not_updated_user == user
 
-        assert user_manager.on_after_update.called is True
+            assert user_manager.on_after_update.called is False
+        else:
+            assert False, "Expected UnauthorizedUpdateException to be raised!"
 
     async def test_password_update_invalid(
         self, user: UserModel, user_manager: UserManagerMock[UserModel]
     ):
         user_update = UserUpdate(password="h")
         with pytest.raises(InvalidPasswordException):
-            await user_manager.update(user_update, user, safe=True)
+            await user_manager.update(user_update, user, user)
 
         assert user_manager.on_after_update.called is False
 
@@ -599,7 +676,11 @@ class TestUpdateUser:
     ):
         old_hashed_password = user.hashed_password
         user_update = UserUpdate(password="holygrail")
-        updated_user = await user_manager.update(user_update, user, safe=True)
+        updated_user = await user_manager.update(
+            user_update,
+            user,
+            user,
+        )
 
         assert updated_user.hashed_password != old_hashed_password
 
@@ -613,7 +694,12 @@ class TestUpdateUser:
     ):
         user_update = UserUpdate(email=superuser.email)
         with pytest.raises(UserAlreadyExists):
-            await user_manager.update(user_update, user, safe=True)
+            await user_manager.update(
+                user_update,
+                superuser,
+                user,
+                # safe=True,
+            )
 
         assert user_manager.on_after_update.called is False
 
@@ -621,7 +707,12 @@ class TestUpdateUser:
         self, user: UserModel, user_manager: UserManagerMock[UserModel]
     ):
         user_update = UserUpdate(email=user.email)
-        updated_user = await user_manager.update(user_update, user, safe=True)
+        updated_user = await user_manager.update(
+            user_update,
+            user,
+            user,
+            # safe=True,
+        )
 
         assert updated_user.email == user.email
 

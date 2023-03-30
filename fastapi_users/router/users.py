@@ -1,6 +1,9 @@
-from typing import Any, Type
+from typing import Any, Type, Optional, Union, get_origin, get_args
+from makefun import with_signature
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
+from pydantic.fields import ModelField
+from starlette.status import HTTP_404_NOT_FOUND
 
 from fastapi_users import exceptions, models, schemas
 from fastapi_users.authentication import Authenticator
@@ -93,9 +96,7 @@ def get_users_router(
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ):
         try:
-            user = await user_manager.update(
-                user_update, user, safe=True, request=request
-            )
+            user = await user_manager.update(user_update, user, user, request=request)
             return user_schema.from_orm(user)
         except exceptions.InvalidPasswordException as e:
             raise HTTPException(
@@ -109,6 +110,14 @@ def get_users_router(
             raise HTTPException(
                 status.HTTP_400_BAD_REQUEST,
                 detail=ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS,
+            )
+        except exceptions.UnauthorizedUpdateException as e:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail={
+                    "code": ErrorCode.NO_PERMISSIONS_FOR_UPDATE,
+                    "reason": f'Has no permissions to change "{e.field_name}"',
+                },
             )
 
     @router.get(
@@ -134,7 +143,7 @@ def get_users_router(
     @router.patch(
         "/{id}",
         response_model=user_schema,
-        dependencies=[Depends(get_current_superuser)],
+        dependencies=[Depends(get_current_active_user)],
         name="users:patch_user",
         responses={
             status.HTTP_401_UNAUTHORIZED: {
@@ -174,14 +183,28 @@ def get_users_router(
         },
     )
     async def update_user(
+        id: Any,
         user_update: user_update_schema,  # type: ignore
         request: Request,
-        user=Depends(get_user_or_404),
+        actioning_user=Depends(get_current_active_user),
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ):
         try:
+            target_user = await get_user_or_404(id, user_manager)
+        except HTTPException as e:
+            # If the actioning user is a superuser,
+            # return 404 indicating that the user doesn't exist.
+            # Otherwise return 403 for security purposes.
+            if actioning_user.is_superuser:
+                raise e
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
+
+        try:
             user = await user_manager.update(
-                user_update, user, safe=False, request=request
+                user_update,
+                actioning_user,
+                target_user,
+                request=request,
             )
             return user_schema.from_orm(user)
         except exceptions.InvalidPasswordException as e:
@@ -196,6 +219,14 @@ def get_users_router(
             raise HTTPException(
                 status.HTTP_400_BAD_REQUEST,
                 detail=ErrorCode.UPDATE_USER_EMAIL_ALREADY_EXISTS,
+            )
+        except exceptions.UnauthorizedUpdateException as e:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail={
+                    "code": ErrorCode.NO_PERMISSIONS_FOR_UPDATE,
+                    "reason": f'Has no permissions to change "{e.field_name}"',
+                },
             )
 
     @router.delete(

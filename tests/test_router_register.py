@@ -4,24 +4,39 @@ import httpx
 import pytest
 from fastapi import FastAPI, status
 
-from fastapi_users.router import ErrorCode, get_register_router
-from tests.conftest import User, UserCreate
+from fastapi_users.authentication import Authenticator
+from fastapi_users.router import ErrorCode, auth, get_register_router
+
+
+@pytest.fixture
+def app_factory(get_user_manager, mock_authentication):
+    def _app_factory() -> FastAPI:
+        mock_authentication_bis = get_mock_authentication(name="mock-bis")
+        authenticator = Authenticator(
+            [mock_authentication, mock_authentication_bis], get_user_manager
+        )
+
+        register_router = get_register_router(
+            get_user_manager, User, UserCreate, authenticator
+        )
+
+        app = FastAPI()
+        app.include_router(register_router)
+
+        return app
+
+    return _app_factory
+
+
+from tests.conftest import User, UserCreate, get_mock_authentication
 
 
 @pytest.fixture
 @pytest.mark.asyncio
 async def test_app_client(
-    get_user_manager, get_test_client
+    get_user_manager, get_test_client, app_factory
 ) -> AsyncGenerator[httpx.AsyncClient, None]:
-    register_router = get_register_router(
-        get_user_manager,
-        User,
-        UserCreate,
-    )
-
-    app = FastAPI()
-    app.include_router(register_router)
-
+    app = app_factory()
     async for client in get_test_client(app):
         yield client
 
@@ -104,14 +119,6 @@ class TestRegister:
         assert data["is_active"] is True
 
 
-@pytest.mark.asyncio
-async def test_register_namespace(get_user_manager):
-    app = FastAPI()
-    app.include_router(
-        get_register_router(
-            get_user_manager,
-            User,
-            UserCreate,
-        )
-    )
-    assert app.url_path_for("register:register") == "/register"
+    @pytest.mark.asyncio
+    async def test_register_namespace(self, app_factory):
+        assert app_factory().url_path_for("register:register") == "/register"

@@ -1,5 +1,6 @@
 import uuid
-from typing import Any, Dict, Generic, Optional, Union
+from typing import Any, Dict, Generic, Optional, Union, Type
+from pydantic import BaseModel
 
 import jwt
 from fastapi import Request
@@ -40,11 +41,21 @@ class BaseUserManager(Generic[models.UP, models.ID]):
     user_db: BaseUserDatabase[models.UP, models.ID]
     password_helper: PasswordHelperProtocol
 
+    user_schema: Type[BaseModel]
+    user_create_schema: Type[BaseModel]
+    user_update_schema: Type[BaseModel]
+
     def __init__(
         self,
+        user_schema: Type[BaseModel],
+        user_create_schema: Type[BaseModel],
+        user_update_schema: Type[BaseModel],
         user_db: BaseUserDatabase[models.UP, models.ID],
         password_helper: Optional[PasswordHelperProtocol] = None,
     ):
+        self.user_schema = user_schema
+        self.user_create_schema = user_create_schema
+        self.user_update_schema = user_update_schema
         self.user_db = user_db
         if password_helper is None:
             self.password_helper = PasswordHelper()
@@ -110,7 +121,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
     async def create(
         self,
         user_create: schemas.UC,
-        safe: bool = False,
+        actioning_user: Optional[models.UP] = None,
         request: Optional[Request] = None,
     ) -> models.UP:
         """
@@ -119,8 +130,6 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         Triggers the on_after_register handler on success.
 
         :param user_create: The UserCreate model to create.
-        :param safe: If True, sensitive values like is_superuser or is_verified
-        will be ignored during the creation, defaults to False.
         :param request: Optional FastAPI request that
         triggered the operation, defaults to None.
         :raises UserAlreadyExists: A user already exists with the same e-mail.
@@ -132,11 +141,14 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         if existing_user is not None:
             raise exceptions.UserAlreadyExists()
 
-        user_dict = (
-            user_create.create_update_dict()
-            if safe
-            else user_create.create_update_dict_superuser()
+        user_dict: Dict[str, Any] = schemas.create_update_dict(
+            self.user_schema,
+            self.user_create_schema,
+            actioning_user,
+            None,
+            user_create,
         )
+
         password = user_dict.pop("password")
         user_dict["hashed_password"] = self.password_helper.hash(password)
 
@@ -440,8 +452,8 @@ class BaseUserManager(Generic[models.UP, models.ID]):
     async def update(
         self,
         user_update: schemas.UU,
-        user: models.UP,
-        safe: bool = False,
+        actioning_user: models.UP,
+        target_user: models.UP,
         request: Optional[Request] = None,
     ) -> models.UP:
         """
@@ -451,18 +463,22 @@ class BaseUserManager(Generic[models.UP, models.ID]):
 
         :param user_update: The UserUpdate model containing
         the changes to apply to the user.
-        :param user: The current user to update.
-        :param safe: If True, sensitive values like is_superuser or is_verified
-        will be ignored during the update, defaults to False
+        :param actioning_user: The user making the call.
+        :param target_user: The user to update.
         :param request: Optional FastAPI request that
         triggered the operation, defaults to None.
         :return: The updated user.
         """
-        if safe:
-            updated_user_data = user_update.create_update_dict()
-        else:
-            updated_user_data = user_update.create_update_dict_superuser()
-        updated_user = await self._update(user, updated_user_data)
+
+        updated_user_data: Dict[str, Any] = schemas.create_update_dict(
+            self.user_schema,
+            self.user_update_schema,
+            actioning_user,
+            target_user,
+            user_update,
+        )
+
+        updated_user = await self._update(target_user, updated_user_data)
         await self.on_after_update(updated_user, updated_user_data, request)
         return updated_user
 

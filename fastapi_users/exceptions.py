@@ -36,3 +36,8 @@ class InvalidResetPasswordToken(FastAPIUsersException):
 class InvalidPasswordException(FastAPIUsersException):
     def __init__(self, reason: Any) -> None:
         self.reason = reason
+
+
+class UnauthorizedUpdateException(FastAPIUsersException):
+    def __init__(self, field_name: str) -> None:
+        self.field_name = field_name

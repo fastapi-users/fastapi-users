@@ -4,6 +4,7 @@ import httpx
 import pytest
 from fastapi import FastAPI, status
 
+from pprint  import pprint
 from fastapi_users.authentication import Authenticator
 from fastapi_users.router import ErrorCode, get_users_router
 from tests.conftest import User, UserModel, UserUpdate, get_mock_authentication
@@ -179,6 +180,22 @@ class TestUpdateMe:
 
             data = cast(Dict[str, Any], response.json())
             assert data["email"] == user.email
+
+    async def test_invalid_protected_field(
+        self,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
+        verified_user: UserModel,
+    ):
+        client, _ = test_app_client
+        json = {"is_active": "string instead of bool!"}
+        response = await client.patch(
+            "/me", json=json, headers={"Authorization": f"Bearer {verified_user.id}"}
+        )
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+        data = cast(Dict[str, Any], response.json())
+        assert data["detail"][0]["loc"] == ["body", "is_active", "value"]
+        assert data["detail"][0]["type"] == "type_error.bool"
 
     async def test_valid_body(
         self,
@@ -515,6 +532,7 @@ class TestUpdateUser:
         client, _ = test_app_client
         response = await client.patch(
             "/d35d213e-f3d8-4f08-954a-7e0d1bea286f",
+            json={},
             headers={"Authorization": f"Bearer {verified_user.id}"},
         )
         assert response.status_code == status.HTTP_403_FORBIDDEN
