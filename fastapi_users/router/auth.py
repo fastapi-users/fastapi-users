@@ -1,6 +1,6 @@
 from typing import Tuple
 
-from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
 
 from fastapi_users import models
@@ -51,6 +51,7 @@ def get_auth_router(
     async def login(
         request: Request,
         response: Response,
+        background_tasks: BackgroundTasks,
         credentials: OAuth2PasswordRequestForm = Depends(),
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
         strategy: Strategy[models.UP, models.ID] = Depends(backend.get_strategy),
@@ -68,7 +69,9 @@ def get_auth_router(
                 detail=ErrorCode.LOGIN_USER_NOT_VERIFIED,
             )
         login_return = await backend.login(strategy, user, response)
-        await user_manager.on_after_login(user, request)
+        after_login_bgtask = await user_manager.on_after_login(user, request)
+        if after_login_bgtask is not None:
+            background_tasks.add_task(after_login_bgtask)
         return login_return
 
     logout_responses: OpenAPIResponseType = {
