@@ -165,6 +165,9 @@ class TestLogin:
             "token_type": "bearer",
         }
         assert user_manager.on_after_login.called is True
+        args, kwargs = user_manager.on_after_login.call_args
+        assert len(args) == 3
+        assert all(x is not None for x in args)
 
     async def test_inactive_user(
         self,

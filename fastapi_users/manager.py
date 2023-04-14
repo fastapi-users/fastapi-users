@@ -586,7 +586,10 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         return  # pragma: no cover
 
     async def on_after_login(
-        self, user: models.UP, request: Optional[Request] = None
+        self,
+        user: models.UP,
+        request: Optional[Request] = None,
+        login_return: Optional[Any] = None,
     ) -> None:
         """
         Perform logic after user login.
@@ -594,7 +597,8 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         *You should overload this method to add your own logic.*
 
         :param user: The user that is logging in
-        :param request: Optional FastAPI request that
+        :param request: Optional FastAPI request
+        :param login_return: Optional return of the login
         triggered the operation, defaults to None.
         """
         return  # pragma: no cover
