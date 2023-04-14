@@ -1,7 +1,7 @@
 from typing import List
 
 import motor.motor_asyncio
-from beanie import PydanticObjectId
+from beanie import Document
 from fastapi_users.db import BaseOAuthAccount, BeanieBaseUser, BeanieUserDatabase
 from pydantic import Field
 
@@ -16,7 +16,7 @@ class OAuthAccount(BaseOAuthAccount):
     pass
 
 
-class User(BeanieBaseUser[PydanticObjectId]):
+class User(BeanieBaseUser, Document):
     oauth_accounts: List[OAuthAccount] = Field(default_factory=list)
 
 

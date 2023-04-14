@@ -22,23 +22,6 @@ As for any Beanie ODM model, we'll create a `User` model.
 
 As you can see, **FastAPI Users** provides a base class that will include base fields for our `User` table. You can of course add you own fields there to fit to your needs!
 
-!!! tip "Document ID is a MongoDB ObjectID"
-    Beanie [automatically manages document ID](https://roman-right.github.io/beanie/tutorial/defining-a-document/#id) by encoding/decoding MongoDB ObjectID.
-
-    If you want to use another type, like UUID, you can override the `id` field:
-
-    ```py
-    import uuid
-
-    from pydantic import Field
-
-
-    class User(BeanieBaseUser[uuid.UUID]):
-        id: uuid.UUID = Field(default_factory=uuid.uuid4)
-    ```
-
-    Notice that `BeanieBaseUser` expects a generic type to define the actual type of ID you use.
-
 !!! info
     The base class is configured to automatically create a [unique index](https://roman-right.github.io/beanie/tutorial/defining-a-document/#indexes) on `id` and `email`.
 
