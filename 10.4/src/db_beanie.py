@@ -1,5 +1,5 @@
 import motor.motor_asyncio
-from beanie import PydanticObjectId
+from beanie import Document
 from fastapi_users.db import BeanieBaseUser, BeanieUserDatabase
 
 DATABASE_URL = "mongodb://localhost:27017"
@@ -9,7 +9,7 @@ client = motor.motor_asyncio.AsyncIOMotorClient(
 db = client["database_name"]
 
 
-class User(BeanieBaseUser[PydanticObjectId]):
+class User(BeanieBaseUser, Document):
     pass
 
 

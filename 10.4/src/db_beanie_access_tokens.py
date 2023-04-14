@@ -1,5 +1,5 @@
 import motor.motor_asyncio
-from beanie import PydanticObjectId
+from beanie import Document
 from fastapi_users.db import BeanieBaseUser, BeanieUserDatabase
 from fastapi_users_db_beanie.access_token import (
     BeanieAccessTokenDatabase,
@@ -13,11 +13,11 @@ client = motor.motor_asyncio.AsyncIOMotorClient(
 db = client["database_name"]
 
 
-class User(BeanieBaseUser):
+class User(BeanieBaseUser, Document):
     pass
 
 
-class AccessToken(BeanieBaseAccessToken[PydanticObjectId]):  # (1)!
+class AccessToken(BeanieBaseAccessToken, Document):  # (1)!
     pass
 
 
