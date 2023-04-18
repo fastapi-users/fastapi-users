@@ -57,6 +57,8 @@ We'll expand from the basic Beanie configuration.
 
 Don't forget to add the `AccessToken` ODM model to the `document_models` array in your Beanie initialization, [just like you did with the `User` model](../../databases/beanie.md#initialize-beanie)!
 
+!!! info
+    If you want to add your own custom settings to your `AccessToken` document model - like changing the collection name - don't forget to let your inner `Settings` class inherit the pre-defined settings from `BeanieBaseAccessToken` like this: `Settings(BeanieBaseAccessToken.Settings): # ...`! See Beanie's [documentation on `Settings`](https://beanie-odm.dev/tutorial/defining-a-document/#settings) for details.
 
 ### Strategy
 
