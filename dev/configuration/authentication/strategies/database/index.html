@@ -1384,6 +1384,10 @@
 </li>
 </ol>
 <p>Don't forget to add the <code>AccessToken</code> ODM model to the <code>document_models</code> array in your Beanie initialization, <a href="../../../databases/beanie/#initialize-beanie">just like you did with the <code>User</code> model</a>!</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>If you want to add your own custom settings to your <code>AccessToken</code> document model - like changing the collection name - don't forget to let your inner <code>Settings</code> class inherit the pre-defined settings from <code>BeanieBaseAccessToken</code> like this: <code>Settings(BeanieBaseAccessToken.Settings): # ...</code>! See Beanie's <a href="https://beanie-odm.dev/tutorial/defining-a-document/#settings">documentation on <code>Settings</code></a> for details.</p>
+</div>
 <h3 id="strategy">Strategy<a class="headerlink" href="#strategy" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">import</span> <span class="nn">uuid</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
