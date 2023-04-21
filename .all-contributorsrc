@@ -654,6 +654,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "EssaAlshammri",
+      "name": "Essa Alshammri",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10750698?v=4",
+      "profile": "https://github.com/EssaAlshammri",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
