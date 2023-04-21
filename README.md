@@ -13,7 +13,7 @@
 [![PyPI version](https://badge.fury.io/py/fastapi-users.svg)](https://badge.fury.io/py/fastapi-users)
 [![Downloads](https://pepy.tech/badge/fastapi-users)](https://pepy.tech/project/fastapi-users)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-70-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-71-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <p align="center">
@@ -166,6 +166,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://bkis.github.io"><img src="https://avatars.githubusercontent.com/u/9215743?v=4?s=100" width="100px;" alt="Börge Kiss"/><br /><sub><b>Börge Kiss</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=bkis" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://www.praciano.com.br"><img src="https://avatars.githubusercontent.com/u/4080737?v=4?s=100" width="100px;" alt="Guilherme Caminha"/><br /><sub><b>Guilherme Caminha</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=gpkc" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/sorasful"><img src="https://avatars.githubusercontent.com/u/32820423?v=4?s=100" width="100px;" alt="Téva KRIEF"/><br /><sub><b>Téva KRIEF</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=sorasful" title="Code">💻</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/EssaAlshammri"><img src="https://avatars.githubusercontent.com/u/10750698?v=4?s=100" width="100px;" alt="Essa Alshammri"/><br /><sub><b>Essa Alshammri</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=EssaAlshammri" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>
