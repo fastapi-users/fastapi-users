@@ -37,7 +37,7 @@ async def get_user_manager(user_db=Depends(get_user_db)):
 
 ## Full customization
 
-If you don't wist to use Passlib at all – **which we don't recommend unless you're absolutely sure of what you're doing** — you can implement your own `PasswordHelper` class as long as it implements the `PasswordHelperProtocol` and its methods.
+If you don't wish to use Passlib at all – **which we don't recommend unless you're absolutely sure of what you're doing** — you can implement your own `PasswordHelper` class as long as it implements the `PasswordHelperProtocol` and its methods.
 
 ```py
 from typing import Tuple
