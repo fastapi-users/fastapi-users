@@ -187,7 +187,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
         self,
         user: User,
         request: Optional[Request] = None,
-        login_return: Optional[Any] = None,
+        response: Optional[Response] = None,
     ):
         print(f"User {user.id} logged in.")
 ```

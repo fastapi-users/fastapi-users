@@ -2,7 +2,7 @@ import uuid
 from typing import Any, Dict, Generic, Optional, Union
 
 import jwt
-from fastapi import Request
+from fastapi import Request, Response
 from fastapi.security import OAuth2PasswordRequestForm
 
 from fastapi_users import exceptions, models, schemas
@@ -589,7 +589,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         self,
         user: models.UP,
         request: Optional[Request] = None,
-        login_return: Optional[Any] = None,
+        response: Optional[Response] = None,
     ) -> None:
         """
         Perform logic after user login.
@@ -598,8 +598,8 @@ class BaseUserManager(Generic[models.UP, models.ID]):
 
         :param user: The user that is logging in
         :param request: Optional FastAPI request
-        :param login_return: Optional return of the login
-        triggered the operation, defaults to None.
+        :param response: Optional response built by the transport.
+        Defaults to None
         """
         return  # pragma: no cover
 
