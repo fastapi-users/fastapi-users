@@ -37,6 +37,13 @@ class CookieTransport(Transport):
 
     async def get_login_response(self, token: str) -> Response:
         response = Response(status_code=status.HTTP_204_NO_CONTENT)
+        return self._set_login_cookie(response, token)
+
+    async def get_logout_response(self) -> Response:
+        response = Response(status_code=status.HTTP_204_NO_CONTENT)
+        return self._set_logout_cookie(response)
+
+    def _set_login_cookie(self, response: Response, token: str) -> Response:
         response.set_cookie(
             self.cookie_name,
             token,
@@ -49,8 +56,7 @@ class CookieTransport(Transport):
         )
         return response
 
-    async def get_logout_response(self) -> Response:
-        response = Response(status_code=status.HTTP_204_NO_CONTENT)
+    def _set_logout_cookie(self, response: Response) -> Response:
         response.set_cookie(
             self.cookie_name,
             "",
