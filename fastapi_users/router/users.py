@@ -1,4 +1,4 @@
-from typing import Any, Type
+from typing import Type
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 
@@ -26,7 +26,7 @@ def get_users_router(
     )
 
     async def get_user_or_404(
-        id: Any,
+        id: str,
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ) -> models.UP:
         try:
