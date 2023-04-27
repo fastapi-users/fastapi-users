@@ -663,6 +663,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "jankadel",
+      "name": "0xJan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/34775247?v=4",
+      "profile": "https://github.com/jankadel",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
