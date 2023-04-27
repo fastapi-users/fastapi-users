@@ -1,6 +1,6 @@
 from typing import Tuple
 
-from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordRequestForm
 
 from fastapi_users import models
@@ -50,7 +50,6 @@ def get_auth_router(
     )
     async def login(
         request: Request,
-        response: Response,
         credentials: OAuth2PasswordRequestForm = Depends(),
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
         strategy: Strategy[models.UP, models.ID] = Depends(backend.get_strategy),
@@ -67,9 +66,9 @@ def get_auth_router(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=ErrorCode.LOGIN_USER_NOT_VERIFIED,
             )
-        login_return = await backend.login(strategy, user, response)
-        await user_manager.on_after_login(user, request, login_return)
-        return login_return
+        response = await backend.login(strategy, user)
+        await user_manager.on_after_login(user, request, response)
+        return response
 
     logout_responses: OpenAPIResponseType = {
         **{
@@ -84,11 +83,10 @@ def get_auth_router(
         "/logout", name=f"auth:{backend.name}.logout", responses=logout_responses
     )
     async def logout(
-        response: Response,
         user_token: Tuple[models.UP, str] = Depends(get_current_user_token),
         strategy: Strategy[models.UP, models.ID] = Depends(backend.get_strategy),
     ):
         user, token = user_token
-        return await backend.logout(strategy, user, token, response)
+        return await backend.logout(strategy, user, token)
 
     return router

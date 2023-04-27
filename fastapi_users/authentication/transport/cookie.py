@@ -1,5 +1,5 @@
 import sys
-from typing import Any, Optional
+from typing import Optional
 
 if sys.version_info < (3, 8):
     from typing_extensions import Literal  # pragma: no cover
@@ -35,7 +35,15 @@ class CookieTransport(Transport):
         self.cookie_samesite = cookie_samesite
         self.scheme = APIKeyCookie(name=self.cookie_name, auto_error=False)
 
-    async def get_login_response(self, token: str, response: Response) -> Any:
+    async def get_login_response(self, token: str) -> Response:
+        response = Response(status_code=status.HTTP_204_NO_CONTENT)
+        return self._set_login_cookie(response, token)
+
+    async def get_logout_response(self) -> Response:
+        response = Response(status_code=status.HTTP_204_NO_CONTENT)
+        return self._set_logout_cookie(response)
+
+    def _set_login_cookie(self, response: Response, token: str) -> Response:
         response.set_cookie(
             self.cookie_name,
             token,
@@ -46,12 +54,9 @@ class CookieTransport(Transport):
             httponly=self.cookie_httponly,
             samesite=self.cookie_samesite,
         )
+        return response
 
-        # We shouldn't return directly the response
-        # so that FastAPI can terminate it properly
-        return None
-
-    async def get_logout_response(self, response: Response) -> Any:
+    def _set_logout_cookie(self, response: Response) -> Response:
         response.set_cookie(
             self.cookie_name,
             "",
@@ -62,11 +67,12 @@ class CookieTransport(Transport):
             httponly=self.cookie_httponly,
             samesite=self.cookie_samesite,
         )
+        return response
 
     @staticmethod
     def get_openapi_login_responses_success() -> OpenAPIResponseType:
-        return {status.HTTP_200_OK: {"model": None}}
+        return {status.HTTP_204_NO_CONTENT: {"model": None}}
 
     @staticmethod
     def get_openapi_logout_responses_success() -> OpenAPIResponseType:
-        return {status.HTTP_200_OK: {"model": None}}
+        return {status.HTTP_204_NO_CONTENT: {"model": None}}

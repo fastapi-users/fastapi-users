@@ -38,10 +38,10 @@ async def test_get_login_response(cookie_transport: CookieTransport):
     secure = cookie_transport.cookie_secure
     httponly = cookie_transport.cookie_httponly
 
-    response = Response()
-    login_response = await cookie_transport.get_login_response("TOKEN", response)
+    response = await cookie_transport.get_login_response("TOKEN")
 
-    assert login_response is None
+    assert isinstance(response, Response)
+    assert response.status_code == status.HTTP_204_NO_CONTENT
 
     cookies = [header for header in response.raw_headers if header[0] == b"set-cookie"]
     assert len(cookies) == 1
@@ -79,10 +79,10 @@ async def test_get_login_response(cookie_transport: CookieTransport):
 @pytest.mark.authentication
 @pytest.mark.asyncio
 async def test_get_logout_response(cookie_transport: CookieTransport):
-    response = Response()
-    logout_response = await cookie_transport.get_logout_response(response)
+    response = await cookie_transport.get_logout_response()
 
-    assert logout_response is None
+    assert isinstance(response, Response)
+    assert response.status_code == status.HTTP_204_NO_CONTENT
 
     cookies = [header for header in response.raw_headers if header[0] == b"set-cookie"]
     assert len(cookies) == 1
@@ -96,7 +96,7 @@ async def test_get_logout_response(cookie_transport: CookieTransport):
 @pytest.mark.openapi
 def test_get_openapi_login_responses_success(cookie_transport: CookieTransport):
     assert cookie_transport.get_openapi_login_responses_success() == {
-        status.HTTP_200_OK: {"model": None}
+        status.HTTP_204_NO_CONTENT: {"model": None}
     }
 
 
@@ -104,5 +104,5 @@ def test_get_openapi_login_responses_success(cookie_transport: CookieTransport):
 @pytest.mark.openapi
 def test_get_openapi_logout_responses_success(cookie_transport: CookieTransport):
     assert cookie_transport.get_openapi_logout_responses_success() == {
-        status.HTTP_200_OK: {"model": None}
+        status.HTTP_204_NO_CONTENT: {"model": None}
     }

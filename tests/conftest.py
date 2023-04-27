@@ -517,8 +517,8 @@ class MockTransport(BearerTransport):
     def __init__(self, tokenUrl: str):
         super().__init__(tokenUrl)
 
-    async def get_logout_response(self, response: Response) -> Any:
-        return None
+    async def get_logout_response(self) -> Any:
+        return Response()
 
     @staticmethod
     def get_openapi_logout_responses_success() -> OpenAPIResponseType:
