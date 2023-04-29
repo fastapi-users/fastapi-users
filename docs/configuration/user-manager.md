@@ -174,6 +174,7 @@ It may be useful for custom logic or processes triggered by new logins, for exam
 
 * `user` (`User`): the updated user.
 * `request` (`Optional[Request]`): optional FastAPI request object that triggered the operation. Defaults to None.
+* `response` (`Optional[Response]`): Optional response built by the transport. Defaults to None.
 
 **Example**
 
