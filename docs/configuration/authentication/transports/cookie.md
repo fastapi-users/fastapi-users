@@ -32,7 +32,7 @@ This method will return a response with a valid `set-cookie` header upon success
 
 This method will remove the authentication cookie:
 
-!!! success "`200 OK`"
+!!! success "`204 No content`"
 
 > Check documentation about [logout route](../../../usage/routes.md#post-logout).
 

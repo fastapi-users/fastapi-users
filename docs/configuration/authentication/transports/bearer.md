@@ -30,7 +30,7 @@ This method will return the in the following form upon successful login:
 
 ## Logout
 
-The logout method with this transport returns nothing.
+!!! success "`204 No content`"
 
 ## Authentication
 
