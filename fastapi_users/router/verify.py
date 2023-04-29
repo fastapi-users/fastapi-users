@@ -69,7 +69,8 @@ def get_verify_router(
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ):
         try:
-            return await user_manager.verify(token, request)
+            user = await user_manager.verify(token, request)
+            return user_schema.from_orm(user)
         except (exceptions.InvalidVerifyToken, exceptions.UserNotExists):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
