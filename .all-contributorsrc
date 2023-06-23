@@ -672,6 +672,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "justhomas",
+      "name": "Justin Thomas",
+      "avatar_url": "https://avatars.githubusercontent.com/u/29140428?v=4",
+      "profile": "https://www.justhomas.in/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -680,5 +689,6 @@
   "repoType": "github",
   "repoHost": "https://github.com",
   "skipCi": true,
-  "commitConvention": "angular"
+  "commitConvention": "angular",
+  "commitType": "docs"
 }
