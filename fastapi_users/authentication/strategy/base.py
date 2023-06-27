@@ -1,10 +1,4 @@
-import sys
-from typing import Generic, Optional
-
-if sys.version_info < (3, 8):
-    from typing_extensions import Protocol  # pragma: no cover
-else:
-    from typing import Protocol  # pragma: no cover
+from typing import Generic, Optional, Protocol
 
 from fastapi_users import models
 from fastapi_users.manager import BaseUserManager

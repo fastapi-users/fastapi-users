@@ -1,10 +1,4 @@
-import sys
-from typing import Optional
-
-if sys.version_info < (3, 8):
-    from typing_extensions import Literal  # pragma: no cover
-else:
-    from typing import Literal  # pragma: no cover
+from typing import Literal, Optional
 
 from fastapi import Response, status
 from fastapi.security import APIKeyCookie

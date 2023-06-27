@@ -115,7 +115,6 @@ classifiers = [
     "Framework :: FastAPI",
     "Framework :: AsyncIO",
     "Intended Audience :: Developers",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
@@ -123,7 +122,7 @@ classifiers = [
     "Programming Language :: Python :: 3 :: Only",
     "Topic :: Internet :: WWW/HTTP :: Session",
 ]
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 dependencies = [
     "fastapi >=0.65.2",
     "passlib[bcrypt] ==1.7.4",
@@ -131,7 +130,6 @@ dependencies = [
     "pyjwt[crypto] ==2.7.0",
     "python-multipart ==0.0.6",
     "makefun >=1.11.2,<2.0.0",
-    "typing-extensions >=4.1.1; python_version < '3.8'",
 ]
 
 [project.optional-dependencies]
@@ -142,7 +140,7 @@ beanie = [
     "fastapi-users-db-beanie >=1.0.0",
 ]
 oauth = [
-    "httpx-oauth >=0.4,<0.12"
+    "httpx-oauth >=0.13"
 ]
 redis = [
     "redis >=4.3.3,<5.0.0",

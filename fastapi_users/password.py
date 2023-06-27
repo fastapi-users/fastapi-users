@@ -1,10 +1,4 @@
-import sys
-from typing import Optional, Tuple
-
-if sys.version_info < (3, 8):
-    from typing_extensions import Protocol  # pragma: no cover
-else:
-    from typing import Protocol  # pragma: no cover
+from typing import Optional, Protocol, Tuple
 
 from passlib import pwd
 from passlib.context import CryptContext

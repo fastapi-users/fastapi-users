@@ -1,9 +1,4 @@
-import sys
-
-if sys.version_info < (3, 8):
-    from typing_extensions import Protocol  # pragma: no cover
-else:
-    from typing import Protocol  # pragma: no cover
+from typing import Protocol
 
 from fastapi import Response
 from fastapi.security.base import SecurityBase

@@ -1,10 +1,4 @@
-import sys
-from typing import Generic, List, Optional, TypeVar
-
-if sys.version_info < (3, 8):
-    from typing_extensions import Protocol  # pragma: no cover
-else:
-    from typing import Protocol  # pragma: no cover
+from typing import Generic, List, Optional, Protocol, TypeVar
 
 ID = TypeVar("ID")
 
