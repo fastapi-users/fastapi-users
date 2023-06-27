@@ -134,10 +134,10 @@ dependencies = [
 
 [project.optional-dependencies]
 sqlalchemy = [
-    "fastapi-users-db-sqlalchemy >=4.0.0",
+    "fastapi-users-db-sqlalchemy >=6.0.0",
 ]
 beanie = [
-    "fastapi-users-db-beanie >=1.0.0",
+    "fastapi-users-db-beanie >=3.0.0",
 ]
 oauth = [
     "httpx-oauth >=0.13"
