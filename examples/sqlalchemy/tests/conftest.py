@@ -1,12 +1,3 @@
-"""
-Override dependencies works exactly with your api object
-
-from src.main import api_v1 as app
-@pytest.fixture(scope='session')
-def get_test_user():
-    yield TEST_USER
-app.dependency_overrides[current_user] = lambda: get_test_user
-"""
 import typing as tp
 import httpx
 import asyncio
