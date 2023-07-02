@@ -22,6 +22,7 @@ from app.users import get_user_db, get_user_manager, UserManager
 DATABASE_URL_TEST = "sqlite+aiosqlite:///./pytest.db"
 TEST_USER_EMAIL = 'user@example.com'
 TEST_USER_PASSWORD = "test_user$example1password"
+TEST_USER = None
 
 engine_test = create_async_engine(DATABASE_URL_TEST, poolclass=NullPool)
 async_session_factory = async_sessionmaker(engine_test, expire_on_commit=False)
@@ -49,8 +50,8 @@ async def add_user():
                         is_active=True,
                         is_superuser=False,
                         is_verified=True)
-
-    await manager.create(user_create=uc)
+    global TEST_USER
+    TEST_USER = await manager.create(user_create=uc)
 
 
 @pytest.fixture(autouse=True, scope='session')
@@ -74,8 +75,6 @@ def event_loop(request):
 
 @pytest.fixture(scope="function")
 async def jwt_authorized_async_client() -> tp.AsyncGenerator[httpx.AsyncClient, None]:
-    from app.app import app
-
     async with httpx.AsyncClient(app=app,
                                  base_url="http://0.0.0.0:8100/", follow_redirects=True) as ac:
         auth_req = await ac.post('auth/jwt/login',
@@ -85,4 +84,22 @@ async def jwt_authorized_async_client() -> tp.AsyncGenerator[httpx.AsyncClient, 
 
         data = auth_req.json()
         ac.headers['Authorization'] = f'{data["token_type"]} {data["access_token"]}'
+        yield ac
+
+
+@pytest.fixture(scope="function")
+async def async_client() -> tp.AsyncGenerator[httpx.AsyncClient, None]:
+    async with httpx.AsyncClient(app=app,
+                                 base_url="http://0.0.0.0:8100/", follow_redirects=True) as ac:
+        yield ac
+
+
+@pytest.fixture(scope="function")
+async def override_current_user_async_client() -> tp.AsyncGenerator[httpx.AsyncClient, None]:
+    from app.users import current_active_user
+
+    app.dependency_overrides[current_active_user] = lambda: TEST_USER
+
+    async with httpx.AsyncClient(app=app,
+                                 base_url="http://0.0.0.0:8100/", follow_redirects=True) as ac:
         yield ac
