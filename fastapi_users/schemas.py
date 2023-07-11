@@ -7,20 +7,34 @@ from fastapi_users import models
 
 class CreateUpdateDictModel(BaseModel):
     def create_update_dict(self):
-        return self.model_dump(
-            exclude_unset=True,
-            exclude={
-                "id",
-                "is_superuser",
-                "is_active",
-                "is_verified",
-                "oauth_accounts",
-            },
-        )
+        if getattr(self, "dict"):
+            return self.dict(
+                exclude_unset=True,
+                exclude={
+                    "id",
+                    "is_superuser",
+                    "is_active",
+                    "is_verified",
+                    "oauth_accounts",
+                },
+            )
+        else:
+            return self.model_dump(
+                exclude_unset=True,
+                exclude={
+                    "id",
+                    "is_superuser",
+                    "is_active",
+                    "is_verified",
+                    "oauth_accounts",
+                },
+            )
 
     def create_update_dict_superuser(self):
-        return self.model_dump(exclude_unset=True, exclude={"id"})
-
+        if getattr(self, "dict"):
+            return self.dict(exclude_unset=True, exclude={"id"})
+        else:
+            return self.model_dump(exclude_unset=True, exclude={"id"})
 
 class BaseUser(Generic[models.ID], CreateUpdateDictModel):
     """Base User model."""
@@ -30,6 +44,9 @@ class BaseUser(Generic[models.ID], CreateUpdateDictModel):
     is_active: bool = True
     is_superuser: bool = False
     is_verified: bool = False
+
+    class Config:
+        orm_mode = True
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -65,6 +82,9 @@ class BaseOAuthAccount(Generic[models.ID], BaseModel):
     refresh_token: Optional[str] = None
     account_id: str
     account_email: str
+
+    class Config:
+        orm_mode = True
 
     model_config = ConfigDict(from_attributes = True)
 
