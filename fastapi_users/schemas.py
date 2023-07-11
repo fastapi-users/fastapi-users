@@ -1,13 +1,13 @@
 from typing import Generic, List, Optional, TypeVar
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr
 
 from fastapi_users import models
 
 
 class CreateUpdateDictModel(BaseModel):
     def create_update_dict(self):
-        return self.dict(
+        return self.model_dump(
             exclude_unset=True,
             exclude={
                 "id",
@@ -19,7 +19,7 @@ class CreateUpdateDictModel(BaseModel):
         )
 
     def create_update_dict_superuser(self):
-        return self.dict(exclude_unset=True, exclude={"id"})
+        return self.model_dump(exclude_unset=True, exclude={"id"})
 
 
 class BaseUser(Generic[models.ID], CreateUpdateDictModel):
@@ -31,8 +31,7 @@ class BaseUser(Generic[models.ID], CreateUpdateDictModel):
     is_superuser: bool = False
     is_verified: bool = False
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class BaseUserCreate(CreateUpdateDictModel):
@@ -67,8 +66,7 @@ class BaseOAuthAccount(Generic[models.ID], BaseModel):
     account_id: str
     account_email: str
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes = True)
 
 
 class BaseOAuthAccountMixin(BaseModel):
