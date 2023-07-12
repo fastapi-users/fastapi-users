@@ -1,13 +1,35 @@
-from typing import Generic, List, Optional, TypeVar
+from typing import Any, Dict, Generic, List, Optional, Type, TypeVar
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr
+from pydantic.version import VERSION as PYDANTIC_VERSION
 
 from fastapi_users import models
+
+PYDANTIC_V2 = PYDANTIC_VERSION.startswith("2.")
+
+SCHEMA = TypeVar("SCHEMA", bound=BaseModel)
+
+if PYDANTIC_V2:
+
+    def model_dump(model: BaseModel, *args, **kwargs) -> Dict[str, Any]:
+        return model.model_dump(*args, **kwargs)
+
+    def model_validate(schema: Type[SCHEMA], obj: Any, *args, **kwargs) -> SCHEMA:
+        return schema.model_validate(obj, *args, **kwargs)
+
+else:
+
+    def model_dump(model: BaseModel, *args, **kwargs) -> Dict[str, Any]:
+        return model.dict(*args, **kwargs)
+
+    def model_validate(schema: Type[SCHEMA], obj: Any, *args, **kwargs) -> SCHEMA:
+        return schema.from_orm(obj)
 
 
 class CreateUpdateDictModel(BaseModel):
     def create_update_dict(self):
-        return self.dict(
+        return model_dump(
+            self,
             exclude_unset=True,
             exclude={
                 "id",
@@ -19,10 +41,10 @@ class CreateUpdateDictModel(BaseModel):
         )
 
     def create_update_dict_superuser(self):
-        return self.dict(exclude_unset=True, exclude={"id"})
+        return model_dump(self, exclude_unset=True, exclude={"id"})
 
 
-class BaseUser(Generic[models.ID], CreateUpdateDictModel):
+class BaseUser(CreateUpdateDictModel, Generic[models.ID]):
     """Base User model."""
 
     id: models.ID
@@ -31,8 +53,12 @@ class BaseUser(Generic[models.ID], CreateUpdateDictModel):
     is_superuser: bool = False
     is_verified: bool = False
 
-    class Config:
-        orm_mode = True
+    if PYDANTIC_V2:
+        model_config = ConfigDict(from_attributes=True)
+    else:
+
+        class Config:
+            orm_mode = True
 
 
 class BaseUserCreate(CreateUpdateDictModel):
@@ -44,11 +70,11 @@ class BaseUserCreate(CreateUpdateDictModel):
 
 
 class BaseUserUpdate(CreateUpdateDictModel):
-    password: Optional[str]
-    email: Optional[EmailStr]
-    is_active: Optional[bool]
-    is_superuser: Optional[bool]
-    is_verified: Optional[bool]
+    password: Optional[str] = None
+    email: Optional[EmailStr] = None
+    is_active: Optional[bool] = None
+    is_superuser: Optional[bool] = None
+    is_verified: Optional[bool] = None
 
 
 U = TypeVar("U", bound=BaseUser)
@@ -56,7 +82,7 @@ UC = TypeVar("UC", bound=BaseUserCreate)
 UU = TypeVar("UU", bound=BaseUserUpdate)
 
 
-class BaseOAuthAccount(Generic[models.ID], BaseModel):
+class BaseOAuthAccount(BaseModel, Generic[models.ID]):
     """Base OAuth account model."""
 
     id: models.ID
@@ -67,8 +93,12 @@ class BaseOAuthAccount(Generic[models.ID], BaseModel):
     account_id: str
     account_email: str
 
-    class Config:
-        orm_mode = True
+    if PYDANTIC_V2:
+        model_config = ConfigDict(from_attributes=True)
+    else:
+
+        class Config:
+            orm_mode = True
 
 
 class BaseOAuthAccountMixin(BaseModel):

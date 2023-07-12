@@ -71,6 +71,6 @@ def get_register_router(
                 },
             )
 
-        return user_schema.from_orm(created_user)
+        return schemas.model_validate(user_schema, created_user)
 
     return router

@@ -39,14 +39,14 @@ lancelot_password_hash = password_helper.hash("lancelot")
 excalibur_password_hash = password_helper.hash("excalibur")
 
 
-IDType = uuid.UUID
+IDType = UUID4
 
 
 @dataclasses.dataclass
 class UserModel(models.UserProtocol[IDType]):
     email: str
     hashed_password: str
-    id: uuid.UUID = dataclasses.field(default_factory=uuid.uuid4)
+    id: IDType = dataclasses.field(default_factory=uuid.uuid4)
     is_active: bool = True
     is_superuser: bool = False
     is_verified: bool = False
@@ -59,7 +59,7 @@ class OAuthAccountModel(models.OAuthAccountProtocol[IDType]):
     access_token: str
     account_id: str
     account_email: str
-    id: uuid.UUID = dataclasses.field(default_factory=uuid.uuid4)
+    id: IDType = dataclasses.field(default_factory=uuid.uuid4)
     expires_at: Optional[int] = None
     refresh_token: Optional[str] = None
 
@@ -70,15 +70,15 @@ class UserOAuthModel(UserModel):
 
 
 class User(schemas.BaseUser[IDType]):
-    first_name: Optional[str]
+    first_name: Optional[str] = None
 
 
 class UserCreate(schemas.BaseUserCreate):
-    first_name: Optional[str]
+    first_name: Optional[str] = None
 
 
 class UserUpdate(schemas.BaseUserUpdate):
-    first_name: Optional[str]
+    first_name: Optional[str] = None
 
 
 class UserOAuth(User, schemas.BaseOAuthAccountMixin):
