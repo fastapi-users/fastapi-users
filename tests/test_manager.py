@@ -1,8 +1,8 @@
+import uuid
 from typing import Callable
 
 import pytest
 from fastapi.security import OAuth2PasswordRequestForm
-from pydantic import UUID4
 from pytest_mock import MockerFixture
 
 from fastapi_users.exceptions import (
@@ -77,7 +77,7 @@ def create_oauth2_password_request_form() -> (
 class TestGet:
     async def test_not_existing_user(self, user_manager: UserManagerMock[UserModel]):
         with pytest.raises(UserNotExists):
-            await user_manager.get(UUID4("d35d213e-f3d8-4f08-954a-7e0d1bea286f"))
+            await user_manager.get(uuid.UUID("d35d213e-f3d8-4f08-954a-7e0d1bea286f"))
 
     async def test_existing_user(
         self, user_manager: UserManagerMock[UserModel], user: UserModel

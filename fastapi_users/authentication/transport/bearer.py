@@ -8,6 +8,7 @@ from fastapi_users.authentication.transport.base import (
     TransportLogoutNotSupportedError,
 )
 from fastapi_users.openapi import OpenAPIResponseType
+from fastapi_users.schemas import model_dump
 
 
 class BearerResponse(BaseModel):
@@ -23,7 +24,7 @@ class BearerTransport(Transport):
 
     async def get_login_response(self, token: str) -> Response:
         bearer_response = BearerResponse(access_token=token, token_type="bearer")
-        return JSONResponse(bearer_response.dict())
+        return JSONResponse(model_dump(bearer_response))
 
     async def get_logout_response(self) -> Response:
         raise TransportLogoutNotSupportedError()

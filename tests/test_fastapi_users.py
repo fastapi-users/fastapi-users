@@ -4,7 +4,7 @@ import httpx
 import pytest
 from fastapi import Depends, FastAPI, status
 
-from fastapi_users import FastAPIUsers
+from fastapi_users import FastAPIUsers, schemas
 from tests.conftest import IDType, User, UserCreate, UserModel, UserUpdate
 
 
@@ -77,7 +77,7 @@ async def test_app_client(
     def optional_current_user(
         user: Optional[UserModel] = Depends(fastapi_users.current_user(optional=True)),
     ):
-        return User.from_orm(user) if user else None
+        return schemas.model_validate(User, user) if user else None
 
     @app.get("/optional-current-active-user")
     def optional_current_active_user(
@@ -85,7 +85,7 @@ async def test_app_client(
             fastapi_users.current_user(optional=True, active=True)
         ),
     ):
-        return User.from_orm(user) if user else None
+        return schemas.model_validate(User, user) if user else None
 
     @app.get("/optional-current-verified-user")
     def optional_current_verified_user(
@@ -93,7 +93,7 @@ async def test_app_client(
             fastapi_users.current_user(optional=True, verified=True)
         ),
     ):
-        return User.from_orm(user) if user else None
+        return schemas.model_validate(User, user) if user else None
 
     @app.get("/optional-current-superuser")
     def optional_current_superuser(
@@ -101,7 +101,7 @@ async def test_app_client(
             fastapi_users.current_user(optional=True, active=True, superuser=True)
         ),
     ):
-        return User.from_orm(user) if user else None
+        return schemas.model_validate(User, user) if user else None
 
     @app.get("/optional-current-verified-superuser")
     def optional_current_verified_superuser(
@@ -111,7 +111,7 @@ async def test_app_client(
             )
         ),
     ):
-        return User.from_orm(user) if user else None
+        return schemas.model_validate(User, user) if user else None
 
     async for client in get_test_client(app):
         yield client
