@@ -1,6 +1,6 @@
 from typing import Generic, List, Optional, TypeVar
 
-from pydantic import BaseModel, ConfigDict, EmailStr
+from pydantic import BaseModel, EmailStr
 
 from fastapi_users import models
 
@@ -36,6 +36,7 @@ class CreateUpdateDictModel(BaseModel):
         else:
             return self.model_dump(exclude_unset=True, exclude={"id"})
 
+
 class BaseUser(Generic[models.ID], CreateUpdateDictModel):
     """Base User model."""
 
@@ -47,8 +48,7 @@ class BaseUser(Generic[models.ID], CreateUpdateDictModel):
 
     class Config:
         orm_mode = True
-
-    model_config = ConfigDict(from_attributes=True)
+        from_attributes = True
 
 
 class BaseUserCreate(CreateUpdateDictModel):
@@ -85,8 +85,7 @@ class BaseOAuthAccount(Generic[models.ID], BaseModel):
 
     class Config:
         orm_mode = True
-
-    model_config = ConfigDict(from_attributes = True)
+        from_attributes = True
 
 
 class BaseOAuthAccountMixin(BaseModel):
