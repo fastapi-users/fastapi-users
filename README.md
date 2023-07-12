@@ -13,7 +13,7 @@
 [![PyPI version](https://badge.fury.io/py/fastapi-users.svg)](https://badge.fury.io/py/fastapi-users)
 [![Downloads](https://pepy.tech/badge/fastapi-users)](https://pepy.tech/project/fastapi-users)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-73-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-74-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <p align="center">
@@ -171,6 +171,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/EssaAlshammri"><img src="https://avatars.githubusercontent.com/u/10750698?v=4?s=100" width="100px;" alt="Essa Alshammri"/><br /><sub><b>Essa Alshammri</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=EssaAlshammri" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/jankadel"><img src="https://avatars.githubusercontent.com/u/34775247?v=4?s=100" width="100px;" alt="0xJan"/><br /><sub><b>0xJan</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/issues?q=author%3Ajankadel" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.justhomas.in/"><img src="https://avatars.githubusercontent.com/u/29140428?v=4?s=100" width="100px;" alt="Justin Thomas"/><br /><sub><b>Justin Thomas</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=justhomas" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://www.adamisrael.com/"><img src="https://avatars.githubusercontent.com/u/125008?v=4?s=100" width="100px;" alt="Adam Israel"/><br /><sub><b>Adam Israel</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=AdamIsrael" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
