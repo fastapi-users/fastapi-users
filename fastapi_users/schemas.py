@@ -7,7 +7,7 @@ from fastapi_users import models
 
 class CreateUpdateDictModel(BaseModel):
     def create_update_dict(self):
-        if getattr(self, "dict"):
+        if hasattr(self, "dict"):
             return self.dict(
                 exclude_unset=True,
                 exclude={
@@ -31,7 +31,7 @@ class CreateUpdateDictModel(BaseModel):
             )
 
     def create_update_dict_superuser(self):
-        if getattr(self, "dict"):
+        if hasattr(self, "dict"):
             return self.dict(exclude_unset=True, exclude={"id"})
         else:
             return self.model_dump(exclude_unset=True, exclude={"id"})
