@@ -2,7 +2,7 @@
 
 FastAPI is heavily using [Pydantic models](https://pydantic-docs.helpmanual.io/) to validate request payloads and serialize responses. **FastAPI Users** is no exception and will expect you to provide Pydantic schemas representing a user when it's read, created and updated.
 
-It's **different from your `User` model**, which is an object that actually interacts with the database. Those schemas on the other hand are here to validate data and serialize correct it in the API.
+It's **different from your `User` model**, which is an object that actually interacts with the database. Those schemas on the other hand are here to validate data and correctly serialize it in the API.
 
 **FastAPI Users** provides a base structure to cover its needs. It is structured like this:
 
