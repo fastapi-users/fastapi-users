@@ -221,7 +221,7 @@ def get_users_router(
         user=Depends(get_user_or_404),
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ):
-        await user_manager.delete(user, request)
+        await user_manager.delete(user, request=request)
         return None
 
     return router

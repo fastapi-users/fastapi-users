@@ -475,6 +475,8 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         Delete a user.
 
         :param user: The user to delete.
+        :param request: Optional FastAPI request that
+        triggered the operation, defaults to None.
         """
         await self.on_before_delete(user, request)
         await self.user_db.delete(user)
