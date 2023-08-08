@@ -13,9 +13,6 @@ class UserProtocol(Protocol[ID]):
     is_superuser: bool
     is_verified: bool
 
-    def __init__(self, *args, **kwargs) -> None:
-        ...  # pragma: no cover
-
 
 class OAuthAccountProtocol(Protocol[ID]):
     """OAuth account protocol that ORM model should follow."""
@@ -28,9 +25,6 @@ class OAuthAccountProtocol(Protocol[ID]):
     account_id: str
     account_email: str
 
-    def __init__(self, *args, **kwargs) -> None:
-        ...  # pragma: no cover
-
 
 UP = TypeVar("UP", bound=UserProtocol)
 OAP = TypeVar("OAP", bound=OAuthAccountProtocol)
@@ -39,6 +33,12 @@ OAP = TypeVar("OAP", bound=OAuthAccountProtocol)
 class UserOAuthProtocol(UserProtocol[ID], Generic[ID, OAP]):
     """User protocol including a list of OAuth accounts."""
 
+    id: ID
+    email: str
+    hashed_password: str
+    is_active: bool
+    is_superuser: bool
+    is_verified: bool
     oauth_accounts: List[OAP]
 
 
