@@ -11,8 +11,5 @@ class AccessTokenProtocol(Protocol[models.ID]):
     user_id: models.ID
     created_at: datetime
 
-    def __init__(self, *args, **kwargs) -> None:
-        ...  # pragma: no cover
-
 
 AP = TypeVar("AP", bound=AccessTokenProtocol)
