@@ -43,7 +43,7 @@ class DatabaseStrategy(
     async def write_token(self, user: models.UP) -> str:
         access_token_dict = self._create_access_token_dict(user)
         access_token = await self.database.create(access_token_dict)
-        return access_token.token
+        return access_token
 
     async def destroy_token(self, token: str, user: models.UP) -> None:
         access_token = await self.database.get_by_token(token)
@@ -52,4 +52,4 @@ class DatabaseStrategy(
 
     def _create_access_token_dict(self, user: models.UP) -> Dict[str, Any]:
         token = secrets.token_urlsafe()
-        return {"token": token, "user_id": user.id}
+        return {"token": token, "user_id": user.id, "scopes": "", "mfa_scopes": "email=0"}
