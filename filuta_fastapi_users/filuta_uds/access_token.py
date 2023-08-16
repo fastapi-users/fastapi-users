@@ -85,8 +85,13 @@ class SQLAlchemyAccessTokenDatabase(Generic[AP], AccessTokenDatabase[AP]):
         for key, value in update_dict.items():
             setattr(access_token, key, value)
         self.session.add(access_token)
+        
         await self.session.commit()
+        print("before", access_token.mfa_scopes)
+
         await self.session.refresh(access_token)
+        print("after", access_token.mfa_scopes)
+
         return access_token
 
     async def delete(self, access_token: AP) -> None:

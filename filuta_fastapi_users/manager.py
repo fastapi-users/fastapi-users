@@ -497,14 +497,6 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         """
         return  # pragma: no cover
     
-    async def otp_email_create(self, user: models.UP, token_record, otp_record):
-        
-        """ todo create OTP """
-        
-        """ todo save to DB """
-        
-        pass
-    
     async def on_after_otp_email_created(self, user: models.UP, token_record):
         pass
 

@@ -24,3 +24,16 @@ class RefreshTokenProtocol(Protocol[models.ID]):
 
 
 RTP = TypeVar("RTP", bound=RefreshTokenProtocol)
+
+
+class OtpTokenProtocol(Protocol[models.ID]):
+    """OTP token protocol that ORM model should follow."""
+
+    access_token: str
+    mfa_type: str
+    mfa_token: str
+    created_at: datetime
+    expire_at: datetime
+
+
+OTPTP = TypeVar("OTPTP", bound=OtpTokenProtocol)

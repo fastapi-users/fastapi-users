@@ -50,7 +50,7 @@ class RefreshTokenDatabase(Protocol, Generic[AP]):
 class OtpTokenDatabase(Protocol, Generic[AP]):
     """Protocol for retrieving, creating and updating OTP tokens from a database."""
 
-    async def get_by_token(
+    async def get_by_access_token(
         self, token: str, max_age: Optional[datetime] = None
     ) -> Optional[AP]:
         """Get a single OTP token by token."""
