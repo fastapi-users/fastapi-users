@@ -13,3 +13,14 @@ class AccessTokenProtocol(Protocol[models.ID]):
 
 
 AP = TypeVar("AP", bound=AccessTokenProtocol)
+
+
+class RefreshTokenProtocol(Protocol[models.ID]):
+    """Refresh token protocol that ORM model should follow."""
+
+    token: str
+    user_id: models.ID
+    created_at: datetime
+
+
+RTP = TypeVar("RTP", bound=RefreshTokenProtocol)

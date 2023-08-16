@@ -12,7 +12,6 @@ from filuta_fastapi_users.authentication.transport import (
     TransportLogoutNotSupportedError,
 )
 from filuta_fastapi_users.types import DependencyCallable
-from filuta_fastapi_users.authentication.mfa.base import generate_all_otps
 
 
 class AuthenticationBackend(Generic[models.UP, models.ID]):

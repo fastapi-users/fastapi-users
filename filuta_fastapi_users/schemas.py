@@ -76,7 +76,6 @@ class BaseUserUpdate(CreateUpdateDictModel):
     is_superuser: Optional[bool] = None
     is_verified: Optional[bool] = None
 
-
 U = TypeVar("U", bound=BaseUser)
 UC = TypeVar("UC", bound=BaseUserCreate)
 UU = TypeVar("UU", bound=BaseUserUpdate)

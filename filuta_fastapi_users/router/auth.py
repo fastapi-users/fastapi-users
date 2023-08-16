@@ -9,6 +9,8 @@ from filuta_fastapi_users.manager import BaseUserManager, UserManagerDependency
 from filuta_fastapi_users.openapi import OpenAPIResponseType
 from filuta_fastapi_users.router.common import ErrorCode, ErrorModel
 
+from filuta_fastapi_users.authentication.mfa.base import generate_otp_token
+
 def get_auth_router(
     backend: AuthenticationBackend,
     get_user_manager: UserManagerDependency[models.UP, models.ID],
@@ -96,12 +98,28 @@ def get_auth_router(
         strategy: Strategy[models.UP, models.ID] = Depends(backend.get_strategy),
     ):
         user, token = user_token
+        
+        query_params = request.query_params
+        target_mfa_verification = query_params.get("mfa_type", "")
+        
         token_record = await strategy.get_token_record(token=token)
         token_mfas = token_record.mfa_scopes
         
-        if "email" in token_mfas and token_mfas["email"] == 0:
-            await user_manager.mfa_send_otp(user=user, type="email", token_record=token_record)
+        if "email" in token_mfas and target_mfa_verification == "email":
+            
+            otp_token = generate_otp_token()
+            
+            otp_record = await user_manager.otp_email_create(user=user, token_record=token_record, otp_record="")
+            """ await user_manager.on_after_otp_email_created(user=user, token_record=token_record, otp_record=otp_record) """
+            return {"status": "ok", "message": "E-mail was sent"}
         
+        """ todo as feature """
+        if "sms" in token_mfas and target_mfa_verification == "sms":
+            pass
+        
+        """ todo as feature """
+        if "authenticator" in token_mfas and target_mfa_verification == "authenticator":
+            pass 
         
         return token_record
         

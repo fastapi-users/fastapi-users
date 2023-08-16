@@ -1,28 +1,23 @@
 import secrets
-import json
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, Generic, Optional
 
 from filuta_fastapi_users import exceptions, models
 from filuta_fastapi_users.authentication.strategy.base import Strategy
-from filuta_fastapi_users.authentication.strategy.db.adapter import AccessTokenDatabase
-from filuta_fastapi_users.authentication.strategy.db.models import AP
+from filuta_fastapi_users.authentication.strategy.db.adapter import AccessTokenDatabase,RefreshTokenDatabase, OtpTokenDatabase
+from filuta_fastapi_users.authentication.strategy.db.models import AP, RTP
 from filuta_fastapi_users.manager import BaseUserManager
 
-
-def packToJson(data):
-    return json.dumps(data)
-
-def unpackFromJson(str):
-    return json.loads(str)
-
 class DatabaseStrategy(
-    Strategy[models.UP, models.ID], Generic[models.UP, models.ID, AP]
+    Strategy[models.UP, models.ID], 
+    Generic[models.UP, models.ID, AP]
 ):
     def __init__(
-        self, database: AccessTokenDatabase[AP], lifetime_seconds: Optional[int] = None
+        self, 
+        access_token_db: AccessTokenDatabase[AP], 
+        lifetime_seconds: Optional[int] = None
     ):
-        self.database = database
+        self.access_token_db = access_token_db
         self.lifetime_seconds = lifetime_seconds
 
     async def read_token(
@@ -37,7 +32,7 @@ class DatabaseStrategy(
                 seconds=self.lifetime_seconds
             )
 
-        access_token = await self.database.get_by_token(token, max_age)
+        access_token = await self.access_token_db.get_by_token(token, max_age)
         if access_token is None:
             return None
 
@@ -59,18 +54,18 @@ class DatabaseStrategy(
                 seconds=self.lifetime_seconds
             )
 
-        access_token = await self.database.get_by_token(token, max_age)
+        access_token = await self.access_token_db.get_by_token(token, max_age)
         return access_token
 
     async def write_token(self, user: models.UP) -> str:
         access_token_dict = self._create_access_token_dict(user)
-        access_token = await self.database.create(access_token_dict)
+        access_token = await self.access_token_db.create(access_token_dict)
         return access_token
 
     async def destroy_token(self, token: str, user: models.UP) -> None:
-        access_token = await self.database.get_by_token(token)
+        access_token = await self.access_token_db.get_by_token(token)
         if access_token is not None:
-            await self.database.delete(access_token)
+            await self.access_token_db.delete(access_token)
 
     def _create_access_token_dict(self, user: models.UP) -> Dict[str, Any]:
         token = secrets.token_urlsafe()
