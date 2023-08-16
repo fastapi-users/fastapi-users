@@ -47,6 +47,21 @@ class DatabaseStrategy(
         except (exceptions.UserNotExists, exceptions.InvalidID):
             return None
 
+    async def get_token_record(
+        self, token: Optional[str]
+    ) -> Optional[models.UP]:
+        if token is None:
+            return None
+
+        max_age = None
+        if self.lifetime_seconds:
+            max_age = datetime.now(timezone.utc) - timedelta(
+                seconds=self.lifetime_seconds
+            )
+
+        access_token = await self.database.get_by_token(token, max_age)
+        return access_token
+
     async def write_token(self, user: models.UP) -> str:
         access_token_dict = self._create_access_token_dict(user)
         access_token = await self.database.create(access_token_dict)

@@ -91,9 +91,20 @@ def get_auth_router(
     )
     async def send_otp_token(
         request: Request,
-        user: models.UP = Depends(get_current_active_user),
+        user_token: Tuple[models.UP, str] = Depends(get_current_user_token),
+        user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
+        strategy: Strategy[models.UP, models.ID] = Depends(backend.get_strategy),
     ):
-        pass
+        user, token = user_token
+        token_record = await strategy.get_token_record(token=token)
+        token_mfas = token_record.mfa_scopes
+        
+        if "email" in token_mfas and token_mfas["email"] == 0:
+            await user_manager.mfa_send_otp(user=user, type="email", token_record=token_record)
+        
+        
+        return token_record
+        
 
     @router.post(
         "/logout", name=f"auth:{backend.name}.logout", responses=logout_responses

@@ -496,6 +496,9 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         :return: None if the password is valid.
         """
         return  # pragma: no cover
+    
+    async def mfa_send_otp(self, user: models.UP, type: str, token_record):
+        pass
 
     async def on_after_register(
         self, user: models.UP, request: Optional[Request] = None
