@@ -1,4 +1,0 @@
-fastapi
-fastapi-users[sqlalchemy,oauth]
-uvicorn[standard]
-aiosqlite

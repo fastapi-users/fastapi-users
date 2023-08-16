@@ -1,3 +1,0 @@
-fastapi
-fastapi-users[beanie,oauth]
-uvicorn[standard]
