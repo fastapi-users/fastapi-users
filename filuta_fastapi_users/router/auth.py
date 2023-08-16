@@ -9,7 +9,6 @@ from filuta_fastapi_users.manager import BaseUserManager, UserManagerDependency
 from filuta_fastapi_users.openapi import OpenAPIResponseType
 from filuta_fastapi_users.router.common import ErrorCode, ErrorModel
 
-
 def get_auth_router(
     backend: AuthenticationBackend,
     get_user_manager: UserManagerDependency[models.UP, models.ID],
@@ -19,7 +18,11 @@ def get_auth_router(
     """Generate a router with login/logout routes for an authentication backend."""
     router = APIRouter()
     get_current_user_token = authenticator.current_user_token(
-        active=True, verified=requires_verification
+        active=True, verified=requires_verification, optional=False
+    )
+    
+    get_current_active_user = authenticator.current_user(
+        active=True, verified=False, optional=False
     )
 
     login_responses: OpenAPIResponseType = {
@@ -66,7 +69,9 @@ def get_auth_router(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=ErrorCode.LOGIN_USER_NOT_VERIFIED,
             )
+            
         response = await backend.login(strategy, user)
+        
         await user_manager.on_after_login(user, request, response)
         return response
 
@@ -78,6 +83,17 @@ def get_auth_router(
         },
         **backend.transport.get_openapi_logout_responses_success(),
     }
+
+    @router.post(
+        "/send_otp_token",
+        name=f"auth:{backend.name}.send_otp_token",
+        dependencies=[Depends(get_current_active_user)],
+    )
+    async def send_otp_token(
+        request: Request,
+        user: models.UP = Depends(get_current_active_user),
+    ):
+        pass
 
     @router.post(
         "/logout", name=f"auth:{backend.name}.logout", responses=logout_responses

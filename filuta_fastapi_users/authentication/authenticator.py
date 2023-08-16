@@ -160,6 +160,9 @@ class Authenticator:
         enabled_backends: Sequence[AuthenticationBackend] = kwargs.get(
             "enabled_backends", self.backends
         )
+        
+        detail = "no-user"
+        
         for backend in self.backends:
             if backend in enabled_backends:
                 token = kwargs[name_to_variable_name(backend.name)]
@@ -174,15 +177,18 @@ class Authenticator:
         status_code = status.HTTP_401_UNAUTHORIZED
         if user:
             status_code = status.HTTP_403_FORBIDDEN
+            detail = "no-reason"
             if active and not user.is_active:
                 status_code = status.HTTP_401_UNAUTHORIZED
                 user = None
+                detail = "no-active"
             elif (
                 verified and not user.is_verified or superuser and not user.is_superuser
             ):
                 user = None
+                detail = "no-verified"
         if not user and not optional:
-            raise HTTPException(status_code=status_code)
+            raise HTTPException(status_code=status_code, detail=detail)
         return user, token
 
     def _get_dependency_signature(

@@ -1,4 +1,5 @@
 import secrets
+import json
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, Generic, Optional
 
@@ -8,6 +9,12 @@ from filuta_fastapi_users.authentication.strategy.db.adapter import AccessTokenD
 from filuta_fastapi_users.authentication.strategy.db.models import AP
 from filuta_fastapi_users.manager import BaseUserManager
 
+
+def packToJson(data):
+    return json.dumps(data)
+
+def unpackFromJson(str):
+    return json.loads(str)
 
 class DatabaseStrategy(
     Strategy[models.UP, models.ID], Generic[models.UP, models.ID, AP]
@@ -52,4 +59,4 @@ class DatabaseStrategy(
 
     def _create_access_token_dict(self, user: models.UP) -> Dict[str, Any]:
         token = secrets.token_urlsafe()
-        return {"token": token, "user_id": user.id, "scopes": "", "mfa_scopes": "email=0"}
+        return {"token": token, "user_id": user.id, "scopes": "none", "mfa_scopes": {"email": 0}}

@@ -12,6 +12,7 @@ from filuta_fastapi_users.authentication.transport import (
     TransportLogoutNotSupportedError,
 )
 from filuta_fastapi_users.types import DependencyCallable
+from filuta_fastapi_users.authentication.mfa.base import generate_all_otps
 
 
 class AuthenticationBackend(Generic[models.UP, models.ID]):
@@ -39,8 +40,13 @@ class AuthenticationBackend(Generic[models.UP, models.ID]):
         self.transport = transport
         self.get_strategy = get_strategy
 
+    async def abd():
+        pass
+
     async def login(
-        self, strategy: Strategy[models.UP, models.ID], user: models.UP
+        self, 
+        strategy: Strategy[models.UP, models.ID], 
+        user: models.UP,
     ) -> Response:
         record = await strategy.write_token(user)
         return await self.transport.get_login_response(record)

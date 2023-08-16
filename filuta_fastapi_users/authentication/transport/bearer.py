@@ -2,6 +2,7 @@ from fastapi import Response, status
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel
+from typing import Dict
 
 from filuta_fastapi_users.authentication.transport.base import (
     Transport,
@@ -15,7 +16,7 @@ class BearerResponse(BaseModel):
     access_token: str
     token_type: str
     scopes: str
-    mfa_scopes: str
+    mfa_scopes: Dict[str, int]
 
 
 class BearerTransport(Transport):
