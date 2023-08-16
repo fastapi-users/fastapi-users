@@ -51,7 +51,7 @@ jobs:
     - name: Build and install it on system host
       run: |
         hatch build
-        pip install dist/fastapi_users-*.whl
+        pip install dist/filuta_fastapi_users-*.whl
         python test_build.py
 
   release:

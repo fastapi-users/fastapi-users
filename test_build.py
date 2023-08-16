@@ -2,7 +2,7 @@
 import sys
 
 try:
-    from fastapi_users import FastAPIUsers
+    from filuta_fastapi_users import FastAPIUsers
 except:
     sys.exit(1)
 

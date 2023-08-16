@@ -23,7 +23,7 @@ addopts = "--ignore=test_build.py"
 markers = [
 	"authentication",
 	"db",
-	"fastapi_users",
+	"filuta_fastapi_users",
 	"jwt",
 	"manager",
 	"oauth",
@@ -41,7 +41,7 @@ allow-direct-references = true
 [tool.hatch.version]
 source = "regex_commit"
 commit_extra_args = ["-e"]
-path = "fastapi_users/__init__.py"
+path = "filuta_fastapi_users/__init__.py"
 
 [tool.hatch.envs.default]
 features = [
@@ -75,28 +75,28 @@ dependencies = [
 
 [tool.hatch.envs.default.scripts]
 lint = [
-  "isort ./fastapi_users ./tests",
-  "isort ./docs/src -o fastapi_users",
-  "isort ./examples -o fastapi_users -p app",
+  "isort ./filuta_fastapi_users ./tests",
+  "isort ./docs/src -o filuta_fastapi_users",
+  "isort ./examples -o filuta_fastapi_users -p app",
   "black . ",
   "ruff --fix .",
-  "mypy fastapi_users/",
+  "mypy filuta_fastapi_users/",
 ]
 lint-check = [
-  "isort --check-only ./fastapi_users ./tests",
-  "isort --check-only  ./docs/src -o fastapi_users",
-  "isort --check-only ./examples -o fastapi_users -p app",
+  "isort --check-only ./filuta_fastapi_users ./tests",
+  "isort --check-only  ./docs/src -o filuta_fastapi_users",
+  "isort --check-only ./examples -o filuta_fastapi_users -p app",
   "black --check .",
   "ruff .",
-  "mypy fastapi_users/",
+  "mypy filuta_fastapi_users/",
 ]
 docs = "mkdocs serve"
 
 [tool.hatch.envs.test]
 
 [tool.hatch.envs.test.scripts]
-test = "pytest --cov=fastapi_users/ --cov-report=term-missing --cov-fail-under=100"
-test-cov-xml = "pytest --cov=fastapi_users/ --cov-report=xml --cov-fail-under=100"
+test = "pytest --cov=filuta_fastapi_users/ --cov-report=term-missing --cov-fail-under=100"
+test-cov-xml = "pytest --cov=filuta_fastapi_users/ --cov-report=xml --cov-fail-under=100"
 
 [[tool.hatch.envs.test.matrix]]
 pydantic = ["v1", "v2"]
