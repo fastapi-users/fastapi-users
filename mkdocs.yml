@@ -72,7 +72,6 @@ nav:
     - configuration/overview.md
     - User model and databases:
       - configuration/databases/sqlalchemy.md
-      - configuration/databases/beanie.md
     - Authentication backends:
       - Introduction: configuration/authentication/index.md
       - Transports:

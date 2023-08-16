@@ -4,7 +4,7 @@ __all__ = ["BaseUserDatabase", "UserDatabaseDependency"]
 
 
 try:  # pragma: no cover
-    from fastapi_users_db_sqlalchemy import (  # noqa: F401
+    from filuta_fastapi_users.filuta_uds import (  # noqa: F401
         SQLAlchemyBaseOAuthAccountTable,
         SQLAlchemyBaseOAuthAccountTableUUID,
         SQLAlchemyBaseUserTable,
@@ -17,20 +17,5 @@ try:  # pragma: no cover
     __all__.append("SQLAlchemyBaseOAuthAccountTable")
     __all__.append("SQLAlchemyBaseOAuthAccountTableUUID")
     __all__.append("SQLAlchemyUserDatabase")
-except ImportError:  # pragma: no cover
-    pass
-
-try:  # pragma: no cover
-    from fastapi_users_db_beanie import (  # noqa: F401
-        BaseOAuthAccount,
-        BeanieBaseUser,
-        BeanieUserDatabase,
-        ObjectIDIDMixin,
-    )
-
-    __all__.append("BeanieBaseUser")
-    __all__.append("BaseOAuthAccount")
-    __all__.append("BeanieUserDatabase")
-    __all__.append("ObjectIDIDMixin")
 except ImportError:  # pragma: no cover
     pass
