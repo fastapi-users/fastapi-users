@@ -21,10 +21,16 @@ class SQLAlchemyBaseAccessTokenTable(Generic[ID]):
         created_at: datetime
         expire_at: datetime
         scopes: str
+        mfa_scopes: str
         user_id: ID
     else:
         token: Mapped[str] = mapped_column(String(length=43), primary_key=True)
+        scopes: Mapped[str] = mapped_column(String(length=255))
+        mfa_scopes: Mapped[str] = mapped_column(String(length=255))
         created_at: Mapped[datetime] = mapped_column(
+            TIMESTAMPAware(timezone=True), index=True, nullable=False, default=now_utc
+        )
+        expire_at: Mapped[datetime] = mapped_column(
             TIMESTAMPAware(timezone=True), index=True, nullable=False, default=now_utc
         )
 
