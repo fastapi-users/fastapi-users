@@ -34,3 +34,18 @@ try:  # pragma: no cover
     __all__.append("ObjectIDIDMixin")
 except ImportError:  # pragma: no cover
     pass
+
+try:  # pragma: no cover
+    from fastapi_users_db_sqlmodel import (  # noqa: F401
+        SQLModelBaseUserDB,
+        SQLModelBaseOAuthAccount,
+        SQLModelUserDatabase,
+        SQLModelUserDatabaseAsync,
+    )
+
+    __all__.append("SQLModelBaseUserDB")
+    __all__.append("SQLModelBaseOAuthAccount")
+    __all__.append("SQLModelUserDatabase")
+    __all__.append("SQLModelUserDatabaseAsync")
+except ImportError:  # pragma: no cover
+    pass

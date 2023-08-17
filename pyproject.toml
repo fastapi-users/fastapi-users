@@ -92,6 +92,17 @@ lint-check = [
 ]
 docs = "mkdocs serve"
 
+[tool.hatch.envs.sqlmodel]
+features = [
+    "sqlmodel"
+]
+dependencies = [
+    "aiosqlite"
+]
+
+[tool.hatch.envs.sqlmodel.scripts]
+example = "python examples/sqlmodel/main.py"
+
 [tool.hatch.envs.test]
 
 [tool.hatch.envs.test.scripts]
@@ -157,6 +168,9 @@ oauth = [
 ]
 redis = [
     "redis >=4.3.3,<5.0.0",
+]
+sqlmodel = [
+    "fastapi-users-db-sqlmodel >=0.3.0,<1.0.0",
 ]
 
 [project.urls]

@@ -1,0 +1,4 @@
+fastapi
+fastapi-users[sqlmodel]
+uvicorn[standard]
+aiosqlite
