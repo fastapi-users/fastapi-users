@@ -4,6 +4,7 @@ from filuta_fastapi_users.router.register import get_register_router
 from filuta_fastapi_users.router.reset import get_reset_password_router
 from filuta_fastapi_users.router.users import get_users_router
 from filuta_fastapi_users.router.verify import get_verify_router
+from filuta_fastapi_users.router.otp_router import get_otp_router
 
 __all__ = [
     "ErrorCode",
@@ -12,6 +13,7 @@ __all__ = [
     "get_reset_password_router",
     "get_users_router",
     "get_verify_router",
+    "get_otp_router",
 ]
 
 try:  # pragma: no cover

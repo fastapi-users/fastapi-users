@@ -12,6 +12,7 @@ from filuta_fastapi_users.router import (
     get_reset_password_router,
     get_users_router,
     get_verify_router,
+    get_otp_router
 )
 
 try:
@@ -41,10 +42,15 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
         self,
         get_user_manager: UserManagerDependency[models.UP, models.ID],
         auth_backends: Sequence[AuthenticationBackend],
+        get_refresh_token_db: any,
+        get_otp_token_db: any,
     ):
         self.authenticator = Authenticator(auth_backends, get_user_manager)
         self.get_user_manager = get_user_manager
+        self.get_refresh_token_db = get_refresh_token_db
+        self.get_otp_token_db = get_otp_token_db
         self.current_user = self.authenticator.current_user
+        
 
     def get_register_router(
         self, user_schema: Type[schemas.U], user_create_schema: Type[schemas.UC]
@@ -86,6 +92,22 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
             self.get_user_manager,
             self.authenticator,
             requires_verification,
+        )
+
+    def get_otp_router(
+        self, backend: AuthenticationBackend
+    ) -> APIRouter:
+        """
+        Return an auth router for a given authentication backend.
+
+        :param backend: The authentication backend instance.
+        :param requires_verification: Whether the authentication
+        require the user to be verified or not. Defaults to False.
+        """
+        return get_otp_router(
+            backend,
+            self.get_user_manager,
+            self.authenticator,
         )
 
     def get_oauth_router(

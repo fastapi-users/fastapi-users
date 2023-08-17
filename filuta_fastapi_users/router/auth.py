@@ -9,9 +9,6 @@ from filuta_fastapi_users.manager import BaseUserManager, UserManagerDependency
 from filuta_fastapi_users.openapi import OpenAPIResponseType
 from filuta_fastapi_users.router.common import ErrorCode, ErrorModel
 
-from filuta_fastapi_users.authentication.mfa.base import generate_otp_token
-from pydantic import BaseModel
-
 def get_auth_router(
     backend: AuthenticationBackend,
     get_user_manager: UserManagerDependency[models.UP, models.ID],
@@ -86,77 +83,6 @@ def get_auth_router(
         },
         **backend.transport.get_openapi_logout_responses_success(),
     }
-
-    @router.post(
-        "/send_otp_token",
-        name=f"auth:{backend.name}.send_otp_token",
-        dependencies=[Depends(get_current_active_user)],
-    )
-    async def send_otp_token(
-        request: Request,
-        user_token: Tuple[models.UP, str] = Depends(get_current_user_token),
-        user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
-        strategy: Strategy[models.UP, models.ID] = Depends(backend.get_strategy),
-    ):
-        user, token = user_token
-        
-        query_params = request.query_params
-        target_mfa_verification = query_params.get("mfa_type", "")
-        
-        token_record = await strategy.get_token_record(token=token)
-        token_mfas = token_record.mfa_scopes
-        
-        if "email" in token_mfas and target_mfa_verification == "email":
-            
-            otp_token = generate_otp_token()
-            otp_record = await strategy.create_otp_email_token(access_token=token, mfa_token=otp_token)
-            """ await user_manager.on_after_otp_email_created(user=user, token_record=token_record, otp_record=otp_record) """
-            return {"status": True, "message": "E-mail was sent"}
-        
-        """ todo as feature """
-        if "sms" in token_mfas and target_mfa_verification == "sms":
-            pass
-        
-        """ todo as feature """
-        if "authenticator" in token_mfas and target_mfa_verification == "authenticator":
-            pass 
-        
-        return {"status": False, "message": "No MFA"}
-
-
-    class ValidateOtpTokenRequestBody(BaseModel):
-        code: str
-        type: str
-
-    @router.post(
-        "/validate_otp_token",
-        name=f"auth:{backend.name}.validate_otp_token",
-        dependencies=[Depends(get_current_active_user)],
-    )
-    async def send_otp_token(
-        request: Request,
-        jsonBody: ValidateOtpTokenRequestBody,
-        user_token: Tuple[models.UP, str] = Depends(get_current_user_token),
-        user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
-        strategy: Strategy[models.UP, models.ID] = Depends(backend.get_strategy),
-    ):
-        user, token = user_token
-        mfa_token = jsonBody.code
-        mfa_type = jsonBody.type
-        
-        otp_record = await strategy.find_otp_token(access_token = token, mfa_type=mfa_type, mfa_token=mfa_token)
-        
-        if otp_record:
-            
-            token_record = await strategy.get_token_record(token=token)
-            token_mfa_scopes = token_record.mfa_scopes
-            token_mfa_scopes[mfa_type] = 1
-            new_token = await strategy.update_token(access_token=token_record, data={"mfa_scopes": token_mfa_scopes})
-            
-            return {"status": True, "message": "Approved", "access_token": new_token}
-                    
-        return {"status": False}
-        
 
     @router.post(
         "/logout", name=f"auth:{backend.name}.logout", responses=logout_responses
