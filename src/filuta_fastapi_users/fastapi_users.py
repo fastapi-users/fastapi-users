@@ -44,13 +44,13 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
         self,
         get_user_manager: UserManagerDependency[models.UP, models.ID],
         auth_backends: Sequence[AuthenticationBackend],
-        get_refresh_token_db: any,
+        get_refresh_token_manager: any,
         get_otp_manager: any,
         requires_verification: bool = False
     ):        
         self.authenticator = Authenticator(auth_backends, get_user_manager)
         self.get_user_manager = get_user_manager
-        self.get_refresh_token_db = get_refresh_token_db
+        self.get_refresh_token_manager = get_refresh_token_manager
         self.current_user = self.authenticator.current_user
         self.get_otp_manager = get_otp_manager
         self.requires_verification = requires_verification
@@ -102,6 +102,7 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
         return get_auth_router(
             backend=backend,
             get_user_manager=self.get_user_manager,
+            get_refresh_token_manager=self.get_refresh_token_manager,
             authenticator=self.authenticator,
             requires_verification=self.requires_verification,
         )

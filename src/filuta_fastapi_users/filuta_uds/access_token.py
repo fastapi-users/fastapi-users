@@ -67,8 +67,6 @@ class SQLAlchemyAccessTokenDatabase(Generic[AP], AccessTokenDatabase[AP]):
         authorized: bool = False
     ) -> Optional[AP]:
         
-        print("authorized", authorized)
-        
         statement = select(self.access_token_table).where(
             self.access_token_table.token == token  # type: ignore
         )

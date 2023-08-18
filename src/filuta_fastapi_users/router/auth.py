@@ -14,6 +14,7 @@ def get_auth_router(
     get_user_manager: UserManagerDependency[models.UP, models.ID],
     authenticator: Authenticator,
     requires_verification: bool = False,
+    get_refresh_token_manager: any = None,
 ) -> APIRouter:
     """Generate a router with login/logout routes for an authentication backend."""
     router = APIRouter()
@@ -76,6 +77,23 @@ def get_auth_router(
         },
         **backend.transport.get_openapi_logout_responses_success(),
     }
+    
+    get_current_user_token = authenticator.current_user_token(
+        active=True, verified=requires_verification, authorized=True
+    )
+
+    @router.post(
+        "/renew_access_token",
+        name=f"auth:{backend.name}.renew_access_token",
+    )
+    async def renew_access_token(
+        request: Request,
+        credentials: OAuth2PasswordRequestForm = Depends(),
+        user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
+        strategy: Strategy[models.UP, models.ID] = Depends(backend.get_strategy),
+        refresh_token_manager = Depends(get_refresh_token_manager),
+    ):
+        pass
     
     get_current_user_token = authenticator.current_user_token(
         active=True, verified=requires_verification, authorized=True
