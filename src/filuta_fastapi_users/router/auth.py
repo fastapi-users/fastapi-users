@@ -17,13 +17,6 @@ def get_auth_router(
 ) -> APIRouter:
     """Generate a router with login/logout routes for an authentication backend."""
     router = APIRouter()
-    get_current_user_token = authenticator.current_user_token(
-        active=True, verified=requires_verification, optional=False
-    )
-    
-    get_current_active_user = authenticator.current_user(
-        active=True, verified=False, optional=False
-    )
 
     login_responses: OpenAPIResponseType = {
         status.HTTP_400_BAD_REQUEST: {
@@ -83,6 +76,10 @@ def get_auth_router(
         },
         **backend.transport.get_openapi_logout_responses_success(),
     }
+    
+    get_current_user_token = authenticator.current_user_token(
+        active=True, verified=requires_verification, authorized=True
+    )
 
     @router.post(
         "/logout", name=f"auth:{backend.name}.logout", responses=logout_responses

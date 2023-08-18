@@ -46,15 +46,19 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
         auth_backends: Sequence[AuthenticationBackend],
         get_refresh_token_db: any,
         get_otp_manager: any,
+        requires_verification: bool = False
     ):        
         self.authenticator = Authenticator(auth_backends, get_user_manager)
         self.get_user_manager = get_user_manager
         self.get_refresh_token_db = get_refresh_token_db
         self.current_user = self.authenticator.current_user
-        self.get_otp_manager = get_otp_manager    
+        self.get_otp_manager = get_otp_manager
+        self.requires_verification = requires_verification
 
     def get_register_router(
-        self, user_schema: Type[schemas.U], user_create_schema: Type[schemas.UC]
+        self, 
+        user_schema: Type[schemas.U], 
+        user_create_schema: Type[schemas.UC]
     ) -> APIRouter:
         """
         Return a router with a register route.
@@ -63,7 +67,9 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
         :param user_create_schema: Pydantic schema for creating a user.
         """
         return get_register_router(
-            self.get_user_manager, user_schema, user_create_schema
+            get_user_manager=self.get_user_manager, 
+            user_schema=user_schema, 
+            user_create_schema=user_create_schema
         )
 
     def get_verify_router(self, user_schema: Type[schemas.U]) -> APIRouter:
@@ -72,27 +78,32 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
 
         :param user_schema: Pydantic schema of a public user.
         """
-        return get_verify_router(self.get_user_manager, user_schema)
+        return get_verify_router(
+            get_user_manager=self.get_user_manager, 
+            user_schema=user_schema
+        )
 
     def get_reset_password_router(self) -> APIRouter:
         """Return a reset password process router."""
-        return get_reset_password_router(self.get_user_manager)
+        return get_reset_password_router(
+            get_user_manager=self.get_user_manager
+        )
 
     def get_auth_router(
-        self, backend: AuthenticationBackend, requires_verification: bool = False
+        self, 
+        backend: AuthenticationBackend,
     ) -> APIRouter:
         """
         Return an auth router for a given authentication backend.
 
         :param backend: The authentication backend instance.
-        :param requires_verification: Whether the authentication
         require the user to be verified or not. Defaults to False.
         """
         return get_auth_router(
-            backend,
-            self.get_user_manager,
-            self.authenticator,
-            requires_verification,
+            backend=backend,
+            get_user_manager=self.get_user_manager,
+            authenticator=self.authenticator,
+            requires_verification=self.requires_verification,
         )
 
     def get_otp_router(
@@ -102,14 +113,14 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
         Return an auth router for a given authentication backend.
 
         :param backend: The authentication backend instance.
-        :param requires_verification: Whether the authentication
         require the user to be verified or not. Defaults to False.
         """
         return get_otp_router(
-            backend,
-            self.get_user_manager,
-            self.authenticator,
-            self.get_otp_manager
+            backend=backend,
+            get_user_manager=self.get_user_manager,
+            authenticator=self.authenticator,
+            get_otp_manager=self.get_otp_manager,
+            requires_verification=self.requires_verification,
         )
 
     def get_oauth_router(
@@ -151,7 +162,6 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
         user_schema: Type[schemas.U],
         state_secret: SecretType,
         redirect_url: Optional[str] = None,
-        requires_verification: bool = False,
     ) -> APIRouter:
         """
         Return an OAuth association router for a given OAuth client.
@@ -161,7 +171,6 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
         :param state_secret: Secret used to encode the state JWT.
         :param redirect_url: Optional arbitrary redirect URL for the OAuth2 flow.
         If not given, the URL to the callback endpoint will be generated.
-        :param requires_verification: Whether the endpoints
         require the users to be verified or not. Defaults to False.
         """
         return get_oauth_associate_router(
@@ -171,21 +180,18 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
             user_schema,
             state_secret,
             redirect_url,
-            requires_verification,
         )
 
     def get_users_router(
         self,
         user_schema: Type[schemas.U],
         user_update_schema: Type[schemas.UU],
-        requires_verification: bool = False,
     ) -> APIRouter:
         """
         Return a router with routes to manage users.
 
         :param user_schema: Pydantic schema of a public user.
         :param user_update_schema: Pydantic schema for updating a user.
-        :param requires_verification: Whether the endpoints
         require the users to be verified or not. Defaults to False.
         """
         return get_users_router(
@@ -193,5 +199,4 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
             user_schema,
             user_update_schema,
             self.authenticator,
-            requires_verification,
         )

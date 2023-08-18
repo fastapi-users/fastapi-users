@@ -14,17 +14,18 @@ def get_otp_router(
     backend: AuthenticationBackend,
     get_user_manager: UserManagerDependency[models.UP, models.ID],
     authenticator: Authenticator,
-    get_otp_manager: any = None
+    get_otp_manager: any = None,
+    requires_verification: bool = False,
 ) -> APIRouter:
     """Generate a router with login/logout routes for an authentication backend."""
     router = APIRouter()
     
     get_current_user_token = authenticator.current_user_token(
-        active=True, verified=True, optional=False
+        active=True, verified=requires_verification, authorized=False
     )
     
     get_current_active_user = authenticator.current_user(
-        active=True, verified=False, optional=False
+        active=True, verified=requires_verification, authorized=False
     )
 
     @router.post(

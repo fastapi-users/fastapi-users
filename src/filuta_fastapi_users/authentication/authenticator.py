@@ -62,6 +62,7 @@ class Authenticator:
         active: bool = False,
         verified: bool = False,
         superuser: bool = False,
+        authorized: bool = True,
         get_enabled_backends: Optional[EnabledBackendsDependency] = None,
     ):
         """
@@ -106,6 +107,7 @@ class Authenticator:
         active: bool = False,
         verified: bool = False,
         superuser: bool = False,
+        authorized: bool = True,
         get_enabled_backends: Optional[EnabledBackendsDependency] = None,
     ):
         """
