@@ -74,11 +74,12 @@ def get_otp_router(
         name=f"auth:{backend.name}.validate_otp_token",
         dependencies=[Depends(get_current_active_user)],
     )
-    async def send_otp_token(
+    async def validate_token(
         request: Request,
         jsonBody: ValidateOtpTokenRequestBody,
         user_token: Tuple[models.UP, str] = Depends(get_current_user_token),
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
+        otp_manager = Depends(get_otp_manager),
         strategy: Strategy[models.UP, models.ID] = Depends(backend.get_strategy),
     ):
         user, token = user_token
@@ -87,8 +88,7 @@ def get_otp_router(
         
         """ todo get_otp_token_db """
         
-        
-        otp_record = await strategy.find_otp_token(access_token = token, mfa_type=mfa_type, mfa_token=mfa_token)
+        otp_record = await otp_manager.find_otp_token(access_token = token, mfa_type=mfa_type, mfa_token=mfa_token)
         
         if otp_record:
             
