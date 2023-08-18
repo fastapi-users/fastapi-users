@@ -7,6 +7,7 @@ from filuta_fastapi_users.models import ID
 from sqlalchemy import ForeignKey, String, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Mapped, declared_attr, mapped_column
+from datetime import datetime
 
 from .generics import GUID, TIMESTAMPAware, now_utc
 
@@ -65,8 +66,9 @@ class SQLAlchemyOtpTokenDatabase(Generic[OTPTP], OtpTokenDatabase[OTPTP]):
         return results.scalar_one_or_none()
 
     async def find_otp_token(
-        self, access_token: str, mfa_type: str, mfa_token: str
+        self, access_token: str, mfa_type: str, mfa_token: str, only_valid: bool = False
     ) -> Optional[OTPTP]:
+        
         statement = select(self.otp_token_table).where(
             self.otp_token_table.access_token == access_token  # type: ignore
         ).where(
@@ -74,9 +76,26 @@ class SQLAlchemyOtpTokenDatabase(Generic[OTPTP], OtpTokenDatabase[OTPTP]):
         ).where(
             self.otp_token_table.mfa_type == mfa_type
         )
+        
+        if only_valid:
+            current_utc_time = datetime.utcnow()
+            statement = statement.where(self.otp_token_table.expire_at > current_utc_time)
 
         results = await self.session.execute(statement)
         return results.scalar_one_or_none()
+
+    async def user_has_token(
+        self, access_token: str, mfa_type: str
+    ) -> Optional[OTPTP]:
+        statement = select(self.otp_token_table).where(
+            self.otp_token_table.access_token == access_token  # type: ignore
+        ).where(
+            self.otp_token_table.mfa_type == mfa_type
+        )
+
+        results = await self.session.execute(statement)
+        return results.scalar_one_or_none()
+    
 
     async def create(self, create_dict: Dict[str, Any]) -> OTPTP:
         otp_token = self.otp_token_table(**create_dict)

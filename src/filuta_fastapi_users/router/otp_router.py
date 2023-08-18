@@ -49,8 +49,14 @@ def get_otp_router(
         
         if "email" in token_mfas and target_mfa_verification == "email":
             
+            already_obtained = await otp_manager.user_has_issued_token(access_token = token, mfa_type=target_mfa_verification)
             otp_token = otp_manager.generate_otp_token()
-            otp_token_record = await otp_manager.create_otp_email_token(access_token=token, mfa_token=otp_token)
+            
+            if already_obtained:
+                await otp_manager.delete_record(item=already_obtained)
+                
+            otp_token_record = await otp_manager.create_otp_token(access_token=token, mfa_token=otp_token, mfa_type="email")
+            
             await user_manager.on_after_otp_email_created(user=user, access_token_record=access_token_record, otp_token_record=otp_token_record)
             return {"status": True, "message": "E-mail was sent"}
         
@@ -86,16 +92,21 @@ def get_otp_router(
         mfa_token = jsonBody.code
         mfa_type = jsonBody.type
         
-        """ todo get_otp_token_db """
-        
-        otp_record = await otp_manager.find_otp_token(access_token = token, mfa_type=mfa_type, mfa_token=mfa_token)
+        otp_record = await otp_manager.find_otp_token(access_token = token, mfa_type=mfa_type, mfa_token=mfa_token, only_valid=True)
         
         if otp_record:
             
             token_record = await strategy.get_token_record(token=token)
             token_mfa_scopes = copy.deepcopy(token_record.mfa_scopes)
             token_mfa_scopes[mfa_type] = 1
-            new_token = await strategy.update_token(access_token=token_record, data={"mfa_scopes": token_mfa_scopes})
+
+            if all(value == 1 for value in token_mfa_scopes.values()):
+                scopes = "approved"
+            else:
+                scopes = "none"
+            
+            new_token = await strategy.update_token(access_token=token_record, data={"mfa_scopes": token_mfa_scopes, "scopes": scopes})
+            await otp_manager.delete_record(item=otp_record)
             
             return {"status": True, "message": "Approved", "access_token": new_token}
                     

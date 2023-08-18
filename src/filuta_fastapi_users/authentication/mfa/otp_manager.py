@@ -2,6 +2,7 @@ import secrets
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, Generic, Optional
 import random
+from datetime import datetime, timedelta
 
 from filuta_fastapi_users import exceptions, models
 from filuta_fastapi_users.authentication.strategy.base import Strategy
@@ -27,11 +28,21 @@ class OtpManager(
         return otp
 
 
-    async def create_otp_email_token(self, access_token, mfa_token):
-        otp_record = await self.otp_token_db.create(create_dict={"access_token": access_token, "mfa_type": "email", "mfa_token": mfa_token})
-        return otp_record
+    async def create_otp_token(self, access_token, mfa_token, mfa_type):
+        
+        current_datetime = datetime.utcnow()
+        expire_time = current_datetime + timedelta(minutes=10)
+        
+        return await self.otp_token_db.create(create_dict={"access_token": access_token, "mfa_type": mfa_type, "mfa_token": mfa_token, "expire_at": expire_time})
+    
+    async def update_otp_token(self, otp_token_record, mfa_token):
+        return await self.otp_token_db.update(otp_token=otp_token_record, update_dict={"mfa_token": mfa_token})
 
+    async def find_otp_token(self, access_token, mfa_type, mfa_token, only_valid = False):
+        return await self.otp_token_db.find_otp_token(access_token=access_token, mfa_type=mfa_type, mfa_token=mfa_token, only_valid=only_valid)
 
-    async def find_otp_token(self, access_token, mfa_type, mfa_token):
-        otp_record = await self.otp_token_db.find_otp_token(access_token=access_token, mfa_type=mfa_type, mfa_token=mfa_token)
-        return otp_record
+    async def user_has_issued_token(self, access_token, mfa_type):
+        return await self.otp_token_db.user_has_token(access_token=access_token, mfa_type=mfa_type)
+
+    async def delete_record(self, item):
+        return await self.otp_token_db.delete(otp_token=item)
