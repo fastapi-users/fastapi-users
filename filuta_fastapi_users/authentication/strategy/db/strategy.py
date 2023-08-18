@@ -15,11 +15,9 @@ class DatabaseStrategy(
     def __init__(
         self, 
         access_token_db: AccessTokenDatabase[AP],
-        otp_token_db = OtpTokenDatabase[OTPTP],
         lifetime_seconds: Optional[int] = None
     ):
         self.access_token_db = access_token_db
-        self.otp_token_db = otp_token_db
         self.lifetime_seconds = lifetime_seconds
 
     async def read_token(
@@ -76,11 +74,3 @@ class DatabaseStrategy(
     def _create_access_token_dict(self, user: models.UP) -> Dict[str, Any]:
         token = secrets.token_urlsafe()
         return {"token": token, "user_id": user.id, "scopes": "none", "mfa_scopes": {"email": 0}}
-
-    async def create_otp_email_token(self, access_token, mfa_token):
-        otp_record = await self.otp_token_db.create({"access_token": access_token, "mfa_type": "email", "mfa_token": mfa_token})
-        return otp_record
-
-    async def find_otp_token(self, access_token, mfa_type, mfa_token):
-        otp_record = await self.otp_token_db.find_otp_token(access_token=access_token, mfa_type=mfa_type, mfa_token=mfa_token)
-        return otp_record

@@ -8,14 +8,13 @@ from filuta_fastapi_users import models
 from filuta_fastapi_users.authentication import AuthenticationBackend, Authenticator, Strategy
 from filuta_fastapi_users.manager import BaseUserManager, UserManagerDependency
 
-from filuta_fastapi_users.authentication.mfa.base import generate_otp_token
 from pydantic import BaseModel
 
 def get_otp_router(
     backend: AuthenticationBackend,
     get_user_manager: UserManagerDependency[models.UP, models.ID],
     authenticator: Authenticator,
-    get_otp_token_db: any = None
+    get_otp_manager: any = None
 ) -> APIRouter:
     """Generate a router with login/logout routes for an authentication backend."""
     router = APIRouter()
@@ -37,6 +36,7 @@ def get_otp_router(
         request: Request,
         user_token: Tuple[models.UP, str] = Depends(get_current_user_token),
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
+        otp_manager = Depends(get_otp_manager),
         strategy: Strategy[models.UP, models.ID] = Depends(backend.get_strategy),
     ):
         user, token = user_token
@@ -44,14 +44,14 @@ def get_otp_router(
         query_params = request.query_params
         target_mfa_verification = query_params.get("mfa_type", "")
         
-        token_record = await strategy.get_token_record(token=token)
-        token_mfas = token_record.mfa_scopes
+        access_token_record = await strategy.get_token_record(token=token)
+        token_mfas = access_token_record.mfa_scopes
         
         if "email" in token_mfas and target_mfa_verification == "email":
             
-            otp_token = generate_otp_token()
-            otp_record = await strategy.create_otp_email_token(access_token=token, mfa_token=otp_token)
-            """ await user_manager.on_after_otp_email_created(user=user, token_record=token_record, otp_record=otp_record) """
+            otp_token = otp_manager.generate_otp_token()
+            otp_token_record = await otp_manager.create_otp_email_token(access_token=token, mfa_token=otp_token)
+            await user_manager.on_after_otp_email_created(user=user, access_token_record=access_token_record, otp_token_record=otp_token_record)
             return {"status": True, "message": "E-mail was sent"}
         
         """ todo as feature """

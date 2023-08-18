@@ -1,6 +1,6 @@
 from typing import Generic, Optional, Sequence, Type
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
 from filuta_fastapi_users import models, schemas
 from filuta_fastapi_users.authentication import AuthenticationBackend, Authenticator
@@ -14,6 +14,8 @@ from filuta_fastapi_users.router import (
     get_verify_router,
     get_otp_router
 )
+
+from filuta_fastapi_users.authentication.mfa.otp_manager import OtpManager
 
 try:
     from httpx_oauth.oauth2 import BaseOAuth2
@@ -43,14 +45,13 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
         get_user_manager: UserManagerDependency[models.UP, models.ID],
         auth_backends: Sequence[AuthenticationBackend],
         get_refresh_token_db: any,
-        get_otp_token_db: any,
-    ):
+        get_otp_manager: any,
+    ):        
         self.authenticator = Authenticator(auth_backends, get_user_manager)
         self.get_user_manager = get_user_manager
         self.get_refresh_token_db = get_refresh_token_db
-        self.get_otp_token_db = get_otp_token_db
         self.current_user = self.authenticator.current_user
-        
+        self.get_otp_manager = get_otp_manager    
 
     def get_register_router(
         self, user_schema: Type[schemas.U], user_create_schema: Type[schemas.UC]
@@ -108,6 +109,7 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
             backend,
             self.get_user_manager,
             self.authenticator,
+            self.get_otp_manager
         )
 
     def get_oauth_router(
