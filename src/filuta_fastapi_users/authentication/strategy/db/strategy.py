@@ -15,13 +15,16 @@ class DatabaseStrategy(
     def __init__(
         self, 
         access_token_db: AccessTokenDatabase[AP],
-        lifetime_seconds: Optional[int] = None
+        lifetime_seconds: Optional[int] = None,
     ):
         self.access_token_db = access_token_db
         self.lifetime_seconds = lifetime_seconds
 
     async def read_token(
-        self, token: Optional[str], user_manager: BaseUserManager[models.UP, models.ID]
+        self, 
+        token: Optional[str], 
+        user_manager: BaseUserManager[models.UP, models.ID],
+        authorized: bool = False
     ) -> Optional[models.UP]:
         if token is None:
             return None
@@ -32,7 +35,7 @@ class DatabaseStrategy(
                 seconds=self.lifetime_seconds
             )
 
-        access_token = await self.access_token_db.get_by_token(token, max_age)
+        access_token = await self.access_token_db.get_by_token(token=token, max_age=max_age, authorized=authorized)
         if access_token is None:
             return None
 
