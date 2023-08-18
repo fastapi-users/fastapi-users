@@ -68,7 +68,7 @@ def get_otp_router(
         if "authenticator" in token_mfas and target_mfa_verification == "authenticator":
             pass 
         
-        return {"status": False, "message": "No MFA"}
+        return {"status": False, "error": "no-mfa-method"}
 
 
     class ValidateOtpTokenRequestBody(BaseModel):
@@ -108,8 +108,8 @@ def get_otp_router(
             new_token = await strategy.update_token(access_token=token_record, data={"mfa_scopes": token_mfa_scopes, "scopes": scopes})
             await otp_manager.delete_record(item=otp_record)
             
-            return {"status": True, "message": "Approved", "access_token": new_token}
+            return {"status": True, "access_token": new_token}
                     
-        return {"status": False}
+        return {"status": False, "error": "no-token"}
         
     return router
