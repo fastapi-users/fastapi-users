@@ -24,7 +24,8 @@ class DatabaseStrategy(
         self, 
         token: Optional[str], 
         user_manager: BaseUserManager[models.UP, models.ID],
-        authorized: bool = False
+        authorized: bool = False,
+        ignore_expired: bool = False,
     ) -> Optional[models.UP]:
         if token is None:
             return None
@@ -35,7 +36,7 @@ class DatabaseStrategy(
                 seconds=self.lifetime_seconds
             )
 
-        access_token = await self.access_token_db.get_by_token(token=token, max_age=max_age, authorized=authorized)
+        access_token = await self.access_token_db.get_by_token(token=token, max_age=max_age, authorized=authorized, ignore_expired=ignore_expired)
         if access_token is None:
             return None
 
@@ -60,8 +61,21 @@ class DatabaseStrategy(
         access_token = await self.access_token_db.get_by_token(token, max_age)
         return access_token
 
+    async def get_token_record_raw(
+        self, token: Optional[str]
+    ) -> Optional[models.UP]:
+        if token is None:
+            return None
+
+        access_token = await self.access_token_db.get_by_token(token)
+        return access_token
+
     async def write_token(self, user: models.UP) -> str:
         access_token_dict = self._create_access_token_dict(user)
+        access_token = await self.access_token_db.create(access_token_dict)
+        return access_token
+
+    async def insert_token(self, access_token_dict) -> str:
         access_token = await self.access_token_db.create(access_token_dict)
         return access_token
 
@@ -69,11 +83,14 @@ class DatabaseStrategy(
         access_token = await self.access_token_db.update(access_token=access_token, update_dict=data)
         return access_token
 
-    async def destroy_token(self, token: str, user: models.UP) -> None:
+    async def destroy_token(self, token: str) -> None:
         access_token = await self.access_token_db.get_by_token(token)
         if access_token is not None:
             await self.access_token_db.delete(access_token)
 
     def _create_access_token_dict(self, user: models.UP) -> Dict[str, Any]:
-        token = secrets.token_urlsafe()
+        token = self.generate_token()
         return {"token": token, "user_id": user.id, "scopes": "none", "mfa_scopes": {"email": 0}}
+
+    def generate_token(self) -> str:
+        return secrets.token_urlsafe()

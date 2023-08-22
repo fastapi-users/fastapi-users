@@ -18,15 +18,11 @@ class SQLAlchemyBaseRefreshTokenTable(Generic[ID]):
     __tablename__ = "refresh_tokens"
 
     if TYPE_CHECKING:  # pragma: no cover
+        user_id: ID
         token: str
         created_at: datetime
-        scopes: str
-        mfa_scopes: json
-        user_id: ID
     else:
         token: Mapped[str] = mapped_column(String(length=43), primary_key=True)
-        scopes: Mapped[str] = mapped_column(String(length=255))
-        mfa_scopes: Mapped[json] = mapped_column(JSON())
         created_at: Mapped[datetime] = mapped_column(
             TIMESTAMPAware(timezone=True), index=True, nullable=False, default=now_utc
         )

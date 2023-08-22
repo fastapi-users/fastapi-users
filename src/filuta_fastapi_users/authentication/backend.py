@@ -46,9 +46,10 @@ class AuthenticationBackend(Generic[models.UP, models.ID]):
         self, 
         strategy: Strategy[models.UP, models.ID], 
         user: models.UP,
+        refresh_token: str
     ) -> Response:
         record = await strategy.write_token(user)
-        return await self.transport.get_login_response(record)
+        return await self.transport.get_login_response(record=record, refresh_token=refresh_token)
 
     async def logout(
         self, strategy: Strategy[models.UP, models.ID], user: models.UP, token: str

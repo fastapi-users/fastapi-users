@@ -6,43 +6,42 @@ from datetime import datetime, timedelta
 
 from filuta_fastapi_users import exceptions, models
 from filuta_fastapi_users.authentication.strategy.base import Strategy
-from filuta_fastapi_users.authentication.strategy.db.adapter import AccessTokenDatabase,RefreshTokenDatabase, OtpTokenDatabase
-from filuta_fastapi_users.authentication.strategy.db.models import OTPTP
+from filuta_fastapi_users.authentication.strategy.db.adapter import RefreshTokenDatabase
+from filuta_fastapi_users.authentication.strategy.db.models import RTP
 from filuta_fastapi_users.manager import BaseUserManager
 
 
 class RefreshTokenManager(
-    Generic[models.UP, models.ID, OTPTP]
+    Generic[models.UP, models.ID, RTP]
 ):
     def __init__(
         self, 
-        otp_token_db = OtpTokenDatabase[OTPTP],
+        refresh_token_db = RefreshTokenDatabase[RTP],
     ):
 
-        self.otp_token_db = otp_token_db
+        self.refresh_token_db = refresh_token_db
         
-    def generate_otp_token(self, length=6):
-        """Generate a random OTP of given length."""
-        # Generate OTP using numbers 0-9
-        otp = ''.join([str(random.randint(0, 9)) for _ in range(length)])
-        return otp
-
-
-    async def create_otp_token(self, access_token, mfa_token, mfa_type):
+    def generate_refresh_token(self):
+        return secrets.token_urlsafe()
         
-        current_datetime = datetime.utcnow()
-        expire_time = current_datetime + timedelta(minutes=10)
         
-        return await self.otp_token_db.create(create_dict={"access_token": access_token, "mfa_type": mfa_type, "mfa_token": mfa_token, "expire_at": expire_time})
-    
-    async def update_otp_token(self, otp_token_record, mfa_token):
-        return await self.otp_token_db.update(otp_token=otp_token_record, update_dict={"mfa_token": mfa_token})
+    async def generate_new_token_for_user(self, user):
+        token = self.generate_refresh_token()
 
-    async def find_otp_token(self, access_token, mfa_type, mfa_token, only_valid = False):
-        return await self.otp_token_db.find_otp_token(access_token=access_token, mfa_type=mfa_type, mfa_token=mfa_token, only_valid=only_valid)
+        return await self.refresh_token_db.create(create_dict={
+            "token": token,
+            "user_id": user.id,
+        })
 
-    async def user_has_issued_token(self, access_token, mfa_type):
-        return await self.otp_token_db.user_has_token(access_token=access_token, mfa_type=mfa_type)
+    async def find_refresh_token(self, refresh_token: str = None, lifetime_seconds: int = None):
+        
+        max_age = None
+        if lifetime_seconds:
+            max_age = datetime.now(timezone.utc) - timedelta(
+                seconds=lifetime_seconds
+            )
+        
+        return await self.refresh_token_db.get_by_token(token=refresh_token, max_age=max_age)
 
     async def delete_record(self, item):
-        return await self.otp_token_db.delete(otp_token=item)
+        return await self.refresh_token_db.delete(refresh_token=item)

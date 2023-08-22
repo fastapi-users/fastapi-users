@@ -46,7 +46,8 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
         auth_backends: Sequence[AuthenticationBackend],
         get_refresh_token_manager: any,
         get_otp_manager: any,
-        requires_verification: bool = False
+        requires_verification: bool = False,
+        refresh_token_lifetime_seconds: int = None
     ):        
         self.authenticator = Authenticator(auth_backends, get_user_manager)
         self.get_user_manager = get_user_manager
@@ -54,6 +55,7 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
         self.current_user = self.authenticator.current_user
         self.get_otp_manager = get_otp_manager
         self.requires_verification = requires_verification
+        self.refresh_token_lifetime_seconds = refresh_token_lifetime_seconds
 
     def get_register_router(
         self, 
@@ -105,6 +107,7 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
             get_refresh_token_manager=self.get_refresh_token_manager,
             authenticator=self.authenticator,
             requires_verification=self.requires_verification,
+            refresh_token_lifetime_seconds=self.refresh_token_lifetime_seconds
         )
 
     def get_otp_router(

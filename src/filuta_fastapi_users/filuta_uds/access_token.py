@@ -64,12 +64,17 @@ class SQLAlchemyAccessTokenDatabase(Generic[AP], AccessTokenDatabase[AP]):
         self, 
         token: str, 
         max_age: Optional[datetime] = None,
-        authorized: bool = False
+        authorized: bool = False,
+        ignore_expired: bool = False,
     ) -> Optional[AP]:
         
         statement = select(self.access_token_table).where(
             self.access_token_table.token == token  # type: ignore
         )
+        
+        if ignore_expired:
+            max_age = None
+        
         if max_age is not None:
             statement = statement.where(
                 self.access_token_table.created_at >= max_age  # type: ignore

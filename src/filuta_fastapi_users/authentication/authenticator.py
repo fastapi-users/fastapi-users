@@ -63,6 +63,7 @@ class Authenticator:
         verified: bool = False,
         superuser: bool = False,
         authorized: bool = True,
+        ignore_expired: bool = False,
         get_enabled_backends: Optional[EnabledBackendsDependency] = None,
     ):
         """
@@ -96,6 +97,8 @@ class Authenticator:
                 active=active,
                 verified=verified,
                 superuser=superuser,
+                authorized=authorized,
+                ignore_expired=ignore_expired,
                 **kwargs,
             )
 
@@ -108,6 +111,7 @@ class Authenticator:
         verified: bool = False,
         superuser: bool = False,
         authorized: bool = True,
+        ignore_expired: bool = False,
         get_enabled_backends: Optional[EnabledBackendsDependency] = None,
     ):
         """
@@ -142,6 +146,7 @@ class Authenticator:
                 verified=verified,
                 superuser=superuser,
                 authorized=authorized,
+                ignore_expired=ignore_expired,
                 **kwargs,
             )
             return user
@@ -157,6 +162,7 @@ class Authenticator:
         verified: bool = False,
         superuser: bool = False,
         authorized: bool = False,
+        ignore_expired: bool = False,
         **kwargs,
     ) -> Tuple[Optional[models.UP], Optional[str]]:
         user: Optional[models.UP] = None
@@ -174,7 +180,7 @@ class Authenticator:
                     name_to_strategy_variable_name(backend.name)
                 ]
                 if token is not None:
-                    user = await strategy.read_token(token=token, user_manager=user_manager, authorized=authorized)
+                    user = await strategy.read_token(token=token, user_manager=user_manager, authorized=authorized, ignore_expired=ignore_expired)
                     if user:
                         break
 

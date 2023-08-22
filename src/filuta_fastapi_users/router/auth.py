@@ -8,6 +8,8 @@ from filuta_fastapi_users.authentication import AuthenticationBackend, Authentic
 from filuta_fastapi_users.manager import BaseUserManager, UserManagerDependency
 from filuta_fastapi_users.openapi import OpenAPIResponseType
 from filuta_fastapi_users.router.common import ErrorCode, ErrorModel
+import copy
+from pydantic import BaseModel
 
 def get_auth_router(
     backend: AuthenticationBackend,
@@ -15,6 +17,7 @@ def get_auth_router(
     authenticator: Authenticator,
     requires_verification: bool = False,
     get_refresh_token_manager: any = None,
+    refresh_token_lifetime_seconds: int = None
 ) -> APIRouter:
     """Generate a router with login/logout routes for an authentication backend."""
     router = APIRouter()
@@ -50,6 +53,7 @@ def get_auth_router(
         credentials: OAuth2PasswordRequestForm = Depends(),
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
         strategy: Strategy[models.UP, models.ID] = Depends(backend.get_strategy),
+        refresh_token_manager = Depends(get_refresh_token_manager),
     ):
         user = await user_manager.authenticate(credentials)
 
@@ -64,7 +68,9 @@ def get_auth_router(
                 detail=ErrorCode.LOGIN_USER_NOT_VERIFIED,
             )
             
-        response = await backend.login(strategy, user)
+        refresh_token_record = await refresh_token_manager.generate_new_token_for_user(user=user)
+        refresh_token = refresh_token_record.token
+        response = await backend.login(strategy=strategy, user=user, refresh_token=refresh_token)
         
         await user_manager.on_after_login(user, request, response)
         return response
@@ -78,9 +84,13 @@ def get_auth_router(
         **backend.transport.get_openapi_logout_responses_success(),
     }
     
-    get_current_user_token = authenticator.current_user_token(
-        active=True, verified=requires_verification, authorized=True
+    get_current_user_to_renew_token = authenticator.current_user_token(
+        active=True, verified=requires_verification, authorized=True, ignore_expired=True
     )
+
+
+    class ValidateRefreshTokenRequestBody(BaseModel):
+        refresh_token: str
 
     @router.post(
         "/renew_access_token",
@@ -88,12 +98,42 @@ def get_auth_router(
     )
     async def renew_access_token(
         request: Request,
-        credentials: OAuth2PasswordRequestForm = Depends(),
+        jsonBody: ValidateRefreshTokenRequestBody,
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
         strategy: Strategy[models.UP, models.ID] = Depends(backend.get_strategy),
         refresh_token_manager = Depends(get_refresh_token_manager),
+        user_token: Tuple[models.UP, str] = Depends(get_current_user_to_renew_token),
     ):
-        pass
+        user, token = user_token
+        refresh_token = jsonBody.refresh_token
+        
+        refresh_token_record = await refresh_token_manager.find_refresh_token(refresh_token=refresh_token, lifetime_seconds=refresh_token_lifetime_seconds)
+                
+        if not refresh_token_record:
+            return {"status": False, "error": "no-valid-refresh-token"}
+        
+        old_token_record = await strategy.get_token_record_raw(token)
+        
+        if not old_token_record:
+            return {"status": False, "error": "no-valid-access-token"}
+    
+        new_access_token_record = {
+            "user_id": old_token_record.user_id,
+            "token": strategy.generate_token(),
+            "scopes": old_token_record.scopes,
+            "mfa_scopes": old_token_record.mfa_scopes,
+        }
+        
+        new_token_record = await strategy.insert_token(new_access_token_record)
+        
+        if new_token_record:
+            await strategy.destroy_token(token=old_token_record.token)
+        
+        return {
+            "status": True,
+            "access_token": new_token_record.token
+        }
+        
     
     get_current_user_token = authenticator.current_user_token(
         active=True, verified=requires_verification, authorized=True
