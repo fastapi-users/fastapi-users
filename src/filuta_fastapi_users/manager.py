@@ -637,7 +637,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         return  # pragma: no cover
 
     async def authenticate(
-        self, credentials: OAuth2PasswordRequestForm
+        self, credentials: any
     ) -> Optional[models.UP]:
         """
         Authenticate and return a user following an email and a password.

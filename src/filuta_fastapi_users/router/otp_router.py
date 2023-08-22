@@ -28,22 +28,24 @@ def get_otp_router(
         active=True, verified=requires_verification, authorized=False
     )
 
+    class ValidateObtainOtpTokenRequestBody(BaseModel):
+        type: str
+
     @router.post(
-        "/otp/send_token",
+        "/otp/send-token",
         name=f"auth:{backend.name}.send_otp_token",
         dependencies=[Depends(get_current_active_user)],
     )
     async def send_otp_token(
         request: Request,
+        jsonBody: ValidateObtainOtpTokenRequestBody,
         user_token: Tuple[models.UP, str] = Depends(get_current_user_token),
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
         otp_manager = Depends(get_otp_manager),
         strategy: Strategy[models.UP, models.ID] = Depends(backend.get_strategy),
     ):
         user, token = user_token
-        
-        query_params = request.query_params
-        target_mfa_verification = query_params.get("mfa_type", "")
+        target_mfa_verification = jsonBody.type
         
         access_token_record = await strategy.get_token_record(token=token)
         token_mfas = access_token_record.mfa_scopes
@@ -77,7 +79,7 @@ def get_otp_router(
         type: str
 
     @router.post(
-        "/otp/validate_token",
+        "/otp/validate-token",
         name=f"auth:{backend.name}.validate_otp_token",
         dependencies=[Depends(get_current_active_user)],
     )
