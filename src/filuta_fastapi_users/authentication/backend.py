@@ -55,7 +55,7 @@ class AuthenticationBackend(Generic[models.UP, models.ID]):
         self, strategy: Strategy[models.UP, models.ID], user: models.UP, token: str
     ) -> Response:
         try:
-            await strategy.destroy_token(token, user)
+            await strategy.destroy_token(token=token, user=user)
         except StrategyDestroyNotSupportedError:
             pass
 

@@ -439,9 +439,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         updated_user = await self._update(user, {"password": password})
 
         await self.on_after_reset_password(user=user, request=request)
-        
-        await self.access_token_db.delete_all_records_for_user(user=user)
-        await self.refresh_token_db.delete_all_records_for_user(user=user)
+        await self.delete_user_tokens(user=user)
 
         return updated_user
 
@@ -691,6 +689,10 @@ class BaseUserManager(Generic[models.UP, models.ID]):
             else:
                 validated_update_dict[field] = value
         return await self.user_db.update(user, validated_update_dict)
+    
+    async def delete_user_tokens(self, user):
+        await self.access_token_db.delete_all_records_for_user(user=user)
+        await self.refresh_token_db.delete_all_records_for_user(user=user)
 
 
 class UUIDIDMixin:

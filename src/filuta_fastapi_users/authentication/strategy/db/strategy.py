@@ -83,7 +83,7 @@ class DatabaseStrategy(
         access_token = await self.access_token_db.update(access_token=access_token, update_dict=data)
         return access_token
 
-    async def destroy_token(self, token: str) -> None:
+    async def destroy_token(self, token: str, user: models.UP) -> None:
         access_token = await self.access_token_db.get_by_token(token)
         if access_token is not None:
             await self.access_token_db.delete(access_token)

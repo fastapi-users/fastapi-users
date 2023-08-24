@@ -156,6 +156,8 @@ def get_auth_router(
         strategy: Strategy[models.UP, models.ID] = Depends(backend.get_strategy),
     ):
         user, token = user_token
-        return await backend.logout(strategy, user, token)
+        logout_response = await backend.logout(strategy, user, token)
+        
+        return logout_response
 
     return router
