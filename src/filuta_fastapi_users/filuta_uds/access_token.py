@@ -108,3 +108,13 @@ class SQLAlchemyAccessTokenDatabase(Generic[AP], AccessTokenDatabase[AP]):
     async def delete(self, access_token: AP) -> None:
         await self.session.delete(access_token)
         await self.session.commit()
+        
+    async def delete_all_records_for_user(self, user):
+        statement = select(self.access_token_table).where(self.access_token_table.user_id == user.id)
+        results = await self.session.execute(statement)
+        tokens = results.scalars().all()
+        
+        for token in tokens:
+            await self.session.delete(token)
+
+        await self.session.commit()

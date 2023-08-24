@@ -193,10 +193,15 @@ class Authenticator:
                 user = None
                 detail = "no-active"
             elif (
-                verified and not user.is_verified or superuser and not user.is_superuser
+                verified and not user.is_verified
             ):
                 user = None
                 detail = "no-verified"
+            elif (
+                superuser and not user.is_superuser
+            ):
+                user = None
+                detail = "no-permissions"
         if not user and not optional:
             raise HTTPException(status_code=status_code, detail=detail)
         return user, token

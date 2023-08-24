@@ -88,7 +88,7 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
     def get_reset_password_router(self) -> APIRouter:
         """Return a reset password process router."""
         return get_reset_password_router(
-            get_user_manager=self.get_user_manager
+            get_user_manager=self.get_user_manager,
         )
 
     def get_auth_router(

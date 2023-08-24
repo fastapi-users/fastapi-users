@@ -43,9 +43,13 @@ class BaseUserManager(Generic[models.UP, models.ID]):
     def __init__(
         self,
         user_db: BaseUserDatabase[models.UP, models.ID],
+        access_token_db: any,
+        refresh_token_db: any,
         password_helper: Optional[PasswordHelperProtocol] = None,
     ):
         self.user_db = user_db
+        self.access_token_db = access_token_db
+        self.refresh_token_db = refresh_token_db
         if password_helper is None:
             self.password_helper = PasswordHelper()
         else:
@@ -382,6 +386,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
             self.reset_password_token_lifetime_seconds,
         )
         await self.on_after_forgot_password(user, token, request)
+        return {"status": True}
 
     async def reset_password(
         self, token: str, password: str, request: Optional[Request] = None
@@ -433,7 +438,10 @@ class BaseUserManager(Generic[models.UP, models.ID]):
 
         updated_user = await self._update(user, {"password": password})
 
-        await self.on_after_reset_password(user, request)
+        await self.on_after_reset_password(user=user, request=request)
+        
+        await self.access_token_db.delete_all_records_for_user(user=user)
+        await self.refresh_token_db.delete_all_records_for_user(user=user)
 
         return updated_user
 

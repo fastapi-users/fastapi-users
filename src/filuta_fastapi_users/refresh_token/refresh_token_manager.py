@@ -4,12 +4,9 @@ from typing import Any, Dict, Generic, Optional
 import random
 from datetime import datetime, timedelta
 
-from filuta_fastapi_users import exceptions, models
-from filuta_fastapi_users.authentication.strategy.base import Strategy
+from filuta_fastapi_users import models
 from filuta_fastapi_users.authentication.strategy.db.adapter import RefreshTokenDatabase
 from filuta_fastapi_users.authentication.strategy.db.models import RTP
-from filuta_fastapi_users.manager import BaseUserManager
-
 
 class RefreshTokenManager(
     Generic[models.UP, models.ID, RTP]

@@ -2,6 +2,7 @@ from fastapi import APIRouter, Body, Depends, HTTPException, Request, status
 from pydantic import EmailStr
 
 from filuta_fastapi_users import exceptions, models
+from filuta_fastapi_users.authentication import AuthenticationBackend, Strategy
 from filuta_fastapi_users.manager import BaseUserManager, UserManagerDependency
 from filuta_fastapi_users.openapi import OpenAPIResponseType
 from filuta_fastapi_users.router.common import ErrorCode, ErrorModel
@@ -72,7 +73,7 @@ def get_reset_password_router(
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ):
         try:
-            await user_manager.reset_password(token, password, request)
+            await user_manager.reset_password(token=token, password=password, request=request)
         except (
             exceptions.InvalidResetPasswordToken,
             exceptions.UserNotExists,
