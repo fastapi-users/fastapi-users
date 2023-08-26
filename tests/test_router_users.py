@@ -826,6 +826,33 @@ class TestUpdateUser:
         updated_user = mock_user_db.update.call_args[0][0]
         assert updated_user.hashed_password != current_hashed_password
 
+    async def test_valid_body_password_unchanged_unverified_superuser(
+        self,
+        mocker,
+        mock_user_db,
+        test_app_client: Tuple[httpx.AsyncClient, bool],
+        user: UserModel,
+        superuser: UserModel,
+    ):
+        client, requires_verification = test_app_client
+        mocker.spy(mock_user_db, "update")
+        current_hashed_password = user.hashed_password
+
+        json = {"password": None}
+        response = await client.patch(
+            f"/{user.id}",
+            json=json,
+            headers={"Authorization": f"Bearer {superuser.id}"},
+        )
+        if requires_verification:
+            assert response.status_code == status.HTTP_403_FORBIDDEN
+        else:
+            assert response.status_code == status.HTTP_200_OK
+            assert mock_user_db.update.called is True
+
+            updated_user = mock_user_db.update.call_args[0][0]
+            assert updated_user.hashed_password == current_hashed_password
+
 
 @pytest.mark.router
 @pytest.mark.asyncio
