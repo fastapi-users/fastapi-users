@@ -672,7 +672,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
                 except exceptions.UserNotExists:
                     validated_update_dict["email"] = value
                     validated_update_dict["is_verified"] = False
-            elif field == "password":
+            elif field == "password" and value is not None:
                 await self.validate_password(value, user)
                 validated_update_dict["hashed_password"] = self.password_helper.hash(
                     value

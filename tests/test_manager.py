@@ -585,6 +585,17 @@ class TestUpdateUser:
 
         assert user_manager.on_after_update.called is True
 
+    async def test_unsafe_update_password_unchanged(
+        self, user: UserModel, user_manager: UserManagerMock[UserModel]
+    ):
+        old_hashed_password = user.hashed_password
+        user_update = UserUpdate(password=None)
+        updated_user = await user_manager.update(user_update, user, safe=False)
+
+        assert updated_user.hashed_password == old_hashed_password
+
+        assert user_manager.on_after_update.called is True
+
     async def test_password_update_invalid(
         self, user: UserModel, user_manager: UserManagerMock[UserModel]
     ):
