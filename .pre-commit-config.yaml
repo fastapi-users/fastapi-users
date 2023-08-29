@@ -1,0 +1,61 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+    -   id: check-yaml
+    -   id: end-of-file-fixer
+        exclude_types: [csv, markdown]
+    -   id: trailing-whitespace
+    -   id: check-ast
+    -   id: debug-statements
+    -   id: check-merge-conflict
+    -   id: requirements-txt-fixer
+    -   id: check-added-large-files
+        args: [--maxkb=100000]  # 100MB
+-   repo: https://github.com/PyCQA/autoflake
+    rev: v2.2.0
+    hooks:
+    -   id: autoflake
+        args: ["--remove-all-unused-imports","--ignore-init-module-imports", "-i", "."]
+        name: remove unused imports
+-   repo: https://github.com/psf/black
+    rev: 23.7.0
+    hooks:
+    -   id: black
+        args: ["--line-length", "120"]
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.5.1
+    hooks:
+    -   id: mypy
+        args: [--ignore-missing-imports, --install-types, --check-untyped-defs]
+        additional_dependencies: ['types-requests', 'types-setuptools', 'pydantic<2', 'types-decorator', 'types-redis', 'types-six', 'types-ujson']
+-   repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.23.3
+    hooks:
+    -   id: check-github-workflows
+        name: validate github workflows
+-   repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.0.278
+    hooks:
+      - id: ruff
+-   repo: https://github.com/PyCQA/bandit
+    rev: 1.7.5
+    hooks:
+    -   id: bandit
+        exclude: tests/.*$
+-   repo: https://github.com/frnmst/md-toc
+    rev: 8.1.9
+    hooks:
+    -   id: md-toc
+        args: [--newline-string, '\n', -p, github, -l6]
+-   repo: https://github.com/cruft/cruft
+    rev: 2.11.1
+    hooks:
+      - id: cruft
+        name: cruft
+        language: system
+        # Log status but always succeed, providing downstream project
+        # maintainers template synchronization discretion.
+        # see: https://stackoverflow.com/a/59745587
+        verbose: true
+        entry: bash -c 'cruft check || true' --

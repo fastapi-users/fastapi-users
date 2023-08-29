@@ -1,5 +1,3 @@
-from typing import Type
-
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 
 from filuta_fastapi_users import exceptions, models, schemas
@@ -9,8 +7,8 @@ from filuta_fastapi_users.router.common import ErrorCode, ErrorModel
 
 def get_register_router(
     get_user_manager: UserManagerDependency[models.UP, models.ID],
-    user_schema: Type[schemas.U],
-    user_create_schema: Type[schemas.UC],
+    user_schema: type[schemas.U],
+    user_create_schema: type[schemas.UC],
 ) -> APIRouter:
     """Generate a router with the register route."""
     router = APIRouter()
@@ -28,17 +26,14 @@ def get_register_router(
                         "examples": {
                             ErrorCode.REGISTER_USER_ALREADY_EXISTS: {
                                 "summary": "A user with this email already exists.",
-                                "value": {
-                                    "detail": ErrorCode.REGISTER_USER_ALREADY_EXISTS
-                                },
+                                "value": {"detail": ErrorCode.REGISTER_USER_ALREADY_EXISTS},
                             },
                             ErrorCode.REGISTER_INVALID_PASSWORD: {
                                 "summary": "Password validation failed.",
                                 "value": {
                                     "detail": {
                                         "code": ErrorCode.REGISTER_INVALID_PASSWORD,
-                                        "reason": "Password should be"
-                                        "at least 3 characters",
+                                        "reason": "Password should be" "at least 3 characters",
                                     }
                                 },
                             },
@@ -52,11 +47,9 @@ def get_register_router(
         request: Request,
         user_create: user_create_schema,  # type: ignore
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
-    ):
+    ) -> schemas.U:
         try:
-            created_user = await user_manager.create(
-                user_create, safe=True, request=request
-            )
+            created_user = await user_manager.create(user_create, True, request)
         except exceptions.UserAlreadyExists:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,

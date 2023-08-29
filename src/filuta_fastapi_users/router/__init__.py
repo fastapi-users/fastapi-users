@@ -1,10 +1,10 @@
 from filuta_fastapi_users.router.auth import get_auth_router
 from filuta_fastapi_users.router.common import ErrorCode
+from filuta_fastapi_users.router.otp_router import get_otp_router
 from filuta_fastapi_users.router.register import get_register_router
 from filuta_fastapi_users.router.reset import get_reset_password_router
 from filuta_fastapi_users.router.users import get_users_router
 from filuta_fastapi_users.router.verify import get_verify_router
-from filuta_fastapi_users.router.otp_router import get_otp_router
 
 __all__ = [
     "ErrorCode",

@@ -1,4 +1,4 @@
-from typing import Any, Dict, Generic, List, Optional, Type, TypeVar
+from typing import Any, Generic, TypeVar
 
 from pydantic import BaseModel, ConfigDict, EmailStr
 from pydantic.version import VERSION as PYDANTIC_VERSION
@@ -11,23 +11,23 @@ SCHEMA = TypeVar("SCHEMA", bound=BaseModel)
 
 if PYDANTIC_V2:  # pragma: no cover
 
-    def model_dump(model: BaseModel, *args, **kwargs) -> Dict[str, Any]:
+    def model_dump(model: BaseModel, *args: Any, **kwargs: Any) -> dict[str, Any]:
         return model.model_dump(*args, **kwargs)  # type: ignore
 
-    def model_validate(schema: Type[SCHEMA], obj: Any, *args, **kwargs) -> SCHEMA:
+    def model_validate(schema: type[SCHEMA], obj: Any, *args: Any, **kwargs: Any) -> SCHEMA:
         return schema.model_validate(obj, *args, **kwargs)  # type: ignore
 
-else:  # pragma: no cover  # type: ignore
+else:  # pragma: no cover
 
-    def model_dump(model: BaseModel, *args, **kwargs) -> Dict[str, Any]:
-        return model.dict(*args, **kwargs)  # type: ignore
+    def model_dump(model: BaseModel, *args: Any, **kwargs: Any) -> dict[str, Any]:
+        return model.dict(*args, **kwargs)
 
-    def model_validate(schema: Type[SCHEMA], obj: Any, *args, **kwargs) -> SCHEMA:
-        return schema.from_orm(obj)  # type: ignore
+    def model_validate(schema: type[SCHEMA], obj: Any, *args: Any, **kwargs: Any) -> SCHEMA:
+        return schema.from_orm(obj)
 
 
 class CreateUpdateDictModel(BaseModel):
-    def create_update_dict(self):
+    def create_update_dict(self) -> dict[str, Any]:
         return model_dump(
             self,
             exclude_unset=True,
@@ -40,7 +40,7 @@ class CreateUpdateDictModel(BaseModel):
             },
         )
 
-    def create_update_dict_superuser(self):
+    def create_update_dict_superuser(self) -> dict[str, Any]:
         return model_dump(self, exclude_unset=True, exclude={"id"})
 
 
@@ -64,19 +64,20 @@ class BaseUser(CreateUpdateDictModel, Generic[models.ID]):
 class BaseUserCreate(CreateUpdateDictModel):
     email: EmailStr
     password: str
-    is_active: Optional[bool] = True
-    is_superuser: Optional[bool] = False
-    is_verified: Optional[bool] = False
+    is_active: bool | None = True
+    is_superuser: bool | None = False
+    is_verified: bool | None = False
 
 
 class BaseUserUpdate(CreateUpdateDictModel):
-    password: Optional[str] = None
-    email: Optional[EmailStr] = None
-    is_active: Optional[bool] = None
-    is_superuser: Optional[bool] = None
-    is_verified: Optional[bool] = None
+    password: str | None = None
+    email: EmailStr | None = None
+    is_active: bool | None = None
+    is_superuser: bool | None = None
+    is_verified: bool | None = None
 
-U = TypeVar("U", bound=BaseUser)
+
+U = TypeVar("U", bound=BaseUser)  # type: ignore
 UC = TypeVar("UC", bound=BaseUserCreate)
 UU = TypeVar("UU", bound=BaseUserUpdate)
 
@@ -87,8 +88,8 @@ class BaseOAuthAccount(BaseModel, Generic[models.ID]):
     id: models.ID
     oauth_name: str
     access_token: str
-    expires_at: Optional[int] = None
-    refresh_token: Optional[str] = None
+    expires_at: int | None = None
+    refresh_token: str | None = None
     account_id: str
     account_email: str
 
@@ -103,4 +104,9 @@ class BaseOAuthAccount(BaseModel, Generic[models.ID]):
 class BaseOAuthAccountMixin(BaseModel):
     """Adds OAuth accounts list to a User model."""
 
-    oauth_accounts: List[BaseOAuthAccount] = []
+    oauth_accounts: list[BaseOAuthAccount] = []  # type: ignore
+
+
+class ValidateLoginRequestBody(BaseModel):
+    username: str
+    password: str

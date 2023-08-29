@@ -1,21 +1,23 @@
 import uuid
-from typing import Any, Dict, Generic, Optional, Union
+from abc import ABC, abstractmethod
+from typing import Any, Generic
 
 import jwt
 from fastapi import Request, Response
 from fastapi.security import OAuth2PasswordRequestForm
 
 from filuta_fastapi_users import exceptions, models, schemas
+from filuta_fastapi_users.authentication.strategy.db.adapter import AccessTokenDatabase, RefreshTokenDatabase
 from filuta_fastapi_users.db import BaseUserDatabase
 from filuta_fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from filuta_fastapi_users.password import PasswordHelper, PasswordHelperProtocol
 from filuta_fastapi_users.types import DependencyCallable
 
-RESET_PASSWORD_TOKEN_AUDIENCE = "fastapi-users:reset"
-VERIFY_USER_TOKEN_AUDIENCE = "fastapi-users:verify"
+RESET_PASSWORD_TOKEN_AUDIENCE = "fastapi-users:reset"  # nosec B105
+VERIFY_USER_TOKEN_AUDIENCE = "fastapi-users:verify"  # nosec B105
 
 
-class BaseUserManager(Generic[models.UP, models.ID]):
+class BaseUserManager(ABC, Generic[models.UP, models.ID]):
     """
     User management logic.
 
@@ -37,15 +39,14 @@ class BaseUserManager(Generic[models.UP, models.ID]):
     verification_token_lifetime_seconds: int = 3600
     verification_token_audience: str = VERIFY_USER_TOKEN_AUDIENCE
 
-    user_db: BaseUserDatabase[models.UP, models.ID]
     password_helper: PasswordHelperProtocol
 
     def __init__(
         self,
         user_db: BaseUserDatabase[models.UP, models.ID],
-        access_token_db: any,
-        refresh_token_db: any,
-        password_helper: Optional[PasswordHelperProtocol] = None,
+        access_token_db: AccessTokenDatabase[models.AP],
+        refresh_token_db: RefreshTokenDatabase[models.RTP],
+        password_helper: PasswordHelperProtocol | None = None,
     ):
         self.user_db = user_db
         self.access_token_db = access_token_db
@@ -55,6 +56,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         else:
             self.password_helper = password_helper  # pragma: no cover
 
+    @abstractmethod
     def parse_id(self, value: Any) -> models.ID:
         """
         Parse a value into a correct models.ID instance.
@@ -115,7 +117,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         self,
         user_create: schemas.UC,
         safe: bool = False,
-        request: Optional[Request] = None,
+        request: Request | None = None,
     ) -> models.UP:
         """
         Create a user in database.
@@ -136,11 +138,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         if existing_user is not None:
             raise exceptions.UserAlreadyExists()
 
-        user_dict = (
-            user_create.create_update_dict()
-            if safe
-            else user_create.create_update_dict_superuser()
-        )
+        user_dict = user_create.create_update_dict() if safe else user_create.create_update_dict_superuser()
         password = user_dict.pop("password")
         user_dict["hashed_password"] = self.password_helper.hash(password)
 
@@ -150,15 +148,15 @@ class BaseUserManager(Generic[models.UP, models.ID]):
 
         return created_user
 
-    async def oauth_callback(
+    async def oauth_callback(  # noqa: PLR0913
         self: "BaseUserManager[models.UOAP, models.ID]",
         oauth_name: str,
         access_token: str,
         account_id: str,
         account_email: str,
-        expires_at: Optional[int] = None,
-        refresh_token: Optional[str] = None,
-        request: Optional[Request] = None,
+        expires_at: int | None = None,
+        refresh_token: str | None = None,
+        request: Request | None = None,
         *,
         associate_by_email: bool = False,
         is_verified_by_default: bool = False,
@@ -224,26 +222,21 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         else:
             # Update oauth
             for existing_oauth_account in user.oauth_accounts:
-                if (
-                    existing_oauth_account.account_id == account_id
-                    and existing_oauth_account.oauth_name == oauth_name
-                ):
-                    user = await self.user_db.update_oauth_account(
-                        user, existing_oauth_account, oauth_account_dict
-                    )
+                if existing_oauth_account.account_id == account_id and existing_oauth_account.oauth_name == oauth_name:
+                    user = await self.user_db.update_oauth_account(user, existing_oauth_account, oauth_account_dict)
 
         return user
 
-    async def oauth_associate_callback(
+    async def oauth_associate_callback(  # noqa: PLR0913
         self: "BaseUserManager[models.UOAP, models.ID]",
         user: models.UOAP,
         oauth_name: str,
         access_token: str,
         account_id: str,
         account_email: str,
-        expires_at: Optional[int] = None,
-        refresh_token: Optional[str] = None,
-        request: Optional[Request] = None,
+        expires_at: int | None = None,
+        refresh_token: str | None = None,
+        request: Request | None = None,
     ) -> models.UOAP:
         """
         Handle the callback after a successful OAuth association.
@@ -276,9 +269,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
 
         return user
 
-    async def request_verify(
-        self, user: models.UP, request: Optional[Request] = None
-    ) -> None:
+    async def request_verify(self, user: models.UP, request: Request | None = None) -> None:
         """
         Start a verification request.
 
@@ -307,7 +298,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         )
         await self.on_after_request_verify(user, token, request)
 
-    async def verify(self, token: str, request: Optional[Request] = None) -> models.UP:
+    async def verify(self, token: str, request: Request | None = None) -> models.UP:
         """
         Validate a verification request.
 
@@ -359,9 +350,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
 
         return verified_user
 
-    async def forgot_password(
-        self, user: models.UP, request: Optional[Request] = None
-    ) -> None:
+    async def forgot_password(self, user: models.UP, request: Request | None = None) -> None:
         """
         Start a forgot password request.
 
@@ -386,11 +375,8 @@ class BaseUserManager(Generic[models.UP, models.ID]):
             self.reset_password_token_lifetime_seconds,
         )
         await self.on_after_forgot_password(user, token, request)
-        return {"status": True}
 
-    async def reset_password(
-        self, token: str, password: str, request: Optional[Request] = None
-    ) -> models.UP:
+    async def reset_password(self, token: str, password: str, request: Request | None = None) -> models.UP:
         """
         Reset the password of a user.
 
@@ -438,8 +424,8 @@ class BaseUserManager(Generic[models.UP, models.ID]):
 
         updated_user = await self._update(user, {"password": password})
 
-        await self.on_after_reset_password(user=user, request=request)
-        await self.delete_user_tokens(user=user)
+        await self.on_after_reset_password(user, request)
+        await self.delete_user_tokens(user)
 
         return updated_user
 
@@ -448,7 +434,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         user_update: schemas.UU,
         user: models.UP,
         safe: bool = False,
-        request: Optional[Request] = None,
+        request: Request | None = None,
     ) -> models.UP:
         """
         Update a user.
@@ -475,7 +461,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
     async def delete(
         self,
         user: models.UP,
-        request: Optional[Request] = None,
+        request: Request | None = None,
     ) -> None:
         """
         Delete a user.
@@ -488,9 +474,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         await self.user_db.delete(user)
         await self.on_after_delete(user, request)
 
-    async def validate_password(
-        self, password: str, user: Union[schemas.UC, models.UP]
-    ) -> None:
+    async def validate_password(self, password: str, user: schemas.UC | models.UP) -> None:
         """
         Validate a password.
 
@@ -502,13 +486,13 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         :return: None if the password is valid.
         """
         return  # pragma: no cover
-    
-    async def on_after_otp_email_created(self, user: models.UP, access_token_record, otp_token_record):
+
+    async def on_after_otp_email_created(
+        self, user: models.UP, access_token_record: models.AP | None, otp_token_record: models.OTPTP
+    ) -> None:
         pass
 
-    async def on_after_register(
-        self, user: models.UP, request: Optional[Request] = None
-    ) -> None:
+    async def on_after_register(self, user: models.UP, request: Request | None = None) -> None:
         """
         Perform logic after successful user registration.
 
@@ -523,8 +507,8 @@ class BaseUserManager(Generic[models.UP, models.ID]):
     async def on_after_update(
         self,
         user: models.UP,
-        update_dict: Dict[str, Any],
-        request: Optional[Request] = None,
+        update_dict: dict[str, Any],
+        request: Request | None = None,
     ) -> None:
         """
         Perform logic after successful user update.
@@ -538,9 +522,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         """
         return  # pragma: no cover
 
-    async def on_after_request_verify(
-        self, user: models.UP, token: str, request: Optional[Request] = None
-    ) -> None:
+    async def on_after_request_verify(self, user: models.UP, token: str, request: Request | None = None) -> None:
         """
         Perform logic after successful verification request.
 
@@ -553,9 +535,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         """
         return  # pragma: no cover
 
-    async def on_after_verify(
-        self, user: models.UP, request: Optional[Request] = None
-    ) -> None:
+    async def on_after_verify(self, user: models.UP, request: Request | None = None) -> None:
         """
         Perform logic after successful user verification.
 
@@ -567,9 +547,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         """
         return  # pragma: no cover
 
-    async def on_after_forgot_password(
-        self, user: models.UP, token: str, request: Optional[Request] = None
-    ) -> None:
+    async def on_after_forgot_password(self, user: models.UP, token: str, request: Request | None = None) -> None:
         """
         Perform logic after successful forgot password request.
 
@@ -582,9 +560,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         """
         return  # pragma: no cover
 
-    async def on_after_reset_password(
-        self, user: models.UP, request: Optional[Request] = None
-    ) -> None:
+    async def on_after_reset_password(self, user: models.UP, request: Request | None = None) -> None:
         """
         Perform logic after successful password reset.
 
@@ -599,8 +575,8 @@ class BaseUserManager(Generic[models.UP, models.ID]):
     async def on_after_login(
         self,
         user: models.UP,
-        request: Optional[Request] = None,
-        response: Optional[Response] = None,
+        request: Request | None = None,
+        response: Response | None = None,
     ) -> None:
         """
         Perform logic after user login.
@@ -614,9 +590,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         """
         return  # pragma: no cover
 
-    async def on_before_delete(
-        self, user: models.UP, request: Optional[Request] = None
-    ) -> None:
+    async def on_before_delete(self, user: models.UP, request: Request | None = None) -> None:
         """
         Perform logic before user delete.
 
@@ -628,9 +602,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         """
         return  # pragma: no cover
 
-    async def on_after_delete(
-        self, user: models.UP, request: Optional[Request] = None
-    ) -> None:
+    async def on_after_delete(self, user: models.UP, request: Request | None = None) -> None:
         """
         Perform logic before user delete.
 
@@ -642,9 +614,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         """
         return  # pragma: no cover
 
-    async def authenticate(
-        self, credentials: any
-    ) -> Optional[models.UP]:
+    async def authenticate(self, credentials: OAuth2PasswordRequestForm) -> models.UP | None:
         """
         Authenticate and return a user following an email and a password.
 
@@ -671,7 +641,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
 
         return user
 
-    async def _update(self, user: models.UP, update_dict: Dict[str, Any]) -> models.UP:
+    async def _update(self, user: models.UP, update_dict: dict[str, Any]) -> models.UP:
         validated_update_dict = {}
         for field, value in update_dict.items():
             if field == "email" and value != user.email:
@@ -683,16 +653,14 @@ class BaseUserManager(Generic[models.UP, models.ID]):
                     validated_update_dict["is_verified"] = False
             elif field == "password":
                 await self.validate_password(value, user)
-                validated_update_dict["hashed_password"] = self.password_helper.hash(
-                    value
-                )
+                validated_update_dict["hashed_password"] = self.password_helper.hash(value)
             else:
                 validated_update_dict[field] = value
         return await self.user_db.update(user, validated_update_dict)
-    
-    async def delete_user_tokens(self, user):
-        await self.access_token_db.delete_all_records_for_user(user=user)
-        await self.refresh_token_db.delete_all_records_for_user(user=user)
+
+    async def delete_user_tokens(self, user: models.UP) -> None:
+        await self.access_token_db.delete_all_records_for_user(user)
+        await self.refresh_token_db.delete_all_records_for_user(user)
 
 
 class UUIDIDMixin:

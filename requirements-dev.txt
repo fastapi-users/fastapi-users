@@ -1,0 +1,19 @@
+-e .
+artifacts-keyring
+black
+build
+cruft
+ipython
+keyring
+mypy
+pre-commit
+pytest
+pytest-env
+ruff
+sphinx
+sphinx-autoapi
+sphinx-autobuild
+sphinx-copybutton
+sphinx-rtd-theme
+tox
+twine

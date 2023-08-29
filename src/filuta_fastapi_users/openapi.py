@@ -1,3 +1,3 @@
-from typing import Any, Dict, Union
+from typing import Any
 
-OpenAPIResponseType = Dict[Union[int, str], Dict[str, Any]]
+OpenAPIResponseType = dict[int | str, dict[str, Any]]

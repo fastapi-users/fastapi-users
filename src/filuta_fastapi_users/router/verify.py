@@ -1,5 +1,3 @@
-from typing import Type
-
 from fastapi import APIRouter, Body, Depends, HTTPException, Request, status
 from pydantic import EmailStr
 
@@ -10,8 +8,8 @@ from filuta_fastapi_users.router.common import ErrorCode, ErrorModel
 
 def get_verify_router(
     get_user_manager: UserManagerDependency[models.UP, models.ID],
-    user_schema: Type[schemas.U],
-):
+    user_schema: type[schemas.U],
+) -> APIRouter:
     router = APIRouter()
 
     @router.post(
@@ -23,7 +21,7 @@ def get_verify_router(
         request: Request,
         email: EmailStr = Body(..., embed=True),
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
-    ):
+    ) -> None:
         try:
             user = await user_manager.get_by_email(email)
             await user_manager.request_verify(user, request)
@@ -33,8 +31,6 @@ def get_verify_router(
             exceptions.UserAlreadyVerified,
         ):
             pass
-
-        return None
 
     @router.post(
         "/verify",
@@ -53,9 +49,7 @@ def get_verify_router(
                             },
                             ErrorCode.VERIFY_USER_ALREADY_VERIFIED: {
                                 "summary": "The user is already verified.",
-                                "value": {
-                                    "detail": ErrorCode.VERIFY_USER_ALREADY_VERIFIED
-                                },
+                                "value": {"detail": ErrorCode.VERIFY_USER_ALREADY_VERIFIED},
                             },
                         }
                     }
@@ -67,7 +61,7 @@ def get_verify_router(
         request: Request,
         token: str = Body(..., embed=True),
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
-    ):
+    ) -> schemas.U:
         try:
             user = await user_manager.verify(token, request)
             return schemas.model_validate(user_schema, user)

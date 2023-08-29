@@ -1,7 +1,7 @@
-from typing import Dict, List, Optional, Tuple, Type
+from typing import Any, cast
 
 import jwt
-from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 from httpx_oauth.integrations.fastapi import OAuth2AuthorizeCallback
 from httpx_oauth.oauth2 import BaseOAuth2, OAuth2Token
 from pydantic import BaseModel
@@ -13,26 +13,24 @@ from filuta_fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from filuta_fastapi_users.manager import BaseUserManager, UserManagerDependency
 from filuta_fastapi_users.router.common import ErrorCode, ErrorModel
 
-STATE_TOKEN_AUDIENCE = "fastapi-users:oauth-state"
+STATE_TOKEN_AUDIENCE = "fastapi-users:oauth-state"  # nosec B105
 
 
 class OAuth2AuthorizeResponse(BaseModel):
     authorization_url: str
 
 
-def generate_state_token(
-    data: Dict[str, str], secret: SecretType, lifetime_seconds: int = 3600
-) -> str:
+def generate_state_token(data: dict[str, str], secret: SecretType, lifetime_seconds: int = 3600) -> str:
     data["aud"] = STATE_TOKEN_AUDIENCE
     return generate_jwt(data, secret, lifetime_seconds)
 
 
 def get_oauth_router(
-    oauth_client: BaseOAuth2,
-    backend: AuthenticationBackend,
+    oauth_client: BaseOAuth2[dict[str, Any]],
+    backend: AuthenticationBackend[models.UP, models.ID, models.AP],
     get_user_manager: UserManagerDependency[models.UP, models.ID],
     state_secret: SecretType,
-    redirect_url: Optional[str] = None,
+    redirect_url: str | None = None,
     associate_by_email: bool = False,
     is_verified_by_default: bool = False,
 ) -> APIRouter:
@@ -56,15 +54,13 @@ def get_oauth_router(
         name=f"oauth:{oauth_client.name}.{backend.name}.authorize",
         response_model=OAuth2AuthorizeResponse,
     )
-    async def authorize(
-        request: Request, scopes: List[str] = Query(None)
-    ) -> OAuth2AuthorizeResponse:
+    async def authorize(request: Request, scopes: list[str] = Query(None)) -> OAuth2AuthorizeResponse:
         if redirect_url is not None:
             authorize_redirect_url = redirect_url
         else:
             authorize_redirect_url = str(request.url_for(callback_route_name))
 
-        state_data: Dict[str, str] = {}
+        state_data: dict[str, str] = {}
         state = generate_state_token(state_data, state_secret)
         authorization_url = await oauth_client.get_authorization_url(
             authorize_redirect_url,
@@ -100,16 +96,13 @@ def get_oauth_router(
     )
     async def callback(
         request: Request,
-        access_token_state: Tuple[OAuth2Token, str] = Depends(
-            oauth2_authorize_callback
-        ),
+        access_token_state: tuple[OAuth2Token, str] = Depends(oauth2_authorize_callback),
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
-        strategy: Strategy[models.UP, models.ID] = Depends(backend.get_strategy),
-    ):
+        strategy: Strategy[models.UP, models.ID, models.AP] = Depends(backend.get_strategy),
+    ) -> Response:
         token, state = access_token_state
-        account_id, account_email = await oauth_client.get_id_email(
-            token["access_token"]
-        )
+        access_token: str = cast(str, token["access_token"])
+        account_id, account_email = await oauth_client.get_id_email(access_token)
 
         if account_email is None:
             raise HTTPException(
@@ -122,14 +115,15 @@ def get_oauth_router(
         except jwt.DecodeError:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
 
+        refresh_token: str = cast(str, token.get("refresh_token"))
         try:
             user = await user_manager.oauth_callback(
                 oauth_client.name,
-                token["access_token"],
+                access_token,
                 account_id,
                 account_email,
                 token.get("expires_at"),
-                token.get("refresh_token"),
+                refresh_token,
                 request,
                 associate_by_email=associate_by_email,
                 is_verified_by_default=is_verified_by_default,
@@ -147,7 +141,7 @@ def get_oauth_router(
             )
 
         # Authenticate
-        response = await backend.login(strategy, user)
+        response = await backend.login(strategy, user, refresh_token)
         await user_manager.on_after_login(user, request, response)
         return response
 
@@ -155,20 +149,18 @@ def get_oauth_router(
 
 
 def get_oauth_associate_router(
-    oauth_client: BaseOAuth2,
-    authenticator: Authenticator,
+    oauth_client: BaseOAuth2[dict[str, Any]],
+    authenticator: Authenticator[models.UP, models.ID, models.AP],
     get_user_manager: UserManagerDependency[models.UP, models.ID],
-    user_schema: Type[schemas.U],
+    user_schema: type[schemas.U],
     state_secret: SecretType,
-    redirect_url: Optional[str] = None,
+    redirect_url: str | None = None,
     requires_verification: bool = False,
 ) -> APIRouter:
     """Generate a router with the OAuth routes to associate an authenticated user."""
     router = APIRouter()
 
-    get_current_active_user = authenticator.current_user(
-        active=True, verified=requires_verification
-    )
+    get_current_active_user = authenticator.current_user(active=True, verified=requires_verification)
 
     callback_route_name = f"oauth-associate:{oauth_client.name}.callback"
 
@@ -190,7 +182,7 @@ def get_oauth_associate_router(
     )
     async def authorize(
         request: Request,
-        scopes: List[str] = Query(None),
+        scopes: list[str] = Query(None),
         user: models.UP = Depends(get_current_active_user),
     ) -> OAuth2AuthorizeResponse:
         if redirect_url is not None:
@@ -198,7 +190,7 @@ def get_oauth_associate_router(
         else:
             authorize_redirect_url = str(request.url_for(callback_route_name))
 
-        state_data: Dict[str, str] = {"sub": str(user.id)}
+        state_data: dict[str, str] = {"sub": str(user.id)}
         state = generate_state_token(state_data, state_secret)
         authorization_url = await oauth_client.get_authorization_url(
             authorize_redirect_url,
@@ -232,15 +224,11 @@ def get_oauth_associate_router(
     async def callback(
         request: Request,
         user: models.UP = Depends(get_current_active_user),
-        access_token_state: Tuple[OAuth2Token, str] = Depends(
-            oauth2_authorize_callback
-        ),
+        access_token_state: tuple[OAuth2Token, str] = Depends(oauth2_authorize_callback),
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
-    ):
+    ) -> schemas.U:
         token, state = access_token_state
-        account_id, account_email = await oauth_client.get_id_email(
-            token["access_token"]
-        )
+        account_id, account_email = await oauth_client.get_id_email(token["access_token"])
 
         if account_email is None:
             raise HTTPException(
