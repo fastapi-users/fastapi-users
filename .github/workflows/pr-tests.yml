@@ -1,0 +1,23 @@
+name: Pull Requests Tests
+
+on: [workflow_dispatch, push]
+
+jobs:
+  tests:
+    name: Full test suite
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Install mamba
+        uses: mamba-org/setup-micromamba@v1
+        with:
+          environment-file: environment.yml
+          cache-environment: true
+      - name: Run tox
+        run: |
+            pip install tox
+            tox r

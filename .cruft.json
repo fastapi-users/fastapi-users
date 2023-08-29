@@ -1,0 +1,18 @@
+{
+  "template": "git@github.com:FilutaAI/python-project-template.git",
+  "commit": "9293c03b4926ccec3ae2087a1f784ef80b69786a",
+  "checkout": null,
+  "context": {
+    "cookiecutter": {
+      "project_name": "filuta_fastapi_users",
+      "package_name": "filuta_fastapi_users",
+      "project_description": "Filuta fork of fastapi-users to include OTP natively",
+      "author_name": "Josef Ryzi",
+      "author_email": "josef@filuta.ai",
+      "package_version": "0.1.0",
+      "python_version": "3.11",
+      "_template": "git@github.com:FilutaAI/python-project-template.git"
+    }
+  },
+  "directory": null
+}

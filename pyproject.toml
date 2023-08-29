@@ -1,164 +1,67 @@
-[tool.isort]
-profile = "black"
-
-[[tool.mypy.overrides]]
-module = "motor.*"
-ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
-module = "passlib.*"
-ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
-module = "fastapi_users_db_beanie.*"
-ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
-module = "fastapi_users_db_sqlalchemy.*"
-ignore_missing_imports = true
-
-[tool.pytest.ini_options]
-asyncio_mode = "auto"
-addopts = "--ignore=test_build.py"
-markers = [
-	"authentication",
-	"db",
-	"fastapi_users",
-	"jwt",
-	"manager",
-	"oauth",
-	"openapi",
-	"router",
-]
-
-[tool.ruff]
-
-[tool.hatch]
-
-[tool.hatch.metadata]
-allow-direct-references = true
-
-[tool.hatch.version]
-source = "regex_commit"
-commit_extra_args = ["-e"]
-path = "fastapi_users/__init__.py"
-
-[tool.hatch.envs.default]
-features = [
-    "sqlalchemy",
-    "beanie",
-    "oauth",
-    "redis",
-]
-dependencies = [
-    "pytest",
-    "isort",
-    "pytest-asyncio",
-    "mike",
-    "mkdocs",
-    "mkdocs-material",
-    "mkdocs-mermaid2-plugin",
-    "black",
-    "mypy",
-    "pytest-cov",
-    "pytest-mock",
-    "markdown-include",
-    "pygments",
-    "pymdown-extensions",
-    "httpx-oauth",
-    "httpx",
-    "asgi_lifespan",
-    "uvicorn",
-    "types-redis",
-    "ruff",
-]
-
-[tool.hatch.envs.default.scripts]
-lint = [
-  "isort ./fastapi_users ./tests",
-  "isort ./docs/src -o fastapi_users",
-  "isort ./examples -o fastapi_users -p app",
-  "black . ",
-  "ruff --fix .",
-  "mypy fastapi_users/",
-]
-lint-check = [
-  "isort --check-only ./fastapi_users ./tests",
-  "isort --check-only  ./docs/src -o fastapi_users",
-  "isort --check-only ./examples -o fastapi_users -p app",
-  "black --check .",
-  "ruff .",
-  "mypy fastapi_users/",
-]
-docs = "mkdocs serve"
-
-[tool.hatch.envs.test]
-
-[tool.hatch.envs.test.scripts]
-test = "pytest --cov=fastapi_users/ --cov-report=term-missing --cov-fail-under=100"
-test-cov-xml = "pytest --cov=fastapi_users/ --cov-report=xml --cov-fail-under=100"
-
-[[tool.hatch.envs.test.matrix]]
-pydantic = ["v1", "v2"]
-
-[tool.hatch.envs.test.overrides]
-matrix.pydantic.extra-dependencies = [
-  {value = "pydantic<2.0", if = ["v1"]},
-  {value = "pydantic>=2.0", if = ["v2"]},
-]
-
-[tool.hatch.build.targets.sdist]
-support-legacy = true  # Create setup.py
+[tool.black]
+line-length = 120
 
 [build-system]
-requires = ["hatchling", "hatch-regex-commit"]
-build-backend = "hatchling.build"
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
 
-[project]
-name = "fastapi-users"
-authors = [
-  { name = "François Voron", email = "fvoron@gmail.com" }
-]
-description = "Ready-to-use and customizable users management for FastAPI"
-readme = "README.md"
-dynamic = ["version"]
-classifiers = [
-    "License :: OSI Approved :: MIT License",
-    "Development Status :: 5 - Production/Stable",
-    "Framework :: FastAPI",
-    "Framework :: AsyncIO",
-    "Intended Audience :: Developers",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3 :: Only",
-    "Topic :: Internet :: WWW/HTTP :: Session",
-]
-requires-python = ">=3.8"
-dependencies = [
-    "fastapi >=0.65.2",
-    "passlib[bcrypt] ==1.7.4",
-    "email-validator >=1.1.0,<2.1",
-    "pyjwt[crypto] ==2.8.0",
-    "python-multipart ==0.0.6",
-    "makefun >=1.11.2,<2.0.0",
+[tool.pytest.ini_options]
+env = [
+    "PROFILE=TEST"
 ]
 
-[project.optional-dependencies]
-sqlalchemy = [
-    "fastapi-users-db-sqlalchemy >=6.0.0",
-]
-beanie = [
-    "fastapi-users-db-beanie >=3.0.0",
-]
-oauth = [
-    "httpx-oauth >=0.13"
-]
-redis = [
-    "redis >=4.3.3,<5.0.0",
+addopts= [
+    "-v",
 ]
 
-[project.urls]
-Documentation = "https://fastapi-users.github.io/fastapi-users/"
-Source = "https://github.com/fastapi-users/fastapi-users"
+[tool.mypy]
+plugins = [
+  "pydantic.mypy"
+]
+follow_imports = "silent"
+warn_redundant_casts = true
+warn_unused_ignores = true
+disallow_any_generics = true
+check_untyped_defs = true
+no_implicit_reexport = true
+ignore_missing_imports = true
+disallow_untyped_defs = true
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+
+[tool.ruff]
+line-length = 120
+pylint.max-args = 7
+
+select = [
+    "F", # Pyflakes
+    "E", "W", # pycodestyle
+    "C90", # McCabe
+    "I", # isort
+    "UP", # pyupgrade
+    "PLC", "PLE", "PLR", "PLW", # Pylint
+]
+
+ignore = [
+    # pycodestyle:
+    "E501", # Line too long (covered by Black)
+]
+
+fix = true
+format = "grouped"
+show-source = true
+target-version = "py311"
+
+[tool.ruff.isort]
+# Note: Ruff implicitly uses `profile = "black"`
+combine-as-imports = true
+
+[tool.cruft]
+skip = [
+    ".env",
+    ".python-version",
+    "filuta_fastapi_users/__init__.py",
+]
