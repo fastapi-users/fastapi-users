@@ -1,6 +1,6 @@
 from typing import Type
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status, BackgroundTasks
 
 from fastapi_users import exceptions, models, schemas
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
@@ -51,11 +51,12 @@ def get_register_router(
     async def register(
         request: Request,
         user_create: user_create_schema,  # type: ignore
+        background_tasks: BackgroundTasks,
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ):
         try:
             created_user = await user_manager.create(
-                user_create, safe=True, request=request
+                user_create, background_tasks=background_tasks, safe=True, request=request
             )
         except exceptions.UserAlreadyExists:
             raise HTTPException(

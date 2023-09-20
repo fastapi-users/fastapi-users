@@ -2,7 +2,7 @@ import uuid
 from typing import Any, Dict, Generic, Optional, Union
 
 import jwt
-from fastapi import Request, Response
+from fastapi import Request, Response, BackgroundTasks
 from fastapi.security import OAuth2PasswordRequestForm
 
 from fastapi_users import exceptions, models, schemas
@@ -110,6 +110,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
     async def create(
         self,
         user_create: schemas.UC,
+        background_tasks: BackgroundTasks,
         safe: bool = False,
         request: Optional[Request] = None,
     ) -> models.UP:
@@ -142,7 +143,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
 
         created_user = await self.user_db.create(user_dict)
 
-        await self.on_after_register(created_user, request)
+        await self.on_after_register(created_user, request, background_tasks)
 
         return created_user
 
@@ -498,7 +499,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         return  # pragma: no cover
 
     async def on_after_register(
-        self, user: models.UP, request: Optional[Request] = None
+        self, user: models.UP, request: Optional[Request] = None, background_tasks: BackgroundTasks | None = None
     ) -> None:
         """
         Perform logic after successful user registration.
