@@ -110,9 +110,9 @@ class BaseUserManager(Generic[models.UP, models.ID]):
     async def create(
         self,
         user_create: schemas.UC,
-        background_tasks: BackgroundTasks,
         safe: bool = False,
         request: Optional[Request] = None,
+        background_tasks: Optional[BackgroundTasks] = None,
     ) -> models.UP:
         """
         Create a user in database.
