@@ -499,7 +499,10 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         return  # pragma: no cover
 
     async def on_after_register(
-        self, user: models.UP, request: Optional[Request] = None, background_tasks: BackgroundTasks | None = None
+        self,
+        user: models.UP,
+        request: Optional[Request] = None,
+        background_tasks: Optional[BackgroundTasks] = None,
     ) -> None:
         """
         Perform logic after successful user registration.
