@@ -711,6 +711,15 @@
         "code",
         "bug"
       ]
+    },
+    {
+      "login": "lifengmds",
+      "name": "lifengmds",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8794442?v=4",
+      "profile": "https://github.com/lifengmds",
+      "contributions": [
+        "financial"
+      ]
     }
   ],
   "contributorsPerLine": 7,
