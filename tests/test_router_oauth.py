@@ -174,9 +174,9 @@ class TestCallback:
         async_method_mocker(
             oauth_client, "get_id_email", return_value=("user_oauth1", user_oauth.email)
         )
-        async_method_mocker(
-            user_manager_oauth, "oauth_callback"
-        ).side_effect = exceptions.UserAlreadyExists
+        async_method_mocker(user_manager_oauth, "oauth_callback").side_effect = (
+            exceptions.UserAlreadyExists
+        )
 
         response = await test_app_client.get(
             "/oauth/callback",
