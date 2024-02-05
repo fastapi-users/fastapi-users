@@ -104,9 +104,6 @@ ENV/
 # mypy
 .mypy_cache/
 
-# .vscode
-.vscode/
-
 # OS files
 .DS_Store
 

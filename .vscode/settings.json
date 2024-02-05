@@ -1,0 +1,21 @@
+{
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.autoImportCompletions": true,
+    "python.terminal.activateEnvironment": true,
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "editor.rulers": [88],
+    "python.defaultInterpreterPath": "${workspaceFolder}/.hatch/fastapi-users/bin/python",
+    "python.testing.pytestPath": "${workspaceFolder}/.hatch/fastapi-users/bin/pytest",
+    "python.testing.cwd": "${workspaceFolder}",
+    "python.testing.pytestArgs": ["--no-cov"],
+    "[python]": {
+      "editor.formatOnSave": true,
+      "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit",
+        "source.organizeImports": "explicit"
+      },
+      "editor.defaultFormatter": "charliermarsh.ruff"
+    }
+  }
