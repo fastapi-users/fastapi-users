@@ -36,9 +36,10 @@ class AccessTokenDatabaseMock(AccessTokenDatabase[AccessTokenModel]):
             access_token = self.store[token]
             if max_age is not None and access_token.created_at < max_age:
                 return None
-            return access_token
         except KeyError:
             return None
+        else:
+            return access_token
 
     async def create(self, create_dict: Dict[str, Any]) -> AccessTokenModel:
         access_token = AccessTokenModel(**create_dict)

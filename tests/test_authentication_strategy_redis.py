@@ -18,9 +18,10 @@ class RedisMock:
             value, expiration = self.store[key]
             if expiration is not None and expiration < datetime.now().timestamp():
                 return None
-            return value
         except KeyError:
             return None
+        else:
+            return value
 
     async def set(self, key: str, value: str, ex: Optional[int] = None):
         expiration = None

@@ -202,7 +202,7 @@ hatch run test
 
 ### Format the code
 
-Execute the following command to apply `isort` and `black` formatting:
+Execute the following command to apply linting and check typing:
 
 ```bash
 hatch run lint

@@ -11,6 +11,12 @@ from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.manager import BaseUserManager
 
 
+class JWTStrategyDestroyNotSupportedError(StrategyDestroyNotSupportedError):
+    def __init__(self) -> None:
+        message = "A JWT can't be invalidated: it's valid until it expires."
+        super().__init__(message)
+
+
 class JWTStrategy(Strategy[models.UP, models.ID], Generic[models.UP, models.ID]):
     def __init__(
         self,
@@ -63,6 +69,4 @@ class JWTStrategy(Strategy[models.UP, models.ID], Generic[models.UP, models.ID])
         )
 
     async def destroy_token(self, token: str, user: models.UP) -> None:
-        raise StrategyDestroyNotSupportedError(
-            "A JWT can't be invalidated: it's valid until it expires."
-        )
+        raise JWTStrategyDestroyNotSupportedError()

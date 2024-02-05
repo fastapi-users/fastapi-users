@@ -71,7 +71,7 @@ def jwt_strategy(request, secret: SecretType):
         return JWTStrategy(
             ECC_PRIVATE_KEY, LIFETIME, algorithm="ES256", public_key=ECC_PUBLIC_KEY
         )
-    raise ValueError(f"Unrecognized algorithm: {request.param}")
+    raise ValueError(f"Unrecognized algorithm: {request.param}")  # noqa: TRY003
 
 
 @pytest.fixture
