@@ -98,9 +98,14 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         :param oauth: Name of the OAuth client.
         :param account_id: Id. of the account on the external OAuth service.
         :raises UserNotExists: The user does not exist.
+        :raises NotImplementedError: The OAuthAccount wasn't added to fastapi_users.db base.
         :return: A user.
         """
-        user = await self.user_db.get_by_oauth_account(oauth, account_id)
+        try:
+            user = await self.user_db.get_by_oauth_account(oauth, account_id)
+        except NotImplementedError:
+            print("User manager does not support OAuth accounts. maybe you forgot add OAuthAccount to fastapi_users.db base?")
+            raise NotImplementedError
 
         if user is None:
             raise exceptions.UserNotExists()
