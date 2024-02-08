@@ -24,7 +24,7 @@ As you can see, instantiation is quite simple. It accepts the following argument
 
 This method will return a response with a valid `set-cookie` header upon successful login:
 
-!!! success "`200 OK`"
+!!! success "`204 OK`"
 
 > Check documentation about [login route](../../../usage/routes.md#post-login).
 
