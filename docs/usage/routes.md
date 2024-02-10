@@ -42,7 +42,7 @@ Logout the authenticated user against the method named `name`. Check the corresp
 !!! fail "`401 Unauthorized`"
     Missing token or inactive user.
 
-!!! success "`200 OK`"
+!!! success "`204 No content`"
     The logout process was successful.
 
 ## Register router
