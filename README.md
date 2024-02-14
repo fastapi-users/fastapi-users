@@ -17,7 +17,12 @@
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <p align="center">
-<a href="https://github.com/sponsors/frankie567"><img src="https://md-buttons.francoisvoron.com/button.svg?text=Buy%20me%20a%20coffee%20%E2%98%95%EF%B8%8F&bg=ef4444&w=200&h=50"></a>
+<a href="https://polar.sh/frankie567">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://polar.sh/embed/support-us.svg?org=frankie567&&text=Support+me&darkmode=1">
+  <img alt="Support me" src="https://polar.sh/embed/support-us.svg?org=frankie567&text=Support+me">
+</picture>
+</a>
 </p>
 
 ---
