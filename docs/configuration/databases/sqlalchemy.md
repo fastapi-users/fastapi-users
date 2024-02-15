@@ -33,7 +33,9 @@ As you can see, **FastAPI Users** provides a base class that will include base f
     By default, we use UUID as a primary key ID for your user. If you want to use another type, like an auto-incremented integer, you can use `SQLAlchemyBaseUserTable` as base class and define your own `id` column.
 
     ```py
-    class User(SQLAlchemyBaseUserTable[int], Base):
+    from fastapi_users.db import SQLAlchemyBaseUserTable
+    
+    class User(SQLAlchemyBaseUserTable[Mapped[int]], Base):
         id: Mapped[int] = mapped_column(Integer, primary_key=True)
     ```
 
