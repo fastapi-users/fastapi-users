@@ -13,7 +13,7 @@
 [![PyPI version](https://badge.fury.io/py/fastapi-users.svg)](https://badge.fury.io/py/fastapi-users)
 [![Downloads](https://pepy.tech/badge/fastapi-users)](https://pepy.tech/project/fastapi-users)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-77-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-78-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <p align="center">
@@ -180,6 +180,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Nerixjk"><img src="https://avatars.githubusercontent.com/u/32194858?v=4?s=100" width="100px;" alt="Nerixjk"/><br /><sub><b>Nerixjk</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/issues?q=author%3ANerixjk" title="Bug reports">🐛</a> <a href="https://github.com/fastapi-users/fastapi-users/commits?author=Nerixjk" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/fotinakis"><img src="https://avatars.githubusercontent.com/u/75300?v=4?s=100" width="100px;" alt="Mike Fotinakis"/><br /><sub><b>Mike Fotinakis</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=fotinakis" title="Code">💻</a> <a href="https://github.com/fastapi-users/fastapi-users/issues?q=author%3Afotinakis" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/lifengmds"><img src="https://avatars.githubusercontent.com/u/8794442?v=4?s=100" width="100px;" alt="lifengmds"/><br /><sub><b>lifengmds</b></sub></a><br /><a href="#financial-lifengmds" title="Financial">💵</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/raindata5"><img src="https://avatars.githubusercontent.com/u/87434335?v=4?s=100" width="100px;" alt="raindata5"/><br /><sub><b>raindata5</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=raindata5" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>
