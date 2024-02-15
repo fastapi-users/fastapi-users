@@ -19,8 +19,8 @@
 <p align="center">
 <a href="https://polar.sh/frankie567">
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://polar.sh/embed/support-us.svg?org=frankie567&&text=Support+me&darkmode=1">
-  <img alt="Support me" src="https://polar.sh/embed/support-us.svg?org=frankie567&text=Support+me">
+  <source media="(prefers-color-scheme: dark)" srcset="https://polar.sh/embed/subscribe.svg?org=frankie567&darkmode=1">
+  <img alt="Support me" src="https://polar.sh/embed/subscribe.svg?org=frankie567">
 </picture>
 </a>
 </p>
