@@ -61,8 +61,7 @@ Add quickly a registration and authentication system to your [FastAPI](https://f
 **Implementing registration, login, social auth is hard and painful. We know it. With our highly secure and open-source users management platform, you can focus on your app while staying in control of your users data.**
 
 * Based on **FastAPI Users**!
-* **Open-source**: self-host it for free or use our hosted version
-* **Bring your own database**: host your database anywhere, we'll take care of the rest
+* **Open-source**: self-host it for free
 * **Pre-built login and registration pages**: clean and fast authentication so you don't have to do it yourself
 * **Official Python client** with built-in **FastAPI integration**
 
