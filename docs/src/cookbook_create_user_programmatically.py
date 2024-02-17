@@ -21,5 +21,7 @@ async def create_user(email: str, password: str, is_superuser: bool = False):
                         )
                     )
                     print(f"User created {user}")
+                    return user
     except UserAlreadyExists:
         print(f"User {email} already exists")
+        raise UserAlreadyExists
