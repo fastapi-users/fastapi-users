@@ -13,7 +13,7 @@
 [![PyPI version](https://badge.fury.io/py/fastapi-users.svg)](https://badge.fury.io/py/fastapi-users)
 [![Downloads](https://pepy.tech/badge/fastapi-users)](https://pepy.tech/project/fastapi-users)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-78-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-79-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <p align="center">
@@ -182,6 +182,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/raindata5"><img src="https://avatars.githubusercontent.com/u/87434335?v=4?s=100" width="100px;" alt="raindata5"/><br /><sub><b>raindata5</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=raindata5" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/mdonnellyli"><img src="https://avatars.githubusercontent.com/u/1457654?v=4?s=100" width="100px;" alt="Mark Donnelly"/><br /><sub><b>Mark Donnelly</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=mdonnellyli" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>
