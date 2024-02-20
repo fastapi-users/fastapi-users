@@ -730,6 +730,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "mdonnellyli",
+      "name": "Mark Donnelly",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1457654?v=4",
+      "profile": "https://github.com/mdonnellyli",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
