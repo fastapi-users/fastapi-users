@@ -50,9 +50,9 @@ from beanie import init_beanie
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await init_beanie(
-        database=db,
+        database=db,  # (1)!
         document_models=[
-            User,
+            User,  # (2)!
         ],
     )
     yield
