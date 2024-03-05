@@ -40,20 +40,24 @@ Notice that we pass a reference to the `User` model we defined above.
 
 ## Initialize Beanie
 
-When initializing your FastAPI app, it's important that you [**initialize Beanie**](https://roman-right.github.io/beanie/tutorial/initialization/) so it can discover your models. We can achieve this using a startup event handler on the FastAPI app:
+When initializing your FastAPI app, it's important that you [**initialize Beanie**](https://roman-right.github.io/beanie/tutorial/initialization/) so it can discover your models. We can achieve this using [**Lifespan Events**](https://fastapi.tiangolo.com/advanced/events/) on the FastAPI app:
 
 ```py
+from contextlib import asynccontextmanager
 from beanie import init_beanie
 
 
-@app.on_event("startup")
-async def on_startup():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
     await init_beanie(
-        database=db,  # (1)!
+        database=db,
         document_models=[
-            User,  # (2)!
+            User,
         ],
     )
+    yield
+
+app = FastAPI(lifespan=lifespan)
 ```
 
 1. This is the `db` Motor database instance we defined above.

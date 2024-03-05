@@ -1,3 +1,5 @@
+from contextlib import asynccontextmanager
+
 from beanie import init_beanie
 from fastapi import Depends, FastAPI
 
@@ -11,7 +13,19 @@ from app.users import (
     google_oauth_client,
 )
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await init_beanie(
+        database=db,
+        document_models=[
+            User,
+        ],
+    )
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 
 app.include_router(
     fastapi_users.get_auth_router(auth_backend), prefix="/auth/jwt", tags=["auth"]
@@ -46,13 +60,3 @@ app.include_router(
 @app.get("/authenticated-route")
 async def authenticated_route(user: User = Depends(current_active_user)):
     return {"message": f"Hello {user.email}!"}
-
-
-@app.on_event("startup")
-async def on_startup():
-    await init_beanie(
-        database=db,
-        document_models=[
-            User,
-        ],
-    )
