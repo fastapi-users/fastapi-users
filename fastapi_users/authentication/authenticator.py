@@ -1,13 +1,18 @@
 import re
 from inspect import Parameter, Signature
-from typing import Callable, List, Optional, Sequence, Tuple, cast
+from typing import Callable, List, Optional, Sequence, Tuple, Union, cast
 
 from fastapi import Depends, HTTPException, status
 from makefun import with_signature
 
 from fastapi_users import models
-from fastapi_users.authentication.backend import AuthenticationBackend
+from fastapi_users.authentication.backend import (
+    AuthenticationBackend,
+    AuthenticationBackendRefresh,
+)
+from fastapi_users.authentication.models import AccessRefreshToken
 from fastapi_users.authentication.strategy import Strategy
+from fastapi_users.authentication.strategy.base import StrategyRefresh
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from fastapi_users.types import DependencyCallable
 
@@ -31,7 +36,9 @@ class DuplicateBackendNamesError(Exception):
     pass
 
 
-EnabledBackendsDependency = DependencyCallable[Sequence[AuthenticationBackend]]
+EnabledBackendsDependency = DependencyCallable[
+    Sequence[Union[AuthenticationBackend, AuthenticationBackendRefresh]]
+]
 
 
 class Authenticator:
@@ -46,11 +53,11 @@ class Authenticator:
     :param get_user_manager: User manager dependency callable.
     """
 
-    backends: Sequence[AuthenticationBackend]
+    backends: Sequence[Union[AuthenticationBackend, AuthenticationBackendRefresh]]
 
     def __init__(
         self,
-        backends: Sequence[AuthenticationBackend],
+        backends: Sequence[Union[AuthenticationBackend, AuthenticationBackendRefresh]],
         get_user_manager: UserManagerDependency[models.UP, models.ID],
     ):
         self.backends = backends
@@ -154,20 +161,24 @@ class Authenticator:
         verified: bool = False,
         superuser: bool = False,
         **kwargs,
-    ) -> Tuple[Optional[models.UP], Optional[str]]:
+    ) -> Tuple[Optional[models.UP], Optional[Union[str, AccessRefreshToken]]]:
         user: Optional[models.UP] = None
-        token: Optional[str] = None
+        token: Optional[Union[str, AccessRefreshToken]] = None
         enabled_backends: Sequence[AuthenticationBackend] = kwargs.get(
             "enabled_backends", self.backends
         )
         for backend in self.backends:
             if backend in enabled_backends:
                 token = kwargs[name_to_variable_name(backend.name)]
-                strategy: Strategy[models.UP, models.ID] = kwargs[
-                    name_to_strategy_variable_name(backend.name)
-                ]
+                strategy: Union[
+                    Strategy[models.UP, models.ID],
+                    StrategyRefresh[models.UP, models.ID],
+                ] = kwargs[name_to_strategy_variable_name(backend.name)]
                 if token is not None:
-                    user = await strategy.read_token(token, user_manager)
+                    if isinstance(token, str):
+                        user = await strategy.read_token(token, user_manager)
+                    else:
+                        user = await strategy.read_token(token[0], user_manager)
                     if user:
                         break
 

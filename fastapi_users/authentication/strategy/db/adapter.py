@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Any, Dict, Generic, Optional, Protocol
 
-from fastapi_users.authentication.strategy.db.models import AP
+from fastapi_users.authentication.strategy.db.models import AP, APE
 
 
 class AccessTokenDatabase(Protocol, Generic[AP]):
@@ -24,3 +24,11 @@ class AccessTokenDatabase(Protocol, Generic[AP]):
     async def delete(self, access_token: AP) -> None:
         """Delete an access token."""
         ...  # pragma: no cover
+
+
+class AccessRefreshTokenDatabase(AccessTokenDatabase[APE], Generic[APE]):
+    async def get_by_refresh_token(
+        self, refresh_token: str, max_age: Optional[datetime] = None
+    ) -> Optional[APE]:
+        """Get a single access token by refresh token"""
+        ...

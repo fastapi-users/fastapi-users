@@ -1,5 +1,25 @@
-from fastapi_users.authentication.strategy.db.adapter import AccessTokenDatabase
-from fastapi_users.authentication.strategy.db.models import AP, AccessTokenProtocol
-from fastapi_users.authentication.strategy.db.strategy import DatabaseStrategy
+from fastapi_users.authentication.strategy.db.adapter import (
+    AccessRefreshTokenDatabase,
+    AccessTokenDatabase,
+)
+from fastapi_users.authentication.strategy.db.models import (
+    AP,
+    APE,
+    AccessRefreshTokenProtocol,
+    AccessTokenProtocol,
+)
+from fastapi_users.authentication.strategy.db.strategy import (
+    DatabaseRefreshStrategy,
+    DatabaseStrategy,
+)
 
-__all__ = ["AP", "AccessTokenDatabase", "AccessTokenProtocol", "DatabaseStrategy"]
+__all__ = [
+    "AP",
+    "APE",
+    "AccessRefreshTokenDatabase",
+    "AccessRefreshTokenProtocol",
+    "AccessTokenDatabase",
+    "AccessTokenProtocol",
+    "DatabaseStrategy",
+    "DatabaseRefreshStrategy",
+]

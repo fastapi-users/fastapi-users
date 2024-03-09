@@ -1,9 +1,12 @@
 from fastapi_users.authentication.strategy.base import (
     Strategy,
     StrategyDestroyNotSupportedError,
+    StrategyRefresh,
 )
 from fastapi_users.authentication.strategy.db import (
     AP,
+    AccessRefreshTokenDatabase,
+    AccessRefreshTokenProtocol,
     AccessTokenDatabase,
     AccessTokenProtocol,
     DatabaseStrategy,
@@ -17,11 +20,14 @@ except ImportError:  # pragma: no cover
 
 __all__ = [
     "AP",
+    "AccessRefreshTokenDatabase",
+    "AccessRefreshTokenProtocol",
     "AccessTokenDatabase",
     "AccessTokenProtocol",
     "DatabaseStrategy",
     "JWTStrategy",
     "Strategy",
     "StrategyDestroyNotSupportedError",
+    "StrategyRefresh",
     "RedisStrategy",
 ]

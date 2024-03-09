@@ -1,5 +1,8 @@
 from fastapi_users.authentication.authenticator import Authenticator
-from fastapi_users.authentication.backend import AuthenticationBackend
+from fastapi_users.authentication.backend import (
+    AuthenticationBackend,
+    AuthenticationBackendRefresh,
+)
 from fastapi_users.authentication.strategy import JWTStrategy, Strategy
 
 try:
@@ -16,6 +19,7 @@ from fastapi_users.authentication.transport import (
 __all__ = [
     "Authenticator",
     "AuthenticationBackend",
+    "AuthenticationBackendRefresh",
     "BearerTransport",
     "CookieTransport",
     "JWTStrategy",

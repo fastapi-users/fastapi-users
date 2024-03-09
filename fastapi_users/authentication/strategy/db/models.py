@@ -13,3 +13,10 @@ class AccessTokenProtocol(Protocol[models.ID]):
 
 
 AP = TypeVar("AP", bound=AccessTokenProtocol)
+
+
+class AccessRefreshTokenProtocol(AccessTokenProtocol):
+    refresh_token: str
+
+
+APE = TypeVar("APE", bound=AccessRefreshTokenProtocol)
