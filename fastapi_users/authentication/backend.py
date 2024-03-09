@@ -1,4 +1,4 @@
-from typing import Generic
+from typing import Generic, Optional
 
 from fastapi import Response, status
 
@@ -6,11 +6,14 @@ from fastapi_users import models
 from fastapi_users.authentication.strategy import (
     Strategy,
     StrategyDestroyNotSupportedError,
+    StrategyRefresh,
 )
 from fastapi_users.authentication.transport import (
     Transport,
     TransportLogoutNotSupportedError,
+    TransportRefresh,
 )
+from fastapi_users.manager import BaseUserManager
 from fastapi_users.types import DependencyCallable
 
 
@@ -59,3 +62,31 @@ class AuthenticationBackend(Generic[models.UP, models.ID]):
             response = Response(status_code=status.HTTP_204_NO_CONTENT)
 
         return response
+
+
+class AuthenticationBackendRefresh(
+    AuthenticationBackend[models.UP, models.ID], Generic[models.UP, models.ID]
+):
+    transport: TransportRefresh
+
+    def __init__(
+        self,
+        name: str,
+        transport: TransportRefresh,
+        get_strategy: DependencyCallable[StrategyRefresh[models.UP, models.ID]],
+    ):
+        super().__init__(name, transport, get_strategy)
+
+    async def refresh(
+        self,
+        strategy: StrategyRefresh[models.UP, models.ID],
+        user_manager: BaseUserManager[models.UP, models.ID],
+        refresh_token: str,
+    ) -> Optional[Response]:
+        user = await strategy.read_token(
+            None, refresh_token=refresh_token, user_manager=user_manager
+        )
+        if user is not None:
+            await strategy.destroy_token(None, user=user, refresh_token=refresh_token)
+            token = await strategy.write_token(user)
+            return await self.transport.get_login_response(token)

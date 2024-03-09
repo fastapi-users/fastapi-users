@@ -1,9 +1,13 @@
-from typing import Generic, Optional, Sequence, Type
+from typing import Generic, Optional, Sequence, Type, Union
 
 from fastapi import APIRouter
 
 from fastapi_users import models, schemas
-from fastapi_users.authentication import AuthenticationBackend, Authenticator
+from fastapi_users.authentication import (
+    AuthenticationBackend,
+    AuthenticationBackendRefresh,
+    Authenticator,
+)
 from fastapi_users.jwt import SecretType
 from fastapi_users.manager import UserManagerDependency
 from fastapi_users.router import (
@@ -40,7 +44,9 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
     def __init__(
         self,
         get_user_manager: UserManagerDependency[models.UP, models.ID],
-        auth_backends: Sequence[AuthenticationBackend],
+        auth_backends: Sequence[
+            Union[AuthenticationBackend, AuthenticationBackendRefresh]
+        ],
     ):
         self.authenticator = Authenticator(auth_backends, get_user_manager)
         self.get_user_manager = get_user_manager
@@ -72,7 +78,9 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
         return get_reset_password_router(self.get_user_manager)
 
     def get_auth_router(
-        self, backend: AuthenticationBackend, requires_verification: bool = False
+        self,
+        backend: Union[AuthenticationBackend, AuthenticationBackendRefresh],
+        requires_verification: bool = False,
     ) -> APIRouter:
         """
         Return an auth router for a given authentication backend.
@@ -91,7 +99,7 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
     def get_oauth_router(
         self,
         oauth_client: BaseOAuth2,
-        backend: AuthenticationBackend,
+        backend: Union[AuthenticationBackend, AuthenticationBackendRefresh],
         state_secret: SecretType,
         redirect_url: Optional[str] = None,
         associate_by_email: bool = False,

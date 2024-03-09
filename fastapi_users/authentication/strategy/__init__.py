@@ -1,6 +1,7 @@
 from fastapi_users.authentication.strategy.base import (
     Strategy,
     StrategyDestroyNotSupportedError,
+    StrategyRefresh,
 )
 from fastapi_users.authentication.strategy.db import (
     AP,
@@ -23,5 +24,6 @@ __all__ = [
     "JWTStrategy",
     "Strategy",
     "StrategyDestroyNotSupportedError",
+    "StrategyRefresh",
     "RedisStrategy",
 ]
