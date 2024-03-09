@@ -154,7 +154,7 @@ class Authenticator:
         verified: bool = False,
         superuser: bool = False,
         **kwargs,
-    ) -> Tuple[Optional[models.UP], Optional[str]]:
+    ) -> Tuple[Optional[models.UP], Optional[Union[str, AccessRefreshToken]]]:
         user: Optional[models.UP] = None
         token: Optional[str] = None
         enabled_backends: Sequence[BaseAuthenticationBackend] = kwargs.get(
@@ -167,10 +167,7 @@ class Authenticator:
                     name_to_strategy_variable_name(backend.name)
                 ]
                 if token is not None:
-                    # if isinstance(token, str):
                     user = await strategy.read_token(token, user_manager)
-                    # else:
-                    # user = await strategy.read_token(token[0], user_manager)
                     if user:
                         break
 
