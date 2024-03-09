@@ -4,18 +4,12 @@ from typing import Any, Dict, Generic, Optional
 
 from fastapi_users import exceptions, models
 from fastapi_users.authentication.models import AccessRefreshToken
-from fastapi_users.authentication.strategy.base import (
-    Strategy,
-    StrategyRefresh,
-)
+from fastapi_users.authentication.strategy.base import Strategy, StrategyRefresh
 from fastapi_users.authentication.strategy.db.adapter import (
     AccessRefreshTokenDatabase,
     AccessTokenDatabase,
 )
-from fastapi_users.authentication.strategy.db.models import (
-    AP,
-    APE,
-)
+from fastapi_users.authentication.strategy.db.models import AP, APE
 from fastapi_users.manager import BaseUserManager
 
 
