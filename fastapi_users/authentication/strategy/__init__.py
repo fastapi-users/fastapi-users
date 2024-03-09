@@ -5,6 +5,8 @@ from fastapi_users.authentication.strategy.base import (
 )
 from fastapi_users.authentication.strategy.db import (
     AP,
+    AccessRefreshTokenDatabase,
+    AccessRefreshTokenProtocol,
     AccessTokenDatabase,
     AccessTokenProtocol,
     DatabaseStrategy,
@@ -18,6 +20,8 @@ except ImportError:  # pragma: no cover
 
 __all__ = [
     "AP",
+    "AccessRefreshTokenDatabase",
+    "AccessRefreshTokenProtocol",
     "AccessTokenDatabase",
     "AccessTokenProtocol",
     "DatabaseStrategy",
