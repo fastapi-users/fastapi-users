@@ -1,5 +1,6 @@
 import httpx
 import pytest
+import pytest_asyncio
 from fastapi import FastAPI, status
 
 from fastapi_users.fastapi_users import FastAPIUsers
@@ -28,8 +29,7 @@ def test_app(
     return app
 
 
-@pytest.fixture
-@pytest.mark.asyncio
+@pytest_asyncio.fixture
 async def test_app_client(test_app, get_test_client):
     async for client in get_test_client(test_app):
         yield client

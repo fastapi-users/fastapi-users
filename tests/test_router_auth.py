@@ -2,6 +2,7 @@ from typing import Any, AsyncGenerator, Dict, Tuple, cast
 
 import httpx
 import pytest
+import pytest_asyncio
 from fastapi import FastAPI, status
 
 from fastapi_users.authentication import Authenticator
@@ -39,10 +40,9 @@ def app_factory(get_user_manager, mock_authentication):
     return _app_factory
 
 
-@pytest.fixture(
+@pytest_asyncio.fixture(
     params=[True, False], ids=["required_verification", "not_required_verification"]
 )
-@pytest.mark.asyncio
 async def test_app_client(
     request, get_test_client, app_factory
 ) -> AsyncGenerator[Tuple[httpx.AsyncClient, bool], None]:

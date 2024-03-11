@@ -2,6 +2,7 @@ from typing import AsyncGenerator, Generic, List, Optional, Sequence
 
 import httpx
 import pytest
+import pytest_asyncio
 from fastapi import Depends, FastAPI, Request, status
 from fastapi.security.base import SecurityBase
 
@@ -66,8 +67,7 @@ def get_backend_user(user: UserModel):
     return _get_backend_user
 
 
-@pytest.fixture
-@pytest.mark.asyncio
+@pytest_asyncio.fixture
 def get_test_auth_client(get_user_manager, get_test_client):
     async def _get_test_auth_client(
         backends: List[AuthenticationBackend],

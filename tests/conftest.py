@@ -126,13 +126,6 @@ class UserManagerMock(BaseTestUserManager[models.UP]):
     _update: MagicMock
 
 
-@pytest.fixture(scope="session")
-def event_loop():
-    loop = asyncio.get_event_loop()
-    yield loop
-    loop.close()
-
-
 AsyncMethodMocker = Callable[..., MagicMock]
 
 
