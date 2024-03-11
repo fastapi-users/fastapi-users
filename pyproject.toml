@@ -141,8 +141,7 @@ classifiers = [
 requires-python = ">=3.8"
 dependencies = [
     "fastapi >=0.65.2",
-    "passlib[bcrypt] ==1.7.4; python_version < '3.12'",
-    "bcrypt ==4.1.2; python_version >= '3.12'",
+    "pwdlib[argon2,bcrypt] ==0.2.0",
     "email-validator >=1.1.0,<2.2",
     "pyjwt[crypto] ==2.8.0",
     "python-multipart ==0.0.7",
