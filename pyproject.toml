@@ -145,7 +145,7 @@ dependencies = [
     "bcrypt ==4.1.2; python_version >= '3.12'",
     "email-validator >=1.1.0,<2.2",
     "pyjwt[crypto] ==2.8.0",
-    "python-multipart ==0.0.7",
+    "python-multipart ==0.0.9",
     "makefun >=1.11.2,<2.0.0",
 ]
 
