@@ -1044,9 +1044,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#customize-cryptcontext" class="md-nav__link">
+  <a href="#customize-passwordhash" class="md-nav__link">
     <span class="md-ellipsis">
-      Customize CryptContext
+      Customize PasswordHash
     </span>
   </a>
   
@@ -1518,9 +1518,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#customize-cryptcontext" class="md-nav__link">
+  <a href="#customize-passwordhash" class="md-nav__link">
     <span class="md-ellipsis">
-      Customize CryptContext
+      Customize PasswordHash
     </span>
   </a>
   
@@ -1551,16 +1551,19 @@
 
 
 <h1 id="password-hash">Password hash<a class="headerlink" href="#password-hash" title="Permanent link">&para;</a></h1>
-<p>By default, FastAPI Users will use the <a href="https://en.wikipedia.org/wiki/Bcrypt">BCrypt algorithm</a> to <strong>hash and salt</strong> passwords before storing them in the database.</p>
-<p>The implementation is provided by <a href="https://passlib.readthedocs.io/en/stable/index.html">Passlib</a>, a battle-tested Python library for password hashing.</p>
-<h2 id="customize-cryptcontext">Customize <code>CryptContext</code><a class="headerlink" href="#customize-cryptcontext" title="Permanent link">&para;</a></h2>
-<p>If you need to support other hashing algorithms, you can customize the <a href="https://passlib.readthedocs.io/en/stable/lib/passlib.context.html#the-cryptcontext-class"><code>CryptContext</code> object of Passlib</a>.</p>
-<p>For this, you'll need to instantiate the <code>PasswordHelper</code> class and pass it your <code>CryptContext</code>. The example below shows you how you can create a <code>CryptContext</code> to add support for the Argon2 algorithm while deprecating BCrypt.</p>
+<p>By default, FastAPI Users will use the <a href="https://en.wikipedia.org/wiki/Argon2">Argon2 algorithm</a> to <strong>hash and salt</strong> passwords before storing them in the database, with backwards-compatibility with <a href="https://en.wikipedia.org/wiki/Bcrypt">Bcrypt</a>.</p>
+<p>The implementation is provided by <a href="https://github.com/frankie567/pwdlib">pwdlib</a>, a modern password hashing wrapper.</p>
+<h2 id="customize-passwordhash">Customize <code>PasswordHash</code><a class="headerlink" href="#customize-passwordhash" title="Permanent link">&para;</a></h2>
+<p>If you need to tune the algorithms used or their settings, you can customize the <a href="https://frankie567.github.io/pwdlib/reference/pwdlib/#pwdlib.PasswordHash"><code>PasswordHash</code> object of pwdlib</a>.</p>
+<p>For this, you'll need to instantiate the <code>PasswordHelper</code> class and pass it your <code>PasswordHash</code>. The example below shows you how you can create a <code>PasswordHash</code> to only support the Argon2 algorithm.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span> <span class="nn">fastapi_users.password</span> <span class="kn">import</span> <span class="n">PasswordHelper</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span> <span class="nn">passlib.context</span> <span class="kn">import</span> <span class="n">CryptContext</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">context</span> <span class="o">=</span> <span class="n">CryptContext</span><span class="p">(</span><span class="n">schemes</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;argon2&quot;</span><span class="p">,</span> <span class="s2">&quot;bcrypt&quot;</span><span class="p">],</span> <span class="n">deprecated</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">password_helper</span> <span class="o">=</span> <span class="n">PasswordHelper</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span> <span class="nn">pwdlib</span> <span class="kn">import</span> <span class="n">PasswordHash</span><span class="p">,</span> <span class="n">exceptions</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">from</span> <span class="nn">pwdlib.hashers.argon2</span> <span class="kn">import</span> <span class="n">Argon2Hasher</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">password_hash</span> <span class="o">=</span> <span class="n">PasswordHash</span><span class="p">((</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">Argon2Hasher</span><span class="p">(),</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">))</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">password_helper</span> <span class="o">=</span> <span class="n">PasswordHelper</span><span class="p">(</span><span class="n">password_hash</span><span class="p">)</span>
 </code></pre></div>
 <p>Finally, pass the <code>password_helper</code> variable while instantiating your <code>UserManager</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_manager</span><span class="p">(</span><span class="n">user_db</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">get_user_db</span><span class="p">)):</span>
@@ -1572,12 +1575,8 @@
 <p>Typically, when a user logs in, we'll check if the password hash algorithm is deprecated.</p>
 <p>If it is, we take the opportunity of having the password in plain-text at hand (since the user just logged in!) to hash it with a better algorithm and update it in database.</p>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Dependencies for alternative algorithms are not included by default</p>
-<p>FastAPI Users won't install required dependencies to make other algorithms like Argon2 work. It's up to you to install them.</p>
-</div>
 <h2 id="full-customization">Full customization<a class="headerlink" href="#full-customization" title="Permanent link">&para;</a></h2>
-<p>If you don't wish to use Passlib at all – <strong>which we don't recommend unless you're absolutely sure of what you're doing</strong> — you can implement your own <code>PasswordHelper</code> class as long as it implements the <code>PasswordHelperProtocol</code> and its methods.</p>
+<p>If you don't wish to use <code>pwdlib</code> at all – <strong>which we don't recommend unless you're absolutely sure of what you're doing</strong> — you can implement your own <code>PasswordHelper</code> class as long as it implements the <code>PasswordHelperProtocol</code> and its methods.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kn">from</span> <span class="nn">fastapi_users.password</span> <span class="kn">import</span> <span class="n">PasswordHelperProtocol</span>
