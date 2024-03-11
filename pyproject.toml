@@ -82,7 +82,7 @@ lint = [
   "isort ./docs/src -o fastapi_users",
   "isort ./examples -o fastapi_users -p app",
   "ruff format .",
-  "ruff --fix .",
+  "ruff check --fix .",
   "mypy fastapi_users/",
 ]
 lint-check = [
@@ -90,7 +90,7 @@ lint-check = [
   "isort --check-only  ./docs/src -o fastapi_users",
   "isort --check-only ./examples -o fastapi_users -p app",
   "ruff format .",
-  "ruff .",
+  "ruff check .",
   "mypy fastapi_users/",
 ]
 docs = "mkdocs serve"
