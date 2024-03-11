@@ -2,6 +2,7 @@ from typing import Any, AsyncGenerator, Dict, cast
 
 import httpx
 import pytest
+import pytest_asyncio
 from fastapi import FastAPI, status
 
 from fastapi_users.exceptions import (
@@ -14,8 +15,7 @@ from fastapi_users.router import ErrorCode, get_reset_password_router
 from tests.conftest import AsyncMethodMocker, UserManagerMock
 
 
-@pytest.fixture
-@pytest.mark.asyncio
+@pytest_asyncio.fixture
 async def test_app_client(
     get_user_manager, get_test_client
 ) -> AsyncGenerator[httpx.AsyncClient, None]:

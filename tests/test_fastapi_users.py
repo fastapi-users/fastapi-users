@@ -2,14 +2,14 @@ from typing import AsyncGenerator, Optional
 
 import httpx
 import pytest
+import pytest_asyncio
 from fastapi import Depends, FastAPI, status
 
 from fastapi_users import FastAPIUsers, schemas
 from tests.conftest import IDType, User, UserCreate, UserModel, UserUpdate
 
 
-@pytest.fixture
-@pytest.mark.asyncio
+@pytest_asyncio.fixture
 async def test_app_client(
     secret,
     get_user_manager,

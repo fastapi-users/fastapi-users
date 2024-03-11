@@ -2,6 +2,7 @@ from typing import Any, Dict, cast
 
 import httpx
 import pytest
+import pytest_asyncio
 from fastapi import FastAPI, status
 from httpx_oauth.oauth2 import BaseOAuth2, OAuth2
 
@@ -69,15 +70,13 @@ def test_app_requires_verification(app_factory):
     return app_factory(requires_verification=True)
 
 
-@pytest.fixture
-@pytest.mark.asyncio
+@pytest_asyncio.fixture
 async def test_app_client(test_app, get_test_client):
     async for client in get_test_client(test_app):
         yield client
 
 
-@pytest.fixture
-@pytest.mark.asyncio
+@pytest_asyncio.fixture
 async def test_app_client_redirect_url(test_app_redirect_url, get_test_client):
     async for client in get_test_client(test_app_redirect_url):
         yield client
