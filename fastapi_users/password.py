@@ -7,14 +7,11 @@ from passlib.context import CryptContext
 class PasswordHelperProtocol(Protocol):
     def verify_and_update(
         self, plain_password: str, hashed_password: str
-    ) -> Tuple[bool, str]:
-        ...  # pragma: no cover
+    ) -> Tuple[bool, str]: ...  # pragma: no cover
 
-    def hash(self, password: str) -> str:
-        ...  # pragma: no cover
+    def hash(self, password: str) -> str: ...  # pragma: no cover
 
-    def generate(self) -> str:
-        ...  # pragma: no cover
+    def generate(self) -> str: ...  # pragma: no cover
 
 
 class PasswordHelper(PasswordHelperProtocol):
