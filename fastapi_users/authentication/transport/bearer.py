@@ -119,3 +119,7 @@ class BearerTransportRefresh(BaseBearerTransport, TransportRefresh):
     @staticmethod
     def get_openapi_refresh_responses_success() -> OpenAPIResponseType:
         return BearerTransportRefresh.get_openapi_login_responses_success()
+
+    @staticmethod
+    def get_openapi_logout_responses_success() -> OpenAPIResponseType:
+        return {}
