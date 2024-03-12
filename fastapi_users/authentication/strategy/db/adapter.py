@@ -1,9 +1,9 @@
 from datetime import datetime
 from typing import Any, Dict, Generic, Optional, Protocol, TypeVar
 
-from fastapi_users.authentication.models import TokenIdentityType
 from fastapi_users.authentication.strategy.db.models import AP, APE
 
+TokenIdentityType = TypeVar("TokenIdentityType", covariant=True)
 TokenType = TypeVar("TokenType")
 
 
@@ -21,7 +21,7 @@ class BaseAccessTokenDatabase(Protocol, Generic[TokenIdentityType, TokenType]):
         ...  # pragma: no cover
 
     async def update(
-        self, access_token: TokenIdentityType, update_dict: Dict[str, Any]
+        self, access_token: TokenType, update_dict: Dict[str, Any]
     ) -> TokenType:
         """Update an access token."""
         ...  # pragma: no cover
