@@ -1,4 +1,5 @@
 from fastapi_users.authentication.transport.base import (
+    BaseTransport,
     Transport,
     TransportLogoutNotSupportedError,
     TransportRefresh,
@@ -10,6 +11,7 @@ from fastapi_users.authentication.transport.bearer import (
 from fastapi_users.authentication.transport.cookie import CookieTransport
 
 __all__ = [
+    "BaseTransport",
     "BearerTransport",
     "BearerTransportRefresh",
     "CookieTransport",

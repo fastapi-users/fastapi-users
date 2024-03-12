@@ -7,7 +7,8 @@ from httpx_oauth.oauth2 import BaseOAuth2, OAuth2Token
 from pydantic import BaseModel
 
 from fastapi_users import models, schemas
-from fastapi_users.authentication import AuthenticationBackend, Authenticator, Strategy
+from fastapi_users.authentication import Authenticator, Strategy
+from fastapi_users.authentication.backend import BaseAuthenticationBackend
 from fastapi_users.exceptions import UserAlreadyExists
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
@@ -29,7 +30,7 @@ def generate_state_token(
 
 def get_oauth_router(
     oauth_client: BaseOAuth2,
-    backend: AuthenticationBackend,
+    backend: BaseAuthenticationBackend,
     get_user_manager: UserManagerDependency[models.UP, models.ID],
     state_secret: SecretType,
     redirect_url: Optional[str] = None,

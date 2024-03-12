@@ -1,3 +1,6 @@
+from abc import abstractmethod
+from typing import Generic, TypeVar
+
 from fastapi import Response, status
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
@@ -5,6 +8,7 @@ from pydantic import BaseModel
 
 from fastapi_users.authentication.models import AccessRefreshToken
 from fastapi_users.authentication.transport.base import (
+    BaseTransport,
     Transport,
     TransportLogoutNotSupportedError,
     TransportRefresh,
@@ -12,24 +16,39 @@ from fastapi_users.authentication.transport.base import (
 from fastapi_users.openapi import OpenAPIResponseType
 from fastapi_users.schemas import model_dump
 
+TokenType = TypeVar("TokenType")
+
 
 class BearerResponse(BaseModel):
     access_token: str
     token_type: str
 
 
-class BearerTransport(Transport):
+class BaseBearerTransport(BaseTransport[TokenType], Generic[TokenType]):
     scheme: OAuth2PasswordBearer
 
     def __init__(self, tokenUrl: str):
         self.scheme = OAuth2PasswordBearer(tokenUrl, auto_error=False)
 
-    async def get_login_response(self, token: str) -> Response:
-        bearer_response = BearerResponse(access_token=token, token_type="bearer")
-        return JSONResponse(model_dump(bearer_response))
+    @abstractmethod
+    async def get_login_response(
+        self, token: TokenType
+    ) -> Response: ...  # pragma: no cover
 
     async def get_logout_response(self) -> Response:
         raise TransportLogoutNotSupportedError()
+
+    @staticmethod
+    @abstractmethod
+    def get_openapi_login_responses_success() -> (
+        OpenAPIResponseType
+    ): ...  # pragma: no cover
+
+
+class BearerTransport(BaseBearerTransport[str], Transport):
+    async def get_login_response(self, token: str) -> Response:
+        bearer_response = BearerResponse(access_token=token, token_type="bearer")
+        return JSONResponse(model_dump(bearer_response))
 
     @staticmethod
     def get_openapi_login_responses_success() -> OpenAPIResponseType:
@@ -60,7 +79,7 @@ class BearerResponseRefresh(BearerResponse):
     refresh_token: str
 
 
-class BearerTransportRefresh(BearerTransport, TransportRefresh):
+class BearerTransportRefresh(BaseBearerTransport, TransportRefresh):
     async def get_login_response(
         self,
         token: AccessRefreshToken,
@@ -70,7 +89,7 @@ class BearerTransportRefresh(BearerTransport, TransportRefresh):
             refresh_token=token[1],
             token_type="bearer",
         )
-        return JSONResponse(bearer_response.model_dump())
+        return JSONResponse(model_dump(bearer_response))
 
     @staticmethod
     def get_openapi_login_responses_success() -> OpenAPIResponseType:
@@ -96,3 +115,7 @@ class BearerTransportRefresh(BearerTransport, TransportRefresh):
                 },
             },
         }
+
+    @staticmethod
+    def get_openapi_refresh_responses_success() -> OpenAPIResponseType:
+        return BearerTransportRefresh.get_openapi_login_responses_success()

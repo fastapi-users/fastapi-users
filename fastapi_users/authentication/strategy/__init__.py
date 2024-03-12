@@ -1,4 +1,5 @@
 from fastapi_users.authentication.strategy.base import (
+    BaseStrategy,
     Strategy,
     StrategyDestroyNotSupportedError,
     StrategyRefresh,
@@ -24,6 +25,7 @@ __all__ = [
     "AccessRefreshTokenProtocol",
     "AccessTokenDatabase",
     "AccessTokenProtocol",
+    "BaseStrategy",
     "DatabaseStrategy",
     "JWTStrategy",
     "Strategy",
