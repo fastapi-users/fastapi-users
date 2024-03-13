@@ -135,5 +135,6 @@ def get_auth_router(
                 raise HTTPException(
                     status.HTTP_401_UNAUTHORIZED, detail=ErrorCode.REFRESH_INVALID_TOKEN
                 )
+            return token
 
     return router
