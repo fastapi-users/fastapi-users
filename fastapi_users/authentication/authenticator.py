@@ -154,7 +154,7 @@ class Authenticator:
         verified: bool = False,
         superuser: bool = False,
         **kwargs,
-    ) -> Tuple[Optional[models.UP], Optional[Union[str, AccessRefreshToken]]]:
+    ) -> Tuple[Optional[models.UP], Optional[Any]]:
         user: Optional[models.UP] = None
         token: Optional[str] = None
         enabled_backends: Sequence[BaseAuthenticationBackend] = kwargs.get(
