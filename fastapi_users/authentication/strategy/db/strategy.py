@@ -140,7 +140,7 @@ class DatabaseRefreshStrategy(
         access_token = secrets.token_urlsafe()
         refresh_token = secrets.token_urlsafe()
         token_dict = {
-            "access_token": access_token,
+            "token": access_token,
             "refresh_token": refresh_token,
             "user_id": user.id,
         }
