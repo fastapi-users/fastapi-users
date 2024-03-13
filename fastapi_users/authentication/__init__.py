@@ -4,7 +4,7 @@ from fastapi_users.authentication.backend import (
     AuthenticationBackendRefresh,
     BaseAuthenticationBackend,
 )
-from fastapi_users.authentication.strategy import JWTStrategy, Strategy
+from fastapi_users.authentication.strategy import JWTStrategy, Strategy, StrategyRefresh
 
 try:
     from fastapi_users.authentication.strategy import RedisStrategy
@@ -13,6 +13,7 @@ except ImportError:  # pragma: no cover
 
 from fastapi_users.authentication.transport import (
     BearerTransport,
+    BearerTransportRefresh,
     CookieTransport,
     Transport,
 )
@@ -23,9 +24,11 @@ __all__ = [
     "AuthenticationBackendRefresh",
     "BaseAuthenticationBackend",
     "BearerTransport",
+    "BearerTransportRefresh",
     "CookieTransport",
     "JWTStrategy",
     "RedisStrategy",
     "Strategy",
+    "StrategyRefresh",
     "Transport",
 ]
