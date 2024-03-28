@@ -105,6 +105,14 @@ class DatabaseRefreshStrategy(
         super().__init__(database, lifetime_seconds)
         self.refresh_lifetime_seconds = refresh_lifetime_seconds
 
+    def _refresh_get_max_age(self) -> Optional[datetime]:
+        max_age = None
+        if self.refresh_lifetime_seconds:
+            max_age = datetime.now(timezone.utc) - timedelta(
+                seconds=self.refresh_lifetime_seconds
+            )
+        return max_age
+    
     async def read_token_by_refresh(
         self,
         refresh_token: Optional[str],
@@ -113,7 +121,7 @@ class DatabaseRefreshStrategy(
         if refresh_token is None:
             return None
         access_token = await self.database.get_by_refresh_token(
-            refresh_token=refresh_token, max_age=self._get_max_age()
+            refresh_token=refresh_token, max_age=self._refresh_get_max_age()
         )
         if access_token is None:
             return None
