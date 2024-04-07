@@ -34,6 +34,7 @@ As you can see, **FastAPI Users** provides a base class that will include base f
 
     ```py
     from fastapi_users.db import SQLAlchemyBaseUserTable
+    from sqlalchemy.orm import Mapped, mapped_column
     
     class User(SQLAlchemyBaseUserTable[Mapped[int]], Base):
         id: Mapped[int] = mapped_column(Integer, primary_key=True)
