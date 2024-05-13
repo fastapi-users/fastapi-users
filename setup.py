@@ -27,7 +27,7 @@ setuptools.setup(
         "passlib[bcrypt] ==1.7.4",
         "email-validator >=1.1.0,<2.1",
         "pyjwt[crypto] ==2.8.0",
-        "python-multipart ==0.0.6",
+        "python-multipart ==0.0.9",
         "makefun >=1.11.2,<2.0.0",
         "pydantic<2",
         "python-dotenv",
