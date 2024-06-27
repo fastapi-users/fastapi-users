@@ -1,6 +1,6 @@
 import re
 from inspect import Parameter, Signature
-from typing import Callable, List, Optional, Sequence, Tuple, cast
+from typing import Any, Callable, Generic, List, Optional, Sequence, Tuple, cast
 
 from fastapi import Depends, HTTPException, status
 from makefun import with_signature
@@ -31,10 +31,10 @@ class DuplicateBackendNamesError(Exception):
     pass
 
 
-EnabledBackendsDependency = DependencyCallable[Sequence[AuthenticationBackend]]
+EnabledBackendsDependency = DependencyCallable[Sequence[AuthenticationBackend[models.UP, models.ID]]]
 
 
-class Authenticator:
+class Authenticator(Generic[models.UP, models.ID]):
     """
     Provides dependency callables to retrieve authenticated user.
 
@@ -46,11 +46,11 @@ class Authenticator:
     :param get_user_manager: User manager dependency callable.
     """
 
-    backends: Sequence[AuthenticationBackend]
+    backends: Sequence[AuthenticationBackend[models.UP, models.ID]]
 
     def __init__(
         self,
-        backends: Sequence[AuthenticationBackend],
+        backends: Sequence[AuthenticationBackend[models.UP, models.ID]],
         get_user_manager: UserManagerDependency[models.UP, models.ID],
     ):
         self.backends = backends
@@ -62,7 +62,7 @@ class Authenticator:
         active: bool = False,
         verified: bool = False,
         superuser: bool = False,
-        get_enabled_backends: Optional[EnabledBackendsDependency] = None,
+        get_enabled_backends: Optional[EnabledBackendsDependency[models.UP, models.ID]] = None,
     ):
         """
         Return a dependency callable to retrieve currently authenticated user and token.
@@ -88,7 +88,7 @@ class Authenticator:
         signature = self._get_dependency_signature(get_enabled_backends)
 
         @with_signature(signature)
-        async def current_user_token_dependency(*args, **kwargs):
+        async def current_user_token_dependency(*args: Any, **kwargs: Any):
             return await self._authenticate(
                 *args,
                 optional=optional,
@@ -106,7 +106,7 @@ class Authenticator:
         active: bool = False,
         verified: bool = False,
         superuser: bool = False,
-        get_enabled_backends: Optional[EnabledBackendsDependency] = None,
+        get_enabled_backends: Optional[EnabledBackendsDependency[models.UP, models.ID]] = None,
     ):
         """
         Return a dependency callable to retrieve currently authenticated user.
@@ -132,7 +132,7 @@ class Authenticator:
         signature = self._get_dependency_signature(get_enabled_backends)
 
         @with_signature(signature)
-        async def current_user_dependency(*args, **kwargs):
+        async def current_user_dependency(*args: Any, **kwargs: Any):
             user, _ = await self._authenticate(
                 *args,
                 optional=optional,
@@ -157,7 +157,7 @@ class Authenticator:
     ) -> Tuple[Optional[models.UP], Optional[str]]:
         user: Optional[models.UP] = None
         token: Optional[str] = None
-        enabled_backends: Sequence[AuthenticationBackend] = kwargs.get(
+        enabled_backends: Sequence[AuthenticationBackend[models.UP, models.ID]] = kwargs.get(
             "enabled_backends", self.backends
         )
         for backend in self.backends:

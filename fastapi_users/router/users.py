@@ -12,7 +12,7 @@ def get_users_router(
     get_user_manager: UserManagerDependency[models.UP, models.ID],
     user_schema: Type[schemas.U],
     user_update_schema: Type[schemas.UU],
-    authenticator: Authenticator,
+    authenticator: Authenticator[models.UP, models.ID],
     requires_verification: bool = False,
 ) -> APIRouter:
     """Generate a router with the authentication routes."""
