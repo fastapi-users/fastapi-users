@@ -35,7 +35,7 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
     with a specific set of parameters.
     """
 
-    authenticator: Authenticator
+    authenticator: Authenticator[models.UP, models.ID]
 
     def __init__(
         self,
