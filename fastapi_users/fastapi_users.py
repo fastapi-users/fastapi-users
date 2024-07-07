@@ -41,8 +41,17 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
         self,
         get_user_manager: UserManagerDependency[models.UP, models.ID],
         auth_backends: Sequence[AuthenticationBackend],
+        http_error_no_user: Optional[str] = None,
+        http_error_detail_inactive_user: Optional[str] = None,
+        http_error_detail_unverified_user: Optional[str] = None,
     ):
-        self.authenticator = Authenticator(auth_backends, get_user_manager)
+        self.authenticator = Authenticator(
+            auth_backends,
+            get_user_manager,
+            http_error_no_user,
+            http_error_detail_inactive_user,
+            http_error_detail_unverified_user,
+        )
         self.get_user_manager = get_user_manager
         self.current_user = self.authenticator.current_user
 
