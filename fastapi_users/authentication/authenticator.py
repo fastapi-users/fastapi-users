@@ -1,6 +1,6 @@
 import re
 from inspect import Parameter, Signature
-from typing import Callable, List, Optional, Sequence, Tuple, cast
+from typing import Callable, ClassVar, List, Optional, Sequence, Tuple, cast
 
 from fastapi import Depends, HTTPException, status
 from makefun import with_signature
@@ -48,13 +48,28 @@ class Authenticator:
 
     backends: Sequence[AuthenticationBackend]
 
+    default_no_user: ClassVar[str] = "Unauthorized: No authenticated user"
+    default_detail_inactive_user: ClassVar[str] = "Unauthorized: User is inactive"
+    default_detail_unverified_user: ClassVar[str] = "Forbidden: User is unverified"
+
     def __init__(
         self,
         backends: Sequence[AuthenticationBackend],
         get_user_manager: UserManagerDependency[models.UP, models.ID],
+        http_error_no_user: Optional[str] = None,
+        http_error_detail_inactive_user: Optional[str] = None,
+        http_error_detail_unverified_user: Optional[str] = None,
     ):
         self.backends = backends
         self.get_user_manager = get_user_manager
+
+        self.http_error_no_user = http_error_no_user or self.default_no_user
+        self.http_error_detail_inactive_user = (
+            http_error_detail_inactive_user or self.default_detail_inactive_user
+        )
+        self.http_error_detail_unverified_user = (
+            http_error_detail_unverified_user or self.default_detail_unverified_user
+        )
 
     def current_user_token(
         self,
@@ -171,18 +186,30 @@ class Authenticator:
                     if user:
                         break
 
-        status_code = status.HTTP_401_UNAUTHORIZED
         if user:
-            status_code = status.HTTP_403_FORBIDDEN
             if active and not user.is_active:
-                status_code = status.HTTP_401_UNAUTHORIZED
+                if not optional:
+                    raise HTTPException(
+                        status_code=status.HTTP_401_UNAUTHORIZED,
+                        detail=self.http_error_detail_inactive_user,
+                    )
                 user = None
+
             elif (
                 verified and not user.is_verified or superuser and not user.is_superuser
             ):
+                if not optional:
+                    raise HTTPException(
+                        status_code=status.HTTP_403_FORBIDDEN,
+                        detail=self.http_error_detail_unverified_user,
+                    )
                 user = None
-        if not user and not optional:
-            raise HTTPException(status_code=status_code)
+
+        elif not optional:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail=self.http_error_no_user
+            )
+
         return user, token
 
     def _get_dependency_signature(
