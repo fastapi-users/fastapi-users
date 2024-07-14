@@ -35,12 +35,12 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
     with a specific set of parameters.
     """
 
-    authenticator: Authenticator
+    authenticator: Authenticator[models.UP, models.ID]
 
     def __init__(
         self,
         get_user_manager: UserManagerDependency[models.UP, models.ID],
-        auth_backends: Sequence[AuthenticationBackend],
+        auth_backends: Sequence[AuthenticationBackend[models.UP, models.ID]],
     ):
         self.authenticator = Authenticator(auth_backends, get_user_manager)
         self.get_user_manager = get_user_manager
@@ -72,7 +72,7 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
         return get_reset_password_router(self.get_user_manager)
 
     def get_auth_router(
-        self, backend: AuthenticationBackend, requires_verification: bool = False
+        self, backend: AuthenticationBackend[models.UP, models.ID], requires_verification: bool = False
     ) -> APIRouter:
         """
         Return an auth router for a given authentication backend.
@@ -91,7 +91,7 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
     def get_oauth_router(
         self,
         oauth_client: BaseOAuth2,
-        backend: AuthenticationBackend,
+        backend: AuthenticationBackend[models.UP, models.ID],
         state_secret: SecretType,
         redirect_url: Optional[str] = None,
         associate_by_email: bool = False,

@@ -29,7 +29,7 @@ def generate_state_token(
 
 def get_oauth_router(
     oauth_client: BaseOAuth2,
-    backend: AuthenticationBackend,
+    backend: AuthenticationBackend[models.UP, models.ID],
     get_user_manager: UserManagerDependency[models.UP, models.ID],
     state_secret: SecretType,
     redirect_url: Optional[str] = None,
@@ -156,7 +156,7 @@ def get_oauth_router(
 
 def get_oauth_associate_router(
     oauth_client: BaseOAuth2,
-    authenticator: Authenticator,
+    authenticator: Authenticator[models.UP, models.ID],
     get_user_manager: UserManagerDependency[models.UP, models.ID],
     user_schema: Type[schemas.U],
     state_secret: SecretType,

@@ -11,9 +11,9 @@ from fastapi_users.router.common import ErrorCode, ErrorModel
 
 
 def get_auth_router(
-    backend: AuthenticationBackend,
+    backend: AuthenticationBackend[models.UP, models.ID],
     get_user_manager: UserManagerDependency[models.UP, models.ID],
-    authenticator: Authenticator,
+    authenticator: Authenticator[models.UP, models.ID],
     requires_verification: bool = False,
 ) -> APIRouter:
     """Generate a router with login/logout routes for an authentication backend."""
