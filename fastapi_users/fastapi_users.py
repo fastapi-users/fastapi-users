@@ -72,7 +72,9 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
         return get_reset_password_router(self.get_user_manager)
 
     def get_auth_router(
-        self, backend: AuthenticationBackend[models.UP, models.ID], requires_verification: bool = False
+        self,
+        backend: AuthenticationBackend[models.UP, models.ID],
+        requires_verification: bool = False,
     ) -> APIRouter:
         """
         Return an auth router for a given authentication backend.
