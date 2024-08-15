@@ -33,6 +33,10 @@ class AccessTokenDatabase(Protocol, Generic[models.AP]):
         """Delete all tokens for a given user"""
         ...  # pragma: no cover
 
+    async def get_latest_token_for_user(self, user: models.UP) -> models.AP:
+        """Delete latest token for a user"""
+        ...  # pragma: no cover
+
 
 class RefreshTokenDatabase(Protocol, Generic[models.RTP]):
     """Protocol for retrieving, creating and updating refresh tokens from a database."""

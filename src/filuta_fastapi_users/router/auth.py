@@ -85,10 +85,6 @@ def get_auth_router(
         **backend.transport.get_openapi_logout_responses_success(),
     }
 
-    get_current_user_to_renew_token = authenticator.current_user_token(
-        active=True, verified=requires_verification, authorized=True, ignore_expired=True
-    )
-
     class ValidateRefreshTokenRequestBody(BaseModel):
         refresh_token: str
 
@@ -97,14 +93,11 @@ def get_auth_router(
         name=f"auth:{backend.name}.renew_access_token",
     )
     async def renew_access_token(
-        request: Request,
         jsonBody: ValidateRefreshTokenRequestBody,
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
         strategy: Strategy[models.UP, models.ID, models.AP] = Depends(backend.get_strategy),
         refresh_token_manager: RefreshTokenManager[models.RTP] = Depends(get_refresh_token_manager),
-        user_token: tuple[models.UP, str] = Depends(get_current_user_to_renew_token),
     ) -> JSONResponse:
-        _, token = user_token
         refresh_token = jsonBody.refresh_token
 
         refresh_token_record = await refresh_token_manager.find_refresh_token(
@@ -117,7 +110,8 @@ def get_auth_router(
                 detail=ErrorCode.RENEW_WRONG_REFRESH_TOKEN,
             )
 
-        old_token_record = await strategy.get_token_record_raw(token)
+        user = await user_manager.get(refresh_token_record.user_id)
+        old_token_record = await strategy.get_latest_token_for_user(user)
 
         if old_token_record is None:
             raise HTTPException(
