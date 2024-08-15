@@ -38,3 +38,6 @@ class Strategy(Protocol, Generic[models.UP, models.ID, models.AP]):
 
     def generate_token(self) -> str:
         ...  # pragma: no cover
+
+    async def get_latest_token_for_user(self, user: models.UP) -> models.AP:
+        ...  # pragma: no cover

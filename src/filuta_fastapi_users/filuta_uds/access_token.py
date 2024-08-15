@@ -106,3 +106,12 @@ class SQLAlchemyAccessTokenDatabase(Generic[models.AP], AccessTokenDatabase[mode
             await self.session.delete(token)
 
         await self.session.commit()
+
+    async def get_latest_token_for_user(self, user: models.UP) -> models.AP:
+        results = await self.session.execute(
+            select(self.access_token_table)
+            .where(self.access_token_table.user_id == user.id)
+            .order_by(self.access_token_table.created_at.desc())  # type: ignore
+            .limit(1)
+        )
+        return results.scalar_one_or_none()

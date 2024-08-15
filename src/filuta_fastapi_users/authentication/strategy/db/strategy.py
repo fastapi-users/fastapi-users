@@ -79,3 +79,6 @@ class DatabaseStrategy(Strategy[models.UP, models.ID, models.AP], Generic[models
 
     def generate_token(self) -> str:
         return secrets.token_urlsafe()
+
+    async def get_latest_token_for_user(self, user: models.UP) -> models.AP:
+        return await self.access_token_db.get_latest_token_for_user(user)
