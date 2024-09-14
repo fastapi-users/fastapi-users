@@ -193,6 +193,35 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
         print(f"User {user.id} logged in.")
 ```
 
+#### `on_after_logout`
+
+Perform logic after user logout.
+
+Could be useful for analytics or adding redirect targets when called from html forms.
+
+**Arguments**
+
+* `user` (`User`): the updated user.
+* `request` (`Optional[Request]`): optional FastAPI request object that triggered the operation. Defaults to None.
+* `response` (`Optional[Response]`): Optional response built by the transport. Defaults to None.
+
+**Example**
+
+```py
+from fastapi_users import BaseUserManager, UUIDIDMixin
+
+
+class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
+    # ...
+    async def on_after_logout(
+        self,
+        user: User,
+        request: Optional[Request] = None,
+        response: Optional[Response] = None,
+    ):
+        print(f"User {user.id} logged out.")
+```
+
 #### `on_after_request_verify`
 
 Perform logic after successful verification request.
