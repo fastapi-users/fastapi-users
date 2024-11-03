@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.41">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.43">
     
     
       
@@ -1814,7 +1814,7 @@
 <h3 id="setup-the-database-adapter">Setup the database adapter<a class="headerlink" href="#setup-the-database-adapter" title="Permanent link">&para;</a></h3>
 <h4 id="sqlalchemy">SQLAlchemy<a class="headerlink" href="#sqlalchemy" title="Permanent link">&para;</a></h4>
 <p>You'll need to define the SQLAlchemy model for storing OAuth accounts. We provide a base one for this:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">AsyncGenerator</span><span class="p">,</span> <span class="n">List</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">AsyncGenerator</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">Depends</span>
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="p">(</span>
@@ -1837,7 +1837,7 @@
 </span><a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>
 <a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>
 <a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">SQLAlchemyBaseUserTableUUID</span><span class="p">,</span> <span class="n">Base</span><span class="p">):</span>
-<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="hll">    <span class="n">oauth_accounts</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">OAuthAccount</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="hll">    <span class="n">oauth_accounts</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">OAuthAccount</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
 </span><a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a><span class="hll">        <span class="s2">&quot;OAuthAccount&quot;</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="s2">&quot;joined&quot;</span>
 </span><a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a><span class="hll">    <span class="p">)</span>
 </span><a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a>
@@ -1875,30 +1875,28 @@
 </div>
 <h4 id="beanie">Beanie<a class="headerlink" href="#beanie" title="Permanent link">&para;</a></h4>
 <p>The advantage of MongoDB is that you can easily embed sub-objects in a single document. That's why the configuration for Beanie is quite simple. All we need to do is to define another class to structure an OAuth account object.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="kn">import</span> <span class="nn">motor.motor_asyncio</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="kn">from</span> <span class="nn">beanie</span> <span class="kn">import</span> <span class="n">Document</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="hll"><span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">BaseOAuthAccount</span><span class="p">,</span> <span class="n">BeanieBaseUser</span><span class="p">,</span> <span class="n">BeanieUserDatabase</span>
-</span><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;mongodb://localhost:27017&quot;</span>
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="n">client</span> <span class="o">=</span> <span class="n">motor</span><span class="o">.</span><span class="n">motor_asyncio</span><span class="o">.</span><span class="n">AsyncIOMotorClient</span><span class="p">(</span>
-<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>    <span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">uuidRepresentation</span><span class="o">=</span><span class="s2">&quot;standard&quot;</span>
-<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="p">)</span>
-<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="n">db</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="s2">&quot;database_name&quot;</span><span class="p">]</span>
-<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>
-<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>
-<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="hll"><span class="k">class</span> <span class="nc">OAuthAccount</span><span class="p">(</span><span class="n">BaseOAuthAccount</span><span class="p">):</span>
-</span><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="hll">    <span class="k">pass</span>
-</span><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>
-<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>
-<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">BeanieBaseUser</span><span class="p">,</span> <span class="n">Document</span><span class="p">):</span>
-<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="hll">    <span class="n">oauth_accounts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">OAuthAccount</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
-</span><a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>
-<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>
-<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_db</span><span class="p">():</span>
-<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a>    <span class="k">yield</span> <span class="n">BeanieUserDatabase</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">OAuthAccount</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">import</span> <span class="nn">motor.motor_asyncio</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="kn">from</span> <span class="nn">beanie</span> <span class="kn">import</span> <span class="n">Document</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">BaseOAuthAccount</span><span class="p">,</span> <span class="n">BeanieBaseUser</span><span class="p">,</span> <span class="n">BeanieUserDatabase</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="hll">
+</span><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;mongodb://localhost:27017&quot;</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="n">client</span> <span class="o">=</span> <span class="n">motor</span><span class="o">.</span><span class="n">motor_asyncio</span><span class="o">.</span><span class="n">AsyncIOMotorClient</span><span class="p">(</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>    <span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">uuidRepresentation</span><span class="o">=</span><span class="s2">&quot;standard&quot;</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="p">)</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="n">db</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="s2">&quot;database_name&quot;</span><span class="p">]</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="k">class</span> <span class="nc">OAuthAccount</span><span class="p">(</span><span class="n">BaseOAuthAccount</span><span class="p">):</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>    <span class="k">pass</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="hll">
+</span><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="hll">
+</span><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">BeanieBaseUser</span><span class="p">,</span> <span class="n">Document</span><span class="p">):</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>    <span class="n">oauth_accounts</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">OAuthAccount</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="hll">
+</span><a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_db</span><span class="p">():</span>
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>    <span class="k">yield</span> <span class="n">BeanieUserDatabase</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">OAuthAccount</span><span class="p">)</span>
 </code></pre></div>
 <p>It's worth to note that <code>OAuthAccount</code> is <strong>not a Beanie document</strong> but a Pydantic model that we'll embed inside the <code>User</code> document, through the <code>oauth_accounts</code> array.</p>
 <h3 id="generate-routers">Generate routers<a class="headerlink" href="#generate-routers" title="Permanent link">&para;</a></h3>
@@ -2051,7 +2049,7 @@ Insecure passwords may give attackers full access to your database.</p>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">AsyncGenerator</span><span class="p">,</span> <span class="n">List</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">AsyncGenerator</span>
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
 <a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">Depends</span>
 <a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="p">(</span>
@@ -2074,7 +2072,7 @@ Insecure passwords may give attackers full access to your database.</p>
 <a id="__codelineno-13-21" name="__codelineno-13-21" href="#__codelineno-13-21"></a>
 <a id="__codelineno-13-22" name="__codelineno-13-22" href="#__codelineno-13-22"></a>
 <a id="__codelineno-13-23" name="__codelineno-13-23" href="#__codelineno-13-23"></a><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">SQLAlchemyBaseUserTableUUID</span><span class="p">,</span> <span class="n">Base</span><span class="p">):</span>
-<a id="__codelineno-13-24" name="__codelineno-13-24" href="#__codelineno-13-24"></a>    <span class="n">oauth_accounts</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">OAuthAccount</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
+<a id="__codelineno-13-24" name="__codelineno-13-24" href="#__codelineno-13-24"></a>    <span class="n">oauth_accounts</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">OAuthAccount</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
 <a id="__codelineno-13-25" name="__codelineno-13-25" href="#__codelineno-13-25"></a>        <span class="s2">&quot;OAuthAccount&quot;</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="s2">&quot;joined&quot;</span>
 <a id="__codelineno-13-26" name="__codelineno-13-26" href="#__codelineno-13-26"></a>    <span class="p">)</span>
 <a id="__codelineno-13-27" name="__codelineno-13-27" href="#__codelineno-13-27"></a>
@@ -2265,30 +2263,28 @@ Insecure passwords may give attackers full access to your database.</p>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
-<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>
-<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="kn">import</span> <span class="nn">motor.motor_asyncio</span>
-<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="kn">from</span> <span class="nn">beanie</span> <span class="kn">import</span> <span class="n">Document</span>
-<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">BaseOAuthAccount</span><span class="p">,</span> <span class="n">BeanieBaseUser</span><span class="p">,</span> <span class="n">BeanieUserDatabase</span>
-<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span>
-<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a>
-<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;mongodb://localhost:27017&quot;</span>
-<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="n">client</span> <span class="o">=</span> <span class="n">motor</span><span class="o">.</span><span class="n">motor_asyncio</span><span class="o">.</span><span class="n">AsyncIOMotorClient</span><span class="p">(</span>
-<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a>    <span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">uuidRepresentation</span><span class="o">=</span><span class="s2">&quot;standard&quot;</span>
-<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a><span class="p">)</span>
-<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="n">db</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="s2">&quot;database_name&quot;</span><span class="p">]</span>
-<a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a>
-<a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a>
-<a id="__codelineno-19-15" name="__codelineno-19-15" href="#__codelineno-19-15"></a><span class="k">class</span> <span class="nc">OAuthAccount</span><span class="p">(</span><span class="n">BaseOAuthAccount</span><span class="p">):</span>
-<a id="__codelineno-19-16" name="__codelineno-19-16" href="#__codelineno-19-16"></a>    <span class="k">pass</span>
-<a id="__codelineno-19-17" name="__codelineno-19-17" href="#__codelineno-19-17"></a>
-<a id="__codelineno-19-18" name="__codelineno-19-18" href="#__codelineno-19-18"></a>
-<a id="__codelineno-19-19" name="__codelineno-19-19" href="#__codelineno-19-19"></a><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">BeanieBaseUser</span><span class="p">,</span> <span class="n">Document</span><span class="p">):</span>
-<a id="__codelineno-19-20" name="__codelineno-19-20" href="#__codelineno-19-20"></a>    <span class="n">oauth_accounts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">OAuthAccount</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
-<a id="__codelineno-19-21" name="__codelineno-19-21" href="#__codelineno-19-21"></a>
-<a id="__codelineno-19-22" name="__codelineno-19-22" href="#__codelineno-19-22"></a>
-<a id="__codelineno-19-23" name="__codelineno-19-23" href="#__codelineno-19-23"></a><span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_db</span><span class="p">():</span>
-<a id="__codelineno-19-24" name="__codelineno-19-24" href="#__codelineno-19-24"></a>    <span class="k">yield</span> <span class="n">BeanieUserDatabase</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">OAuthAccount</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kn">import</span> <span class="nn">motor.motor_asyncio</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="kn">from</span> <span class="nn">beanie</span> <span class="kn">import</span> <span class="n">Document</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="kn">from</span> <span class="nn">fastapi_users.db</span> <span class="kn">import</span> <span class="n">BaseOAuthAccount</span><span class="p">,</span> <span class="n">BeanieBaseUser</span><span class="p">,</span> <span class="n">BeanieUserDatabase</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;mongodb://localhost:27017&quot;</span>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="n">client</span> <span class="o">=</span> <span class="n">motor</span><span class="o">.</span><span class="n">motor_asyncio</span><span class="o">.</span><span class="n">AsyncIOMotorClient</span><span class="p">(</span>
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>    <span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">uuidRepresentation</span><span class="o">=</span><span class="s2">&quot;standard&quot;</span>
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="p">)</span>
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="n">db</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="s2">&quot;database_name&quot;</span><span class="p">]</span>
+<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a>
+<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a>
+<a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a><span class="k">class</span> <span class="nc">OAuthAccount</span><span class="p">(</span><span class="n">BaseOAuthAccount</span><span class="p">):</span>
+<a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a>    <span class="k">pass</span>
+<a id="__codelineno-19-15" name="__codelineno-19-15" href="#__codelineno-19-15"></a>
+<a id="__codelineno-19-16" name="__codelineno-19-16" href="#__codelineno-19-16"></a>
+<a id="__codelineno-19-17" name="__codelineno-19-17" href="#__codelineno-19-17"></a><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">BeanieBaseUser</span><span class="p">,</span> <span class="n">Document</span><span class="p">):</span>
+<a id="__codelineno-19-18" name="__codelineno-19-18" href="#__codelineno-19-18"></a>    <span class="n">oauth_accounts</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">OAuthAccount</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+<a id="__codelineno-19-19" name="__codelineno-19-19" href="#__codelineno-19-19"></a>
+<a id="__codelineno-19-20" name="__codelineno-19-20" href="#__codelineno-19-20"></a>
+<a id="__codelineno-19-21" name="__codelineno-19-21" href="#__codelineno-19-21"></a><span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_db</span><span class="p">():</span>
+<a id="__codelineno-19-22" name="__codelineno-19-22" href="#__codelineno-19-22"></a>    <span class="k">yield</span> <span class="n">BeanieUserDatabase</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">OAuthAccount</span><span class="p">)</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
