@@ -1,5 +1,3 @@
-from typing import Type
-
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 
 from fastapi_users import exceptions, models, schemas
@@ -9,8 +7,8 @@ from fastapi_users.router.common import ErrorCode, ErrorModel
 
 def get_register_router(
     get_user_manager: UserManagerDependency[models.UP, models.ID],
-    user_schema: Type[schemas.U],
-    user_create_schema: Type[schemas.UC],
+    user_schema: type[schemas.U],
+    user_create_schema: type[schemas.UC],
 ) -> APIRouter:
     """Generate a router with the register route."""
     router = APIRouter()

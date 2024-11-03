@@ -1,4 +1,5 @@
-from typing import Any, AsyncGenerator, Dict, cast
+from collections.abc import AsyncGenerator
+from typing import Any, cast
 
 import httpx
 import pytest
@@ -106,7 +107,7 @@ class TestResetPassword:
         json = {"token": "foo", "password": "guinevere"}
         response = await test_app_client.post("/reset-password", json=json)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
-        data = cast(Dict[str, Any], response.json())
+        data = cast(dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.RESET_PASSWORD_BAD_TOKEN
 
     async def test_inactive_user(
@@ -118,7 +119,7 @@ class TestResetPassword:
         json = {"token": "foo", "password": "guinevere"}
         response = await test_app_client.post("/reset-password", json=json)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
-        data = cast(Dict[str, Any], response.json())
+        data = cast(dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.RESET_PASSWORD_BAD_TOKEN
 
     async def test_invalid_password(
@@ -132,7 +133,7 @@ class TestResetPassword:
         json = {"token": "foo", "password": "guinevere"}
         response = await test_app_client.post("/reset-password", json=json)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
-        data = cast(Dict[str, Any], response.json())
+        data = cast(dict[str, Any], response.json())
         assert data["detail"] == {
             "code": ErrorCode.RESET_PASSWORD_INVALID_PASSWORD,
             "reason": "Invalid",

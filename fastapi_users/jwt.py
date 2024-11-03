@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta, timezone
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Optional, Union
 
 import jwt
 from pydantic import SecretStr
@@ -30,9 +30,9 @@ def generate_jwt(
 def decode_jwt(
     encoded_jwt: str,
     secret: SecretType,
-    audience: List[str],
-    algorithms: List[str] = [JWT_ALGORITHM],
-) -> Dict[str, Any]:
+    audience: list[str],
+    algorithms: list[str] = [JWT_ALGORITHM],
+) -> dict[str, Any]:
     return jwt.decode(
         encoded_jwt,
         _get_secret_value(secret),

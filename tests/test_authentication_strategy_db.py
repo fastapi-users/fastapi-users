@@ -1,7 +1,7 @@
 import dataclasses
 import uuid
 from datetime import datetime, timezone
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 import pytest
 
@@ -24,7 +24,7 @@ class AccessTokenModel(AccessTokenProtocol[IDType]):
 
 
 class AccessTokenDatabaseMock(AccessTokenDatabase[AccessTokenModel]):
-    store: Dict[str, AccessTokenModel]
+    store: dict[str, AccessTokenModel]
 
     def __init__(self):
         self.store = {}
@@ -41,13 +41,13 @@ class AccessTokenDatabaseMock(AccessTokenDatabase[AccessTokenModel]):
         else:
             return access_token
 
-    async def create(self, create_dict: Dict[str, Any]) -> AccessTokenModel:
+    async def create(self, create_dict: dict[str, Any]) -> AccessTokenModel:
         access_token = AccessTokenModel(**create_dict)
         self.store[access_token.token] = access_token
         return access_token
 
     async def update(
-        self, access_token: AccessTokenModel, update_dict: Dict[str, Any]
+        self, access_token: AccessTokenModel, update_dict: dict[str, Any]
     ) -> AccessTokenModel:
         for field, value in update_dict.items():
             setattr(access_token, field, value)

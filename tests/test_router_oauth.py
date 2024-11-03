@@ -1,4 +1,4 @@
-from typing import Any, Dict, cast
+from typing import Any, cast
 
 import httpx
 import pytest
@@ -184,7 +184,7 @@ class TestCallback:
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
-        data = cast(Dict[str, Any], response.json())
+        data = cast(dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.OAUTH_USER_ALREADY_EXISTS
 
         assert user_manager_oauth.on_after_login.called is False
@@ -214,7 +214,7 @@ class TestCallback:
 
         assert response.status_code == status.HTTP_200_OK
 
-        data = cast(Dict[str, Any], response.json())
+        data = cast(dict[str, Any], response.json())
         assert data["access_token"] == str(user_oauth.id)
 
         assert user_manager_oauth.on_after_login.called is True
@@ -278,7 +278,7 @@ class TestCallback:
             "CODE", "http://www.tintagel.bt/callback", None
         )
 
-        data = cast(Dict[str, Any], response.json())
+        data = cast(dict[str, Any], response.json())
         assert data["access_token"] == str(user_oauth.id)
         assert user_manager_oauth.on_after_login.called is True
 
@@ -486,7 +486,7 @@ class TestAssociateCallback:
 
         assert response.status_code == status.HTTP_200_OK
 
-        data = cast(Dict[str, Any], response.json())
+        data = cast(dict[str, Any], response.json())
         assert data["id"] == str(user_oauth.id)
 
     async def test_redirect_url_router(
@@ -521,7 +521,7 @@ class TestAssociateCallback:
             "CODE", "http://www.tintagel.bt/callback", None
         )
 
-        data = cast(Dict[str, Any], response.json())
+        data = cast(dict[str, Any], response.json())
         assert data["id"] == str(user_oauth.id)
 
     async def test_not_available_email(

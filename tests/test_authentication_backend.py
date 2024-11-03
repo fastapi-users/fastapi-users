@@ -1,4 +1,4 @@
-from typing import Callable, Generic, Optional, Type, cast
+from typing import Callable, Generic, Optional, cast
 
 import pytest
 from fastapi import Response
@@ -34,13 +34,13 @@ class MockStrategyDestroyNotSupported(Strategy, Generic[models.UP]):
 
 @pytest.fixture(params=[MockTransport, MockTransportLogoutNotSupported])
 def transport(request) -> Transport:
-    transport_class: Type[BearerTransport] = request.param
+    transport_class: type[BearerTransport] = request.param
     return transport_class(tokenUrl="/login")
 
 
 @pytest.fixture(params=[MockStrategy, MockStrategyDestroyNotSupported])
 def get_strategy(request) -> Callable[..., Strategy]:
-    strategy_class: Type[Strategy] = request.param
+    strategy_class: type[Strategy] = request.param
     return lambda: strategy_class()
 
 

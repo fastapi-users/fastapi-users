@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, Dict, Generic, Optional, Protocol
+from typing import Any, Generic, Optional, Protocol
 
 from fastapi_users.authentication.strategy.db.models import AP
 
@@ -13,11 +13,11 @@ class AccessTokenDatabase(Protocol, Generic[AP]):
         """Get a single access token by token."""
         ...  # pragma: no cover
 
-    async def create(self, create_dict: Dict[str, Any]) -> AP:
+    async def create(self, create_dict: dict[str, Any]) -> AP:
         """Create an access token."""
         ...  # pragma: no cover
 
-    async def update(self, access_token: AP, update_dict: Dict[str, Any]) -> AP:
+    async def update(self, access_token: AP, update_dict: dict[str, Any]) -> AP:
         """Update an access token."""
         ...  # pragma: no cover
 

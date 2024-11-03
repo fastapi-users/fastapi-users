@@ -1,5 +1,3 @@
-from typing import List
-
 import motor.motor_asyncio
 from beanie import Document
 from fastapi_users.db import BaseOAuthAccount, BeanieBaseUser, BeanieUserDatabase
@@ -17,7 +15,7 @@ class OAuthAccount(BaseOAuthAccount):
 
 
 class User(BeanieBaseUser, Document):
-    oauth_accounts: List[OAuthAccount] = Field(default_factory=list)
+    oauth_accounts: list[OAuthAccount] = Field(default_factory=list)
 
 
 async def get_user_db():

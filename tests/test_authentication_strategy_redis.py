@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Dict, Optional, Tuple
+from typing import Optional
 
 import pytest
 
@@ -8,7 +8,7 @@ from tests.conftest import IDType, UserModel
 
 
 class RedisMock:
-    store: Dict[str, Tuple[str, Optional[int]]]
+    store: dict[str, tuple[str, Optional[int]]]
 
     def __init__(self):
         self.store = {}

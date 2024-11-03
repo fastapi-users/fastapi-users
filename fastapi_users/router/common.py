@@ -1,11 +1,11 @@
 from enum import Enum
-from typing import Dict, Union
+from typing import Union
 
 from pydantic import BaseModel
 
 
 class ErrorModel(BaseModel):
-    detail: Union[str, Dict[str, str]]
+    detail: Union[str, dict[str, str]]
 
 
 class ErrorCodeReasonModel(BaseModel):

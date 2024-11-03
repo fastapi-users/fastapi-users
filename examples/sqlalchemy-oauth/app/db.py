@@ -1,4 +1,4 @@
-from typing import AsyncGenerator, List
+from collections.abc import AsyncGenerator
 
 from fastapi import Depends
 from fastapi_users.db import (
@@ -21,7 +21,7 @@ class OAuthAccount(SQLAlchemyBaseOAuthAccountTableUUID, Base):
 
 
 class User(SQLAlchemyBaseUserTableUUID, Base):
-    oauth_accounts: Mapped[List[OAuthAccount]] = relationship(
+    oauth_accounts: Mapped[list[OAuthAccount]] = relationship(
         "OAuthAccount", lazy="joined"
     )
 

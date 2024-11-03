@@ -32,7 +32,7 @@ markers = [
 ]
 
 [tool.ruff]
-target-version = "py38"
+target-version = "py39"
 
 [tool.ruff.lint]
 extend-select = ["UP", "TRY"]
@@ -132,7 +132,6 @@ classifiers = [
     "Framework :: FastAPI",
     "Framework :: AsyncIO",
     "Intended Audience :: Developers",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -140,7 +139,7 @@ classifiers = [
     "Programming Language :: Python :: 3 :: Only",
     "Topic :: Internet :: WWW/HTTP :: Session",
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 dependencies = [
     "fastapi >=0.65.2",
     "pwdlib[argon2,bcrypt] ==0.2.0",

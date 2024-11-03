@@ -1,5 +1,3 @@
-from typing import Tuple
-
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordRequestForm
 
@@ -83,7 +81,7 @@ def get_auth_router(
         "/logout", name=f"auth:{backend.name}.logout", responses=logout_responses
     )
     async def logout(
-        user_token: Tuple[models.UP, str] = Depends(get_current_user_token),
+        user_token: tuple[models.UP, str] = Depends(get_current_user_token),
         strategy: Strategy[models.UP, models.ID] = Depends(backend.get_strategy),
     ):
         user, token = user_token
