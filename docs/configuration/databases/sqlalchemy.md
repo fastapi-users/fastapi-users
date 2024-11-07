@@ -11,8 +11,8 @@ To work with your DBMS, you'll need to install the corresponding asyncio driver.
 
 Examples of `DB_URL`s are:
 
-* PostgreSQL: `engine = create_engine('postgresql+asyncpg://user:password@host:port/name')`
-* SQLite: `engine = create_engine('sqlite+aiosqlite:///name.db')`
+* PostgreSQL: `postgresql+asyncpg://user:password@host:port/name`
+* SQLite: `sqlite+aiosqlite:///name.db`
 
 For the sake of this tutorial from now on, we'll use a simple SQLite database.
 
