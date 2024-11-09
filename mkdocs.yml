@@ -28,7 +28,7 @@ theme:
     - search.highlight
     - content.code.annotate
 
-repo_name: frankie567/fastapi-users
+repo_name: fastapi-users/fastapi-users
 repo_url: https://github.com/fastapi-users/fastapi-users
 edit_uri: ""
 
