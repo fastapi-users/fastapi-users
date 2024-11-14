@@ -1,4 +1,5 @@
-from typing import AsyncGenerator, Generic, List, Optional, Sequence
+from collections.abc import AsyncGenerator, Sequence
+from typing import Generic, Optional
 
 import httpx
 import pytest
@@ -70,7 +71,7 @@ def get_backend_user(user: UserModel):
 @pytest_asyncio.fixture
 def get_test_auth_client(get_user_manager, get_test_client):
     async def _get_test_auth_client(
-        backends: List[AuthenticationBackend],
+        backends: list[AuthenticationBackend],
         get_enabled_backends: Optional[
             DependencyCallable[Sequence[AuthenticationBackend]]
         ] = None,

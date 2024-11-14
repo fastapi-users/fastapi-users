@@ -1,4 +1,4 @@
-from typing import Generic, List, Optional, Protocol, TypeVar
+from typing import Generic, Optional, Protocol, TypeVar
 
 ID = TypeVar("ID")
 
@@ -39,7 +39,7 @@ class UserOAuthProtocol(UserProtocol[ID], Generic[ID, OAP]):
     is_active: bool
     is_superuser: bool
     is_verified: bool
-    oauth_accounts: List[OAP]
+    oauth_accounts: list[OAP]
 
 
 UOAP = TypeVar("UOAP", bound=UserOAuthProtocol)

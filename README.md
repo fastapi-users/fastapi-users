@@ -13,7 +13,7 @@
 [![PyPI version](https://badge.fury.io/py/fastapi-users.svg)](https://badge.fury.io/py/fastapi-users)
 [![Downloads](https://pepy.tech/badge/fastapi-users)](https://pepy.tech/project/fastapi-users)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-80-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-81-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <p align="center">
@@ -53,14 +53,13 @@ Add quickly a registration and authentication system to your [FastAPI](https://f
 ## In a hurry? Discover Fief, the open-source authentication platform
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/fief-dev/.github/main/logos/logo-full-red.svg?sanitize=true" alt="Fief" width="256" style="width: 256px">
+  <img src="https://raw.githubusercontent.com/fief-dev/.github/main/logos/logo-full-red.svg?sanitize=true" alt="Fief" width="256">
 </p>
 
-<img src="https://www.fief.dev/illustrations/guard-right.svg" alt="Fief" height="300" align="right" style="height: 300px">
+<img src="https://www.fief.dev/illustrations/guard-right.svg" alt="Fief" height="300" align="right">
 
 **Implementing registration, login, social auth is hard and painful. We know it. With our highly secure and open-source users management platform, you can focus on your app while staying in control of your users data.**
 
-* Based on **FastAPI Users**!
 * **Open-source**: self-host it for free
 * **Pre-built login and registration pages**: clean and fast authentication so you don't have to do it yourself
 * **Official Python client** with built-in **FastAPI integration**
@@ -68,9 +67,9 @@ Add quickly a registration and authentication system to your [FastAPI](https://f
 <br clear="right"/>
 
 <p align="center">
-    <a href="https://www.fief.dev"><img src="https://md-buttons.francoisvoron.com/button.svg?text=Join%20the%20beta&bg=f43f5e&w=150&px=30" /></a>
+    <a href="https://www.fief.dev"><img src="https://md-buttons.francoisvoron.com/button.svg?text=Get%20started&bg=f43f5e&w=150&px=30" /></a>
 </p>
-<p align="center">It's free!</p>
+<p align="center">It's free and open-source</p>
 
 ## Contributors and sponsors ✨☕️
 
@@ -184,6 +183,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/raindata5"><img src="https://avatars.githubusercontent.com/u/87434335?v=4?s=100" width="100px;" alt="raindata5"/><br /><sub><b>raindata5</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=raindata5" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/mdonnellyli"><img src="https://avatars.githubusercontent.com/u/1457654?v=4?s=100" width="100px;" alt="Mark Donnelly"/><br /><sub><b>Mark Donnelly</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=mdonnellyli" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/sashkent3"><img src="https://avatars.githubusercontent.com/u/33320473?v=4?s=100" width="100px;" alt="Alexander Zinov"/><br /><sub><b>Alexander Zinov</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=sashkent3" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/nimaxin"><img src="https://avatars.githubusercontent.com/u/97331299?v=4?s=100" width="100px;" alt="nimaxin"/><br /><sub><b>nimaxin</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=nimaxin" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>

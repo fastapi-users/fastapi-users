@@ -1,6 +1,6 @@
 # Database
 
-The most natural way for storing tokens is of course the very same database you're using for your application. In this strategy, we set up a table (or collection) for storing those tokens with the associated user id. On each request, we try to retrive this token from the database to get the corresponding user id.
+The most natural way for storing tokens is of course the very same database you're using for your application. In this strategy, we set up a table (or collection) for storing those tokens with the associated user id. On each request, we try to retrieve this token from the database to get the corresponding user id.
 
 ## Configuration
 

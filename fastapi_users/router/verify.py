@@ -1,5 +1,3 @@
-from typing import Type
-
 from fastapi import APIRouter, Body, Depends, HTTPException, Request, status
 from pydantic import EmailStr
 
@@ -10,7 +8,7 @@ from fastapi_users.router.common import ErrorCode, ErrorModel
 
 def get_verify_router(
     get_user_manager: UserManagerDependency[models.UP, models.ID],
-    user_schema: Type[schemas.U],
+    user_schema: type[schemas.U],
 ):
     router = APIRouter()
 

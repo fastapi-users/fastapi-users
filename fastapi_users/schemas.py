@@ -1,4 +1,4 @@
-from typing import Any, Dict, Generic, List, Optional, Type, TypeVar
+from typing import Any, Generic, Optional, TypeVar
 
 from pydantic import BaseModel, ConfigDict, EmailStr
 from pydantic.version import VERSION as PYDANTIC_VERSION
@@ -11,18 +11,18 @@ SCHEMA = TypeVar("SCHEMA", bound=BaseModel)
 
 if PYDANTIC_V2:  # pragma: no cover
 
-    def model_dump(model: BaseModel, *args, **kwargs) -> Dict[str, Any]:
+    def model_dump(model: BaseModel, *args, **kwargs) -> dict[str, Any]:
         return model.model_dump(*args, **kwargs)  # type: ignore
 
-    def model_validate(schema: Type[SCHEMA], obj: Any, *args, **kwargs) -> SCHEMA:
+    def model_validate(schema: type[SCHEMA], obj: Any, *args, **kwargs) -> SCHEMA:
         return schema.model_validate(obj, *args, **kwargs)  # type: ignore
 
 else:  # pragma: no cover  # type: ignore
 
-    def model_dump(model: BaseModel, *args, **kwargs) -> Dict[str, Any]:
+    def model_dump(model: BaseModel, *args, **kwargs) -> dict[str, Any]:
         return model.dict(*args, **kwargs)  # type: ignore
 
-    def model_validate(schema: Type[SCHEMA], obj: Any, *args, **kwargs) -> SCHEMA:
+    def model_validate(schema: type[SCHEMA], obj: Any, *args, **kwargs) -> SCHEMA:
         return schema.from_orm(obj)  # type: ignore
 
 
@@ -104,4 +104,4 @@ class BaseOAuthAccount(BaseModel, Generic[models.ID]):
 class BaseOAuthAccountMixin(BaseModel):
     """Adds OAuth accounts list to a User model."""
 
-    oauth_accounts: List[BaseOAuthAccount] = []
+    oauth_accounts: list[BaseOAuthAccount] = []

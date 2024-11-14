@@ -1,4 +1,5 @@
-from typing import Any, AsyncGenerator, Dict, cast
+from collections.abc import AsyncGenerator
+from typing import Any, cast
 
 import httpx
 import pytest
@@ -136,7 +137,7 @@ class TestVerify:
         response = await test_app_client.post("/verify", json={"token": "foo"})
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
-        data = cast(Dict[str, Any], response.json())
+        data = cast(dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.VERIFY_USER_BAD_TOKEN
 
     async def test_user_not_exists(
@@ -148,7 +149,7 @@ class TestVerify:
         response = await test_app_client.post("/verify", json={"token": "foo"})
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
-        data = cast(Dict[str, Any], response.json())
+        data = cast(dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.VERIFY_USER_BAD_TOKEN
 
     async def test_user_already_verified(
@@ -160,7 +161,7 @@ class TestVerify:
         response = await test_app_client.post("/verify", json={"token": "foo"})
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
-        data = cast(Dict[str, Any], response.json())
+        data = cast(dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.VERIFY_USER_ALREADY_VERIFIED
 
     async def test_success(
@@ -174,7 +175,7 @@ class TestVerify:
         response = await test_app_client.post("/verify", json={"token": "foo"})
 
         assert response.status_code == status.HTTP_200_OK
-        data = cast(Dict[str, Any], response.json())
+        data = cast(dict[str, Any], response.json())
         assert data["id"] == str(user.id)
 
     async def test_verify_namespace(

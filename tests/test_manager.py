@@ -139,7 +139,7 @@ class TestCreateUser:
     ):
         user = UserCreate(email=email, password="guinevere")
         created_user = await user_manager.create(user)
-        assert type(created_user) == UserModel
+        assert isinstance(created_user, UserModel)
 
         assert user_manager.on_after_register.called is True
 
@@ -151,7 +151,7 @@ class TestCreateUser:
             email="lancelot@camelot.b", password="guinevere", is_superuser=True
         )
         created_user = await user_manager.create(user, safe)
-        assert type(created_user) == UserModel
+        assert isinstance(created_user, UserModel)
         assert created_user.is_superuser is result
 
         assert user_manager.on_after_register.called is True
@@ -164,7 +164,7 @@ class TestCreateUser:
             email="lancelot@camelot.b", password="guinevere", is_active=False
         )
         created_user = await user_manager.create(user, safe)
-        assert type(created_user) == UserModel
+        assert isinstance(created_user, UserModel)
         assert created_user.is_active is result
 
         assert user_manager.on_after_register.called is True

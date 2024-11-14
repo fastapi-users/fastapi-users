@@ -1,12 +1,5 @@
-from typing import (
-    AsyncGenerator,
-    AsyncIterator,
-    Callable,
-    Coroutine,
-    Generator,
-    TypeVar,
-    Union,
-)
+from collections.abc import AsyncGenerator, AsyncIterator, Coroutine, Generator
+from typing import Callable, TypeVar, Union
 
 RETURN_TYPE = TypeVar("RETURN_TYPE")
 

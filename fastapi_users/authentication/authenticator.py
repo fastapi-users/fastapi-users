@@ -1,6 +1,7 @@
 import re
+from collections.abc import Sequence
 from inspect import Parameter, Signature
-from typing import Any, Callable, Generic, List, Optional, Sequence, Tuple, cast
+from typing import Any, Callable, Generic, Optional, cast
 
 from fastapi import Depends, HTTPException, status
 from makefun import with_signature
@@ -160,7 +161,7 @@ class Authenticator(Generic[models.UP, models.ID]):
         verified: bool = False,
         superuser: bool = False,
         **kwargs,
-    ) -> Tuple[Optional[models.UP], Optional[str]]:
+    ) -> tuple[Optional[models.UP], Optional[str]]:
         user: Optional[models.UP] = None
         token: Optional[str] = None
         enabled_backends: Sequence[AuthenticationBackend[models.UP, models.ID]] = (
@@ -203,7 +204,7 @@ class Authenticator(Generic[models.UP, models.ID]):
         This way, each security schemes are detected by the OpenAPI generator.
         """
         try:
-            parameters: List[Parameter] = [
+            parameters: list[Parameter] = [
                 Parameter(
                     name="user_manager",
                     kind=Parameter.POSITIONAL_OR_KEYWORD,

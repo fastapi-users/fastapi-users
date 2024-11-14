@@ -1,5 +1,5 @@
 import uuid
-from typing import Any, Dict, Generic, Optional, Union
+from typing import Any, Generic, Optional, Union
 
 import jwt
 from fastapi import Request, Response
@@ -514,7 +514,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
     async def on_after_update(
         self,
         user: models.UP,
-        update_dict: Dict[str, Any],
+        update_dict: dict[str, Any],
         request: Optional[Request] = None,
     ) -> None:
         """
@@ -680,7 +680,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
 
         return user
 
-    async def _update(self, user: models.UP, update_dict: Dict[str, Any]) -> models.UP:
+    async def _update(self, user: models.UP, update_dict: dict[str, Any]) -> models.UP:
         validated_update_dict = {}
         for field, value in update_dict.items():
             if field == "email" and value != user.email:

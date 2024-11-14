@@ -1,6 +1,6 @@
 import secrets
 from datetime import datetime, timedelta, timezone
-from typing import Any, Dict, Generic, Optional
+from typing import Any, Generic, Optional
 
 from fastapi_users import exceptions, models
 from fastapi_users.authentication.strategy.base import Strategy
@@ -50,6 +50,6 @@ class DatabaseStrategy(
         if access_token is not None:
             await self.database.delete(access_token)
 
-    def _create_access_token_dict(self, user: models.UP) -> Dict[str, Any]:
+    def _create_access_token_dict(self, user: models.UP) -> dict[str, Any]:
         token = secrets.token_urlsafe()
         return {"token": token, "user_id": user.id}
