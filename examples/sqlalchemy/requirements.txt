@@ -2,3 +2,6 @@ fastapi
 fastapi-users[sqlalchemy]
 uvicorn[standard]
 aiosqlite
+httpx
+pytest
+pytest-asyncio
