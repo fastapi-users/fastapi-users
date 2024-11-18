@@ -218,6 +218,7 @@ class TestLogout:
         self,
         mocker,
         path,
+        user_manager,
         test_app_client: tuple[httpx.AsyncClient, bool],
         verified_user: UserModel,
     ):
@@ -225,6 +226,10 @@ class TestLogout:
         response = await client.post(
             path, headers={"Authorization": f"Bearer {verified_user.id}"}
         )
+        assert user_manager.on_after_logout.called is True
+        args, kwargs = user_manager.on_after_logout.call_args
+        assert len(args) == 3
+        assert all(x is not None for x in args)
         assert response.status_code == status.HTTP_200_OK
 
 

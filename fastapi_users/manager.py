@@ -605,6 +605,24 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         """
         return  # pragma: no cover
 
+    async def on_after_logout(
+        self,
+        user: models.UP,
+        request: Optional[Request] = None,
+        response: Optional[Response] = None,
+    ) -> None:
+        """
+        Perform logic after user logout.
+
+        *You should overload this method to add your own logic.*
+
+        :param user: The user that logged out
+        :param request: Optional FastAPI request
+        :param response: Optional response built by the transport.
+        Defaults to None
+        """
+        return  # pragma: no cover
+
     async def on_before_delete(
         self, user: models.UP, request: Optional[Request] = None
     ) -> None:
