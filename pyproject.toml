@@ -147,7 +147,7 @@ dependencies = [
     "pwdlib[argon2,bcrypt] ==0.2.1",
     "email-validator >=1.1.0,<2.3",
     "pyjwt[crypto] ==2.9.0",
-    "python-multipart ==0.0.17",
+    "python-multipart ==0.0.18",
     "makefun >=1.11.2,<2.0.0",
 ]
 
