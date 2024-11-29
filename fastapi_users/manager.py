@@ -57,7 +57,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
 
         :param value: The value to parse.
         :raises InvalidID: The models.ID value is invalid.
-        :return: An models.ID object.
+        :return: A models.ID object.
         """
         raise NotImplementedError()  # pragma: no cover
 
@@ -65,9 +65,9 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         """
         Get a user by id.
 
-        :param id: Id. of the user to retrieve.
+        :param id: Id of the user to retrieve.
         :raises UserNotExists: The user does not exist.
-        :return: A user.
+        :return: A user of type models.UP.
         """
         user = await self.user_db.get(id)
 
@@ -82,7 +82,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
 
         :param user_email: E-mail of the user to retrieve.
         :raises UserNotExists: The user does not exist.
-        :return: A user.
+        :return: A user of type models.UP.
         """
         user = await self.user_db.get_by_email(user_email)
 
@@ -96,9 +96,9 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         Get a user by OAuth account.
 
         :param oauth: Name of the OAuth client.
-        :param account_id: Id. of the account on the external OAuth service.
+        :param account_id: Id of the account on the external OAuth service.
         :raises UserNotExists: The user does not exist.
-        :return: A user.
+        :return: A user of type models.UP.
         """
         user = await self.user_db.get_by_oauth_account(oauth, account_id)
 
@@ -124,7 +124,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         :param request: Optional FastAPI request that
         triggered the operation, defaults to None.
         :raises UserAlreadyExists: A user already exists with the same e-mail.
-        :return: A new user.
+        :return: A new user of type models.UP.
         """
         await self.validate_password(user_create.password, user_create)
 
@@ -173,7 +173,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
 
         :param oauth_name: Name of the OAuth client.
         :param access_token: Valid access token for the service provider.
-        :param account_id: models.ID of the user on the service provider.
+        :param account_id: Id of the account on the external OAuth service.
         :param account_email: E-mail of the user on the service provider.
         :param expires_at: Optional timestamp at which the access token expires.
         :param refresh_token: Optional refresh token to get a
@@ -186,7 +186,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         set to `True` on newly created user. Make sure the OAuth Provider you're
         using does verify the email address before enabling this flag.
         Defaults to False.
-        :return: A user.
+        :return: A user of type models.UOAP.
         """
         oauth_account_dict = {
             "oauth_name": oauth_name,
@@ -248,14 +248,13 @@ class BaseUserManager(Generic[models.UP, models.ID]):
 
         :param oauth_name: Name of the OAuth client.
         :param access_token: Valid access token for the service provider.
-        :param account_id: models.ID of the user on the service provider.
-        :param account_email: E-mail of the user on the service provider.
+:       :param account_id: Id of the account on the external OAuth service.        :param account_email: E-mail of the user on the service provider.
         :param expires_at: Optional timestamp at which the access token expires.
         :param refresh_token: Optional refresh token to get a
         fresh access token from the service provider.
         :param request: Optional FastAPI request that
         triggered the operation, defaults to None
-        :return: A user.
+        :return: A user of type models.UOAP.
         """
         oauth_account_dict = {
             "oauth_name": oauth_name,
@@ -316,7 +315,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         triggered the operation, defaults to None.
         :raises InvalidVerifyToken: The token is invalid or expired.
         :raises UserAlreadyVerified: The user is already verified.
-        :return: The verified user.
+        :return: A verified user of type models.UP.
         """
         try:
             data = decode_jwt(
@@ -398,7 +397,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         :raises InvalidResetPasswordToken: The token is invalid or expired.
         :raises UserInactive: The user is inactive.
         :raises InvalidPasswordException: The password is invalid.
-        :return: The user with updated password.
+        :return: The user of type models.UP with updated password.
         """
         try:
             data = decode_jwt(
@@ -456,7 +455,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         will be ignored during the update, defaults to False
         :param request: Optional FastAPI request that
         triggered the operation, defaults to None.
-        :return: The updated user.
+        :return: The updated user of type models.UP.
         """
         if safe:
             updated_user_data = user_update.create_update_dict()
@@ -642,6 +641,8 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         Will automatically upgrade password hash if necessary.
 
         :param credentials: The user credentials.
+        :return: The authenticated user of type models.UP if credentials are valid,
+        otherwise None.
         """
         try:
             user = await self.get_by_email(credentials.username)
@@ -683,6 +684,10 @@ class BaseUserManager(Generic[models.UP, models.ID]):
 
 
 class UUIDIDMixin:
+    """
+    Mixin for parsing and validating Id of type UUID.
+    """
+
     def parse_id(self, value: Any) -> uuid.UUID:
         if isinstance(value, uuid.UUID):
             return value
@@ -693,6 +698,10 @@ class UUIDIDMixin:
 
 
 class IntegerIDMixin:
+    """
+    Mixin for parsing and validating Id of type Integer.
+    """
+
     def parse_id(self, value: Any) -> int:
         if isinstance(value, float):
             raise exceptions.InvalidID()
