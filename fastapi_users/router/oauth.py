@@ -90,6 +90,14 @@ def get_oauth_router(
                                 "summary": "User is inactive.",
                                 "value": {"detail": ErrorCode.LOGIN_BAD_CREDENTIALS},
                             },
+                            ErrorCode.ACCESS_TOKEN_DECODE_ERROR: {
+                                "summary": "Access token is error.",
+                                "value": {"detail": ErrorCode.ACCESS_TOKEN_DECODE_ERROR},
+                            },
+                            ErrorCode.ACCESS_TOKEN_ALREADY_EXPIRED: {
+                                "summary": "Access token is already expired.",
+                                "value": {"detail": ErrorCode.ACCESS_TOKEN_ALREADY_EXPIRED},
+                            },
                         }
                     }
                 },
@@ -118,7 +126,15 @@ def get_oauth_router(
         try:
             decode_jwt(state, state_secret, [STATE_TOKEN_AUDIENCE])
         except jwt.DecodeError:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=ErrorCode.ACCESS_TOKEN_DECODE_ERROR,
+            )
+        except jwt.ExpiredSignatureError:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=ErrorCode.ACCESS_TOKEN_ALREADY_EXPIRED,
+            )
 
         try:
             user = await user_manager.oauth_callback(
@@ -221,6 +237,14 @@ def get_oauth_associate_router(
                                 "summary": "Invalid state token.",
                                 "value": None,
                             },
+                            ErrorCode.ACCESS_TOKEN_DECODE_ERROR: {
+                                "summary": "Access token is error.",
+                                "value": {"detail": ErrorCode.ACCESS_TOKEN_DECODE_ERROR},
+                            },
+                            ErrorCode.ACCESS_TOKEN_ALREADY_EXPIRED: {
+                                "summary": "Access token is already expired.",
+                                "value": {"detail": ErrorCode.ACCESS_TOKEN_ALREADY_EXPIRED},
+                            },
                         }
                     }
                 },
@@ -249,7 +273,15 @@ def get_oauth_associate_router(
         try:
             state_data = decode_jwt(state, state_secret, [STATE_TOKEN_AUDIENCE])
         except jwt.DecodeError:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=ErrorCode.ACCESS_TOKEN_DECODE_ERROR,
+            )
+        except jwt.ExpiredSignatureError:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=ErrorCode.ACCESS_TOKEN_ALREADY_EXPIRED,
+            )
 
         if state_data["sub"] != str(user.id):
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
