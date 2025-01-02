@@ -309,7 +309,6 @@ class TestCallback:
         json = response.json()
         assert json["detail"] == ErrorCode.OAUTH_NOT_AVAILABLE_EMAIL
 
-
     async def test_callback_token_expired(
         self,
         async_method_mocker: AsyncMethodMocker,
@@ -360,6 +359,7 @@ class TestCallback:
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert user_manager_oauth.on_after_login.called is False
+
 
 @pytest.mark.router
 @pytest.mark.oauth
@@ -602,7 +602,7 @@ class TestAssociateCallback:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         json = response.json()
         assert json["detail"] == ErrorCode.OAUTH_NOT_AVAILABLE_EMAIL
-    
+
     async def test_callback_token_expired(
         self,
         async_method_mocker: AsyncMethodMocker,
@@ -612,10 +612,10 @@ class TestAssociateCallback:
         user_manager_oauth: UserManagerMock,
         access_token: str,
     ):
-        state_jwt = generate_state_token({"sub": str(user_oauth.id)}, "SECRET", lifetime_seconds=-1)
-        async_method_mocker(
-            oauth_client, "get_access_token", return_value=access_token
+        state_jwt = generate_state_token(
+            {"sub": str(user_oauth.id)}, "SECRET", lifetime_seconds=-1
         )
+        async_method_mocker(oauth_client, "get_access_token", return_value=access_token)
         async_method_mocker(
             oauth_client, "get_id_email", return_value=("user_oauth1", user_oauth.email)
         )
@@ -643,9 +643,7 @@ class TestAssociateCallback:
         access_token: str,
     ):
         state_jwt = generate_state_token({"sub": str(user_oauth.id)}, "RANDOM")
-        async_method_mocker(
-            oauth_client, "get_access_token", return_value=access_token
-        )
+        async_method_mocker(oauth_client, "get_access_token", return_value=access_token)
         async_method_mocker(
             oauth_client, "get_id_email", return_value=("user_oauth1", user_oauth.email)
         )
@@ -662,6 +660,7 @@ class TestAssociateCallback:
         assert data["detail"] == ErrorCode.ACCESS_TOKEN_DECODE_ERROR
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
+
 
 @pytest.mark.asyncio
 @pytest.mark.oauth

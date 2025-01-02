@@ -94,11 +94,15 @@ def get_oauth_router(
                             },
                             ErrorCode.ACCESS_TOKEN_DECODE_ERROR: {
                                 "summary": "Access token is error.",
-                                "value": {"detail": ErrorCode.ACCESS_TOKEN_DECODE_ERROR},
+                                "value": {
+                                    "detail": ErrorCode.ACCESS_TOKEN_DECODE_ERROR
+                                },
                             },
                             ErrorCode.ACCESS_TOKEN_ALREADY_EXPIRED: {
                                 "summary": "Access token is already expired.",
-                                "value": {"detail": ErrorCode.ACCESS_TOKEN_ALREADY_EXPIRED},
+                                "value": {
+                                    "detail": ErrorCode.ACCESS_TOKEN_ALREADY_EXPIRED
+                                },
                             },
                         }
                     }
@@ -241,11 +245,15 @@ def get_oauth_associate_router(
                             },
                             ErrorCode.ACCESS_TOKEN_DECODE_ERROR: {
                                 "summary": "Access token is error.",
-                                "value": {"detail": ErrorCode.ACCESS_TOKEN_DECODE_ERROR},
+                                "value": {
+                                    "detail": ErrorCode.ACCESS_TOKEN_DECODE_ERROR
+                                },
                             },
                             ErrorCode.ACCESS_TOKEN_ALREADY_EXPIRED: {
                                 "summary": "Access token is already expired.",
-                                "value": {"detail": ErrorCode.ACCESS_TOKEN_ALREADY_EXPIRED},
+                                "value": {
+                                    "detail": ErrorCode.ACCESS_TOKEN_ALREADY_EXPIRED
+                                },
                             },
                         }
                     }
