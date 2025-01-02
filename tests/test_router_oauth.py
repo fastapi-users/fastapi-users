@@ -606,20 +606,26 @@ class TestAssociateCallback:
     async def test_callback_token_expired(
         self,
         async_method_mocker: AsyncMethodMocker,
-        test_app_client: httpx.AsyncClient,
+        test_app_client_redirect_url: httpx.AsyncClient,
         oauth_client: BaseOAuth2,
         user_oauth: UserOAuthModel,
         user_manager_oauth: UserManagerMock,
         access_token: str,
     ):
-        state_jwt = generate_state_token({}, "SECRET", lifetime_seconds=-1)
-        async_method_mocker(oauth_client, "get_access_token", return_value=access_token)
+        state_jwt = generate_state_token({"sub": str(user_oauth.id)}, "SECRET", lifetime_seconds=-1)
+        async_method_mocker(
+            oauth_client, "get_access_token", return_value=access_token
+        )
         async_method_mocker(
             oauth_client, "get_id_email", return_value=("user_oauth1", user_oauth.email)
         )
-        response = await test_app_client.get(
-            "/oauth/callback",
+        async_method_mocker(
+            user_manager_oauth, "oauth_callback", return_value=user_oauth
+        )
+        response = await test_app_client_redirect_url.get(
+            "/oauth-associate/callback",
             params={"code": "CODE", "state": state_jwt},
+            headers={"Authorization": f"Bearer {user_oauth.id}"},
         )
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -627,33 +633,35 @@ class TestAssociateCallback:
         data = cast(dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.ACCESS_TOKEN_ALREADY_EXPIRED
 
-        assert user_manager_oauth.on_after_login.called is False
-
     async def test_callback_decode_token_error(
         self,
         async_method_mocker: AsyncMethodMocker,
-        test_app_client: httpx.AsyncClient,
+        test_app_client_redirect_url: httpx.AsyncClient,
         oauth_client: BaseOAuth2,
         user_oauth: UserOAuthModel,
         user_manager_oauth: UserManagerMock,
         access_token: str,
     ):
-        state_jwt = generate_state_token({}, "RANDOM")
-        async_method_mocker(oauth_client, "get_access_token", return_value=access_token)
+        state_jwt = generate_state_token({"sub": str(user_oauth.id)}, "RANDOM")
+        async_method_mocker(
+            oauth_client, "get_access_token", return_value=access_token
+        )
         async_method_mocker(
             oauth_client, "get_id_email", return_value=("user_oauth1", user_oauth.email)
         )
-        response = await test_app_client.get(
-            "/oauth/callback",
+        async_method_mocker(
+            user_manager_oauth, "oauth_callback", return_value=user_oauth
+        )
+        response = await test_app_client_redirect_url.get(
+            "/oauth-associate/callback",
             params={"code": "CODE", "state": state_jwt},
+            headers={"Authorization": f"Bearer {user_oauth.id}"},
         )
 
         data = cast(dict[str, Any], response.json())
         assert data["detail"] == ErrorCode.ACCESS_TOKEN_DECODE_ERROR
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
-        assert user_manager_oauth.on_after_login.called is False
-
 
 @pytest.mark.asyncio
 @pytest.mark.oauth
