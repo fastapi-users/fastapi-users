@@ -114,12 +114,15 @@ def get_oauth_router(
     ):
         if is_apple:
             token, state, raw_data = access_token_state
+            id_token = token["id_token"]
+            id_data = jwt.decode(id_token, options={"verify_signature": False})
+            account_id = id_data["sub"]
+            account_email = id_data["email"]
         else:
             token, state = access_token_state
-
-        account_id, account_email = await oauth_client.get_id_email(
-            token["access_token"]
-        )
+            account_id, account_email = await oauth_client.get_id_email(
+                token["access_token"]
+            )
 
         if account_email is None:
             raise HTTPException(
