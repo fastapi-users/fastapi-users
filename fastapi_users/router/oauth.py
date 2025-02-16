@@ -111,11 +111,7 @@ def get_oauth_router(
         strategy: Strategy[models.UP, models.ID] = Depends(backend.get_strategy),
     ):
         token, state = access_token_state
-        
-        if is_apple:
-            account_id, account_email = oauth_client.get_id_email_from_id_token(token)
-        else:
-            account_id, account_email = await oauth_client.get_id_email(token["access_token"])
+        account_id, account_email = await oauth_client.get_id_email(token["access_token"])
 
         if account_email is None:
             raise HTTPException(
@@ -246,11 +242,7 @@ def get_oauth_associate_router(
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ):
         token, state = access_token_state
-
-        if is_apple:
-            account_id, account_email = oauth_client.get_id_email_from_id_token(token)
-        else:
-            account_id, account_email = await oauth_client.get_id_email(token["access_token"])
+        account_id, account_email = await oauth_client.get_id_email(token["access_token"])
 
         if account_email is None:
             raise HTTPException(
