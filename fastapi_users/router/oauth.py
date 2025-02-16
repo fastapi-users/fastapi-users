@@ -113,7 +113,7 @@ def get_oauth_router(
         token, state = access_token_state
         
         if is_apple:
-            account_id, account_email = await oauth_client.get_id_email_from_id_token(token)
+            account_id, account_email = oauth_client.get_id_email_from_id_token(token)
         else:
             account_id, account_email = await oauth_client.get_id_email(token["access_token"])
 
@@ -248,7 +248,7 @@ def get_oauth_associate_router(
         token, state = access_token_state
 
         if is_apple:
-            account_id, account_email = await oauth_client.get_id_email_from_id_token(token)
+            account_id, account_email = oauth_client.get_id_email_from_id_token(token)
         else:
             account_id, account_email = await oauth_client.get_id_email(token["access_token"])
 
