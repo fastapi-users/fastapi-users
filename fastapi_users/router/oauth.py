@@ -39,6 +39,7 @@ def get_oauth_router(
     """Generate a router with the OAuth routes."""
     router = APIRouter()
     callback_route_name = f"oauth:{oauth_client.name}.{backend.name}.callback"
+    callback_methods = ["POST"] if backend.name == "apple" else ["GET"]
 
     if redirect_url is not None:
         oauth2_authorize_callback = OAuth2AuthorizeCallback(
@@ -74,8 +75,9 @@ def get_oauth_router(
 
         return OAuth2AuthorizeResponse(authorization_url=authorization_url)
 
-    @router.get(
+    @router.api_route(
         "/callback",
+        methods=callback_methods,
         name=callback_route_name,
         description="The response varies based on the authentication backend used.",
         responses={
@@ -165,7 +167,7 @@ def get_oauth_associate_router(
 ) -> APIRouter:
     """Generate a router with the OAuth routes to associate an authenticated user."""
     router = APIRouter()
-
+    callback_methods = ["POST"] if oauth_client.name == "apple" else ["GET"]
     get_current_active_user = authenticator.current_user(
         active=True, verified=requires_verification
     )
@@ -208,8 +210,9 @@ def get_oauth_associate_router(
 
         return OAuth2AuthorizeResponse(authorization_url=authorization_url)
 
-    @router.get(
+    @router.api_route(
         "/callback",
+        methods=callback_methods,
         response_model=user_schema,
         name=callback_route_name,
         description="The response varies based on the authentication backend used.",
