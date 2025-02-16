@@ -2,6 +2,7 @@ from typing import Optional
 
 import jwt
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
+from httpx_oauth.clients.apple import AppleOAuth2
 from httpx_oauth.integrations.fastapi import OAuth2AuthorizeCallback
 from httpx_oauth.oauth2 import BaseOAuth2, OAuth2Token
 from pydantic import BaseModel
@@ -38,18 +39,21 @@ def get_oauth_router(
 ) -> APIRouter:
     """Generate a router with the OAuth routes."""
     router = APIRouter()
+    is_apple = isinstance(oauth_client, AppleOAuth2)
     callback_route_name = f"oauth:{oauth_client.name}.{backend.name}.callback"
-    callback_methods = ["POST"] if oauth_client.name == "apple" else ["GET"]
+    callback_methods = ["POST"] if is_apple else ["GET"]
 
     if redirect_url is not None:
         oauth2_authorize_callback = OAuth2AuthorizeCallback(
             oauth_client,
             redirect_url=redirect_url,
+            include_raw_data=is_apple,
         )
     else:
         oauth2_authorize_callback = OAuth2AuthorizeCallback(
             oauth_client,
             route_name=callback_route_name,
+            include_raw_data=is_apple,
         )
 
     @router.get(
@@ -108,7 +112,11 @@ def get_oauth_router(
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
         strategy: Strategy[models.UP, models.ID] = Depends(backend.get_strategy),
     ):
-        token, state = access_token_state
+        if is_apple:
+            token, state, raw_data = access_token_state
+        else:
+            token, state = access_token_state
+
         account_id, account_email = await oauth_client.get_id_email(
             token["access_token"]
         )
