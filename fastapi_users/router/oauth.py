@@ -46,14 +46,12 @@ def get_oauth_router(
     if redirect_url is not None:
         oauth2_authorize_callback = OAuth2AuthorizeCallback(
             oauth_client,
-            redirect_url=redirect_url,
-            include_raw_data=is_apple,
+            redirect_url=redirect_url
         )
     else:
         oauth2_authorize_callback = OAuth2AuthorizeCallback(
             oauth_client,
-            route_name=callback_route_name,
-            include_raw_data=is_apple,
+            route_name=callback_route_name
         )
 
     @router.get(
@@ -112,17 +110,12 @@ def get_oauth_router(
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
         strategy: Strategy[models.UP, models.ID] = Depends(backend.get_strategy),
     ):
+        token, state = access_token_state
+        
         if is_apple:
-            token, state, raw_data = access_token_state
-            id_token = token["id_token"]
-            id_data = jwt.decode(id_token, options={"verify_signature": False})
-            account_id = id_data["sub"]
-            account_email = id_data["email"]
+            account_id, account_email = await oauth_client.get_id_email_from_id_token(token)
         else:
-            token, state = access_token_state
-            account_id, account_email = await oauth_client.get_id_email(
-                token["access_token"]
-            )
+            account_id, account_email = await oauth_client.get_id_email(token["access_token"])
 
         if account_email is None:
             raise HTTPException(
@@ -181,9 +174,10 @@ def get_oauth_associate_router(
     get_current_active_user = authenticator.current_user(
         active=True, verified=requires_verification
     )
-
+    
+    is_apple = isinstance(oauth_client, AppleOAuth2)
     callback_route_name = f"oauth-associate:{oauth_client.name}.callback"
-    callback_methods = ["POST"] if oauth_client.name == "apple" else ["GET"]
+    callback_methods = ["POST"] if is_apple else ["GET"]
 
     if redirect_url is not None:
         oauth2_authorize_callback = OAuth2AuthorizeCallback(
@@ -252,9 +246,11 @@ def get_oauth_associate_router(
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ):
         token, state = access_token_state
-        account_id, account_email = await oauth_client.get_id_email(
-            token["access_token"]
-        )
+
+        if is_apple:
+            account_id, account_email = await oauth_client.get_id_email_from_id_token(token)
+        else:
+            account_id, account_email = await oauth_client.get_id_email(token["access_token"])
 
         if account_email is None:
             raise HTTPException(

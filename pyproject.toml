@@ -159,7 +159,7 @@ beanie = [
     "fastapi-users-db-beanie >=4.0.0",
 ]
 oauth = [
-    "httpx-oauth @ git+https://github.com/ldub/httpx-oauth.git@ca807a013f6364ea1e19d044b99aefd465e825c1"
+    "httpx-oauth @ git+https://github.com/ldub/httpx-oauth.git@19b41c61667d23abaf4475e23abd2baa7cc77eba"
 ]
 redis = [
     "redis >=4.3.3,<6.0.0",
