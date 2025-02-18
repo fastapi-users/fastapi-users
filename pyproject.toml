@@ -70,7 +70,7 @@ dependencies = [
     "markdown-include",
     "pygments",
     "pymdown-extensions",
-    "httpx-oauth @ git+https://github.com/ldub/httpx-oauth.git@ca807a013f6364ea1e19d044b99aefd465e825c1",
+    "httpx-oauth @ git+https://github.com/ldub/httpx-oauth.git@759cede1e2d94f9d36d9f6d639495dcc9db8d55d",
     "httpx",
     "asgi_lifespan",
     "uvicorn",
@@ -159,7 +159,7 @@ beanie = [
     "fastapi-users-db-beanie >=4.0.0",
 ]
 oauth = [
-    "httpx-oauth @ git+https://github.com/ldub/httpx-oauth.git@0f4aa21fc63801282bc59e6a9ff29f30800157a6"
+    "httpx-oauth @ git+https://github.com/ldub/httpx-oauth.git@759cede1e2d94f9d36d9f6d639495dcc9db8d55d"
 ]
 redis = [
     "redis >=4.3.3,<6.0.0",
