@@ -38,9 +38,8 @@ def get_oauth_router(
 ) -> APIRouter:
     """Generate a router with the OAuth routes."""
     router = APIRouter()
-
     callback_route_name = f"oauth:{oauth_client.name}.{backend.name}.callback"
-    callback_methods = [oauth_client.callback_method]
+    callback_methods = [str(oauth_client.callback_method)]
 
     if redirect_url is not None:
         oauth2_authorize_callback = OAuth2AuthorizeCallback(
@@ -171,7 +170,7 @@ def get_oauth_associate_router(
     )
 
     callback_route_name = f"oauth-associate:{oauth_client.name}.callback"
-    callback_methods = [oauth_client.callback_method]
+    callback_methods = [str(oauth_client.callback_method)]
 
     if redirect_url is not None:
         oauth2_authorize_callback = OAuth2AuthorizeCallback(
