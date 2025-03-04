@@ -158,7 +158,7 @@ class Authenticator(Generic[models.UP, models.ID, models.AP]):
 
         return current_user_dependency
 
-    async def _authenticate(  # noqa: PLR0913
+    async def _authenticate(  # noqa: PLR0913, C901
         self,
         *args: Any,
         user_manager: BaseUserManager[models.UP, models.ID],
