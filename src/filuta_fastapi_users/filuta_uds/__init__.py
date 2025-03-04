@@ -28,12 +28,14 @@ class SQLAlchemyBaseUserTable(Generic[models.ID]):
         hashed_password: str
         is_active: bool
         is_superuser: bool
+        is_poweruser: bool
         is_verified: bool
     else:
         email: Mapped[str] = mapped_column(String(length=320), unique=True, index=True, nullable=False)
         hashed_password: Mapped[str] = mapped_column(String(length=1024), nullable=False)
         is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
         is_superuser: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+        is_poweruser: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
         is_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
 
