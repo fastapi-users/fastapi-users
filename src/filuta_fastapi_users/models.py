@@ -12,6 +12,7 @@ class UserProtocol(Protocol[ID]):
     hashed_password: str
     is_active: bool
     is_superuser: bool
+    is_poweruser: bool
     is_verified: bool
 
 
@@ -39,6 +40,7 @@ class UserOAuthProtocol(UserProtocol[ID], Generic[ID, OAP]):
     hashed_password: str
     is_active: bool
     is_superuser: bool
+    is_poweruser: bool
     is_verified: bool
     oauth_accounts: list[OAP]
 

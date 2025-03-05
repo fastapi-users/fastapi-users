@@ -34,6 +34,7 @@ class CreateUpdateDictModel(BaseModel):
             exclude={
                 "id",
                 "is_superuser",
+                "is_poweruser",
                 "is_active",
                 "is_verified",
                 "oauth_accounts",
@@ -51,6 +52,7 @@ class BaseUser(CreateUpdateDictModel, Generic[models.ID]):
     email: EmailStr
     is_active: bool = True
     is_superuser: bool = False
+    is_poweruser: bool = False
     is_verified: bool = False
 
     if PYDANTIC_V2:  # pragma: no cover
@@ -66,6 +68,7 @@ class BaseUserCreate(CreateUpdateDictModel):
     password: str
     is_active: bool | None = True
     is_superuser: bool | None = False
+    is_poweruser: bool | None = False
     is_verified: bool | None = False
 
 
@@ -74,6 +77,7 @@ class BaseUserUpdate(CreateUpdateDictModel):
     email: EmailStr | None = None
     is_active: bool | None = None
     is_superuser: bool | None = None
+    is_poweruser: bool | None = None
     is_verified: bool | None = None
 
 

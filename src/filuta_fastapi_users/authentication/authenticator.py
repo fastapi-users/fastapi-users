@@ -63,6 +63,7 @@ class Authenticator(Generic[models.UP, models.ID, models.AP]):
         active: bool = False,
         verified: bool = False,
         superuser: bool = False,
+        poweruser: bool = False,
         authorized: bool = True,
         ignore_expired: bool = False,
         get_enabled_backends: EnabledBackendsDependency[models.UP, models.ID, models.AP] | None = None,
@@ -98,6 +99,7 @@ class Authenticator(Generic[models.UP, models.ID, models.AP]):
                 active=active,
                 verified=verified,
                 superuser=superuser,
+                poweruser=poweruser,
                 authorized=authorized,
                 ignore_expired=ignore_expired,
                 **kwargs,
@@ -111,6 +113,7 @@ class Authenticator(Generic[models.UP, models.ID, models.AP]):
         active: bool = False,
         verified: bool = False,
         superuser: bool = False,
+        poweruser: bool = False,
         authorized: bool = True,
         ignore_expired: bool = False,
         get_enabled_backends: EnabledBackendsDependency[models.UP, models.ID, models.AP] | None = None,
@@ -146,6 +149,7 @@ class Authenticator(Generic[models.UP, models.ID, models.AP]):
                 active=active,
                 verified=verified,
                 superuser=superuser,
+                poweruser=poweruser,
                 authorized=authorized,
                 ignore_expired=ignore_expired,
                 **kwargs,
@@ -154,7 +158,7 @@ class Authenticator(Generic[models.UP, models.ID, models.AP]):
 
         return current_user_dependency
 
-    async def _authenticate(  # noqa: PLR0913
+    async def _authenticate(  # noqa: PLR0913, C901
         self,
         *args: Any,
         user_manager: BaseUserManager[models.UP, models.ID],
@@ -162,6 +166,7 @@ class Authenticator(Generic[models.UP, models.ID, models.AP]):
         active: bool = False,
         verified: bool = False,
         superuser: bool = False,
+        poweruser: bool = False,
         authorized: bool = False,
         ignore_expired: bool = False,
         **kwargs: Any,
@@ -197,6 +202,9 @@ class Authenticator(Generic[models.UP, models.ID, models.AP]):
                 user = None
                 detail = "no-verified"
             elif superuser and not user.is_superuser:
+                user = None
+                detail = "no-permissions"
+            elif poweruser and not user.is_poweruser:
                 user = None
                 detail = "no-permissions"
         if user is None and not optional:
