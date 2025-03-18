@@ -58,7 +58,7 @@ class BaseUser(CreateUpdateDictModel, Generic[models.ID]):
     else:  # pragma: no cover
 
         class Config:
-            orm_mode = True
+            from_attributes = True
 
 
 class BaseUserCreate(CreateUpdateDictModel):
