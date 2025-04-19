@@ -18,7 +18,7 @@ pip install 'fastapi-users[beanie,oauth]'
 
 ### Instantiate an OAuth2 client
 
-You first need to get an HTTPX OAuth client instance. [Read the documentation](https://frankie567.github.io/httpx-oauth/oauth2/) for more information.
+You first need to get an HTTPX OAuth client instance. [Read the documentation](https://frankie567.github.io/httpx-oauth/usage/) for more information.
 
 ```py
 from httpx_oauth.clients.google import GoogleOAuth2
