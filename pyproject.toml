@@ -162,7 +162,7 @@ oauth = [
     "httpx-oauth >=0.13"
 ]
 redis = [
-    "redis >=4.3.3,<6.0.0",
+    "redis >=4.3.3,<7.0.0",
 ]
 
 [project.urls]
