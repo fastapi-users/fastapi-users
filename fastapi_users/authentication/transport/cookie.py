@@ -19,6 +19,7 @@ class CookieTransport(Transport):
         cookie_secure: bool = True,
         cookie_httponly: bool = True,
         cookie_samesite: Literal["lax", "strict", "none"] = "lax",
+        on_login_redirect_url: Optional[str] = None,
     ):
         self.cookie_name = cookie_name
         self.cookie_max_age = cookie_max_age
@@ -28,9 +29,14 @@ class CookieTransport(Transport):
         self.cookie_httponly = cookie_httponly
         self.cookie_samesite = cookie_samesite
         self.scheme = APIKeyCookie(name=self.cookie_name, auto_error=False)
+        self.on_login_redirect_url = on_login_redirect_url
+
 
     async def get_login_response(self, token: str) -> Response:
-        response = Response(status_code=status.HTTP_204_NO_CONTENT)
+        if self.on_login_redirect_url:
+            response = RedirectResponse(url=self.on_login_redirect_url, status_code=status.HTTP_302_FOUND)
+        else:
+            response = Response(status_code=status.HTTP_204_NO_CONTENT)
         return self._set_login_cookie(response, token)
 
     async def get_logout_response(self) -> Response:
