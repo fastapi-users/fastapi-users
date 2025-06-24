@@ -3,8 +3,8 @@ fastapi==0.109.1
 httpx_oauth==0.13.0
 makefun==1.15.1
 passlib[bcrypt]==1.7.4
-pydantic==1.10.13
-pyjwt[crypto] ==2.10.1
+pydantic>=2.0.0,<3.0.0
+pyjwt[crypto]==2.10.1
 python-dotenv==1.0.0
 python-multipart==0.0.19
 sqlalchemy==2.0.20

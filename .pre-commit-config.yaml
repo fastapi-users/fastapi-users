@@ -28,7 +28,7 @@ repos:
     hooks:
     -   id: mypy
         args: [--ignore-missing-imports, --install-types, --check-untyped-defs]
-        additional_dependencies: ['types-requests', 'types-setuptools', 'pydantic<2', 'types-decorator', 'types-redis', 'types-six', 'types-ujson']
+        additional_dependencies: ['types-requests', 'types-setuptools', 'pydantic>=2', 'types-decorator', 'types-redis', 'types-six', 'types-ujson']
 -   repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.23.3
     hooks:
