@@ -7,7 +7,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 from fastapi_users import exceptions, models, schemas
 from fastapi_users.db import BaseUserDatabase
-from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
+from fastapi_users.jwt import JWT_ALGORITHM, SecretType, decode_jwt, generate_jwt
 from fastapi_users.password import PasswordHelper, PasswordHelperProtocol
 from fastapi_users.types import DependencyCallable
 
@@ -273,7 +273,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         return user
 
     async def request_verify(
-        self, user: models.UP, request: Optional[Request] = None
+        self, user: models.UP, request: Optional[Request] = None, algorithm: str = JWT_ALGORITHM,
     ) -> None:
         """
         Start a verification request.
@@ -282,6 +282,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
 
         :param user: The user to verify.
         :param request: Optional FastAPI request that
+        :param algorithm: Optional algorithm to use for the JWT encoding, defaults to HS256.
         triggered the operation, defaults to None.
         :raises UserInactive: The user is inactive.
         :raises UserAlreadyVerified: The user is already verified.
@@ -300,6 +301,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
             token_data,
             self.verification_token_secret,
             self.verification_token_lifetime_seconds,
+            algorithm,
         )
         await self.on_after_request_verify(user, token, request)
 
@@ -356,7 +358,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
         return verified_user
 
     async def forgot_password(
-        self, user: models.UP, request: Optional[Request] = None
+        self, user: models.UP, request: Optional[Request] = None, algorithm: str = JWT_ALGORITHM,
     ) -> None:
         """
         Start a forgot password request.
@@ -365,6 +367,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
 
         :param user: The user that forgot its password.
         :param request: Optional FastAPI request that
+        :param algorithm: Optional algorithm to use for the JWT encoding, defaults to HS256.
         triggered the operation, defaults to None.
         :raises UserInactive: The user is inactive.
         """
@@ -380,6 +383,7 @@ class BaseUserManager(Generic[models.UP, models.ID]):
             token_data,
             self.reset_password_token_secret,
             self.reset_password_token_lifetime_seconds,
+            algorithm,
         )
         await self.on_after_forgot_password(user, token, request)
 
