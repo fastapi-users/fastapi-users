@@ -19,6 +19,7 @@ flowchart TB
     subgraph DATABASE[Database adapters]
         SQLALCHEMY[SQLAlchemy]
         BEANIE[Beanie]
+        DYNAMODB[DynamoDB]
     end
     subgraph ROUTERS[Routers]
         AUTH[[get_auth_router]]
@@ -68,6 +69,8 @@ FastAPI Users is compatible with various **databases and ORM**. To build the int
 ➡️ [I'm using SQLAlchemy](databases/sqlalchemy.md)
 
 ➡️ [I'm using Beanie](databases/beanie.md)
+
+➡️ [I'm using DynamoDB](databases/dynamodb.md)
 
 ## Authentication backends
 

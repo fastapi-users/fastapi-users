@@ -14,6 +14,10 @@ pip install 'fastapi-users[sqlalchemy,oauth]'
 pip install 'fastapi-users[beanie,oauth]'
 ```
 
+```sh
+pip install 'fastapi-users[dynamodb,oauth]'
+```
+
 ## Configuration
 
 ### Instantiate an OAuth2 client
@@ -64,6 +68,40 @@ The advantage of MongoDB is that you can easily embed sub-objects in a single do
 ```
 
 It's worth to note that `OAuthAccount` is **not a Beanie document** but a Pydantic model that we'll embed inside the `User` document, through the `oauth_accounts` array.
+
+#### DynamoDB
+
+You'll need to define the DynamoDB model for storing OAuth accounts. We provide a base one for this:
+
+```py hl_lines="5 19-20 24-26 43-44"
+--8<-- "docs/src/db_dynamodb_oauth.py"
+```
+
+Since DynamoDB doesn't support lazy relationships like SQLAlchemy, the database adapter will automatically retrieve `OAuthAccount`s and will hydrate the `User` object.
+
+Besides, when instantiating the database adapter, we need pass this DynamoDB model as third argument.
+
+!!! tip "Primary key is defined as UUID"
+    By default, we use UUID as a primary key ID for your user. If you want to use another type, like an auto-incremented integer, you can use `DynamoDBBaseOAuthAccountTable` as base class and define your own `id` and `user_id` column. Since there are no `ForeignKey`s in DynamoDB, the adapter will handle linking the `OAuthAccount` to the `User` object automatically. If you chose not to use the default UUID table, you must implement your own Global Secondary Index to accomodate the type changes:
+
+    ```py
+    from fastapi_users_db_dynamodb import DynamoDBBaseOAuthAccountTable
+    from aiopynamodb.indexes import AllProjection, GlobalSecondaryIndex
+
+    class OAuthAccount(DynamoDBBaseOAuthAccountTable[int], Base):
+        class UserIdIndex(GlobalSecondaryIndex):
+            class Meta:
+                index_name = "user_id-index"
+                projection = AllProjection()
+
+            user_id = NumberAttribute(hash_key=True)
+
+        id = NumberAttribute(hash_key=True, default=123)
+        user_id = NumberAttribute(null=False)
+        user_id_index = UserIdIndex()
+    ```
+
+    Notice that `DynamoDBBaseOAuthAccountTable` expects a generic type to define the actual type of ID you use.
 
 ### Generate routers
 
@@ -230,4 +268,44 @@ app.include_router(
 
     ```py
     --8<-- "examples/beanie-oauth/app/users.py"
+    ```
+
+#### DynamoDB
+
+[Open :material-open-in-new:](https://github.com/fastapi-users/fastapi-users/tree/master/examples/dynamodb-oauth)
+
+=== "requirements.txt"
+
+    ```
+    --8<-- "examples/dynamodb-oauth/requirements.txt"
+    ```
+
+=== "main.py"
+
+    ```py
+    --8<-- "examples/dynamodb-oauth/main.py"
+    ```
+
+=== "app/app.py"
+
+    ```py
+    --8<-- "examples/dynamodb-oauth/app/app.py"
+    ```
+
+=== "app/db.py"
+
+    ```py
+    --8<-- "examples/dynamodb-oauth/app/db.py"
+    ```
+
+=== "app/schemas.py"
+
+    ```py
+    --8<-- "examples/dynamodb-oauth/app/schemas.py"
+    ```
+
+=== "app/users.py"
+
+    ```py
+    --8<-- "examples/dynamodb-oauth/app/users.py"
     ```

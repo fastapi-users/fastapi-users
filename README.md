@@ -45,6 +45,7 @@ Add quickly a registration and authentication system to your [FastAPI](https://f
 * [X] Customizable database backend
     * [X] [SQLAlchemy ORM async](https://docs.sqlalchemy.org/en/14/orm/extensions/asyncio.html) included
     * [X] [MongoDB with Beanie ODM](https://github.com/roman-right/beanie/) included
+    * [X] [DynamoDB ORM async](https://github.com/AppSolves/AioPynamoDB) included
 * [X] Multiple customizable authentication backends
     * [X] Transports: Authorization header, Cookie
     * [X] Strategies: JWT, Database, Redis

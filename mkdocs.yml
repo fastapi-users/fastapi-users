@@ -73,6 +73,7 @@ nav:
     - User model and databases:
       - configuration/databases/sqlalchemy.md
       - configuration/databases/beanie.md
+      - configuration/databases/dynamodb.md
     - Authentication backends:
       - Introduction: configuration/authentication/index.md
       - Transports:

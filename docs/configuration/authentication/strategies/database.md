@@ -60,6 +60,30 @@ Don't forget to add the `AccessToken` ODM model to the `document_models` array i
 !!! info
     If you want to add your own custom settings to your `AccessToken` document model - like changing the collection name - don't forget to let your inner `Settings` class inherit the pre-defined settings from `BeanieBaseAccessToken` like this: `Settings(BeanieBaseAccessToken.Settings): # ...`! See Beanie's [documentation on `Settings`](https://beanie-odm.dev/tutorial/defining-a-document/#settings) for details.
 
+#### DynamoDB
+
+We'll expand from the basic DynamoDB configuration.
+
+```py hl_lines="5-8 23-24 45-48"
+--8<-- "docs/src/db_dynamodb_access_tokens.py"
+```
+
+1. We define an `AccessToken` ORM model inheriting from `DynamoDBBaseAccessTokenTableUUID`.
+
+2. We define a dependency to instantiate the `DynamoDBAccessTokenDatabase` class. Just like the user database adapter, it expects a fresh DynamoDB session and the `AccessToken` model class we defined above.
+
+!!! tip "`user_id` foreign key is defined as UUID"
+    By default, we use UUID as a primary key ID for your user, so we follow the same convention to define the foreign key pointing to the user.
+
+    If you want to use another type, like an auto-incremented integer, you can use `DynamoDBBaseAccessTokenTable` as base class and define your own `user_id` column. Since there are no `ForeignKey`s in DynamoDB, the adapter will handle linking the `AccessToken` to the `User` object automatically as long as you define it.
+
+    ```py
+    class AccessToken(DynamoDBBaseAccessTokenTable[int], Base):
+        user_id = NumberAttribute(null=False)
+    ```
+
+    Notice that `DynamoDBBaseAccessTokenTable` expects a generic type to define the actual type of ID you use.
+
 ### Strategy
 
 ```py

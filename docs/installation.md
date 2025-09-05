@@ -15,6 +15,13 @@ pip install 'fastapi-users[sqlalchemy]'
 pip install 'fastapi-users[beanie]'
 ```
 
+
+## With DynamoDB support
+
+```sh
+pip install 'fastapi-users[dynamodb]'
+```
+
 ## With Redis authentication backend support
 
 Information on installing with proper database support can be found in the [Redis](configuration/authentication/strategies/redis.md) section.

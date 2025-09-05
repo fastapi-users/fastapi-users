@@ -17,6 +17,10 @@ ignore_missing_imports = true
 module = "fastapi_users_db_sqlalchemy.*"
 ignore_missing_imports = true
 
+[[tool.mypy.overrides]]
+module = "fastapi_users_db_dynamodb.*"
+ignore_missing_imports = true
+
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 addopts = "--ignore=test_build.py"
@@ -53,6 +57,7 @@ installer = "uv"
 features = [
     "sqlalchemy",
     "beanie",
+    "dynamodb",
     "oauth",
     "redis",
 ]
@@ -157,6 +162,9 @@ sqlalchemy = [
 ]
 beanie = [
     "fastapi-users-db-beanie >=4.0.0",
+]
+dynamodb = [
+    "fastapi-users-db-dynamodb >=1.0.2",
 ]
 oauth = [
     "httpx-oauth >=0.13"
