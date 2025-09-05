@@ -73,13 +73,13 @@ It's worth to note that `OAuthAccount` is **not a Beanie document** but a Pydant
 
 You'll need to define the DynamoDB model for storing OAuth accounts. We provide a base one for this:
 
-```py hl_lines="5 19-20 24-26 43-44"
+```py hl_lines="4 14-15 19 22-23"
 --8<-- "docs/src/db_dynamodb_oauth.py"
 ```
 
 Since DynamoDB doesn't support lazy relationships like SQLAlchemy, the database adapter will automatically retrieve `OAuthAccount`s and will hydrate the `User` object.
 
-Besides, when instantiating the database adapter, we need pass this DynamoDB model as third argument.
+Besides, when instantiating the database adapter, we need to pass this DynamoDB model as third argument.
 
 !!! tip "Primary key is defined as UUID"
     By default, we use UUID as a primary key ID for your user. If you want to use another type, like an auto-incremented integer, you can use `DynamoDBBaseOAuthAccountTable` as base class and define your own `id` and `user_id` column. Since there are no `ForeignKey`s in DynamoDB, the adapter will handle linking the `OAuthAccount` to the `User` object automatically. If you chose not to use the default UUID table, you must implement your own Global Secondary Index to accomodate the type changes:

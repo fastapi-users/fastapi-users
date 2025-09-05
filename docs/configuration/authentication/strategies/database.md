@@ -64,7 +64,7 @@ Don't forget to add the `AccessToken` ODM model to the `document_models` array i
 
 We'll expand from the basic DynamoDB configuration.
 
-```py hl_lines="5-8 23-24 45-48"
+```py hl_lines="2-5 18-19 26-28"
 --8<-- "docs/src/db_dynamodb_access_tokens.py"
 ```
 
@@ -78,6 +78,8 @@ We'll expand from the basic DynamoDB configuration.
     If you want to use another type, like an auto-incremented integer, you can use `DynamoDBBaseAccessTokenTable` as base class and define your own `user_id` column. Since there are no `ForeignKey`s in DynamoDB, the adapter will handle linking the `AccessToken` to the `User` object automatically as long as you define it.
 
     ```py
+    from aiopynamodb.attributes import NumberAttribute
+
     class AccessToken(DynamoDBBaseAccessTokenTable[int], Base):
         user_id = NumberAttribute(null=False)
     ```
