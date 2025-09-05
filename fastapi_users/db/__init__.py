@@ -34,3 +34,20 @@ try:  # pragma: no cover
     __all__.append("ObjectIDIDMixin")
 except ImportError:  # pragma: no cover
     pass
+
+try:  # pragma: no cover
+    from fastapi_users_db_dynamodb import (  # noqa: F401
+        DynamoDBBaseOAuthAccountTable,
+        DynamoDBBaseOAuthAccountTableUUID,
+        DynamoDBBaseUserTable,
+        DynamoDBBaseUserTableUUID,
+        DynamoDBUserDatabase,
+    )
+
+    __all__.append("DynamoDBBaseUserTable")
+    __all__.append("DynamoDBBaseUserTableUUID")
+    __all__.append("DynamoDBBaseOAuthAccountTable")
+    __all__.append("DynamoDBBaseOAuthAccountTableUUID")
+    __all__.append("DynamoDBUserDatabase")
+except ImportError:  # pragma: no cover
+    pass

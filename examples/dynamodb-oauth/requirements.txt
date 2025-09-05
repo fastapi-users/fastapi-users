@@ -1,0 +1,3 @@
+fastapi
+fastapi-users[dynamodb,oauth]
+uvicorn[standard]
