@@ -32,22 +32,22 @@ async def test_app_client(
 class TestRegister:
     async def test_empty_body(self, test_app_client: httpx.AsyncClient):
         response = await test_app_client.post("/register", json={})
-        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
 
     async def test_missing_email(self, test_app_client: httpx.AsyncClient):
         json = {"password": "guinevere"}
         response = await test_app_client.post("/register", json=json)
-        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
 
     async def test_missing_password(self, test_app_client: httpx.AsyncClient):
         json = {"email": "king.arthur@camelot.bt"}
         response = await test_app_client.post("/register", json=json)
-        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
 
     async def test_wrong_email(self, test_app_client: httpx.AsyncClient):
         json = {"email": "king.arthur", "password": "guinevere"}
         response = await test_app_client.post("/register", json=json)
-        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
 
     async def test_invalid_password(self, test_app_client: httpx.AsyncClient):
         json = {"email": "king.arthur@camelot.bt", "password": "g"}

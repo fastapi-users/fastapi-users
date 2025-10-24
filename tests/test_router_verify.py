@@ -39,7 +39,7 @@ class TestVerifyTokenRequest:
         user_manager: UserManagerMock,
     ):
         response = await test_app_client.post("/request-verify-token", json={})
-        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
         assert user_manager.request_verify.called is False
 
     async def test_wrong_email(
@@ -49,7 +49,7 @@ class TestVerifyTokenRequest:
     ):
         json = {"email": "king.arthur"}
         response = await test_app_client.post("/request-verify-token", json=json)
-        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
         assert user_manager.request_verify.called is False
 
     async def test_user_not_exists(
@@ -125,7 +125,7 @@ class TestVerify:
         user_manager: UserManagerMock,
     ):
         response = await test_app_client.post("/verify", json={})
-        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
         assert user_manager.verify.called is False
 
     async def test_invalid_verify_token(

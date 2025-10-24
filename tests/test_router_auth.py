@@ -66,7 +66,7 @@ class TestLogin:
     ):
         client, _ = test_app_client
         response = await client.post(path, data={})
-        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
         assert user_manager.on_after_login.called is False
 
     async def test_missing_username(
@@ -78,7 +78,7 @@ class TestLogin:
         client, _ = test_app_client
         data = {"password": "guinevere"}
         response = await client.post(path, data=data)
-        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
         assert user_manager.on_after_login.called is False
 
     async def test_missing_password(
@@ -90,7 +90,7 @@ class TestLogin:
         client, _ = test_app_client
         data = {"username": "king.arthur@camelot.bt"}
         response = await client.post(path, data=data)
-        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
         assert user_manager.on_after_login.called is False
 
     async def test_not_existing_user(

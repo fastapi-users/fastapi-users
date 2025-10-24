@@ -36,7 +36,7 @@ class TestForgotPassword:
         self, test_app_client: httpx.AsyncClient, user_manager: UserManagerMock
     ):
         response = await test_app_client.post("/forgot-password", json={})
-        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
         assert user_manager.forgot_password.called is False
 
     async def test_not_existing_user(
@@ -77,7 +77,7 @@ class TestResetPassword:
         user_manager: UserManagerMock,
     ):
         response = await test_app_client.post("/reset-password", json={})
-        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
         assert user_manager.reset_password.called is False
 
     async def test_missing_token(
@@ -85,7 +85,7 @@ class TestResetPassword:
     ):
         json = {"password": "guinevere"}
         response = await test_app_client.post("/reset-password", json=json)
-        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
         assert user_manager.reset_password.called is False
 
     async def test_missing_password(
@@ -95,7 +95,7 @@ class TestResetPassword:
     ):
         json = {"token": "foo"}
         response = await test_app_client.post("/reset-password", json=json)
-        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
         assert user_manager.reset_password.called is False
 
     async def test_invalid_token(
