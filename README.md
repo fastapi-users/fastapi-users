@@ -8,12 +8,20 @@
     <em>Ready-to-use and customizable users management for FastAPI </em>
 </p>
 
+> [!NOTE]
+> **This project is now in maintenance mode.** While we'll continue to provide security updates and dependency maintenance, no new features will be added. We encourage you to explore the project and use it as-is, knowing it will remain stable and secure.
+>
+> We're currently working on a new Python authentication toolkit that will ultimately supersede FastAPI Users. Stay tuned for updates!
+
 [![build](https://github.com/fastapi-users/fastapi-users/workflows/Build/badge.svg)](https://github.com/fastapi-users/fastapi-users/actions)
 [![codecov](https://codecov.io/gh/fastapi-users/fastapi-users/branch/master/graph/badge.svg)](https://codecov.io/gh/fastapi-users/fastapi-users)
 [![PyPI version](https://badge.fury.io/py/fastapi-users.svg)](https://badge.fury.io/py/fastapi-users)
 [![Downloads](https://pepy.tech/badge/fastapi-users)](https://pepy.tech/project/fastapi-users)
+
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-81-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <p align="center">
@@ -37,18 +45,18 @@ Add quickly a registration and authentication system to your [FastAPI](https://f
 
 ## Features
 
-* [X] Extensible base user model
-* [X] Ready-to-use register, login, reset password and verify e-mail routes
-* [X] Ready-to-use social OAuth2 login flow
-* [X] Dependency callables to inject current user in route
-* [X] Pluggable password validation
-* [X] Customizable database backend
-    * [X] [SQLAlchemy ORM async](https://docs.sqlalchemy.org/en/14/orm/extensions/asyncio.html) included
-    * [X] [MongoDB with Beanie ODM](https://github.com/roman-right/beanie/) included
-* [X] Multiple customizable authentication backends
-    * [X] Transports: Authorization header, Cookie
-    * [X] Strategies: JWT, Database, Redis
-* [X] Full OpenAPI schema support, even with several authentication backends
+- [x] Extensible base user model
+- [x] Ready-to-use register, login, reset password and verify e-mail routes
+- [x] Ready-to-use social OAuth2 login flow
+- [x] Dependency callables to inject current user in route
+- [x] Pluggable password validation
+- [x] Customizable database backend
+    - [x] [SQLAlchemy ORM async](https://docs.sqlalchemy.org/en/14/orm/extensions/asyncio.html) included
+    - [x] [MongoDB with Beanie ODM](https://github.com/roman-right/beanie/) included
+- [x] Multiple customizable authentication backends
+    - [x] Transports: Authorization header, Cookie
+    - [x] Strategies: JWT, Database, Redis
+- [x] Full OpenAPI schema support, even with several authentication backends
 
 ## In a hurry? Discover Fief, the open-source authentication platform
 
@@ -60,9 +68,9 @@ Add quickly a registration and authentication system to your [FastAPI](https://f
 
 **Implementing registration, login, social auth is hard and painful. We know it. With our highly secure and open-source users management platform, you can focus on your app while staying in control of your users data.**
 
-* **Open-source**: self-host it for free
-* **Pre-built login and registration pages**: clean and fast authentication so you don't have to do it yourself
-* **Official Python client** with built-in **FastAPI integration**
+- **Open-source**: self-host it for free
+- **Pre-built login and registration pages**: clean and fast authentication so you don't have to do it yourself
+- **Official Python client** with built-in **FastAPI integration**
 
 <br clear="right"/>
 
