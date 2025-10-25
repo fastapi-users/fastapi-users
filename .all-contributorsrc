@@ -759,6 +759,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "mdaffad",
+      "name": "Muhammad Daffa Dinaya",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44805049?v=4",
+      "profile": "http://mdaffad.github.io",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
