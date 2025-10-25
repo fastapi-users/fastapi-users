@@ -248,7 +248,8 @@ class BaseUserManager(Generic[models.UP, models.ID]):
 
         :param oauth_name: Name of the OAuth client.
         :param access_token: Valid access token for the service provider.
-:       :param account_id: Id of the account on the external OAuth service.        :param account_email: E-mail of the user on the service provider.
+        :param account_id: Id of the account on the external OAuth service.
+        :param account_email: E-mail of the user on the service provider.
         :param expires_at: Optional timestamp at which the access token expires.
         :param refresh_token: Optional refresh token to get a
         fresh access token from the service provider.
