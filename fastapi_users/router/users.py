@@ -46,7 +46,7 @@ def get_users_router(
     async def me(
         user: models.UP = Depends(get_current_active_user),
     ):
-        return schemas.model_validate(user_schema, user)
+        return user_schema.model_validate(user)
 
     @router.patch(
         "/me",
@@ -94,7 +94,7 @@ def get_users_router(
             user = await user_manager.update(
                 user_update, user, safe=True, request=request
             )
-            return schemas.model_validate(user_schema, user)
+            return user_schema.model_validate(user)
         except exceptions.InvalidPasswordException as e:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -127,7 +127,7 @@ def get_users_router(
         },
     )
     async def get_user(user=Depends(get_user_or_404)):
-        return schemas.model_validate(user_schema, user)
+        return user_schema.model_validate(user)
 
     @router.patch(
         "/{id}",
@@ -181,7 +181,7 @@ def get_users_router(
             user = await user_manager.update(
                 user_update, user, safe=False, request=request
             )
-            return schemas.model_validate(user_schema, user)
+            return user_schema.model_validate(user)
         except exceptions.InvalidPasswordException as e:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,

@@ -68,7 +68,7 @@ def get_verify_router(
     ):
         try:
             user = await user_manager.verify(token, request)
-            return schemas.model_validate(user_schema, user)
+            return user_schema.model_validate(user)
         except (exceptions.InvalidVerifyToken, exceptions.UserNotExists):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,

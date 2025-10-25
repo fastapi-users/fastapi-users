@@ -41,7 +41,7 @@ jobs:
           pip install hatch
       - name: Test
         run: |
-          hatch run test:test-cov-xml
+          hatch run test-cov-xml
       - uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}

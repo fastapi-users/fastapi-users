@@ -214,7 +214,7 @@ We use [Hatch](https://hatch.pypa.io/latest/install/) to manage the development 
 You can run all the tests with:
 
 ```bash
-hatch run test:test
+hatch run test
 ```
 
 ### Format the code

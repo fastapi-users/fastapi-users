@@ -265,6 +265,6 @@ def get_oauth_associate_router(
             request,
         )
 
-        return schemas.model_validate(user_schema, user)
+        return user_schema.model_validate(user)
 
     return router

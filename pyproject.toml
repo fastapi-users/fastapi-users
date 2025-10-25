@@ -96,21 +96,8 @@ lint-check = [
   "mypy fastapi_users/",
 ]
 docs = "mkdocs serve"
-
-[tool.hatch.envs.test]
-
-[tool.hatch.envs.test.scripts]
 test = "pytest --cov=fastapi_users/ --cov-report=term-missing --cov-fail-under=100"
 test-cov-xml = "pytest --cov=fastapi_users/ --cov-report=xml --cov-fail-under=100"
-
-[[tool.hatch.envs.test.matrix]]
-pydantic = ["v1", "v2"]
-
-[tool.hatch.envs.test.overrides]
-matrix.pydantic.extra-dependencies = [
-  {value = "pydantic<2.0", if = ["v1"]},
-  {value = "pydantic>=2.0", if = ["v2"]},
-]
 
 [tool.hatch.build.targets.sdist]
 support-legacy = true  # Create setup.py
