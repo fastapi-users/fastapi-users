@@ -19,7 +19,9 @@
 [![Downloads](https://pepy.tech/badge/fastapi-users)](https://pepy.tech/project/fastapi-users)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-82-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ---
@@ -46,27 +48,6 @@ Add quickly a registration and authentication system to your [FastAPI](https://f
     - [x] Transports: Authorization header, Cookie
     - [x] Strategies: JWT, Database, Redis
 - [x] Full OpenAPI schema support, even with several authentication backends
-
-## In a hurry? Discover Fief, the open-source authentication platform
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/fief-dev/.github/main/logos/logo-full-red.svg?sanitize=true" alt="Fief" width="256">
-</p>
-
-<img src="https://www.fief.dev/illustrations/guard-right.svg" alt="Fief" height="300" align="right">
-
-**Implementing registration, login, social auth is hard and painful. We know it. With our highly secure and open-source users management platform, you can focus on your app while staying in control of your users data.**
-
-- **Open-source**: self-host it for free
-- **Pre-built login and registration pages**: clean and fast authentication so you don't have to do it yourself
-- **Official Python client** with built-in **FastAPI integration**
-
-<br clear="right"/>
-
-<p align="center">
-    <a href="https://www.fief.dev"><img src="https://md-buttons.francoisvoron.com/button.svg?text=Get%20started&bg=f43f5e&w=150&px=30" /></a>
-</p>
-<p align="center">It's free and open-source</p>
 
 ## Contributors and sponsors ✨☕️
 
