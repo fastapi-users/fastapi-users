@@ -1,4 +1,8 @@
+blank_issues_enabled: false
 contact_links:
+  - name: ⚠️ We're in maintenance mode
+    url: https://github.com/fastapi-users/fastapi-users/discussions/1543
+    about: FastAPI Users is now in maintenance mode. We will only be addressing critical bugs and security issues. For more details, please read the discussion.
   - name: I have a question 🤔
     url: https://github.com/fastapi-users/fastapi-users/discussions
     about: If you have any question about the usage of FastAPI Users that's not clearly a bug, please open a discussion first.
