@@ -1,7 +1,7 @@
 import dataclasses
 import uuid
 from datetime import datetime, timezone
-from typing import Any, Optional
+from typing import Any
 
 import pytest
 
@@ -30,8 +30,8 @@ class AccessTokenDatabaseMock(AccessTokenDatabase[AccessTokenModel]):
         self.store = {}
 
     async def get_by_token(
-        self, token: str, max_age: Optional[datetime] = None
-    ) -> Optional[AccessTokenModel]:
+        self, token: str, max_age: datetime | None = None
+    ) -> AccessTokenModel | None:
         try:
             access_token = self.store[token]
             if max_age is not None and access_token.created_at < max_age:

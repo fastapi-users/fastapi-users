@@ -1,4 +1,5 @@
-from typing import Callable, Generic, Optional, cast
+from collections.abc import Callable
+from typing import Generic, cast
 
 import pytest
 from fastapi import Response
@@ -21,8 +22,8 @@ class MockTransportLogoutNotSupported(BearerTransport):
 
 class MockStrategyDestroyNotSupported(Strategy, Generic[models.UP]):
     async def read_token(
-        self, token: Optional[str], user_manager: BaseUserManager[models.UP, models.ID]
-    ) -> Optional[models.UP]:
+        self, token: str | None, user_manager: BaseUserManager[models.UP, models.ID]
+    ) -> models.UP | None:
         return None
 
     async def write_token(self, user: models.UP) -> str:

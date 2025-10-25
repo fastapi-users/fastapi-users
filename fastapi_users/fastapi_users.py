@@ -1,5 +1,5 @@
 from collections.abc import Sequence
-from typing import Generic, Optional
+from typing import Generic
 
 from fastapi import APIRouter
 
@@ -96,7 +96,7 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
         oauth_client: BaseOAuth2,
         backend: AuthenticationBackend[models.UP, models.ID],
         state_secret: SecretType,
-        redirect_url: Optional[str] = None,
+        redirect_url: str | None = None,
         associate_by_email: bool = False,
         is_verified_by_default: bool = False,
     ) -> APIRouter:
@@ -129,7 +129,7 @@ class FastAPIUsers(Generic[models.UP, models.ID]):
         oauth_client: BaseOAuth2,
         user_schema: type[schemas.U],
         state_secret: SecretType,
-        redirect_url: Optional[str] = None,
+        redirect_url: str | None = None,
         requires_verification: bool = False,
     ) -> APIRouter:
         """

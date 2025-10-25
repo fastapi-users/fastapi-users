@@ -1,6 +1,6 @@
 import secrets
 from datetime import datetime, timedelta, timezone
-from typing import Any, Generic, Optional
+from typing import Any, Generic
 
 from fastapi_users import exceptions, models
 from fastapi_users.authentication.strategy.base import Strategy
@@ -13,14 +13,14 @@ class DatabaseStrategy(
     Strategy[models.UP, models.ID], Generic[models.UP, models.ID, AP]
 ):
     def __init__(
-        self, database: AccessTokenDatabase[AP], lifetime_seconds: Optional[int] = None
+        self, database: AccessTokenDatabase[AP], lifetime_seconds: int | None = None
     ):
         self.database = database
         self.lifetime_seconds = lifetime_seconds
 
     async def read_token(
-        self, token: Optional[str], user_manager: BaseUserManager[models.UP, models.ID]
-    ) -> Optional[models.UP]:
+        self, token: str | None, user_manager: BaseUserManager[models.UP, models.ID]
+    ) -> models.UP | None:
         if token is None:
             return None
 

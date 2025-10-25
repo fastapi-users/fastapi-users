@@ -1,5 +1,4 @@
 from collections.abc import AsyncGenerator
-from typing import Optional
 
 import httpx
 import pytest
@@ -76,13 +75,13 @@ async def test_app_client(
 
     @app.get("/optional-current-user")
     def optional_current_user(
-        user: Optional[UserModel] = Depends(fastapi_users.current_user(optional=True)),
+        user: UserModel | None = Depends(fastapi_users.current_user(optional=True)),
     ):
         return schemas.model_validate(User, user) if user else None
 
     @app.get("/optional-current-active-user")
     def optional_current_active_user(
-        user: Optional[UserModel] = Depends(
+        user: UserModel | None = Depends(
             fastapi_users.current_user(optional=True, active=True)
         ),
     ):
@@ -90,7 +89,7 @@ async def test_app_client(
 
     @app.get("/optional-current-verified-user")
     def optional_current_verified_user(
-        user: Optional[UserModel] = Depends(
+        user: UserModel | None = Depends(
             fastapi_users.current_user(optional=True, verified=True)
         ),
     ):
@@ -98,7 +97,7 @@ async def test_app_client(
 
     @app.get("/optional-current-superuser")
     def optional_current_superuser(
-        user: Optional[UserModel] = Depends(
+        user: UserModel | None = Depends(
             fastapi_users.current_user(optional=True, active=True, superuser=True)
         ),
     ):
@@ -106,7 +105,7 @@ async def test_app_client(
 
     @app.get("/optional-current-verified-superuser")
     def optional_current_verified_superuser(
-        user: Optional[UserModel] = Depends(
+        user: UserModel | None = Depends(
             fastapi_users.current_user(
                 optional=True, active=True, verified=True, superuser=True
             )

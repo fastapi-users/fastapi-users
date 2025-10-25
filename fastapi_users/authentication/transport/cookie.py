@@ -1,4 +1,4 @@
-from typing import Literal, Optional
+from typing import Literal
 
 from fastapi import Response, status
 from fastapi.security import APIKeyCookie
@@ -13,9 +13,9 @@ class CookieTransport(Transport):
     def __init__(
         self,
         cookie_name: str = "fastapiusersauth",
-        cookie_max_age: Optional[int] = None,
+        cookie_max_age: int | None = None,
         cookie_path: str = "/",
-        cookie_domain: Optional[str] = None,
+        cookie_domain: str | None = None,
         cookie_secure: bool = True,
         cookie_httponly: bool = True,
         cookie_samesite: Literal["lax", "strict", "none"] = "lax",

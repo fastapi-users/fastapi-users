@@ -1,4 +1,4 @@
-from typing import Any, Generic, Optional
+from typing import Any, Generic
 
 from fastapi_users.models import ID, OAP, UOAP, UP
 from fastapi_users.types import DependencyCallable
@@ -7,15 +7,15 @@ from fastapi_users.types import DependencyCallable
 class BaseUserDatabase(Generic[UP, ID]):
     """Base adapter for retrieving, creating and updating users from a database."""
 
-    async def get(self, id: ID) -> Optional[UP]:
+    async def get(self, id: ID) -> UP | None:
         """Get a single user by id."""
         raise NotImplementedError()
 
-    async def get_by_email(self, email: str) -> Optional[UP]:
+    async def get_by_email(self, email: str) -> UP | None:
         """Get a single user by email."""
         raise NotImplementedError()
 
-    async def get_by_oauth_account(self, oauth: str, account_id: str) -> Optional[UP]:
+    async def get_by_oauth_account(self, oauth: str, account_id: str) -> UP | None:
         """Get a single user by OAuth account id."""
         raise NotImplementedError()
 

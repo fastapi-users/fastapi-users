@@ -1,4 +1,4 @@
-from typing import Generic, Optional
+from typing import Generic
 
 import jwt
 
@@ -21,10 +21,10 @@ class JWTStrategy(Strategy[models.UP, models.ID], Generic[models.UP, models.ID])
     def __init__(
         self,
         secret: SecretType,
-        lifetime_seconds: Optional[int],
+        lifetime_seconds: int | None,
         token_audience: list[str] = ["fastapi-users:auth"],
         algorithm: str = "HS256",
-        public_key: Optional[SecretType] = None,
+        public_key: SecretType | None = None,
     ):
         self.secret = secret
         self.lifetime_seconds = lifetime_seconds
@@ -41,8 +41,8 @@ class JWTStrategy(Strategy[models.UP, models.ID], Generic[models.UP, models.ID])
         return self.public_key or self.secret
 
     async def read_token(
-        self, token: Optional[str], user_manager: BaseUserManager[models.UP, models.ID]
-    ) -> Optional[models.UP]:
+        self, token: str | None, user_manager: BaseUserManager[models.UP, models.ID]
+    ) -> models.UP | None:
         if token is None:
             return None
 

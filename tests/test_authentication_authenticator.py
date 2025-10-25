@@ -1,5 +1,5 @@
 from collections.abc import AsyncGenerator, Sequence
-from typing import Generic, Optional
+from typing import Generic
 
 import httpx
 import pytest
@@ -18,7 +18,7 @@ from tests.conftest import User, UserModel
 
 
 class MockSecurityScheme(SecurityBase):
-    def __call__(self, request: Request) -> Optional[str]:
+    def __call__(self, request: Request) -> str | None:
         return "mock"
 
 
@@ -31,8 +31,8 @@ class MockTransport(Transport):
 
 class NoneStrategy(Strategy):
     async def read_token(
-        self, token: Optional[str], user_manager: BaseUserManager[models.UP, models.ID]
-    ) -> Optional[models.UP]:
+        self, token: str | None, user_manager: BaseUserManager[models.UP, models.ID]
+    ) -> models.UP | None:
         return None
 
 
@@ -41,8 +41,8 @@ class UserStrategy(Strategy, Generic[models.UP]):
         self.user = user
 
     async def read_token(
-        self, token: Optional[str], user_manager: BaseUserManager[models.UP, models.ID]
-    ) -> Optional[models.UP]:
+        self, token: str | None, user_manager: BaseUserManager[models.UP, models.ID]
+    ) -> models.UP | None:
         return self.user
 
 
@@ -72,9 +72,8 @@ def get_backend_user(user: UserModel):
 def get_test_auth_client(get_user_manager, get_test_client):
     async def _get_test_auth_client(
         backends: list[AuthenticationBackend],
-        get_enabled_backends: Optional[
-            DependencyCallable[Sequence[AuthenticationBackend]]
-        ] = None,
+        get_enabled_backends: DependencyCallable[Sequence[AuthenticationBackend]]
+        | None = None,
     ) -> AsyncGenerator[httpx.AsyncClient, None]:
         app = FastAPI()
         authenticator = Authenticator(backends, get_user_manager)

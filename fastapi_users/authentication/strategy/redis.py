@@ -1,5 +1,5 @@
 import secrets
-from typing import Generic, Optional
+from typing import Generic
 
 import redis.asyncio
 
@@ -12,7 +12,7 @@ class RedisStrategy(Strategy[models.UP, models.ID], Generic[models.UP, models.ID
     def __init__(
         self,
         redis: redis.asyncio.Redis,
-        lifetime_seconds: Optional[int] = None,
+        lifetime_seconds: int | None = None,
         *,
         key_prefix: str = "fastapi_users_token:",
     ):
@@ -21,8 +21,8 @@ class RedisStrategy(Strategy[models.UP, models.ID], Generic[models.UP, models.ID
         self.key_prefix = key_prefix
 
     async def read_token(
-        self, token: Optional[str], user_manager: BaseUserManager[models.UP, models.ID]
-    ) -> Optional[models.UP]:
+        self, token: str | None, user_manager: BaseUserManager[models.UP, models.ID]
+    ) -> models.UP | None:
         if token is None:
             return None
 

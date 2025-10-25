@@ -1,4 +1,4 @@
-from typing import Any, Generic, Optional, TypeVar
+from typing import Any, Generic, TypeVar
 
 from pydantic import BaseModel, ConfigDict, EmailStr
 from pydantic.version import VERSION as PYDANTIC_VERSION
@@ -64,17 +64,17 @@ class BaseUser(CreateUpdateDictModel, Generic[models.ID]):
 class BaseUserCreate(CreateUpdateDictModel):
     email: EmailStr
     password: str
-    is_active: Optional[bool] = True
-    is_superuser: Optional[bool] = False
-    is_verified: Optional[bool] = False
+    is_active: bool | None = True
+    is_superuser: bool | None = False
+    is_verified: bool | None = False
 
 
 class BaseUserUpdate(CreateUpdateDictModel):
-    password: Optional[str] = None
-    email: Optional[EmailStr] = None
-    is_active: Optional[bool] = None
-    is_superuser: Optional[bool] = None
-    is_verified: Optional[bool] = None
+    password: str | None = None
+    email: EmailStr | None = None
+    is_active: bool | None = None
+    is_superuser: bool | None = None
+    is_verified: bool | None = None
 
 
 U = TypeVar("U", bound=BaseUser)
@@ -88,8 +88,8 @@ class BaseOAuthAccount(BaseModel, Generic[models.ID]):
     id: models.ID
     oauth_name: str
     access_token: str
-    expires_at: Optional[int] = None
-    refresh_token: Optional[str] = None
+    expires_at: int | None = None
+    refresh_token: str | None = None
     account_id: str
     account_email: str
 

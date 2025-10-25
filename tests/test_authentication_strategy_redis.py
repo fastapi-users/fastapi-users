@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Optional
 
 import pytest
 
@@ -8,12 +7,12 @@ from tests.conftest import IDType, UserModel
 
 
 class RedisMock:
-    store: dict[str, tuple[str, Optional[int]]]
+    store: dict[str, tuple[str, int | None]]
 
     def __init__(self):
         self.store = {}
 
-    async def get(self, key: str) -> Optional[str]:
+    async def get(self, key: str) -> str | None:
         try:
             value, expiration = self.store[key]
             if expiration is not None and expiration < datetime.now().timestamp():
@@ -23,7 +22,7 @@ class RedisMock:
         else:
             return value
 
-    async def set(self, key: str, value: str, ex: Optional[int] = None):
+    async def set(self, key: str, value: str, ex: int | None = None):
         expiration = None
         if ex is not None:
             expiration = int(datetime.now().timestamp() + ex)

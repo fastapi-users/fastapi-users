@@ -1,5 +1,3 @@
-from typing import Optional
-
 import jwt
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from httpx_oauth.integrations.fastapi import OAuth2AuthorizeCallback
@@ -32,7 +30,7 @@ def get_oauth_router(
     backend: AuthenticationBackend[models.UP, models.ID],
     get_user_manager: UserManagerDependency[models.UP, models.ID],
     state_secret: SecretType,
-    redirect_url: Optional[str] = None,
+    redirect_url: str | None = None,
     associate_by_email: bool = False,
     is_verified_by_default: bool = False,
 ) -> APIRouter:
@@ -160,7 +158,7 @@ def get_oauth_associate_router(
     get_user_manager: UserManagerDependency[models.UP, models.ID],
     user_schema: type[schemas.U],
     state_secret: SecretType,
-    redirect_url: Optional[str] = None,
+    redirect_url: str | None = None,
     requires_verification: bool = False,
 ) -> APIRouter:
     """Generate a router with the OAuth routes to associate an authenticated user."""

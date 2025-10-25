@@ -1,8 +1,8 @@
 import asyncio
 import dataclasses
 import uuid
-from collections.abc import AsyncGenerator
-from typing import Any, Callable, Generic, Optional, Union
+from collections.abc import AsyncGenerator, Callable
+from typing import Any, Generic
 from unittest.mock import MagicMock
 
 import httpx
@@ -41,7 +41,7 @@ class UserModel(models.UserProtocol[IDType]):
     is_active: bool = True
     is_superuser: bool = False
     is_verified: bool = False
-    first_name: Optional[str] = None
+    first_name: str | None = None
 
 
 @dataclasses.dataclass
@@ -51,8 +51,8 @@ class OAuthAccountModel(models.OAuthAccountProtocol[IDType]):
     account_id: str
     account_email: str
     id: IDType = dataclasses.field(default_factory=uuid.uuid4)
-    expires_at: Optional[int] = None
-    refresh_token: Optional[str] = None
+    expires_at: int | None = None
+    refresh_token: str | None = None
 
 
 @dataclasses.dataclass
@@ -61,15 +61,15 @@ class UserOAuthModel(UserModel):
 
 
 class User(schemas.BaseUser[IDType]):
-    first_name: Optional[str] = None
+    first_name: str | None = None
 
 
 class UserCreate(schemas.BaseUserCreate):
-    first_name: Optional[str] = None
+    first_name: str | None = None
 
 
 class UserUpdate(schemas.BaseUserUpdate):
-    first_name: Optional[str] = None
+    first_name: str | None = None
 
 
 class UserOAuth(User, schemas.BaseOAuthAccountMixin):
@@ -83,7 +83,7 @@ class BaseTestUserManager(
     verification_token_secret = "SECRET"
 
     async def validate_password(
-        self, password: str, user: Union[schemas.UC, models.UP]
+        self, password: str, user: schemas.UC | models.UP
     ) -> None:
         if len(password) < 3:
             raise exceptions.InvalidPasswordException(
@@ -308,7 +308,7 @@ def mock_user_db(
     verified_superuser: UserModel,
 ) -> BaseUserDatabase[UserModel, IDType]:
     class MockUserDatabase(BaseUserDatabase[UserModel, IDType]):
-        async def get(self, id: UUID4) -> Optional[UserModel]:
+        async def get(self, id: UUID4) -> UserModel | None:
             if id == user.id:
                 return user
             if id == verified_user.id:
@@ -321,7 +321,7 @@ def mock_user_db(
                 return verified_superuser
             return None
 
-        async def get_by_email(self, email: str) -> Optional[UserModel]:
+        async def get_by_email(self, email: str) -> UserModel | None:
             lower_email = email.lower()
             if lower_email == user.email.lower():
                 return user
@@ -360,7 +360,7 @@ def mock_user_db_oauth(
     verified_superuser_oauth: UserOAuthModel,
 ) -> BaseUserDatabase[UserOAuthModel, IDType]:
     class MockUserDatabase(BaseUserDatabase[UserOAuthModel, IDType]):
-        async def get(self, id: UUID4) -> Optional[UserOAuthModel]:
+        async def get(self, id: UUID4) -> UserOAuthModel | None:
             if id == user_oauth.id:
                 return user_oauth
             if id == verified_user_oauth.id:
@@ -373,7 +373,7 @@ def mock_user_db_oauth(
                 return verified_superuser_oauth
             return None
 
-        async def get_by_email(self, email: str) -> Optional[UserOAuthModel]:
+        async def get_by_email(self, email: str) -> UserOAuthModel | None:
             lower_email = email.lower()
             if lower_email == user_oauth.email.lower():
                 return user_oauth
@@ -389,7 +389,7 @@ def mock_user_db_oauth(
 
         async def get_by_oauth_account(
             self, oauth: str, account_id: str
-        ) -> Optional[UserOAuthModel]:
+        ) -> UserOAuthModel | None:
             user_oauth_account = user_oauth.oauth_accounts[0]
             if (
                 user_oauth_account.oauth_name == oauth
@@ -511,8 +511,8 @@ class MockTransport(BearerTransport):
 
 class MockStrategy(Strategy[UserModel, IDType]):
     async def read_token(
-        self, token: Optional[str], user_manager: BaseUserManager[UserModel, IDType]
-    ) -> Optional[UserModel]:
+        self, token: str | None, user_manager: BaseUserManager[UserModel, IDType]
+    ) -> UserModel | None:
         if token is not None:
             try:
                 parsed_id = user_manager.parse_id(token)
