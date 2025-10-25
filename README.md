@@ -24,15 +24,6 @@
 
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-<p align="center">
-<a href="https://polar.sh/frankie567">
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://polar.sh/embed/subscribe.svg?org=frankie567&darkmode=1">
-  <img alt="Subscribe" src="https://polar.sh/embed/subscribe.svg?org=frankie567">
-</picture>
-</a>
-</p>
-
 ---
 
 **Documentation**: <a href="https://fastapi-users.github.io/fastapi-users/" target="_blank">https://fastapi-users.github.io/fastapi-users/</a>
