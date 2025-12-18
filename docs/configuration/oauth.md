@@ -41,6 +41,7 @@ Notice that we also manually added a `relationship` on `User` so that SQLAlchemy
 Besides, when instantiating the database adapter, we need pass this SQLAlchemy model as third argument.
 
 !!! tip "Primary key is defined as UUID"
+
     By default, we use UUID as a primary key ID for your user. If you want to use another type, like an auto-incremented integer, you can use `SQLAlchemyBaseOAuthAccountTable` as base class and define your own `id` and `user_id` column.
 
     ```py
@@ -78,7 +79,24 @@ app.include_router(
 ```
 
 !!! tip
+
     If you have several OAuth clients and/or several authentication backends, you'll need to create a router for each pair you want to support.
+
+#### CSRF Cookie configuration
+
+For security purposes, OAuth routers set a CSRF cookie when the authentication flow is initiated. By default, the cookie is configured with the following parameters:
+
+- `csrf_token_cookie_name` (`fastapiusersoauthcsrf`): Name of the cookie.
+- `csrf_token_cookie_max_age` (`Optional[int]`): The lifetime of the cookie in seconds. `None` by default, which means it's a session cookie.
+- `csrf_token_cookie_path` (`/`): Cookie path.
+- `csrf_token_cookie_domain` (`None`): Cookie domain.
+- `csrf_token_cookie_secure` (`True`): Whether to only send the cookie to the server via SSL request.
+- `csrf_token_cookie_httponly` (`True`): Whether to prevent access to the cookie via JavaScript.
+- `csrf_token_cookie_samesite` (`lax`): A string that specifies the samesite strategy for the cookie. Valid values are `lax`, `strict` and `none`. Defaults to `lax`.
+
+!!! tip
+
+    In local development, if you're not using HTTPS, you may want to set `csrf_token_cookie_secure` to `False` so that the cookie is sent by the browser.
 
 #### Existing account association
 
@@ -101,11 +119,11 @@ app.include_router(
 
 Bear in mind though that it can lead to security breaches if the OAuth provider does not validate e-mail addresses. How?
 
-* Let's say your app support an OAuth provider, *Merlinbook*, which does not validate e-mail addresses.
-* Imagine a user registers to your app with the e-mail address `lancelot@camelot.bt`.
-* Now, a malicious user creates an account on *Merlinbook* with the same e-mail address. Without e-mail validation, the malicious user can use this account without limitation.
-* The malicious user authenticates using *Merlinbook* OAuth on your app, which automatically associates to the existing `lancelot@camelot.bt`.
-* Now, the malicious user has full access to the user account on your app 😞
+- Let's say your app support an OAuth provider, _Merlinbook_, which does not validate e-mail addresses.
+- Imagine a user registers to your app with the e-mail address `lancelot@camelot.bt`.
+- Now, a malicious user creates an account on _Merlinbook_ with the same e-mail address. Without e-mail validation, the malicious user can use this account without limitation.
+- The malicious user authenticates using _Merlinbook_ OAuth on your app, which automatically associates to the existing `lancelot@camelot.bt`.
+- Now, the malicious user has full access to the user account on your app 😞
 
 #### Association router for authenticated users
 
@@ -124,6 +142,7 @@ Notice that, just like for the [Users router](./routers/users.md), you have to p
 #### Set `is_verified` to `True` by default
 
 !!! tip "This section is only useful if you set up email verification"
+
     You can read more about this feature [here](./routers/verify.md).
 
 When a new user registers with an OAuth provider, the `is_verified` flag is set to `False`, which requires the user to verify its email address.
@@ -144,11 +163,13 @@ app.include_router(
 ```
 
 !!! danger "Make sure you can trust the OAuth provider"
+
     Make sure the OAuth provider you're using **does verify** the email address before enabling this flag.
 
 ### Full example
 
 !!! warning
+
     Notice that **SECRET** should be changed to a strong passphrase.
     Insecure passwords may give attackers full access to your database.
 

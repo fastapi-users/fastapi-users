@@ -106,6 +106,8 @@ class TestAuthorize:
         data = response.json()
         assert "authorization_url" in data
 
+        assert response.cookies.get("fastapiusersoauthcsrf") is not None
+
     async def test_with_redirect_url(
         self,
         async_method_mocker: AsyncMethodMocker,
@@ -125,6 +127,8 @@ class TestAuthorize:
 
         data = response.json()
         assert "authorization_url" in data
+
+        assert response.cookies.get("fastapiusersoauthcsrf") is not None
 
 
 @pytest.mark.router
@@ -157,7 +161,33 @@ class TestCallback:
         )
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
-        get_id_email_mock.assert_called_once_with("TOKEN")
+        get_id_email_mock.assert_not_called()
+
+    @pytest.mark.parametrize("csrf_token", [None, "invalid_csrf_token"])
+    async def test_invalid_csrf_state(
+        self,
+        csrf_token: str | None,
+        async_method_mocker: AsyncMethodMocker,
+        test_app_client: httpx.AsyncClient,
+        oauth_client: BaseOAuth2,
+        user_oauth: UserOAuthModel,
+        access_token: str,
+    ):
+        state_jwt = generate_state_token({"csrftoken": "CSRFTOKEN"}, "SECRET")
+        async_method_mocker(oauth_client, "get_access_token", return_value=access_token)
+        get_id_email_mock = async_method_mocker(
+            oauth_client, "get_id_email", return_value=("user_oauth1", user_oauth.email)
+        )
+
+        if csrf_token is not None:
+            test_app_client.cookies.set("fastapiusersoauthcsrf", csrf_token)
+        response = await test_app_client.get(
+            "/oauth/callback",
+            params={"code": "CODE", "state": state_jwt},
+        )
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+        get_id_email_mock.assert_not_called()
 
     async def test_already_exists_error(
         self,
@@ -168,7 +198,7 @@ class TestCallback:
         user_manager_oauth: UserManagerMock,
         access_token: str,
     ):
-        state_jwt = generate_state_token({}, "SECRET")
+        state_jwt = generate_state_token({"csrftoken": "CSRFTOKEN"}, "SECRET")
         async_method_mocker(oauth_client, "get_access_token", return_value=access_token)
         async_method_mocker(
             oauth_client, "get_id_email", return_value=("user_oauth1", user_oauth.email)
@@ -177,6 +207,7 @@ class TestCallback:
             user_manager_oauth, "oauth_callback"
         ).side_effect = exceptions.UserAlreadyExists
 
+        test_app_client.cookies.set("fastapiusersoauthcsrf", "CSRFTOKEN")
         response = await test_app_client.get(
             "/oauth/callback",
             params={"code": "CODE", "state": state_jwt},
@@ -198,7 +229,7 @@ class TestCallback:
         user_manager_oauth: UserManagerMock,
         access_token: str,
     ):
-        state_jwt = generate_state_token({}, "SECRET")
+        state_jwt = generate_state_token({"csrftoken": "CSRFTOKEN"}, "SECRET")
         async_method_mocker(oauth_client, "get_access_token", return_value=access_token)
         async_method_mocker(
             oauth_client, "get_id_email", return_value=("user_oauth1", user_oauth.email)
@@ -207,6 +238,7 @@ class TestCallback:
             user_manager_oauth, "oauth_callback", return_value=user_oauth
         )
 
+        test_app_client.cookies.set("fastapiusersoauthcsrf", "CSRFTOKEN")
         response = await test_app_client.get(
             "/oauth/callback",
             params={"code": "CODE", "state": state_jwt},
@@ -228,7 +260,7 @@ class TestCallback:
         user_manager_oauth: UserManagerMock,
         access_token: str,
     ):
-        state_jwt = generate_state_token({}, "SECRET")
+        state_jwt = generate_state_token({"csrftoken": "CSRFTOKEN"}, "SECRET")
         async_method_mocker(oauth_client, "get_access_token", return_value=access_token)
         async_method_mocker(
             oauth_client,
@@ -239,6 +271,7 @@ class TestCallback:
             user_manager_oauth, "oauth_callback", return_value=inactive_user_oauth
         )
 
+        test_app_client.cookies.set("fastapiusersoauthcsrf", "CSRFTOKEN")
         response = await test_app_client.get(
             "/oauth/callback",
             params={"code": "CODE", "state": state_jwt},
@@ -256,7 +289,7 @@ class TestCallback:
         user_manager_oauth: UserManagerMock,
         access_token: str,
     ):
-        state_jwt = generate_state_token({}, "SECRET")
+        state_jwt = generate_state_token({"csrftoken": "CSRFTOKEN"}, "SECRET")
         get_access_token_mock = async_method_mocker(
             oauth_client, "get_access_token", return_value=access_token
         )
@@ -267,6 +300,7 @@ class TestCallback:
             user_manager_oauth, "oauth_callback", return_value=user_oauth
         )
 
+        test_app_client_redirect_url.cookies.set("fastapiusersoauthcsrf", "CSRFTOKEN")
         response = await test_app_client_redirect_url.get(
             "/oauth/callback",
             params={"code": "CODE", "state": state_jwt},
@@ -291,7 +325,7 @@ class TestCallback:
         user_manager_oauth: UserManagerMock,
         access_token: str,
     ):
-        state_jwt = generate_state_token({}, "SECRET")
+        state_jwt = generate_state_token({"csrftoken": "CSRFTOKEN"}, "SECRET")
         async_method_mocker(oauth_client, "get_access_token", return_value=access_token)
         async_method_mocker(
             oauth_client, "get_id_email", return_value=("user_oauth1", None)
@@ -300,6 +334,7 @@ class TestCallback:
             user_manager_oauth, "oauth_callback", return_value=user_oauth
         )
 
+        test_app_client_redirect_url.cookies.set("fastapiusersoauthcsrf", "CSRFTOKEN")
         response = await test_app_client_redirect_url.get(
             "/oauth/callback",
             params={"code": "CODE", "state": state_jwt},
@@ -318,11 +353,14 @@ class TestCallback:
         user_manager_oauth: UserManagerMock,
         access_token: str,
     ):
-        state_jwt = generate_state_token({}, "SECRET", lifetime_seconds=-1)
+        state_jwt = generate_state_token(
+            {"csrftoken": "CSRFTOKEN"}, "SECRET", lifetime_seconds=-1
+        )
         async_method_mocker(oauth_client, "get_access_token", return_value=access_token)
         async_method_mocker(
             oauth_client, "get_id_email", return_value=("user_oauth1", user_oauth.email)
         )
+        test_app_client.cookies.set("fastapiusersoauthcsrf", "CSRFTOKEN")
         response = await test_app_client.get(
             "/oauth/callback",
             params={"code": "CODE", "state": state_jwt},
@@ -344,11 +382,12 @@ class TestCallback:
         user_manager_oauth: UserManagerMock,
         access_token: str,
     ):
-        state_jwt = generate_state_token({}, "RANDOM")
+        state_jwt = generate_state_token({"csrftoken": "CSRFTOKEN"}, "RANDOM")
         async_method_mocker(oauth_client, "get_access_token", return_value=access_token)
         async_method_mocker(
             oauth_client, "get_id_email", return_value=("user_oauth1", user_oauth.email)
         )
+        test_app_client.cookies.set("fastapiusersoauthcsrf", "CSRFTOKEN")
         response = await test_app_client.get(
             "/oauth/callback",
             params={"code": "CODE", "state": state_jwt},
@@ -406,6 +445,8 @@ class TestAssociateAuthorize:
         data = response.json()
         assert "authorization_url" in data
 
+        assert response.cookies.get("fastapiusersoauthcsrf") is not None
+
     async def test_with_redirect_url(
         self,
         async_method_mocker: AsyncMethodMocker,
@@ -428,6 +469,8 @@ class TestAssociateAuthorize:
 
         data = response.json()
         assert "authorization_url" in data
+
+        assert response.cookies.get("fastapiusersoauthcsrf") is not None
 
 
 @pytest.mark.router
@@ -485,7 +528,34 @@ class TestAssociateCallback:
         )
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
-        get_id_email_mock.assert_called_once_with("TOKEN")
+        get_id_email_mock.assert_not_called()
+
+    @pytest.mark.parametrize("csrf_token", [None, "invalid_csrf_token"])
+    async def test_invalid_csrf_state(
+        self,
+        csrf_token: str | None,
+        async_method_mocker: AsyncMethodMocker,
+        test_app_client: httpx.AsyncClient,
+        oauth_client: BaseOAuth2,
+        user_oauth: UserOAuthModel,
+        access_token: str,
+    ):
+        state_jwt = generate_state_token({"csrftoken": "CSRFTOKEN"}, "SECRET")
+        async_method_mocker(oauth_client, "get_access_token", return_value=access_token)
+        get_id_email_mock = async_method_mocker(
+            oauth_client, "get_id_email", return_value=("user_oauth1", user_oauth.email)
+        )
+
+        if csrf_token is not None:
+            test_app_client.cookies.set("fastapiusersoauthcsrf", csrf_token)
+        response = await test_app_client.get(
+            "/oauth-associate/callback",
+            params={"code": "CODE", "state": state_jwt},
+            headers={"Authorization": f"Bearer {user_oauth.id}"},
+        )
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+        get_id_email_mock.assert_not_called()
 
     async def test_state_with_different_user_id(
         self,
@@ -496,12 +566,16 @@ class TestAssociateCallback:
         user: UserModel,
         access_token: str,
     ):
-        state_jwt = generate_state_token({"sub": str(user.id)}, "SECRET")
+        state_jwt = generate_state_token(
+            {"sub": str(user.id), "csrftoken": "CSRFTOKEN"}, "SECRET"
+        )
         async_method_mocker(oauth_client, "get_access_token", return_value=access_token)
         get_id_email_mock = async_method_mocker(
             oauth_client, "get_id_email", return_value=("user_oauth1", user_oauth.email)
         )
 
+        test_app_client.cookies.set("fastapiusersoauthcsrf", "CSRFTOKEN")
+        test_app_client.cookies.set("fastapiusersoauthcsrf", "CSRFTOKEN")
         response = await test_app_client.get(
             "/oauth-associate/callback",
             params={"code": "CODE", "state": state_jwt},
@@ -509,7 +583,7 @@ class TestAssociateCallback:
         )
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
-        get_id_email_mock.assert_called_once_with("TOKEN")
+        get_id_email_mock.assert_not_called()
 
     async def test_active_user(
         self,
@@ -520,7 +594,9 @@ class TestAssociateCallback:
         user_manager_oauth: UserManagerMock,
         access_token: str,
     ):
-        state_jwt = generate_state_token({"sub": str(user_oauth.id)}, "SECRET")
+        state_jwt = generate_state_token(
+            {"sub": str(user_oauth.id), "csrftoken": "CSRFTOKEN"}, "SECRET"
+        )
         async_method_mocker(oauth_client, "get_access_token", return_value=access_token)
         async_method_mocker(
             oauth_client, "get_id_email", return_value=("user_oauth1", user_oauth.email)
@@ -529,6 +605,7 @@ class TestAssociateCallback:
             user_manager_oauth, "oauth_callback", return_value=user_oauth
         )
 
+        test_app_client.cookies.set("fastapiusersoauthcsrf", "CSRFTOKEN")
         response = await test_app_client.get(
             "/oauth-associate/callback",
             params={"code": "CODE", "state": state_jwt},
@@ -549,7 +626,9 @@ class TestAssociateCallback:
         user_manager_oauth: UserManagerMock,
         access_token: str,
     ):
-        state_jwt = generate_state_token({"sub": str(user_oauth.id)}, "SECRET")
+        state_jwt = generate_state_token(
+            {"sub": str(user_oauth.id), "csrftoken": "CSRFTOKEN"}, "SECRET"
+        )
         get_access_token_mock = async_method_mocker(
             oauth_client, "get_access_token", return_value=access_token
         )
@@ -560,6 +639,7 @@ class TestAssociateCallback:
             user_manager_oauth, "oauth_callback", return_value=user_oauth
         )
 
+        test_app_client_redirect_url.cookies.set("fastapiusersoauthcsrf", "CSRFTOKEN")
         response = await test_app_client_redirect_url.get(
             "/oauth-associate/callback",
             params={"code": "CODE", "state": state_jwt},
@@ -584,7 +664,9 @@ class TestAssociateCallback:
         user_manager_oauth: UserManagerMock,
         access_token: str,
     ):
-        state_jwt = generate_state_token({"sub": str(user_oauth.id)}, "SECRET")
+        state_jwt = generate_state_token(
+            {"sub": str(user_oauth.id), "csrftoken": "CSRFTOKEN"}, "SECRET"
+        )
         async_method_mocker(oauth_client, "get_access_token", return_value=access_token)
         async_method_mocker(
             oauth_client, "get_id_email", return_value=("user_oauth1", None)
@@ -593,6 +675,7 @@ class TestAssociateCallback:
             user_manager_oauth, "oauth_callback", return_value=user_oauth
         )
 
+        test_app_client_redirect_url.cookies.set("fastapiusersoauthcsrf", "CSRFTOKEN")
         response = await test_app_client_redirect_url.get(
             "/oauth-associate/callback",
             params={"code": "CODE", "state": state_jwt},
@@ -613,7 +696,9 @@ class TestAssociateCallback:
         access_token: str,
     ):
         state_jwt = generate_state_token(
-            {"sub": str(user_oauth.id)}, "SECRET", lifetime_seconds=-1
+            {"sub": str(user_oauth.id), "csrftoken": "CSRFTOKEN"},
+            "SECRET",
+            lifetime_seconds=-1,
         )
         async_method_mocker(oauth_client, "get_access_token", return_value=access_token)
         async_method_mocker(
@@ -622,6 +707,7 @@ class TestAssociateCallback:
         async_method_mocker(
             user_manager_oauth, "oauth_callback", return_value=user_oauth
         )
+        test_app_client_redirect_url.cookies.set("fastapiusersoauthcsrf", "CSRFTOKEN")
         response = await test_app_client_redirect_url.get(
             "/oauth-associate/callback",
             params={"code": "CODE", "state": state_jwt},
@@ -642,7 +728,9 @@ class TestAssociateCallback:
         user_manager_oauth: UserManagerMock,
         access_token: str,
     ):
-        state_jwt = generate_state_token({"sub": str(user_oauth.id)}, "RANDOM")
+        state_jwt = generate_state_token(
+            {"sub": str(user_oauth.id), "csrftoken": "CSRFTOKEN"}, "RANDOM"
+        )
         async_method_mocker(oauth_client, "get_access_token", return_value=access_token)
         async_method_mocker(
             oauth_client, "get_id_email", return_value=("user_oauth1", user_oauth.email)
@@ -650,6 +738,7 @@ class TestAssociateCallback:
         async_method_mocker(
             user_manager_oauth, "oauth_callback", return_value=user_oauth
         )
+        test_app_client_redirect_url.cookies.set("fastapiusersoauthcsrf", "CSRFTOKEN")
         response = await test_app_client_redirect_url.get(
             "/oauth-associate/callback",
             params={"code": "CODE", "state": state_jwt},
