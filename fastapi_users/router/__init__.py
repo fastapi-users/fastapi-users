@@ -15,8 +15,12 @@ __all__ = [
 ]
 
 try:  # pragma: no cover
-    from fastapi_users.router.oauth import get_oauth_router  # noqa: F401
+    from fastapi_users.router.oauth import (  # noqa: F401
+        get_oauth_associate_router,
+        get_oauth_router,
+    )
 
     __all__.append("get_oauth_router")
+    __all__.append("get_oauth_associate_router")
 except ModuleNotFoundError:  # pragma: no cover
     pass
