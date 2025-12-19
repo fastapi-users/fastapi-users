@@ -19,9 +19,7 @@
 [![Downloads](https://pepy.tech/badge/fastapi-users)](https://pepy.tech/project/fastapi-users)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-
-[![All Contributors](https://img.shields.io/badge/all_contributors-82-orange.svg?style=flat-square)](#contributors-)
-
+[![All Contributors](https://img.shields.io/badge/all_contributors-83-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ---
@@ -163,6 +161,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/sashkent3"><img src="https://avatars.githubusercontent.com/u/33320473?v=4?s=100" width="100px;" alt="Alexander Zinov"/><br /><sub><b>Alexander Zinov</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=sashkent3" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/nimaxin"><img src="https://avatars.githubusercontent.com/u/97331299?v=4?s=100" width="100px;" alt="nimaxin"/><br /><sub><b>nimaxin</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/commits?author=nimaxin" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://mdaffad.github.io"><img src="https://avatars.githubusercontent.com/u/44805049?v=4?s=100" width="100px;" alt="Muhammad Daffa Dinaya"/><br /><sub><b>Muhammad Daffa Dinaya</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/issues?q=author%3Amdaffad" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/jthurner"><img src="https://avatars.githubusercontent.com/u/2171402?v=4?s=100" width="100px;" alt="Joschka Thurner"/><br /><sub><b>Joschka Thurner</b></sub></a><br /><a href="https://github.com/fastapi-users/fastapi-users/issues?q=author%3Ajthurner" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>
