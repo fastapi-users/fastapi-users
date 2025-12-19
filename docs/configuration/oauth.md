@@ -87,7 +87,6 @@ app.include_router(
 For security purposes, OAuth routers set a CSRF cookie when the authentication flow is initiated. By default, the cookie is configured with the following parameters:
 
 - `csrf_token_cookie_name` (`fastapiusersoauthcsrf`): Name of the cookie.
-- `csrf_token_cookie_max_age` (`Optional[int]`): The lifetime of the cookie in seconds. `None` by default, which means it's a session cookie.
 - `csrf_token_cookie_path` (`/`): Cookie path.
 - `csrf_token_cookie_domain` (`None`): Cookie domain.
 - `csrf_token_cookie_secure` (`True`): Whether to only send the cookie to the server via SSL request.
