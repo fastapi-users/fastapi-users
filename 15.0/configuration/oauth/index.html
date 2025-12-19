@@ -2363,7 +2363,6 @@
 <p>For security purposes, OAuth routers set a CSRF cookie when the authentication flow is initiated. By default, the cookie is configured with the following parameters:</p>
 <ul>
 <li><code>csrf_token_cookie_name</code> (<code>fastapiusersoauthcsrf</code>): Name of the cookie.</li>
-<li><code>csrf_token_cookie_max_age</code> (<code>Optional[int]</code>): The lifetime of the cookie in seconds. <code>None</code> by default, which means it's a session cookie.</li>
 <li><code>csrf_token_cookie_path</code> (<code>/</code>): Cookie path.</li>
 <li><code>csrf_token_cookie_domain</code> (<code>None</code>): Cookie domain.</li>
 <li><code>csrf_token_cookie_secure</code> (<code>True</code>): Whether to only send the cookie to the server via SSL request.</li>
