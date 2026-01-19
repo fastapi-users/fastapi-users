@@ -69,16 +69,19 @@ def get_auth_router(
         return response
 
     logout_responses: OpenAPIResponseType = {
-        **{
-            status.HTTP_401_UNAUTHORIZED: {
-                "description": "Missing token or inactive user."
-            }
+        status.HTTP_204_NO_CONTENT: {
+            "description": "Successfully logged out."
         },
-        **backend.transport.get_openapi_logout_responses_success(),
+        status.HTTP_401_UNAUTHORIZED: {
+            "description": "Missing token or inactive user."
+        },
     }
 
     @router.post(
-        "/logout", name=f"auth:{backend.name}.logout", responses=logout_responses
+        "/logout",
+        name=f"auth:{backend.name}.logout",
+        status_code=status.HTTP_204_NO_CONTENT,
+        responses=logout_responses,
     )
     async def logout(
         user_token: tuple[models.UP, str] = Depends(get_current_user_token),
