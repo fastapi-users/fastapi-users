@@ -1,6 +1,6 @@
 """Ready-to-use and customizable users management for FastAPI."""
 
-__version__ = "15.0.3"
+__version__ = "15.0.4"
 
 from fastapi_users import models, schemas  # noqa: F401
 from fastapi_users.exceptions import InvalidID, InvalidPasswordException
