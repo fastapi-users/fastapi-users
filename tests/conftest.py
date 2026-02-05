@@ -1,5 +1,6 @@
 import asyncio
 import dataclasses
+import secrets
 import uuid
 from collections.abc import AsyncGenerator, Callable
 from typing import Any, Generic
@@ -28,6 +29,7 @@ angharad_password_hash = password_helper.hash("angharad")
 viviane_password_hash = password_helper.hash("viviane")
 lancelot_password_hash = password_helper.hash("lancelot")
 excalibur_password_hash = password_helper.hash("excalibur")
+JWT_SECRET = secrets.token_urlsafe(32)
 
 
 IDType = UUID4
@@ -79,8 +81,8 @@ class UserOAuth(User, schemas.BaseOAuthAccountMixin):
 class BaseTestUserManager(
     Generic[models.UP], UUIDIDMixin, BaseUserManager[models.UP, IDType]
 ):
-    reset_password_token_secret = "SECRET"
-    verification_token_secret = "SECRET"
+    reset_password_token_secret = JWT_SECRET
+    verification_token_secret = JWT_SECRET
 
     async def validate_password(
         self, password: str, user: schemas.UC | models.UP
@@ -141,7 +143,7 @@ def async_method_mocker(mocker: MockerFixture) -> AsyncMethodMocker:
     return _async_method_mocker
 
 
-@pytest.fixture(params=["SECRET", SecretStr("SECRET")])
+@pytest.fixture(params=[JWT_SECRET, SecretStr(JWT_SECRET)])
 def secret(request) -> SecretType:
     return request.param
 
