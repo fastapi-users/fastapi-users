@@ -1,6 +1,6 @@
+import secrets
 from typing import Protocol
 
-from passlib import pwd
 from passlib.context import CryptContext
 
 
@@ -29,4 +29,4 @@ class PasswordHelper(PasswordHelperProtocol):
         return self.context.hash(password)
 
     def generate(self) -> str:
-        return pwd.genword()
+        return secrets.token_urlsafe(32)
