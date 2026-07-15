@@ -8,9 +8,9 @@ SCHEMA = TypeVar("SCHEMA", bound=BaseModel)
 
 
 class CreateUpdateDictModel(BaseModel):
-    def create_update_dict(self):
+    def create_update_dict(self, *, exclude_unset: bool = True):
         return self.model_dump(
-            exclude_unset=True,
+            exclude_unset=exclude_unset,
             exclude={
                 "id",
                 "is_superuser",
@@ -20,8 +20,8 @@ class CreateUpdateDictModel(BaseModel):
             },
         )
 
-    def create_update_dict_superuser(self):
-        return self.model_dump(exclude_unset=True, exclude={"id"})
+    def create_update_dict_superuser(self, *, exclude_unset: bool = True):
+        return self.model_dump(exclude_unset=exclude_unset, exclude={"id"})
 
 
 class BaseUser(CreateUpdateDictModel, Generic[models.ID]):
