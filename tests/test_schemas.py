@@ -1,5 +1,3 @@
-import pytest
-
 from fastapi_users import schemas
 
 
