@@ -169,6 +169,21 @@ class TestCreateUser:
 
         assert user_manager.on_after_register.called is True
 
+    async def test_default_fields_included_in_create_dict(
+        self,
+        user_manager: UserManagerMock[UserModel],
+        mocker: MockerFixture,
+    ):
+        create_spy = mocker.spy(user_manager.user_db, "create")
+        user = UserCreate(email="lancelot@camelot.bt", password="guinevere")
+        await user_manager.create(user)
+
+        create_dict = create_spy.call_args[0][0]
+        assert "first_name" in create_dict
+        assert create_dict["first_name"] is None
+
+        assert user_manager.on_after_register.called is True
+
 
 @pytest.mark.asyncio
 @pytest.mark.manager
@@ -582,6 +597,21 @@ class TestUpdateUser:
 
         assert updated_user.first_name == "Arthur"
         assert updated_user.is_superuser is True
+
+        assert user_manager.on_after_update.called is True
+
+    async def test_unset_fields_not_in_update_dict(
+        self,
+        user: UserModel,
+        user_manager: UserManagerMock[UserModel],
+        mocker: MockerFixture,
+    ):
+        update_spy = mocker.spy(user_manager.user_db, "update")
+        user_update = UserUpdate(password="holygrail")
+        await user_manager.update(user_update, user, safe=True)
+
+        update_dict = update_spy.call_args[0][1]
+        assert "first_name" not in update_dict
 
         assert user_manager.on_after_update.called is True
 

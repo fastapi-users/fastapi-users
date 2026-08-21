@@ -133,9 +133,9 @@ class BaseUserManager(Generic[models.UP, models.ID]):
             raise exceptions.UserAlreadyExists()
 
         user_dict = (
-            user_create.create_update_dict()
+            user_create.create_update_dict(exclude_unset=False)
             if safe
-            else user_create.create_update_dict_superuser()
+            else user_create.create_update_dict_superuser(exclude_unset=False)
         )
         password = user_dict.pop("password")
         user_dict["hashed_password"] = self.password_helper.hash(password)
