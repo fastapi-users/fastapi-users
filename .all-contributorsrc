@@ -777,14 +777,26 @@
       "contributions": [
         "bug"
       ]
+    },
+    { 
+      "contributorsPerLine": 7,
+      "projectName": "fastapi-users",
+      "projectOwner": "fastapi-users",
+      "repoType": "github",
+      "repoHost": "https://github.com",
+      "skipCi": true,
+      "commitConvention": "angular",
+      "commitType": "docs"
+    },
+    {
+      "login": "Evarline",
+      "name": "Evarline Mipata",
+      "avatar_url": "https://avatars.githubusercontent.com/u/158709159?v=4",
+      "profile": "https://github.com/Evarline",
+      "contributions": [
+        "doc"
+    ]
     }
-  ],
-  "contributorsPerLine": 7,
-  "projectName": "fastapi-users",
-  "projectOwner": "fastapi-users",
-  "repoType": "github",
-  "repoHost": "https://github.com",
-  "skipCi": true,
-  "commitConvention": "angular",
-  "commitType": "docs"
+  ]
 }
+

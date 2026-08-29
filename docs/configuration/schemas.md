@@ -56,17 +56,17 @@ from fastapi_users import schemas
 
 class UserRead(schemas.BaseUser[uuid.UUID]):
     first_name: str
-    birthdate: Optional[datetime.date]
+    birthdate: datetime.date | None = None
 
 
 class UserCreate(schemas.BaseUserCreate):
     first_name: str
-    birthdate: Optional[datetime.date]
+    birthdate: datetime.date | None = None
 
 
 class UserUpdate(schemas.BaseUserUpdate):
-    first_name: Optional[str]
-    birthdate: Optional[datetime.date]
+    first_name: str | None = None
+    birthdate: datetime.date | None = None
 ```
 
 !!! warning "Make sure to mirror this in your database model"
