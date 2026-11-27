@@ -80,7 +80,7 @@ def get_database_strategy(
 As you can see, instantiation is quite simple. It accepts the following arguments:
 
 * `database` (`AccessTokenDatabase`): A database adapter instance for `AccessToken` table, like we defined above.
-* `lifetime_seconds` (`int`): The lifetime of the token in seconds.
+* `lifetime_seconds` (`Optional[int]`): The lifetime of the token in seconds. Defaults to `None`, which means the token doesn't expire.
 
 !!! tip "Why it's inside a function?"
     To allow strategies to be instantiated dynamically with other dependencies, they have to be provided as a callable to the authentication backend.
