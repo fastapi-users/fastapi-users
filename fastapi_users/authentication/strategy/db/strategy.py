@@ -25,7 +25,7 @@ class DatabaseStrategy(
             return None
 
         max_age = None
-        if self.lifetime_seconds:
+        if self.lifetime_seconds is not None:
             max_age = datetime.now(timezone.utc) - timedelta(
                 seconds=self.lifetime_seconds
             )

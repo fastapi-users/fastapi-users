@@ -136,6 +136,17 @@ class TestReadToken:
         assert authenticated_user.id == user.id
 
 
+@pytest.mark.authentication
+@pytest.mark.asyncio
+async def test_zero_lifetime_token_is_expired(
+    secret: SecretType, user_manager, user: UserModel
+):
+    jwt_strategy = JWTStrategy[UserModel, IDType](secret, 0)
+    token = await jwt_strategy.write_token(user)
+
+    assert await jwt_strategy.read_token(token, user_manager) is None
+
+
 @pytest.mark.parametrize("jwt_strategy", ["HS256", "RS256", "ES256"], indirect=True)
 @pytest.mark.authentication
 @pytest.mark.asyncio

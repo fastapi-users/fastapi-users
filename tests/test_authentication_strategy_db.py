@@ -1,6 +1,6 @@
 import dataclasses
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 import pytest
@@ -119,6 +119,26 @@ class TestReadToken:
         authenticated_user = await database_strategy.read_token("TOKEN", user_manager)
         assert authenticated_user is not None
         assert authenticated_user.id == user.id
+
+    @pytest.mark.asyncio
+    async def test_zero_lifetime_token_is_expired(
+        self,
+        access_token_database: AccessTokenDatabaseMock,
+        user_manager,
+        user: UserModel,
+    ):
+        database_strategy = DatabaseStrategy[UserModel, IDType, AccessTokenModel](
+            access_token_database, 0
+        )
+        await access_token_database.create(
+            {
+                "token": "TOKEN",
+                "user_id": user.id,
+                "created_at": datetime.now(timezone.utc) - timedelta(seconds=1),
+            }
+        )
+        authenticated_user = await database_strategy.read_token("TOKEN", user_manager)
+        assert authenticated_user is None
 
 
 @pytest.mark.authentication
